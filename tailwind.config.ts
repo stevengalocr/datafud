@@ -16,9 +16,13 @@ const config: Config = {
           400: "#5aa07f",
           500: "#2e6f4e",
           600: "#22503a",
+          650: "#1f4a36",
           700: "#1b4030",
+          750: "#173a2b",
           800: "#163528",
+          850: "#132f23",
           900: "#112a20",
+          950: "#0a1a13",
         },
         // Acento dorado/mostaza de la marca
         accent: {
@@ -27,11 +31,15 @@ const config: Config = {
           200: "#e9d091",
           300: "#dcb65a",
           400: "#cea03d",
+          450: "#c3993e",
           500: "#b8923f",
           600: "#977331",
           700: "#75592a",
           800: "#5c4626",
           900: "#4d3b22",
+        },
+        stone: {
+          250: "#dedbd9",
         },
         // Neutros crema cálidos, tintados hacia el verde de la marca
         cream: {
