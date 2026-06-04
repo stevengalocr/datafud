@@ -21,9 +21,9 @@ export default function RegisterPage() {
         </Link>
 
         <div className="rounded-2xl border border-slate-200 bg-white p-8 shadow-sm">
-          <h1 className="text-2xl font-bold text-slate-900">Crea tu negocio</h1>
+          <h1 className="font-display text-3xl text-slate-900">Solicita tu DataFud</h1>
           <p className="mt-1 text-sm text-slate-500">
-            Empieza con 30 días de prueba, sin tarjeta.
+            Lo dejamos operando en 48 horas. Implementación $249, luego desde $29/mes.
           </p>
 
           <form action={formAction} className="mt-6 space-y-4">
@@ -59,7 +59,7 @@ export default function RegisterPage() {
             )}
 
             <Button type="submit" size="lg" className="w-full" disabled={pending}>
-              {pending ? "Creando..." : "Crear cuenta gratis"}
+              {pending ? "Creando..." : "Crear mi cuenta"}
             </Button>
           </form>
         </div>

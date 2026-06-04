@@ -142,7 +142,8 @@ export default function PreviewDashboard() {
         {/* Menú */}
         <h2 className="mb-3 mt-8 font-display text-2xl text-slate-900">Menú</h2>
         <Card className="overflow-hidden">
-          <table className="w-full text-sm">
+          <div className="overflow-x-auto">
+          <table className="w-full min-w-[520px] text-sm">
             <thead className="bg-slate-50 text-left text-xs uppercase text-slate-500">
               <tr>
                 <th className="px-5 py-3 font-medium">Platillo</th>
@@ -174,6 +175,7 @@ export default function PreviewDashboard() {
               ))}
             </tbody>
           </table>
+          </div>
         </Card>
       </div>
     </div>

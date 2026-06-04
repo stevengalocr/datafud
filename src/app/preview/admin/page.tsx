@@ -71,7 +71,8 @@ export default function PreviewAdmin() {
         {/* Restaurantes */}
         <h2 className="mb-3 mt-8 font-display text-2xl text-slate-900">Restaurantes</h2>
         <Card className="overflow-hidden">
-          <table className="w-full text-sm">
+          <div className="overflow-x-auto">
+          <table className="w-full min-w-[640px] text-sm">
             <thead className="bg-slate-50 text-left text-xs uppercase tracking-wide text-slate-500">
               <tr>
                 <th className="px-5 py-3 font-medium">Negocio</th>
@@ -115,12 +116,14 @@ export default function PreviewAdmin() {
               ))}
             </tbody>
           </table>
+          </div>
         </Card>
 
         {/* Pagos */}
         <h2 className="mb-3 mt-8 font-display text-2xl text-slate-900">Pagos</h2>
         <Card className="overflow-hidden">
-          <table className="w-full text-sm">
+          <div className="overflow-x-auto">
+          <table className="w-full min-w-[640px] text-sm">
             <thead className="bg-slate-50 text-left text-xs uppercase tracking-wide text-slate-500">
               <tr>
                 <th className="px-5 py-3 font-medium">Restaurante</th>
@@ -149,6 +152,7 @@ export default function PreviewAdmin() {
               ))}
             </tbody>
           </table>
+          </div>
         </Card>
 
         {/* Planes */}

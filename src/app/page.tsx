@@ -30,44 +30,33 @@ const steps: { icon: IconName; title: string; desc: string }[] = [
 const views: { icon: IconName; tag: string; title: string; points: string[] }[] = [
   {
     icon: "smartphone",
-    tag: "Para el cliente",
-    title: "Menú virtual por QR",
+    tag: "Para tus clientes",
+    title: "Menú virtual al instante",
     points: [
-      "Escanea el QR de su mesa, sin instalar nada.",
+      "Acercan el celular a la tarjeta NFC y listo.",
       "Menú 100% personalizable: colores, logo, fotos.",
       "Disponible en español, inglés y portugués.",
-      "Arma su pedido y lo envía a la cocina.",
+      "Arman su pedido y lo envían a la cocina.",
     ],
   },
   {
     icon: "store",
-    tag: "Para el restaurante",
+    tag: "Para tu restaurante",
     title: "Panel de control total",
     points: [
-      "Gestiona platillos, categorías y mesas.",
+      "Gestiona platillos y mesas en segundos.",
       "Tablero de órdenes en vivo con estados.",
       "Reportes de platos del día y montos vendidos.",
       "Configura tu moneda (toda Latam) e idiomas.",
     ],
   },
-  {
-    icon: "grid",
-    tag: "Para el dueño del SaaS",
-    title: "Administración global",
-    points: [
-      "Aprueba o suspende a cada restaurante.",
-      "Controla pagos y fechas de vencimiento.",
-      "Gestiona los planes Básico, Estándar y Empresarial.",
-      "Métricas de todos tus clientes en un lugar.",
-    ],
-  },
 ];
 
 const highlights: { icon: IconName; label: string }[] = [
+  { icon: "clock", label: "Listo en 48 horas" },
   { icon: "globe", label: "3 idiomas (ES · EN · PT)" },
-  { icon: "wallet", label: "Todas las monedas de Latam" },
+  { icon: "wallet", label: "Monedas de Latam" },
   { icon: "zap", label: "Órdenes en tiempo real" },
-  { icon: "shield", label: "Datos seguros por negocio" },
 ];
 
 export default function HomePage() {
@@ -87,7 +76,7 @@ export default function HomePage() {
               <Icon name="qr" size={15} />
               QR Menus · Orders · Analytics
             </span>
-            <h1 className="mt-6 font-display text-5xl leading-[1.05] text-slate-900 sm:text-6xl">
+            <h1 className="mt-6 font-display text-4xl leading-[1.07] text-slate-900 sm:text-5xl lg:text-6xl">
               El menú digital que abre apetito{" "}
               <span className="text-brand-600">y cierra ventas</span>
             </h1>
@@ -101,7 +90,7 @@ export default function HomePage() {
                 href="/register"
                 className="inline-flex h-12 items-center justify-center gap-2 rounded-xl bg-brand-600 px-7 text-base font-semibold text-white transition-[transform,background-color] duration-200 ease-out hover:bg-brand-700 active:scale-[0.98]"
               >
-                Probar gratis
+                Quiero mi DataFud
                 <Icon name="arrow-right" size={18} />
               </Link>
               <Link
@@ -112,13 +101,22 @@ export default function HomePage() {
               </Link>
             </div>
             <p className="mt-4 text-sm text-slate-500">
-              30 días de prueba · sin tarjeta de crédito
+              Listo y operando en 48 horas · desde $29/mes
             </p>
           </div>
 
-          {/* Mockup de teléfono con el menú */}
-          <div className="reveal flex justify-center lg:justify-end">
-            <PhoneMockup />
+          {/* Visual del producto */}
+          <div className="reveal">
+            <div className="relative animate-[scale-in_0.7s_cubic-bezier(0.23,1,0.32,1)_both]">
+              <Image
+                src="/banner.png"
+                alt="Menú digital DataFud: tarjeta para escanear, app en el teléfono y platillos"
+                width={1000}
+                height={620}
+                priority
+                className="h-auto w-full drop-shadow-xl"
+              />
+            </div>
           </div>
         </div>
 
@@ -170,12 +168,12 @@ export default function HomePage() {
             <p className="text-sm font-semibold uppercase tracking-wider text-accent-600">
               El sistema completo
             </p>
-            <h2 className="mt-2 font-display text-4xl text-slate-900">
-              Un sistema, tres experiencias
+            <h2 className="mt-2 font-display text-3xl text-slate-900 sm:text-4xl">
+              Una experiencia para cada lado de la mesa
             </h2>
             <p className="mt-3 text-slate-600">Cada quien ve exactamente lo que necesita.</p>
           </div>
-          <div className="mt-14 grid gap-6 lg:grid-cols-3">
+          <div className="mt-14 grid gap-6 sm:grid-cols-2">
             {views.map((v) => (
               <div
                 key={v.title}
@@ -226,73 +224,39 @@ export default function HomePage() {
       </section>
 
       {/* Footer */}
-      <footer className="border-t border-stone-200 bg-white">
-        <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 px-5 py-8 text-sm text-slate-500 sm:flex-row">
-          <Image
-            src="/logo-main.png"
-            alt="DataFud"
-            width={130}
-            height={54}
-            className="h-8 w-auto"
-          />
-          <p>© {new Date().getFullYear()} DataFud. Menú digital para restaurantes y sodas.</p>
+      <footer className="bg-slate-950 text-slate-400">
+        <div className="mx-auto max-w-6xl px-5 py-12">
+          <div className="flex flex-col gap-8 border-b border-white/10 pb-8 sm:flex-row sm:items-start sm:justify-between">
+            <div className="max-w-sm">
+              <Image
+                src="/logo-main.png"
+                alt="DataFud"
+                width={150}
+                height={62}
+                className="h-9 w-auto brightness-0 invert"
+              />
+              <p className="mt-4 text-sm leading-relaxed text-slate-400">
+                Menú digital, órdenes por NFC y reportes para restaurantes y sodas
+                de toda Latinoamérica.
+              </p>
+            </div>
+            <nav className="flex flex-wrap gap-x-8 gap-y-2 text-sm">
+              <a href="#como-funciona" className="hover:text-white">Cómo funciona</a>
+              <a href="#vistas" className="hover:text-white">El sistema</a>
+              <a href="#planes" className="hover:text-white">Planes</a>
+              <Link href="/login" className="hover:text-white">Ingresar</Link>
+            </nav>
+          </div>
+          <div className="flex flex-col gap-3 pt-6 text-xs sm:flex-row sm:items-center sm:justify-between">
+            <p>
+              © {new Date().getFullYear()} DataFud · Un producto de{" "}
+              <span className="font-semibold text-accent-400">GaloDev</span> · Todos los
+              derechos reservados
+            </p>
+            <p className="tracking-wide text-slate-500">DATAFUD.COM · MADE IN LATAM</p>
+          </div>
         </div>
       </footer>
-    </div>
-  );
-}
-
-// Mockup de teléfono mostrando el menú del cliente.
-function PhoneMockup() {
-  return (
-    <div className="relative w-[300px] animate-[scale-in_0.7s_cubic-bezier(0.23,1,0.32,1)_both]">
-      <div className="absolute -right-6 -top-6 h-24 w-24 rounded-2xl border-2 border-accent-300/60" />
-      <div className="relative rounded-[2.6rem] border-[10px] border-slate-900 bg-slate-900 shadow-2xl">
-        <div className="overflow-hidden rounded-[1.9rem] bg-cream-50">
-          {/* Header del menú */}
-          <div className="bg-brand-700 px-5 pb-6 pt-7 text-white">
-            <p className="font-display text-xl">Soda Demo</p>
-            <p className="text-xs text-brand-100">Mesa 1 · Menú digital</p>
-          </div>
-          {/* Platillo destacado */}
-          <div className="space-y-3 p-4">
-            <div className="overflow-hidden rounded-xl">
-              <Image
-                src="https://images.unsplash.com/photo-1543339308-43e59d6b73a6?w=600&q=70"
-                alt="Casado"
-                width={280}
-                height={150}
-                className="h-32 w-full object-cover"
-              />
-            </div>
-            <MenuRow name="Casado" desc="Arroz, frijoles, carne" price="₡3 500" />
-            <MenuRow name="Gallo Pinto" desc="Típico costarricense" price="₡2 500" />
-            <MenuRow name="Fresco Natural" desc="Del día" price="₡1 200" />
-          </div>
-          {/* Barra de orden */}
-          <div className="border-t border-stone-200 p-4">
-            <div className="flex items-center justify-between rounded-xl bg-brand-600 px-4 py-3 text-white">
-              <span className="text-sm font-semibold">Enviar orden · 2</span>
-              <span className="text-sm font-semibold">₡4 700</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function MenuRow({ name, desc, price }: { name: string; desc: string; price: string }) {
-  return (
-    <div className="flex items-center justify-between border-b border-stone-100 pb-3">
-      <div>
-        <p className="text-sm font-semibold text-slate-900">{name}</p>
-        <p className="text-xs text-slate-500">{desc}</p>
-        <p className="mt-0.5 text-sm font-semibold text-brand-600">{price}</p>
-      </div>
-      <span className="flex h-7 w-7 items-center justify-center rounded-full bg-accent-500 text-white">
-        <Icon name="plus" size={15} />
-      </span>
     </div>
   );
 }

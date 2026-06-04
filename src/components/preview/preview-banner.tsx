@@ -1,9 +1,8 @@
 import Link from "next/link";
 
 const links = [
-  { href: "/preview/admin", label: "Panel SaaS (admin)" },
   { href: "/preview/dashboard", label: "Panel restaurante" },
-  { href: "/preview/cliente", label: "Menú cliente (QR)" },
+  { href: "/preview/cliente", label: "Menú cliente" },
 ];
 
 export function PreviewBanner({ active }: { active?: string }) {

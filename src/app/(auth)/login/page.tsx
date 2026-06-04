@@ -21,7 +21,7 @@ export default function LoginPage() {
         </Link>
 
         <div className="rounded-2xl border border-slate-200 bg-white p-8 shadow-sm">
-          <h1 className="text-2xl font-bold text-slate-900">Ingresar</h1>
+          <h1 className="font-display text-3xl text-slate-900">Ingresar</h1>
           <p className="mt-1 text-sm text-slate-500">
             Accede al panel de tu negocio.
           </p>

@@ -4,12 +4,6 @@ import { Icon, type IconName } from "@/components/ui/icon";
 
 const cards: { href: string; title: string; desc: string; icon: IconName }[] = [
   {
-    href: "/preview/admin",
-    title: "Panel del dueño del SaaS",
-    desc: "Resumen de clientes, restaurantes, pagos y planes. Lo que tú controlas.",
-    icon: "store",
-  },
-  {
     href: "/preview/dashboard",
     title: "Panel del restaurante",
     desc: "Resumen del negocio, órdenes en vivo, menú y reportes del día.",
@@ -17,8 +11,8 @@ const cards: { href: string; title: string; desc: string; icon: IconName }[] = [
   },
   {
     href: "/preview/cliente",
-    title: "Menú del cliente (QR)",
-    desc: "Lo que ve el comensal al escanear el QR de su mesa. Puede pedir.",
+    title: "Menú del cliente",
+    desc: "Lo que ve el comensal al acercar su celular a la tarjeta NFC. Puede pedir.",
     icon: "smartphone",
   },
 ];

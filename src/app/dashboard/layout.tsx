@@ -1,5 +1,5 @@
 import { getTenantContext } from "@/lib/auth/tenant-context";
-import { Sidebar, type NavItem } from "@/components/shell/sidebar";
+import { AppShell, type NavItem } from "@/components/shell/sidebar";
 
 export const dynamic = "force-dynamic";
 
@@ -20,9 +20,8 @@ export default async function DashboardLayout({
   const { tenant } = await getTenantContext();
 
   return (
-    <div className="flex min-h-screen bg-slate-50">
-      <Sidebar brand={tenant.name} subtitle="Panel del restaurante" items={nav} />
-      <main className="flex-1 overflow-y-auto p-8">{children}</main>
-    </div>
+    <AppShell brand={tenant.name} subtitle="Panel del restaurante" items={nav}>
+      {children}
+    </AppShell>
   );
 }

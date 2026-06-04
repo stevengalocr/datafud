@@ -31,7 +31,7 @@ export function LandingNav() {
             href="/register"
             className="rounded-xl bg-brand-600 px-4 py-2 text-sm font-semibold text-white transition-[transform,background-color] duration-200 ease-out hover:bg-brand-700 active:scale-[0.98]"
           >
-            Probar gratis
+            Empezar
           </Link>
         </div>
       </div>
