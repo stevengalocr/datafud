@@ -246,7 +246,7 @@ export const mockProducts: Product[] = [
     description_i18n: { es: "Fresco del día" },
     price: 1200,
     image_url:
-      "https://images.unsplash.com/photo-1497534446932-c925b458314a?w=300&q=70",
+      "https://i.pinimg.com/736x/03/5a/a5/035aa532a09b8be3bb8dad25aa808f6e.jpg",
     is_available: true,
     is_active: true,
     sort_order: 1,
