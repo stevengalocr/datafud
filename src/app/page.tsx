@@ -105,16 +105,18 @@ export default function HomePage() {
             </p>
           </div>
 
-          {/* Visual del producto */}
+          {/* Visual del producto, fundido con el fondo */}
           <div className="reveal">
             <div className="relative animate-[scale-in_0.7s_cubic-bezier(0.23,1,0.32,1)_both]">
+              {/* Glow ambiental que ancla la imagen en la escena */}
+              <div className="pointer-events-none absolute inset-x-6 bottom-6 top-10 -z-10 rounded-[40%] bg-brand-200/40 blur-3xl" />
               <Image
                 src="/banner.png"
                 alt="Menú digital DataFud: tarjeta para escanear, app en el teléfono y platillos"
                 width={1000}
                 height={620}
                 priority
-                className="h-auto w-full drop-shadow-xl"
+                className="h-auto w-full mix-blend-multiply [mask-image:radial-gradient(135%_125%_at_50%_44%,#000_70%,transparent_100%)] [-webkit-mask-image:radial-gradient(135%_125%_at_50%_44%,#000_70%,transparent_100%)]"
               />
             </div>
           </div>
