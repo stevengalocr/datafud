@@ -33,10 +33,12 @@ export function MenuClient({
   data,
   slug,
   token,
+  demo = false,
 }: {
   data: MenuPayload;
   slug: string;
   token: string;
+  demo?: boolean;
 }) {
   const langs = data.settings.enabled_languages?.length
     ? data.settings.enabled_languages
@@ -83,6 +85,15 @@ export function MenuClient({
   async function submit() {
     if (lines.length === 0) return;
     setSending(true);
+    if (demo) {
+      // Modo preview: simula el envío sin tocar la base de datos.
+      await new Promise((r) => setTimeout(r, 600));
+      setSending(false);
+      setDone(true);
+      setCart({});
+      setNote("");
+      return;
+    }
     const res = await placeOrder(slug, token, lines, note);
     setSending(false);
     if ("orderId" in res) {
