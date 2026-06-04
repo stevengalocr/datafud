@@ -1,5 +1,19 @@
 import type { Metadata } from "next";
+import { Young_Serif, Hanken_Grotesk } from "next/font/google";
 import "./globals.css";
+
+const display = Young_Serif({
+  subsets: ["latin"],
+  weight: "400",
+  variable: "--font-display",
+  display: "swap",
+});
+
+const sans = Hanken_Grotesk({
+  subsets: ["latin"],
+  variable: "--font-sans",
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   title: "DataFud — Menú digital para restaurantes y sodas",
@@ -14,7 +28,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="es">
+    <html lang="es" className={`${display.variable} ${sans.variable}`}>
       <body>{children}</body>
     </html>
   );

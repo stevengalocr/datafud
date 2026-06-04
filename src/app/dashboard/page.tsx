@@ -1,8 +1,10 @@
 import { getTenantContext } from "@/lib/auth/tenant-context";
 import { createClient } from "@/lib/supabase/server";
 import { PageHeader } from "@/components/shell/page-header";
+import { StatCard } from "@/components/shell/stat-card";
 import { Card, CardBody } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import type { IconName } from "@/components/ui/icon";
 import { formatMoney } from "@/lib/currency/format";
 import {
   ORDER_STATUS_COLOR,
@@ -37,10 +39,10 @@ export default async function DashboardHome() {
     ["pending", "preparing", "ready"].includes(o.status)
   ).length;
 
-  const stats = [
-    { label: "Órdenes hoy", value: String(todayOrders.length), icon: "🧾" },
-    { label: "Vendido hoy", value: formatMoney(soldToday, currency), icon: "💰" },
-    { label: "Órdenes activas", value: String(pending), icon: "⏳" },
+  const stats: { label: string; value: string; icon: IconName; accent: "brand" | "accent" | "slate" }[] = [
+    { label: "Órdenes hoy", value: String(todayOrders.length), icon: "receipt", accent: "brand" },
+    { label: "Vendido hoy", value: formatMoney(soldToday, currency), icon: "wallet", accent: "accent" },
+    { label: "Órdenes activas", value: String(pending), icon: "clock", accent: "slate" },
   ];
 
   return (
@@ -67,15 +69,7 @@ export default async function DashboardHome() {
 
       <div className="grid gap-4 sm:grid-cols-3">
         {stats.map((s) => (
-          <Card key={s.label}>
-            <CardBody className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-slate-500">{s.label}</p>
-                <p className="mt-1 text-2xl font-bold text-slate-900">{s.value}</p>
-              </div>
-              <span className="text-2xl">{s.icon}</span>
-            </CardBody>
-          </Card>
+          <StatCard key={s.label} {...s} />
         ))}
       </div>
 

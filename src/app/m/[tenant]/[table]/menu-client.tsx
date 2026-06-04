@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 import { placeOrder, type CartLine } from "./actions";
 import { getDict, t } from "@/lib/i18n/dictionaries";
 import { formatMoney } from "@/lib/currency/format";
+import { Icon } from "@/components/ui/icon";
 import type { I18nText, Lang } from "@/lib/supabase/types";
 
 export interface MenuPayload {
@@ -109,12 +110,12 @@ export function MenuClient({
     return (
       <div className="flex min-h-screen flex-col items-center justify-center bg-slate-50 px-6 text-center">
         <div
-          className="flex h-16 w-16 items-center justify-center rounded-full text-3xl text-white"
+          className="flex h-16 w-16 animate-[scale-in_0.5s_cubic-bezier(0.23,1,0.32,1)_both] items-center justify-center rounded-full text-white"
           style={{ backgroundColor: primary }}
         >
-          ✓
+          <Icon name="check" size={30} />
         </div>
-        <h1 className="mt-5 text-xl font-bold text-slate-900">{d.orderSent}</h1>
+        <h1 className="mt-5 font-display text-2xl text-slate-900">{d.orderSent}</h1>
         <p className="mt-2 text-sm text-slate-500">
           {data.settings.restaurant_name} · {d.table} {data.table.label}
         </p>

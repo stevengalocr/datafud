@@ -1,24 +1,25 @@
 import Link from "next/link";
 import Image from "next/image";
+import { Icon, type IconName } from "@/components/ui/icon";
 
-const cards = [
+const cards: { href: string; title: string; desc: string; icon: IconName }[] = [
   {
     href: "/preview/admin",
     title: "Panel del dueño del SaaS",
     desc: "Resumen de clientes, restaurantes, pagos y planes. Lo que tú controlas.",
-    icon: "🏢",
+    icon: "store",
   },
   {
     href: "/preview/dashboard",
     title: "Panel del restaurante",
     desc: "Resumen del negocio, órdenes en vivo, menú y reportes del día.",
-    icon: "🍽️",
+    icon: "utensils",
   },
   {
     href: "/preview/cliente",
     title: "Menú del cliente (QR)",
     desc: "Lo que ve el comensal al escanear el QR de su mesa. Puede pedir.",
-    icon: "📱",
+    icon: "smartphone",
   },
 ];
 
@@ -38,14 +39,20 @@ export default function PreviewIndex() {
             <Link
               key={c.href}
               href={c.href}
-              className="flex items-center gap-4 rounded-2xl border border-slate-200 bg-white p-5 transition-colors hover:border-brand-300 hover:bg-brand-50/30"
+              className="group flex items-center gap-4 rounded-2xl border border-stone-200 bg-white p-5 transition-colors duration-200 hover:border-brand-300 hover:bg-brand-50/40"
             >
-              <span className="text-3xl">{c.icon}</span>
+              <span className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-xl bg-brand-50 text-brand-600">
+                <Icon name={c.icon} size={22} />
+              </span>
               <div>
                 <p className="font-semibold text-slate-900">{c.title}</p>
                 <p className="text-sm text-slate-500">{c.desc}</p>
               </div>
-              <span className="ml-auto text-slate-300">→</span>
+              <Icon
+                name="arrow-right"
+                size={20}
+                className="ml-auto text-stone-300 transition-transform duration-200 group-hover:translate-x-1 group-hover:text-brand-500"
+              />
             </Link>
           ))}
         </div>

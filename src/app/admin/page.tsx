@@ -1,8 +1,10 @@
 import { createClient } from "@/lib/supabase/server";
 import { PageHeader } from "@/components/shell/page-header";
+import { StatCard } from "@/components/shell/stat-card";
 import { Card, CardBody } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { TENANT_STATUS_COLOR, TENANT_STATUS_LABEL } from "@/lib/constants";
+import type { IconName } from "@/components/ui/icon";
 import type { Tenant } from "@/lib/supabase/types";
 
 export const dynamic = "force-dynamic";
@@ -28,11 +30,11 @@ export default async function AdminHome() {
       .filter((p: { paid_at: string | null }) => p.paid_at)
       .reduce((s: number, p: { amount_usd: number }) => s + Number(p.amount_usd), 0) || 0;
 
-  const stats = [
-    { label: "Restaurantes", value: total, icon: "🏬" },
-    { label: "Activos", value: active, icon: "✅" },
-    { label: "En prueba", value: trial, icon: "🧪" },
-    { label: "Suspendidos", value: suspended, icon: "⏸️" },
+  const stats: { label: string; value: number; icon: IconName; accent: "brand" | "accent" | "slate" }[] = [
+    { label: "Restaurantes", value: total, icon: "store", accent: "brand" },
+    { label: "Activos", value: active, icon: "check-circle", accent: "brand" },
+    { label: "En prueba", value: trial, icon: "beaker", accent: "accent" },
+    { label: "Suspendidos", value: suspended, icon: "pause", accent: "slate" },
   ];
 
   return (
@@ -44,15 +46,7 @@ export default async function AdminHome() {
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {stats.map((s) => (
-          <Card key={s.label}>
-            <CardBody className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-slate-500">{s.label}</p>
-                <p className="mt-1 text-3xl font-bold text-slate-900">{s.value}</p>
-              </div>
-              <span className="text-2xl">{s.icon}</span>
-            </CardBody>
-          </Card>
+          <StatCard key={s.label} {...s} />
         ))}
       </div>
 

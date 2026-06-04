@@ -1,6 +1,8 @@
 import { PreviewBanner } from "@/components/preview/preview-banner";
+import { StatCard } from "@/components/shell/stat-card";
 import { Card, CardBody, CardHeader } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import type { IconName } from "@/components/ui/icon";
 import {
   TENANT_STATUS_COLOR,
   TENANT_STATUS_LABEL,
@@ -34,18 +36,18 @@ export default function PreviewAdmin() {
     .filter((p) => p.paid_at)
     .reduce((s, p) => s + Number(p.amount_usd), 0);
 
-  const stats = [
-    { label: "Restaurantes", value: total, icon: "🏬" },
-    { label: "Activos", value: active, icon: "✅" },
-    { label: "En prueba", value: trial, icon: "🧪" },
-    { label: "Suspendidos", value: suspended, icon: "⏸️" },
+  const stats: { label: string; value: number; icon: IconName; accent: "brand" | "accent" | "slate" }[] = [
+    { label: "Restaurantes", value: total, icon: "store", accent: "brand" },
+    { label: "Activos", value: active, icon: "check-circle", accent: "brand" },
+    { label: "En prueba", value: trial, icon: "beaker", accent: "accent" },
+    { label: "Suspendidos", value: suspended, icon: "pause", accent: "slate" },
   ];
 
   return (
     <div className="min-h-screen bg-slate-50">
       <PreviewBanner active="/preview/admin" />
       <div className="mx-auto max-w-6xl px-5 py-8">
-        <h1 className="text-2xl font-bold text-slate-900">Panel del dueño del SaaS</h1>
+        <h1 className="font-display text-3xl text-slate-900">Panel del dueño del SaaS</h1>
         <p className="mt-1 text-sm text-slate-500">
           Vista general de todos tus clientes del SaaS.
         </p>
@@ -53,15 +55,7 @@ export default function PreviewAdmin() {
         {/* Stats */}
         <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {stats.map((s) => (
-            <Card key={s.label}>
-              <CardBody className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-slate-500">{s.label}</p>
-                  <p className="mt-1 text-3xl font-bold text-slate-900">{s.value}</p>
-                </div>
-                <span className="text-2xl">{s.icon}</span>
-              </CardBody>
-            </Card>
+            <StatCard key={s.label} {...s} />
           ))}
         </div>
 
@@ -75,7 +69,7 @@ export default function PreviewAdmin() {
         </Card>
 
         {/* Restaurantes */}
-        <h2 className="mb-3 mt-8 text-lg font-bold text-slate-900">Restaurantes</h2>
+        <h2 className="mb-3 mt-8 font-display text-2xl text-slate-900">Restaurantes</h2>
         <Card className="overflow-hidden">
           <table className="w-full text-sm">
             <thead className="bg-slate-50 text-left text-xs uppercase tracking-wide text-slate-500">
@@ -124,7 +118,7 @@ export default function PreviewAdmin() {
         </Card>
 
         {/* Pagos */}
-        <h2 className="mb-3 mt-8 text-lg font-bold text-slate-900">Pagos</h2>
+        <h2 className="mb-3 mt-8 font-display text-2xl text-slate-900">Pagos</h2>
         <Card className="overflow-hidden">
           <table className="w-full text-sm">
             <thead className="bg-slate-50 text-left text-xs uppercase tracking-wide text-slate-500">
@@ -158,7 +152,7 @@ export default function PreviewAdmin() {
         </Card>
 
         {/* Planes */}
-        <h2 className="mb-3 mt-8 text-lg font-bold text-slate-900">Planes</h2>
+        <h2 className="mb-3 mt-8 font-display text-2xl text-slate-900">Planes</h2>
         <div className="grid gap-5 lg:grid-cols-3">
           {mockPlans.map((p) => (
             <Card key={p.id}>

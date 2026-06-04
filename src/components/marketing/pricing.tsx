@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { cn } from "@/lib/utils/cn";
+import { Icon } from "@/components/ui/icon";
 
 const plans = [
   {
@@ -51,9 +52,12 @@ const plans = [
 
 export function Pricing() {
   return (
-    <section id="planes" className="mx-auto max-w-6xl px-5 py-20">
-      <div className="mx-auto mb-12 max-w-2xl text-center">
-        <h2 className="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">
+    <section id="planes" className="mx-auto max-w-6xl px-5 py-24">
+      <div className="mb-14 max-w-2xl">
+        <p className="text-sm font-semibold uppercase tracking-wider text-accent-600">
+          Planes
+        </p>
+        <h2 className="mt-2 font-display text-4xl text-slate-900">
           Un plan para cada negocio
         </h2>
         <p className="mt-3 text-slate-600">
@@ -73,32 +77,24 @@ export function Pricing() {
             )}
           >
             {plan.highlight && (
-              <span className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-brand-500 px-3 py-1 text-xs font-semibold text-white">
+              <span className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-accent-500 px-3 py-1 text-xs font-semibold text-white">
                 Más popular
               </span>
             )}
-            <h3 className="text-lg font-semibold text-slate-900">{plan.name}</h3>
+            <h3 className="font-display text-2xl text-slate-900">{plan.name}</h3>
             <p className="mt-1 text-sm text-slate-500">{plan.tagline}</p>
             <div className="mt-5 flex items-baseline gap-1">
-              <span className="text-4xl font-bold tracking-tight text-slate-900">
-                ${plan.price}
-              </span>
+              <span className="font-display text-5xl text-slate-900">${plan.price}</span>
               <span className="text-slate-500">/mes</span>
             </div>
             <ul className="mt-6 flex-1 space-y-3 text-sm text-slate-600">
               {plan.features.map((f) => (
-                <li key={f} className="flex items-start gap-2">
-                  <svg
-                    className="mt-0.5 h-4 w-4 flex-shrink-0 text-brand-500"
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M16.7 5.3a1 1 0 010 1.4l-7.5 7.5a1 1 0 01-1.4 0L3.3 9.7a1 1 0 011.4-1.4l3.1 3.1 6.8-6.8a1 1 0 011.4 0z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
+                <li key={f} className="flex items-start gap-2.5">
+                  <Icon
+                    name="check"
+                    size={18}
+                    className="mt-0.5 flex-shrink-0 text-brand-500"
+                  />
                   {f}
                 </li>
               ))}
@@ -106,10 +102,10 @@ export function Pricing() {
             <Link
               href={`/register?plan=${plan.code}`}
               className={cn(
-                "mt-7 inline-flex h-11 items-center justify-center rounded-lg font-medium transition-colors",
+                "mt-7 inline-flex h-11 items-center justify-center rounded-xl font-semibold transition-[transform,background-color] duration-200 ease-out active:scale-[0.98]",
                 plan.highlight
-                  ? "bg-brand-500 text-white hover:bg-brand-600"
-                  : "border border-slate-200 bg-white text-slate-800 hover:bg-slate-50"
+                  ? "bg-brand-600 text-white hover:bg-brand-700"
+                  : "border border-stone-300 bg-white text-slate-800 hover:bg-cream-100"
               )}
             >
               Empezar con {plan.name}

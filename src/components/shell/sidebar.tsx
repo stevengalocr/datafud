@@ -5,8 +5,9 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils/cn";
 import { logoutAction } from "@/app/(auth)/actions";
+import { Icon, type IconName } from "@/components/ui/icon";
 
-export type NavItem = { href: string; label: string; icon: string };
+export type NavItem = { href: string; label: string; icon: IconName };
 
 export function Sidebar({
   brand,
@@ -47,13 +48,13 @@ export function Sidebar({
               key={item.href}
               href={item.href}
               className={cn(
-                "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors",
+                "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors duration-200",
                 active
                   ? "bg-brand-50 text-brand-700"
-                  : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
+                  : "text-slate-600 hover:bg-cream-100 hover:text-slate-900"
               )}
             >
-              <span className="text-base">{item.icon}</span>
+              <Icon name={item.icon} size={18} className={active ? "text-brand-600" : "text-slate-400"} />
               {item.label}
             </Link>
           );
@@ -64,9 +65,9 @@ export function Sidebar({
         <form action={logoutAction}>
           <button
             type="submit"
-            className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-slate-600 hover:bg-rose-50 hover:text-rose-700"
+            className="flex w-full cursor-pointer items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-slate-600 transition-colors duration-200 hover:bg-rose-50 hover:text-rose-700"
           >
-            <span className="text-base">⎋</span>
+            <Icon name="logout" size={18} className="text-slate-400" />
             Cerrar sesión
           </button>
         </form>

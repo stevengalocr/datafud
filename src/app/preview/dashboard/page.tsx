@@ -1,6 +1,8 @@
 import { PreviewBanner } from "@/components/preview/preview-banner";
+import { StatCard } from "@/components/shell/stat-card";
 import { Card, CardBody, CardHeader } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import type { IconName } from "@/components/ui/icon";
 import { formatMoney } from "@/lib/currency/format";
 import { ORDER_STATUS_COLOR, ORDER_STATUS_LABEL } from "@/lib/constants";
 import { t } from "@/lib/i18n/dictionaries";
@@ -23,10 +25,10 @@ export default function PreviewDashboard() {
   ).length;
   const maxUnits = Math.max(...mockTopProducts.map((p) => p.units));
 
-  const stats = [
-    { label: "Órdenes hoy", value: String(mockOrders.length), icon: "🧾" },
-    { label: "Vendido hoy", value: formatMoney(soldToday, currency), icon: "💰" },
-    { label: "Órdenes activas", value: String(pending), icon: "⏳" },
+  const stats: { label: string; value: string; icon: IconName; accent: "brand" | "accent" | "slate" }[] = [
+    { label: "Órdenes hoy", value: String(mockOrders.length), icon: "receipt", accent: "brand" },
+    { label: "Vendido hoy", value: formatMoney(soldToday, currency), icon: "wallet", accent: "accent" },
+    { label: "Órdenes activas", value: String(pending), icon: "clock", accent: "slate" },
   ];
 
   return (
@@ -35,7 +37,7 @@ export default function PreviewDashboard() {
       <div className="mx-auto max-w-6xl px-5 py-8">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold text-slate-900">
+            <h1 className="font-display text-3xl text-slate-900">
               Hola, {mockSettings.restaurant_name}
             </h1>
             <p className="mt-1 text-sm text-slate-500">Resumen de tu negocio hoy.</p>
@@ -45,15 +47,7 @@ export default function PreviewDashboard() {
 
         <div className="mt-6 grid gap-4 sm:grid-cols-3">
           {stats.map((s) => (
-            <Card key={s.label}>
-              <CardBody className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-slate-500">{s.label}</p>
-                  <p className="mt-1 text-2xl font-bold text-slate-900">{s.value}</p>
-                </div>
-                <span className="text-2xl">{s.icon}</span>
-              </CardBody>
-            </Card>
+            <StatCard key={s.label} {...s} />
           ))}
         </div>
 
@@ -146,7 +140,7 @@ export default function PreviewDashboard() {
         </div>
 
         {/* Menú */}
-        <h2 className="mb-3 mt-8 text-lg font-bold text-slate-900">Menú</h2>
+        <h2 className="mb-3 mt-8 font-display text-2xl text-slate-900">Menú</h2>
         <Card className="overflow-hidden">
           <table className="w-full text-sm">
             <thead className="bg-slate-50 text-left text-xs uppercase text-slate-500">

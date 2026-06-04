@@ -4,10 +4,10 @@ import { Sidebar, type NavItem } from "@/components/shell/sidebar";
 export const dynamic = "force-dynamic";
 
 const nav: NavItem[] = [
-  { href: "/admin", label: "Resumen", icon: "▦" },
-  { href: "/admin/tenants", label: "Restaurantes", icon: "🏬" },
-  { href: "/admin/payments", label: "Pagos", icon: "💳" },
-  { href: "/admin/plans", label: "Planes", icon: "✦" },
+  { href: "/admin", label: "Resumen", icon: "grid" },
+  { href: "/admin/tenants", label: "Restaurantes", icon: "store" },
+  { href: "/admin/payments", label: "Pagos", icon: "card" },
+  { href: "/admin/plans", label: "Planes", icon: "sparkles" },
 ];
 
 export default async function AdminLayout({

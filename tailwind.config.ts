@@ -33,9 +33,39 @@ const config: Config = {
           800: "#5c4626",
           900: "#4d3b22",
         },
+        // Neutros crema cálidos, tintados hacia el verde de la marca
+        cream: {
+          50: "#fbfaf6",
+          100: "#f5f3ea",
+          200: "#ece8d9",
+        },
       },
       fontFamily: {
         sans: ["var(--font-sans)", "system-ui", "sans-serif"],
+        display: ["var(--font-display)", "Georgia", "serif"],
+      },
+      transitionTimingFunction: {
+        "out-expo": "cubic-bezier(0.23, 1, 0.32, 1)",
+        "in-out-strong": "cubic-bezier(0.77, 0, 0.175, 1)",
+      },
+      keyframes: {
+        "fade-up": {
+          "0%": { opacity: "0", transform: "translateY(16px)" },
+          "100%": { opacity: "1", transform: "translateY(0)" },
+        },
+        "fade-in": {
+          "0%": { opacity: "0" },
+          "100%": { opacity: "1" },
+        },
+        "scale-in": {
+          "0%": { opacity: "0", transform: "scale(0.96)" },
+          "100%": { opacity: "1", transform: "scale(1)" },
+        },
+      },
+      animation: {
+        "fade-up": "fade-up 0.7s cubic-bezier(0.23, 1, 0.32, 1) both",
+        "fade-in": "fade-in 0.6s ease both",
+        "scale-in": "scale-in 0.5s cubic-bezier(0.23, 1, 0.32, 1) both",
       },
     },
   },
