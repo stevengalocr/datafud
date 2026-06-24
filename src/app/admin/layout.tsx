@@ -7,6 +7,7 @@ const nav: NavItem[] = [
   { href: "/admin", label: "Resumen", icon: "grid" },
   { href: "/admin/tenants", label: "Restaurantes", icon: "store" },
   { href: "/admin/payments", label: "Pagos", icon: "card" },
+  { href: "/admin/charges", label: "Cargos", icon: "receipt" },
   { href: "/admin/plans", label: "Planes", icon: "sparkles" },
 ];
 

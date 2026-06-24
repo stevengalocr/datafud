@@ -13,7 +13,25 @@ tenants, planes y pagos.
 | `/` | público | Landing con explicación del sistema y planes |
 | `/m/[tenant]/[mesa]` | cliente (anónimo) | Menú virtual por QR + envío de orden |
 | `/dashboard` | restaurant_admin | Menú, mesas/QR, órdenes, reportes, configuración |
-| `/admin` | super_admin | Tenants, pagos, planes, métricas |
+| `/admin` | super_admin | Tenants, pagos, cargos (implementación/NFC), planes, métricas |
+
+## Documentación
+
+Centro de documentación en [`docs/`](docs/README.md). **Versión actual: v1.0.1** (ver [CHANGELOG](docs/CHANGELOG.md)).
+
+- [`docs/PRODUCT.md`](docs/PRODUCT.md) — contexto completo: qué es, para qué, para quién y cómo está construido.
+- [`docs/USER_MANUAL.md`](docs/USER_MANUAL.md) — cómo se usa, paso a paso, por rol (comensal, restaurante, super admin).
+- [`docs/MARKETING.md`](docs/MARKETING.md) — línea de venta, mensajes, planes y precios.
+- [`docs/BRAND.md`](docs/BRAND.md) — guía de marca: logo, color, tipografía, motion y voz.
+- [`docs/CHANGELOG.md`](docs/CHANGELOG.md) — historial de versiones.
+- [`docs/specs/`](docs/specs) — diseño técnico · [`docs/plans/`](docs/plans) — planes de implementación.
+
+> 💡 ¿Solo quieres verlo funcionando? Abre **`/preview`** — recorrido por el restaurante de
+> ejemplo "Verde Limón" con la carta del comensal totalmente interactiva.
+
+> **Fuente de verdad de precios/límites:** la landing. Cualquier cambio se refleja en
+> `src/components/marketing/v2/pricing-v2.tsx`, `src/lib/constants.ts` (`PRICING`) y
+> `supabase/schema.sql`.
 
 ## Puesta en marcha
 

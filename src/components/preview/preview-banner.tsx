@@ -1,33 +1,35 @@
 import Link from "next/link";
 
 const links = [
-  { href: "/preview/dashboard", label: "Panel restaurante" },
   { href: "/preview/cliente", label: "Menú cliente" },
+  { href: "/preview/dashboard", label: "Panel restaurante" },
+  { href: "/preview/admin", label: "Super admin" },
 ];
 
 export function PreviewBanner({ active }: { active?: string }) {
   return (
-    <div className="sticky top-0 z-50 border-b border-amber-200 bg-amber-50">
-      <div className="mx-auto flex max-w-6xl flex-wrap items-center gap-x-4 gap-y-2 px-4 py-2 text-sm">
-        <span className="rounded-full bg-amber-500 px-2 py-0.5 text-xs font-semibold text-white">
-          MODO DEMO
+    <div className="sticky top-0 z-50 border-b border-brand-800/40 bg-brand-950 text-cream-100">
+      <div className="mx-auto flex h-[41px] max-w-6xl flex-wrap items-center gap-x-4 gap-y-1 px-4 text-sm">
+        <span className="flex items-center gap-2 rounded-full bg-accent-500 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-widest text-brand-950">
+          <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-brand-950" />
+          Modo demo
         </span>
-        <span className="text-amber-800">Datos de ejemplo · sin base de datos</span>
-        <nav className="ml-auto flex flex-wrap gap-3">
+        <span className="hidden text-xs text-cream-100/60 sm:inline">Verde Limón · datos de ejemplo</span>
+        <nav className="ml-auto flex flex-wrap items-center gap-4 text-[11px] font-bold uppercase tracking-widest">
           {links.map((l) => (
             <Link
               key={l.href}
               href={l.href}
               className={
                 active === l.href
-                  ? "font-semibold text-amber-900 underline"
-                  : "text-amber-700 hover:text-amber-900"
+                  ? "text-accent-300"
+                  : "text-cream-100/70 transition-colors hover:text-white"
               }
             >
               {l.label}
             </Link>
           ))}
-          <Link href="/" className="text-amber-700 hover:text-amber-900">
+          <Link href="/" className="text-cream-100/50 transition-colors hover:text-white">
             ← Landing
           </Link>
         </nav>

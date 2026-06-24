@@ -28,6 +28,11 @@ do $$ begin
   create type payment_status as enum ('pending','paid','overdue');
 exception when duplicate_object then null; end $$;
 
+-- Cargos puntuales (no mensualidad): implementación llave en mano y tarjetas NFC.
+do $$ begin
+  create type charge_kind as enum ('implementation','nfc_cards','other');
+exception when duplicate_object then null; end $$;
+
 commit;
 
 -- ---------------------------------------------------------------------
@@ -89,6 +94,24 @@ create table if not exists public.subscription_payments (
   created_at timestamptz not null default now()
 );
 create index if not exists idx_payments_tenant on public.subscription_payments(tenant_id);
+
+-- Cargos puntuales por tenant: implementación única ($249) y pedidos de NFC ($15/u).
+-- Se registran y gestionan manualmente por el super admin, igual que las mensualidades.
+create table if not exists public.tenant_charges (
+  id uuid primary key default gen_random_uuid(),
+  tenant_id uuid not null references public.tenants(id) on delete cascade,
+  kind charge_kind not null default 'other',
+  description text,
+  quantity int not null default 1 check (quantity > 0),
+  unit_amount_usd numeric(10,2) not null default 0,
+  amount_usd numeric(10,2) not null default 0,
+  status payment_status not null default 'pending',
+  paid_at timestamptz,
+  approved_by uuid references auth.users(id),
+  notes text,
+  created_at timestamptz not null default now()
+);
+create index if not exists idx_charges_tenant on public.tenant_charges(tenant_id);
 
 commit;
 
@@ -283,6 +306,7 @@ do $$
 declare t text;
 begin
   foreach t in array array['tenants','profiles','subscription_payments','plans',
+                           'tenant_charges',
                            'categories','products','tables','orders','order_items',
                            'tenant_settings']
   loop
@@ -314,6 +338,15 @@ create policy tenants_own_read on public.tenants for select
 drop policy if exists payments_super on public.subscription_payments;
 create policy payments_super on public.subscription_payments for all
   using (public.is_super_admin()) with check (public.is_super_admin());
+
+-- TENANT_CHARGES (implementación + NFC): el super admin gestiona todo;
+-- el restaurante solo puede leer sus propios cargos.
+drop policy if exists charges_super on public.tenant_charges;
+create policy charges_super on public.tenant_charges for all
+  using (public.is_super_admin()) with check (public.is_super_admin());
+drop policy if exists charges_own_read on public.tenant_charges;
+create policy charges_own_read on public.tenant_charges for select
+  using (tenant_id = public.current_tenant_id());
 
 -- NOTA: el rol anónimo (cliente final) NO accede directamente a estas tablas.
 -- El menú público y el envío de órdenes se hacen mediante las funciones
@@ -577,10 +610,10 @@ begin;
 
 insert into public.plans (code, name, price_usd, sort_order, features) values
   ('basico','Básico',29.00,1, jsonb_build_object(
-     'max_languages',1,'max_products',30,'max_categories',5,'max_tables',8,
+     'max_languages',1,'max_products',20,'max_categories',5,'max_tables',8,
      'advanced_reports',false,'full_branding',false)),
   ('estandar','Estándar',49.00,2, jsonb_build_object(
-     'max_languages',2,'max_products',100,'max_categories',20,'max_tables',30,
+     'max_languages',2,'max_products',70,'max_categories',20,'max_tables',30,
      'advanced_reports',true,'full_branding',true)),
   ('empresarial','Empresarial',99.00,3, jsonb_build_object(
      'max_languages',3,'max_products',null,'max_categories',null,'max_tables',null,

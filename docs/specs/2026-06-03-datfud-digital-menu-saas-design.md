@@ -11,8 +11,12 @@
 Datfud es un **SaaS multi-tenant** que da a restaurantes, sodas y nichos similares un **menú digital** que el cliente final consulta y ordena desde cualquier dispositivo escaneando un QR en su mesa. Cada negocio (tenant) administra su menú, órdenes, reportes y branding. El dueño del SaaS administra los tenants, sus planes y sus pagos.
 
 ### Modelo de negocio
+- **Implementación única (pago único): $249** — llave en mano, landing personalizada con dominio propio y 1 año de soporte.
 - Suscripción mensual: **Básico $29 · Estándar $49 · Empresarial $99**.
-- Alta por auto-registro desde la landing → **trial automático** → el super admin aprueba/suspende y registra los pagos manualmente.
+- **Add-on físico: tarjetas NFC $15/unidad** (sin suscripción extra).
+- Alta por auto-registro desde la landing → **trial automático (30 días)** → el super admin aprueba/suspende y registra mensualidades y cargos puntuales (implementación, NFC) manualmente.
+
+> La **landing es la fuente de verdad** de precios y límites. Cualquier cambio debe reflejarse en `src/components/marketing/v2/pricing-v2.tsx`, `src/lib/constants.ts` (`PRICING`) y las semillas de `supabase/schema.sql`.
 
 ---
 
@@ -58,8 +62,11 @@ Un solo esquema Postgres con **`tenant_id` en cada tabla de negocio** + **Row-Le
 **`profiles`** — enlaza `auth.users` con tenant + rol.
 - `id` (= `auth.users.id`), `tenant_id` (nullable para super_admin), `role` (`super_admin`|`restaurant_admin`), `full_name`, `created_at`.
 
-**`subscription_payments`** — historial manual de pagos.
+**`subscription_payments`** — historial manual de mensualidades.
 - `id`, `tenant_id`, `plan_id`, `amount_usd`, `period_start`, `period_end`, `paid_at`, `status` (`pending`|`paid`|`overdue`), `approved_by` (super_admin id), `notes`, `created_at`.
+
+**`tenant_charges`** — cargos puntuales (no mensualidad): implementación única y tarjetas NFC.
+- `id`, `tenant_id`, `kind` (`implementation`|`nfc_cards`|`other`), `description`, `quantity`, `unit_amount_usd`, `amount_usd`, `status` (`pending`|`paid`|`overdue`), `paid_at`, `approved_by`, `notes`, `created_at`. Gestionado por el super admin en `/admin/charges`.
 
 ### 4.2 Menú (por tenant)
 
@@ -119,7 +126,7 @@ Principios:
 | | Básico $29 | Estándar $49 | Empresarial $99 |
 |---|---|---|---|
 | Idiomas | 1 | 2 | 3 |
-| Platillos | 30 | 100 | Ilimitado |
+| Platillos | 20 | 70 | Ilimitado |
 | Categorías | 5 | 20 | Ilimitado |
 | Mesas/QR | 8 | 30 | Ilimitado |
 | Reportes avanzados | — | ✓ | ✓ |

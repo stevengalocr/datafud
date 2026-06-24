@@ -3,12 +3,13 @@ import Image from "next/image";
 import { cn } from "@/lib/utils/cn";
 import { Icon, type IconName } from "@/components/ui/icon";
 import { RevealOnView } from "@/components/marketing/v2/reveal";
+import { PRICING } from "@/lib/constants";
 
 const plans = [
   {
     code: "basico",
     name: "Básico",
-    price: 29,
+    price: PRICING.plans.basico.priceUsd,
     highlight: false,
     tagline: "Para empezar tu menú digital",
     features: [
@@ -22,7 +23,7 @@ const plans = [
   {
     code: "estandar",
     name: "Estándar",
-    price: 49,
+    price: PRICING.plans.estandar.priceUsd,
     highlight: true,
     tagline: "El favorito de sodas y restaurantes",
     features: [
@@ -36,7 +37,7 @@ const plans = [
   {
     code: "empresarial",
     name: "Empresarial",
-    price: 99,
+    price: PRICING.plans.empresarial.priceUsd,
     highlight: false,
     tagline: "Sin límites para tu crecimiento",
     features: [
@@ -90,13 +91,13 @@ export function PricingV2() {
             </span>
             <h3 className="font-display text-xl text-brand-900 mt-1">Implementación Única</h3>
             <div className="mt-4 flex items-baseline gap-2">
-              <span className="font-display text-6xl text-brand-900 leading-none">$249</span>
+              <span className="font-display text-6xl text-brand-900 leading-none">${PRICING.setupFeeUsd}</span>
               <span className="text-xs font-semibold uppercase tracking-widest text-brand-700/65">
                 pago único
               </span>
             </div>
             <p className="mt-3 text-xs text-brand-700/80">
-              Después, tu plan mensual preferido desde <span className="font-semibold text-brand-900">$29/mes</span>
+              Después, tu plan mensual preferido desde <span className="font-semibold text-brand-900">${PRICING.plans.basico.priceUsd}/mes</span>
             </p>
           </div>
           
@@ -128,9 +129,15 @@ export function PricingV2() {
             )}
           >
             {plan.highlight && (
-              <span className="absolute -top-3.5 left-8 rounded-full border border-accent-300 bg-accent-500 px-3.5 py-0.5 text-[9px] font-bold uppercase tracking-widest text-white">
-                Recomendado
-              </span>
+              <>
+                <div
+                  className="pointer-events-none absolute -inset-3 -z-10 rounded-[1.75rem] bg-accent-400/20 blur-2xl"
+                  aria-hidden="true"
+                />
+                <span className="absolute -top-3.5 left-8 rounded-full border border-accent-300 bg-accent-500 px-3.5 py-0.5 text-[9px] font-bold uppercase tracking-widest text-white">
+                  Recomendado
+                </span>
+              </>
             )}
             
             <div className="border-b border-stone-200/50 pb-6 mb-6">
@@ -195,7 +202,7 @@ export function PricingV2() {
               Tecnología Física
             </span>
             <span className="flex items-baseline gap-1">
-              <span className="font-display text-3xl text-brand-900">$15</span>
+              <span className="font-display text-3xl text-brand-900">${PRICING.nfcUnitUsd}</span>
               <span className="text-[10px] font-bold uppercase tracking-widest text-brand-700/60">
                 / unidad
               </span>

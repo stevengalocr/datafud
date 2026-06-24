@@ -11,6 +11,7 @@ export type OrderStatus =
   | "paid"
   | "cancelled";
 export type PaymentStatus = "pending" | "paid" | "overdue";
+export type ChargeKind = "implementation" | "nfc_cards" | "other";
 
 export type Lang = "es" | "en" | "pt";
 export type I18nText = Partial<Record<Lang, string>>;
@@ -65,6 +66,21 @@ export interface SubscriptionPayment {
   period_end: string;
   paid_at: string | null;
   status: PaymentStatus;
+  approved_by: string | null;
+  notes: string | null;
+  created_at: string;
+}
+
+export interface TenantCharge {
+  id: string;
+  tenant_id: string;
+  kind: ChargeKind;
+  description: string | null;
+  quantity: number;
+  unit_amount_usd: number;
+  amount_usd: number;
+  status: PaymentStatus;
+  paid_at: string | null;
   approved_by: string | null;
   notes: string | null;
   created_at: string;

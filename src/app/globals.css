@@ -94,6 +94,113 @@ body {
   @apply bg-stone-300 rounded-full;
 }
 
+/* =================================================================
+   Motion audaz — landing (todo transform/opacity, 60fps)
+   ================================================================= */
+
+/* Barra de progreso de scroll (top del nav) */
+.scroll-progress {
+  transform-origin: 0 50%;
+  transform: scaleX(var(--progress, 0));
+  transition: transform 0.05s linear;
+}
+
+/* Marquee infinito (tira de confianza). Pausa al hover. */
+.marquee {
+  display: flex;
+  width: max-content;
+  animation: marquee-x var(--marquee-duration, 38s) linear infinite;
+}
+.marquee-host:hover .marquee {
+  animation-play-state: paused;
+}
+@keyframes marquee-x {
+  from { transform: translate3d(0, 0, 0); }
+  to { transform: translate3d(-50%, 0, 0); }
+}
+
+/* Parallax: JS escribe --parallax (px). */
+.parallax {
+  transform: translate3d(0, var(--parallax, 0px), 0);
+  will-change: transform;
+}
+
+/* Subrayado dorado animado en enlaces de nav */
+.link-underline {
+  position: relative;
+}
+.link-underline::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -4px;
+  height: 1.5px;
+  width: 100%;
+  background: theme("colors.accent.500");
+  transform: scaleX(0);
+  transform-origin: right center;
+  transition: transform 0.4s var(--ease-out);
+}
+.link-underline:hover::after {
+  transform: scaleX(1);
+  transform-origin: left center;
+}
+
+/* Ensamble del motivo QR → tenedor (hero). Cada celda entra escalonada. */
+.qr-pixel {
+  opacity: 0;
+  transform: scale(0.4);
+  animation: qr-pop 0.5s var(--ease-out) forwards;
+}
+@keyframes qr-pop {
+  to { opacity: 1; transform: scale(1); }
+}
+
+/* Pasos pinneados: la imagen activa hace cross-fade + leve zoom. */
+.pin-frame {
+  opacity: 0;
+  transform: scale(1.04);
+  transition: opacity 0.6s var(--ease-out), transform 0.9s var(--ease-out);
+}
+.pin-frame[data-active="true"] {
+  opacity: 1;
+  transform: scale(1);
+}
+/* Riel de progreso vertical de los pasos */
+.pin-rail-fill {
+  transform-origin: top;
+  transform: scaleY(var(--rail, 0));
+  transition: transform 0.15s linear;
+}
+
+/* Tratamiento de color cálido sobre fotos de stock (cohesión de marca) */
+.img-grade::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(160deg, rgba(34, 80, 58, 0.28), rgba(20, 47, 35, 0.05) 55%),
+    radial-gradient(120% 80% at 80% 0%, rgba(184, 146, 63, 0.16), transparent 60%);
+  mix-blend-mode: multiply;
+  pointer-events: none;
+}
+/* Grano sutil para textura editorial */
+.grain::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  opacity: 0.5;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
+  mix-blend-mode: overlay;
+}
+
+/* CTA magnético: JS escribe --mx/--my (px). */
+.magnetic {
+  transform: translate3d(var(--mx, 0px), var(--my, 0px), 0);
+  transition: transform 0.25s var(--ease-out);
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -104,4 +211,9 @@ body {
   }
   .reveal > * { opacity: 1; }
   .reveal-up { opacity: 1 !important; transform: none !important; }
+  .marquee { animation: none !important; }
+  .qr-pixel { opacity: 1 !important; transform: none !important; }
+  .parallax,
+  .magnetic { transform: none !important; }
+  .pin-frame { opacity: 1; transform: none; }
 }

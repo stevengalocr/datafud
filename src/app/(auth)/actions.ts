@@ -122,16 +122,24 @@ export async function registerAction(
     .select("id")
     .single();
   if (tenantErr || !tenant) {
+    // Rollback: no dejar un usuario auth huérfano sin negocio.
+    await admin.auth.admin.deleteUser(userId);
     return { error: "No se pudo crear el negocio. Intenta de nuevo." };
   }
 
   // 3) Perfil + settings por defecto
-  await admin.from("profiles").insert({
+  const { error: profileErr } = await admin.from("profiles").insert({
     id: userId,
     tenant_id: tenant.id,
     role: "restaurant_admin",
     full_name: ownerName,
   });
+  if (profileErr) {
+    // Rollback completo: borrar tenant (cascada) y usuario.
+    await admin.from("tenants").delete().eq("id", tenant.id);
+    await admin.auth.admin.deleteUser(userId);
+    return { error: "No se pudo completar el registro. Intenta de nuevo." };
+  }
   await admin.from("tenant_settings").insert({
     tenant_id: tenant.id,
     currency_code: "USD",

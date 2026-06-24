@@ -1,4 +1,24 @@
-import type { OrderStatus, TenantStatus } from "@/lib/supabase/types";
+import type { ChargeKind, OrderStatus, TenantStatus } from "@/lib/supabase/types";
+
+// Fuente de verdad de la línea de venta. Debe coincidir con la landing
+// (src/components/marketing/v2/pricing-v2.tsx) y con las semillas de
+// supabase/schema.sql. Si cambias un precio o límite, cámbialo en los tres.
+export const PRICING = {
+  setupFeeUsd: 249, // Implementación única llave en mano (pago único)
+  nfcUnitUsd: 15, // Tarjeta NFC física por unidad
+  trialDays: 30,
+  plans: {
+    basico: { name: "Básico", priceUsd: 29, maxLanguages: 1, maxProducts: 20 },
+    estandar: { name: "Estándar", priceUsd: 49, maxLanguages: 2, maxProducts: 70 },
+    empresarial: { name: "Empresarial", priceUsd: 99, maxLanguages: 3, maxProducts: null },
+  },
+} as const;
+
+export const CHARGE_KIND_LABEL: Record<ChargeKind, string> = {
+  implementation: "Implementación única",
+  nfc_cards: "Tarjetas NFC",
+  other: "Otro cargo",
+};
 
 export const ORDER_STATUS_LABEL: Record<OrderStatus, string> = {
   pending: "Pendiente",
