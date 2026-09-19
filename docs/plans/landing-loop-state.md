@@ -21,8 +21,8 @@
 
 ## Contador
 
-- Iteración actual: 7
-- Iteraciones consumidas: 7 / 35
+- Iteración actual: 8
+- Iteraciones consumidas: 8 / 35
 
 ## Capacidades del entorno
 
@@ -43,8 +43,8 @@
 | U03 | CTAs a WhatsApp + botón flotante | hecho | 1 | c4acd8d | directo a main | READY (`dpl_4rGKvw2931aCoaRcmUhFwUQKPv4d`) | `grep href="/register"` = 0; 9 enlaces wa.me con target/rel correctos y data-wa-origin; flotante 56×56 solo en 375, sin tapar el footer |
 | U04 | Promesas y planes (48 h / 15 días, Básico = Carta, frases prohibidas, docs) | hecho | 1 | dc4093d | directo a main | READY (`dpl_5ZvvPVUVmTvRsry7kRGbzmAR1qhX`) | grep de frases prohibidas en landing = 0; capturas de hero, stats y planes; MARKETING/PRODUCT/CHANGELOG alineados |
 | U05 | Sección #hardware | hecho | 1 | 1f7ed73 | directo a main | READY (`dpl_2D3hodjJMk8d9iJqHJRdc8BmjNsB`) | Capturas 375/1440 de #hardware; 4 productos desde PRICING.hardware; CTA de cotización a WhatsApp |
-| U06 | Sección #demo | hecho | 1 | (ver bitácora it. 7) | directo a main | (ver bitácora it. 7) | Capturas 375/1440; CTA a /preview/cliente (200) y /preview/dashboard; sin desbordes en 375 |
-| U07 | Sección #implementacion | pendiente | 0 | | | | |
+| U06 | Sección #demo | hecho | 1 | 7311a8f | directo a main | READY (`dpl_6VRNLVhPHVyPT1boVzuCzDFX7TSm`) | Capturas 375/1440; CTA a /preview/cliente (200) y /preview/dashboard; sin desbordes en 375 |
+| U07 | Sección #implementacion | hecho | 1 | (ver bitácora it. 8) | directo a main | (ver bitácora it. 8) | Capturas 375/1440: línea de tiempo de 4 hitos y dos columnas |
 | U08 | Sección #confianza | pendiente | 0 | | | | |
 | U09 | Sección #preguntas + nav final | pendiente | 0 | | | | |
 | U10 | Legal: /terminos y /privacidad | pendiente | 0 | | | | |
@@ -230,3 +230,15 @@ con `role="img"` y alt descriptivo. Al tener las fotos reales, basta con poner l
   columna del grid y cortaba el título (no lo detectaba `scrollWidth`); se acortó el texto,
   se permite el salto de línea y se añadió `min-w-0`. El QA ahora también detecta elementos
   que sobresalen del viewport. Precios en colones sin decimales.
+
+### Iteración 8 — U07 Sección #implementacion
+
+- Plan: `implementation-section.tsx` con línea de tiempo (Día 0 → 48 horas → Días 2 a 5 →
+  Día 15; horizontal en desktop, vertical en móvil; plazos desde `PRICING.delivery`) y dos
+  columnas: "Lo que hacemos nosotros" (bloque oscuro) y "Lo que ponés vos" (lista numerada).
+  Aclara que con el plan Carta se termina en 48 h. Va justo antes de #planes; el footer la
+  enlaza.
+- Puertas: A ✓ · B ✓ · C ✓ · D ✓ · E ✓ · F ✓ · G ✓ (375/768/1440, sin desbordes) · H n.a.
+  · I ✓ · J siguiente iteración.
+- Autocrítica: las dos tarjetas se estiraban a la misma altura y la oscura dejaba aire vacío
+  en desktop → `lg:items-start`.

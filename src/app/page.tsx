@@ -12,6 +12,7 @@ import { PRICING } from "@/lib/constants";
 import { ContactSection } from "@/components/marketing/v2/contact-section";
 import { HardwareSection } from "@/components/marketing/v2/hardware-section";
 import { DemoSection } from "@/components/marketing/v2/demo-section";
+import { ImplementationSection } from "@/components/marketing/v2/implementation-section";
 import { WhatsAppFloat } from "@/components/marketing/v2/whatsapp-float";
 import { SITE, hasWhatsApp, mailLink, waProps, whatsappDisplay } from "@/lib/site";
 
@@ -363,7 +364,10 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ── Precios + NFC ──────────────────────────────────────── */}
+      {/* ── Implementación ─────────────────────────────────────── */}
+      <ImplementationSection />
+
+      {/* ── Planes y precios ───────────────────────────────────── */}
       <PricingV2 />
 
       {/* ── Contacto ───────────────────────────────────────────── */}
@@ -426,6 +430,7 @@ export default function HomePage() {
                   <a href="#como-funciona" className="transition-colors duration-200 hover:text-white">Cómo funciona</a>
                   <a href="#sistema" className="transition-colors duration-200 hover:text-white">El sistema</a>
                   <a href="#hardware" className="transition-colors duration-200 hover:text-white">Hardware de mesa</a>
+                  <a href="#implementacion" className="transition-colors duration-200 hover:text-white">Implementación</a>
                   <a href="#planes" className="transition-colors duration-200 hover:text-white">Planes y precios</a>
                   <a href="#demo" className="transition-colors duration-200 hover:text-white">Demo en vivo</a>
                   <a href="#contacto" className="transition-colors duration-200 hover:text-white">Contacto</a>
