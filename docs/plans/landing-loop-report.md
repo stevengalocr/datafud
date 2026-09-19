@@ -35,8 +35,8 @@ conversión y Lighthouse móvil 95 / 100 / 96 / 100. U15 y U16 se omitieron por 
 | U14 | next 15.5.25 + audit | d1533fc | READY `dpl_85iQ4Um43VxCLzux68xE3MNrJPZx` |
 | U15 | Carta estática `/c/[slug]` | — | omitida (CONFIG = no) |
 | U16 | Redirecciones `/q/[code]` | — | omitida (CONFIG = no) |
-| U17 | Pulido (1 pasada, convergió) | 3cb86fe | ver estado (verificado al cerrar) |
-| U18 | Este informe | (commit de este archivo) | ver estado |
+| U17 | Pulido (1 pasada, convergió) | 3cb86fe | READY `dpl_J75UF4qRBFLKvcgvuw7gcA3Wh7iF` |
+| U18 | Este informe | 167a1ae | READY `dpl_GdfhYA53uFyvaMRe31cvsWziQJC6` (alias datafud.com) |
 
 ## Rúbrica final (1–5)
 
@@ -122,9 +122,11 @@ Dependencias nuevas: `resend`, `@vercel/analytics`; de desarrollo: `@playwright/
 
 ## Riesgos por puertas degradadas
 
-- **Red del sandbox**: sin salida a datafud.com ni a images.unsplash.com. La puerta J se
-  verificó con la API de Vercel (estado READY y alias datafud.com de cada despliegue), no con
-  una carga real de producción. Las 7 fotos de Unsplash de la landing original no se vieron
+- **Red del sandbox**: sin salida directa a datafud.com ni a images.unsplash.com. La puerta J
+  se verificó con la API de Vercel (estado READY y alias datafud.com de cada despliegue) y, al
+  cerrar, con una lectura del HTML de producción vía Vercel: 12 enlaces `wa.me`, las 9
+  secciones, canonical, OG, JSON-LD, 0 frases prohibidas, 0 enlaces a `/register`,
+  `/robots.txt` y `/sitemap.xml` correctos. Las 7 fotos de Unsplash de la landing original no se vieron
   cargadas en las capturas; en producción se sirven desde `remotePatterns` como antes.
 - **Lighthouse local**: medido sobre `next start` en el sandbox; el Performance real en Vercel
   (con CDN y las fotos remotas) puede variar unos puntos. Conviene una corrida de PageSpeed

@@ -55,8 +55,8 @@
 | U14 | Seguridad de dependencias (next 15.5.x, audit) | hecho | 1 | d1533fc | directo a main | READY (`dpl_85iQ4Um43VxCLzux68xE3MNrJPZx`) | next 15.5.25; audit prod: 0 críticas; queda 1 alta (postcss interno de Next, solo se arregla con Next 16) |
 | U15 | Carta estática /c/[slug] | omitida (CONFIG=no) | – | | | | |
 | U16 | Redirecciones /q/[code] | omitida (CONFIG=no) | – | | | | |
-| U17 | Pulido (bucle de calidad) | hecho | 1 | 3cb86fe | directo a main | (verificar en it. 17) | Pasada 1: 0 hallazgos altos, 4 medios corregidos, rúbrica ≥ 4 en los 10 criterios; todas las puertas en verde |
-| U18 | Informe final | hecho | 1 | (commit de este archivo) | directo a main | (ver bitácora it. 17) | `docs/plans/landing-loop-report.md` |
+| U17 | Pulido (bucle de calidad) | hecho | 1 | 3cb86fe | directo a main | READY (`dpl_J75UF4qRBFLKvcgvuw7gcA3Wh7iF`) | Pasada 1: 0 hallazgos altos, 4 medios corregidos, rúbrica ≥ 4 en los 10 criterios; todas las puertas en verde |
+| U18 | Informe final | hecho | 1 | 167a1ae | directo a main | READY (`dpl_GdfhYA53uFyvaMRe31cvsWziQJC6`) | `docs/plans/landing-loop-report.md` |
 
 ## PENDIENTES-STEVEN
 
