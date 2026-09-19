@@ -1,4 +1,3 @@
-import Image from "next/image";
 import { cn } from "@/lib/utils/cn";
 import { Icon, type IconName } from "@/components/ui/icon";
 import { RevealOnView } from "@/components/marketing/v2/reveal";
@@ -67,12 +66,6 @@ const setupIncludes: { icon: IconName; label: string }[] = [
   { icon: "zap", label: `Carta publicada en ${PRICING.delivery.menuHours} horas y sistema completo en ${PRICING.delivery.fullSystemDays} días` },
   { icon: "palette", label: "Carta a tu marca: colores, logo y fotos de tus platillos" },
   { icon: "shield", label: "1 año de soporte técnico incluido" },
-];
-
-const nfcSteps = [
-  { n: "1.", title: "Toca", desc: "El comensal acerca su teléfono a la tarjeta NFC de la mesa." },
-  { n: "2.", title: "Ordena", desc: "Navega por la carta y, si tenés pedidos activos, envía el suyo al instante." },
-  { n: "3.", title: "Disfruta", desc: "Con el sistema completo, la orden llega directo a tu panel de cocina." },
 ];
 
 export function PricingV2() {
@@ -198,55 +191,26 @@ export function PricingV2() {
         ))}
       </RevealOnView>
 
-      {/* Add-on: Tarjetas NFC */}
-      <RevealOnView className="reveal-up relative mt-16 flex min-h-[520px] items-center overflow-hidden rounded-3xl border border-stone-200/80 bg-white sm:mt-20 lg:min-h-[480px]">
-        {/* Background Image Container */}
-        <div className="absolute inset-0 z-0">
-          <Image
-            src="/nfc.png"
-            alt="Cliente acercando su celular a una tarjeta NFC de DataFud"
-            fill
-            className="object-cover object-[25%_center] lg:object-left"
-            priority
-          />
-          {/* Gradient overlay to fade to white on the right for readability */}
-          <div className="absolute inset-0 bg-gradient-to-b from-white/10 via-white/70 to-white/95 lg:bg-gradient-to-r lg:from-transparent lg:via-white/75 lg:to-white/95" />
-        </div>
-
-        {/* Content overlaid on the right side */}
-        <div className="relative z-10 w-full lg:w-1/2 ml-auto p-8 sm:p-12 lg:pr-16 flex flex-col justify-center">
-          <div className="flex items-center gap-3">
-            <span className="rounded-full border border-accent-300/40 bg-accent-50 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-accent-700">
-              Tecnología Física
-            </span>
-            <span className="flex items-baseline gap-1">
-              <span className="font-display text-3xl text-brand-900">${PRICING.nfcUnitUsd}</span>
-              <span className="text-[10px] font-bold uppercase tracking-widest text-brand-700/60">
-                / unidad
-              </span>
-            </span>
+      {/* Puente al hardware de mesa (la oferta completa vive en #hardware) */}
+      <RevealOnView className="reveal-up mt-14 flex flex-col gap-5 rounded-2xl border border-stone-200/80 bg-cream-100/60 px-7 py-6 sm:mt-16 sm:flex-row sm:items-center sm:justify-between sm:px-9">
+        <div className="flex items-start gap-4">
+          <span className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-xl border border-accent-300 bg-brand-600 text-white">
+            <Icon name="qr" size={20} />
+          </span>
+          <div>
+            <h3 className="font-display text-xl text-brand-900">¿Y lo que va en la mesa?</h3>
+            <p className="mt-1 text-sm font-medium leading-relaxed text-brand-700/80">
+              Stands QR impresos en 3D desde ${PRICING.hardware[0].priceUsd} y tarjetas NFC a ${PRICING.nfcUnitUsd} por unidad, con tu logo. Se compran aparte, sin suscripción extra.
+            </p>
           </div>
-          <h3 className="mt-4 font-display text-3xl text-brand-900">
-            Tarjetas NFC para tus mesas
-          </h3>
-          <p className="mt-3 text-sm text-brand-850 leading-relaxed font-medium">
-            Tus clientes solo acercan el teléfono y la carta aparece en su pantalla al instante. Sumá las tarjetas que necesités, sin suscripciones extra.
-          </p>
-          
-          <ul className="mt-8 space-y-5">
-            {nfcSteps.map((s, idx) => (
-              <li key={idx} className="flex gap-4">
-                <span className="font-display text-xl text-accent-500 leading-none">
-                  {s.n}
-                </span>
-                <div>
-                  <h4 className="text-sm font-bold text-brand-900 leading-tight">{s.title}</h4>
-                  <p className="text-xs text-brand-700/70 mt-1 leading-relaxed">{s.desc}</p>
-                </div>
-              </li>
-            ))}
-          </ul>
         </div>
+        <a
+          href="#hardware"
+          className="inline-flex h-11 flex-shrink-0 items-center justify-center gap-2 whitespace-nowrap rounded-lg border border-stone-300 bg-white px-6 text-xs font-bold uppercase tracking-[0.16em] text-brand-800 transition-all duration-300 ease-out-expo hover:border-stone-400 hover:bg-cream-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-400 focus-visible:ring-offset-2"
+        >
+          Ver hardware de mesa
+          <Icon name="arrow-right" size={16} />
+        </a>
       </RevealOnView>
     </section>
   );

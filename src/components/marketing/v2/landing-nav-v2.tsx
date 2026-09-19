@@ -7,6 +7,7 @@ import { waProps } from "@/lib/site";
 const links = [
   { href: "#como-funciona", label: "Cómo funciona" },
   { href: "#sistema", label: "El sistema" },
+  { href: "#hardware", label: "Hardware" },
   { href: "#planes", label: "Planes" },
 ];
 

@@ -21,8 +21,8 @@
 
 ## Contador
 
-- Iteración actual: 5
-- Iteraciones consumidas: 5 / 35
+- Iteración actual: 6
+- Iteraciones consumidas: 6 / 35
 
 ## Capacidades del entorno
 
@@ -40,9 +40,9 @@
 |---|---|---|---|---|---|---|---|
 | U01 | Config central `site.ts` + `PRICING.hardware` + `deliveryLabel` | hecho | 1 | 91df1af | directo a main | READY (`dpl_EkvtvuSQmEUTVFiUMuob2etKFaBr`) | typecheck/lint/build ✓; prueba de `waLink`, `waProps`, `mailLink` en Node; sin cambios visibles |
 | U02 | Contacto (#contacto, formulario Resend, /register → /#contacto, demo fuera de /login) | hecho | 1 | 34e75a3 | directo a main | READY (`dpl_FynHV9NVoSWdrDAN16CR8zhTqhsJ`) | Capturas de #contacto con y sin formulario en 375/1440; prueba de teclado, validación Zod y error de Resend con aria-live |
-| U03 | CTAs a WhatsApp + botón flotante | hecho | 1 | c4acd8d | directo a main | (verificar en it. 5) | `grep href="/register"` = 0; 9 enlaces wa.me con target/rel correctos y data-wa-origin; flotante 56×56 solo en 375, sin tapar el footer |
-| U04 | Promesas y planes (48 h / 15 días, Básico = Carta, frases prohibidas, docs) | hecho | 1 | (ver bitácora it. 5) | directo a main | (ver bitácora it. 5) | grep de frases prohibidas en landing = 0; capturas de hero, stats y planes; MARKETING/PRODUCT/CHANGELOG alineados |
-| U05 | Sección #hardware | pendiente | 0 | | | | |
+| U03 | CTAs a WhatsApp + botón flotante | hecho | 1 | c4acd8d | directo a main | READY (`dpl_4rGKvw2931aCoaRcmUhFwUQKPv4d`) | `grep href="/register"` = 0; 9 enlaces wa.me con target/rel correctos y data-wa-origin; flotante 56×56 solo en 375, sin tapar el footer |
+| U04 | Promesas y planes (48 h / 15 días, Básico = Carta, frases prohibidas, docs) | hecho | 1 | dc4093d | directo a main | READY (`dpl_5ZvvPVUVmTvRsry7kRGbzmAR1qhX`) | grep de frases prohibidas en landing = 0; capturas de hero, stats y planes; MARKETING/PRODUCT/CHANGELOG alineados |
+| U05 | Sección #hardware | hecho | 1 | (ver bitácora it. 6) | directo a main | (ver bitácora it. 6) | Capturas 375/1440 de #hardware; 4 productos desde PRICING.hardware; CTA de cotización a WhatsApp |
 | U06 | Sección #demo | pendiente | 0 | | | | |
 | U07 | Sección #implementacion | pendiente | 0 | | | | |
 | U08 | Sección #confianza | pendiente | 0 | | | | |
@@ -66,7 +66,14 @@
 
 ## TODO-FOTO
 
-_(se llena cuando U05 publique la sección de hardware)_
+Hoy se muestran ilustraciones SVG de marca (`hardware-art.tsx`) en cajas de proporción fija
+con `role="img"` y alt descriptivo. Al tener las fotos reales, basta con poner la ruta en
+`PRICING.hardware[].photo` (constants.ts) y dejar el archivo en `public/`.
+
+- `stand-qr-3d` — foto real del stand QR impreso en 3D (ideal: sobre una mesa del local, 4:3).
+- `stand-qr-3d-nfc` — foto real del stand QR 3D con chip NFC.
+- `stand-resenas` — foto real del stand de reseñas de Google (QR + NFC).
+- `tarjeta-nfc` — ya usa `public/nfc.png` (render existente); opcional reemplazar por foto real.
 
 ## Línea base (iteración 1, `main` @ 25b0cf2)
 
@@ -188,3 +195,22 @@ _(se llena cuando U05 publique la sección de hardware)_
   Empresarial"), stats 375 (48h · 15 · 3 · 18), hero 375 con el nuevo párrafo en voseo.
 - Nota: `PRICING.trialDays` y `trial_ends_at` siguen en código/BD (no se tocan; solo salieron
   de la landing).
+
+### Iteración 6 — U05 Sección #hardware
+
+- Plan: `hardware-section.tsx` (servidor) con los cuatro productos de `PRICING.hardware` en
+  composición asimétrica (stand QR 3D grande · tarjeta NFC y stand QR 3D + NFC apilados ·
+  stand de reseñas ancho · bloque oscuro "Todo es 100 % personalizable… Cotizá tu diseño por
+  WhatsApp" con `waProps("hardware")`); `hardware-art.tsx` con tres ilustraciones SVG de
+  marca (TODO-FOTO) y `nfc.png` para la tarjeta. Precio "desde $X / unidad" o "$15 / unidad";
+  con precio PENDIENTE mostraría "Cotizá por WhatsApp" (`formatPublishedPrice`). Nav y footer
+  ganan "Hardware". En #planes el bloque NFC duplicado se reemplaza por un puente a #hardware.
+- Lo que ve un visitante: nueva sección entre "El sistema" y el act-break con los precios
+  publicados y el CTA de cotización.
+- Puertas: A ✓ · B ✓ · C ✓ · D ✓ · E ✓ (0) · F ✓ (0 bg-clip-text/backdrop-blur, 0 emojis;
+  `curl /` sin TODO/PENDIENTE: los TODO-FOTO están solo en comentarios) · G ✓ (375/768/1440
+  sin scroll horizontal; ancla #hardware resuelve desde nav, footer y planes) · H n.a. · I ✓
+  · J siguiente iteración.
+- Capturas: #hardware 375 y 1440. Autocrítica corregida: texto "TU LOGO" pisaba la franja en
+  la ilustración (se quitó), la tarjeta grande dejaba aire vacío en desktop (la imagen ahora
+  llena la altura) y el CTA del bloque oscuro se salía en 375 (ahora envuelve).
