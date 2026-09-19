@@ -27,7 +27,7 @@ function PriceTag({ item, wa, dark = false }: { item: HardwareItem; wa: boolean;
       )}
       <span className={cn("font-display leading-none", pending ? "text-xl" : "text-3xl")}>{price}</span>
       {!pending && (
-        <span className={cn("text-[10px] font-bold uppercase tracking-[0.16em]", dark ? "text-cream-100/60" : "text-brand-700/60")}>/ {item.unit}</span>
+        <span className={cn("text-[10px] font-bold uppercase tracking-[0.16em]", dark ? "text-cream-100/60" : "text-brand-700/75")}>/ {item.unit}</span>
       )}
     </p>
   );
@@ -89,7 +89,7 @@ export function HardwareSection() {
               <p className="mt-3 max-w-lg text-sm font-medium leading-relaxed text-brand-700/80 sm:text-[15px]">{standQr.benefit}</p>
               <div className="mt-6 flex flex-wrap items-end justify-between gap-4 border-t border-stone-200/70 pt-6">
                 <PriceTag item={standQr} wa={wa} />
-                <span className="text-xs font-semibold text-brand-700/60">Un color + base, con tu logo</span>
+                <span className="text-xs font-semibold text-brand-700/75">Un color + base, con tu logo</span>
               </div>
             </div>
           </article>

@@ -65,7 +65,7 @@ export function ContactForm({ whatsappHref }: { whatsappHref: string }) {
         </div>
         <div className="sm:col-span-2">
           <label htmlFor={`${id}-message`} className={label}>
-            Mensaje <span className="font-semibold normal-case tracking-normal text-brand-700/60">(opcional)</span>
+            Mensaje <span className="font-semibold normal-case tracking-normal text-brand-700/75">(opcional)</span>
           </label>
           <textarea id={`${id}-message`} name="message" rows={4} maxLength={1500} placeholder="Contanos cuántas mesas tenés, si ya usás carta digital o qué te gustaría resolver." className={cn(field, "h-auto py-3 leading-relaxed")} />
         </div>

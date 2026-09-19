@@ -91,7 +91,7 @@ export function ImplementationSection() {
                 <div className="lg:mt-6 lg:pr-6">
                   <p className="flex items-baseline gap-2">
                     <span className="font-display text-2xl leading-none text-accent-700">{m.when}</span>
-                    <span className="text-[10px] font-bold uppercase tracking-[0.16em] text-brand-700/50">Paso {i + 1}</span>
+                    <span className="text-[10px] font-bold uppercase tracking-[0.16em] text-brand-700/75">Paso {i + 1}</span>
                   </p>
                   <h3 className="mt-2 font-display text-xl text-brand-900">{m.title}</h3>
                   <p className="mt-2 max-w-sm text-sm font-medium leading-relaxed text-brand-700/80">{m.desc}</p>

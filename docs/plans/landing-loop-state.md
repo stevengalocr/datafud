@@ -21,8 +21,8 @@
 
 ## Contador
 
-- Iteración actual: 13
-- Iteraciones consumidas: 13 / 35
+- Iteración actual: 14
+- Iteraciones consumidas: 14 / 35
 
 ## Capacidades del entorno
 
@@ -49,8 +49,8 @@
 | U09 | Sección #preguntas + nav final | hecho | 1 | 639eea7 | directo a main | READY (`dpl_HwTRMENDNGZeY6eW6td6dTwt4vpm`) | 11 preguntas en `src/lib/faq.ts`; prueba de teclado (Enter/Space/flechas/Home/End) y de menú móvil (aria-expanded, Escape, 44 px) |
 | U10 | Legal: /terminos y /privacidad | hecho | 1 | fd4c98c | directo a main | READY (`dpl_5K2Qm1gNvDKQAnqunz53V8fdCTfQ`) | Ambas rutas 200 y estáticas; capturas 375/1440; 29 marcas [REVISAR] resaltadas en /terminos; aviso de borrador visible |
 | U11 | SEO: sitemap, robots, metadata, OG, JSON-LD | hecho | 1 | ab7fd6c | directo a main | READY (`dpl_JA4xxhYzAejBykgL1CWZf7wwHUNX`) | robots/sitemap/OG verificados con curl; JSON-LD Organization + 3 Product + FAQPage (11); Lighthouse móvil 94/100/96/100 |
-| U12 | Analítica: @vercel/analytics + eventos | hecho | 1 | (ver bitácora it. 13) | directo a main | (ver bitácora it. 13) | `events-test.mjs`: cola `vaq` con pageview, whatsapp_click{origen:hero}, whatsapp_click{origen:plan-estandar}, demo_open{vista:cliente} |
-| U13 | Accesibilidad y rendimiento | pendiente | 0 | | | | |
+| U12 | Analítica: @vercel/analytics + eventos | hecho | 1 | 94fa50f | directo a main | (verificar en it. 14) | `events-test.mjs`: cola `vaq` con pageview, whatsapp_click{origen:hero}, whatsapp_click{origen:plan-estandar}, demo_open{vista:cliente} |
+| U13 | Accesibilidad y rendimiento | hecho | 1 | (ver bitácora it. 14) | directo a main | (ver bitácora it. 14) | Lighthouse móvil con reduced-motion forzado: / 96/100/96/100, /terminos 99/100/96/100; 0 objetivos < 44 px; CLS 0 |
 | U14 | Seguridad de dependencias (next 15.5.x, audit) | pendiente | 0 | | | | |
 | U15 | Carta estática /c/[slug] | omitida (CONFIG=no) | – | | | | |
 | U16 | Redirecciones /q/[code] | omitida (CONFIG=no) | – | | | | |
@@ -333,3 +333,23 @@ con `role="img"` y alt descriptivo. Al tener las fotos reales, basta con poner l
   de insights, que solo existe en Vercel) · H sin cambios de UI · I ✓ · J siguiente iteración.
 - PENDIENTE-STEVEN: activar **Web Analytics** en el proyecto de Vercel (pestaña Analytics);
   sin eso el script devuelve 404 también en producción y no se registran eventos.
+
+### Iteración 14 — U13 Accesibilidad y rendimiento
+
+- Diagnóstico: Lighthouse con `--force-prefers-reduced-motion` (así se auditan también los
+  elementos que entran con reveal): contraste insuficiente en `text-brand-700/60` (3,59) y
+  `/50` (2,73) y en la etiqueta "Recomendado" (blanco sobre oro, 2,9); objetivos táctiles
+  de 16–36 px en enlaces del footer, nav, firma de #confianza y pie legal; imágenes `fill`
+  sin `sizes` en el act-break y el cierre.
+- Cambios: opacidades de texto verde sobre claro suben a `/75` (todos los archivos de la
+  landing y legal); "Recomendado" pasa a verde con borde dorado; enlaces de texto con
+  `min-h-11` (44 px) en footer, nav de escritorio, logo, "Ingresar", firma de GaloDev, pie
+  legal y enlace hermano; `sizes="100vw"` en las dos imágenes de fondo; estilo global de
+  `:focus-visible` (anillo dorado, solo teclado). Ya cumplían: un solo h1 y orden de
+  encabezados, alt en todas las imágenes, `display: swap` en las fuentes, CLS 0.
+- Resultado: Lighthouse móvil `/` → Performance 96 · Accessibility 100 · Best Practices 96 ·
+  SEO 100 (LCP 2,7 s, CLS 0); `/terminos` → 99 / 100 / 96 / 100. Único fallo restante en
+  ambas: `errors-in-console` por Unsplash (sandbox) y el script de insights (solo en Vercel).
+  `qa.mjs` ahora exige 44 px de área táctil: 0 hallazgos en `/`, `/terminos`, `/privacidad`.
+- Puertas: A ✓ · B ✓ · C ✓ · D ✓ · E ✓ · F ✓ · G ✓ · H ✓ · I ✓ (corrida con reduced-motion
+  sin diferencias) · J siguiente iteración.

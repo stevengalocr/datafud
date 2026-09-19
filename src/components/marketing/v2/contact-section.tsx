@@ -50,7 +50,7 @@ export function ContactSection() {
                     <span className="font-display text-lg leading-tight text-brand-900">{whatsappDisplay()}</span>
                     <span className="mt-0.5 text-xs font-medium text-brand-700/70">La vía más rápida. Respondemos en horario de oficina.</span>
                   </span>
-                  <Icon name="arrow-right" size={18} className="ml-auto text-brand-700/50 transition-transform duration-300 group-hover:translate-x-1" />
+                  <Icon name="arrow-right" size={18} className="ml-auto text-brand-700/75 transition-transform duration-300 group-hover:translate-x-1" />
                 </a>
               )}
               {showEmail && (
@@ -66,12 +66,12 @@ export function ContactSection() {
                     <span className="truncate font-display text-lg leading-tight text-brand-900">{SITE.email}</span>
                     <span className="mt-0.5 text-xs font-medium text-brand-700/70">Para cotizaciones formales o si preferís escribir largo.</span>
                   </span>
-                  <Icon name="arrow-right" size={18} className="ml-auto flex-shrink-0 text-brand-700/50 transition-transform duration-300 group-hover:translate-x-1" />
+                  <Icon name="arrow-right" size={18} className="ml-auto flex-shrink-0 text-brand-700/75 transition-transform duration-300 group-hover:translate-x-1" />
                 </a>
               )}
             </div>
 
-            <p className="reveal-up mt-8 text-xs font-semibold uppercase tracking-[0.14em] text-brand-700/60">
+            <p className="reveal-up mt-8 text-xs font-semibold uppercase tracking-[0.14em] text-brand-700/75">
               {SITE.maker} · {SITE.region}
             </p>
           </RevealOnView>

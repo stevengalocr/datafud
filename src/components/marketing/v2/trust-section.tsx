@@ -57,7 +57,7 @@ export function TrustSection() {
                 <p className="font-display text-lg leading-tight text-brand-900">{SITE.maker}</p>
                 <p className="text-xs font-medium text-brand-700/70">Estudio de software e impresión 3D · {SITE.country}</p>
                 {hasWhatsApp() && (
-                  <a {...wa} className="mt-1 inline-flex items-center gap-1.5 text-xs font-bold text-brand-700 underline decoration-accent-400 underline-offset-4 transition-colors hover:text-brand-900">
+                  <a {...wa} className="inline-flex min-h-11 items-center gap-1.5 text-xs font-bold text-brand-700 underline decoration-accent-400 underline-offset-4 transition-colors hover:text-brand-900">
                     <Icon name="whatsapp" size={13} />
                     {whatsappDisplay()}
                   </a>

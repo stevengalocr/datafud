@@ -45,7 +45,7 @@ export function LegalPage({
       <main className="mx-auto max-w-3xl px-5 pb-24 pt-14 sm:px-6 sm:pt-20">
         <p className="text-xs font-bold uppercase tracking-[0.2em] text-accent-700">{eyebrow}</p>
         <h1 className="mt-3 font-display text-[clamp(2rem,5vw,3.2rem)] leading-[1.08] tracking-tight text-brand-900">{title}</h1>
-        <p className="mt-4 text-sm font-semibold uppercase tracking-[0.14em] text-brand-700/60">Última actualización: {LEGAL_UPDATED}</p>
+        <p className="mt-4 text-sm font-semibold uppercase tracking-[0.14em] text-brand-700/75">Última actualización: {LEGAL_UPDATED}</p>
 
         <div
           role="note"
@@ -93,12 +93,12 @@ export function LegalPage({
         <div className="mt-16 flex flex-col gap-4 border-t border-stone-200/80 pt-8 sm:flex-row sm:items-center sm:justify-between">
           <p className="text-sm font-medium text-brand-700/80">
             ¿Dudas sobre este documento? Escribinos a{" "}
-            <a href={mailLink(`Consulta sobre ${title}`)} className="font-bold text-brand-800 underline decoration-accent-400 underline-offset-4 hover:text-brand-900">
+            <a href={mailLink(`Consulta sobre ${title}`)} className="inline-flex min-h-11 items-center font-bold text-brand-800 underline decoration-accent-400 underline-offset-4 hover:text-brand-900">
               {SITE.email}
             </a>
             .
           </p>
-          <Link href={sibling.href} className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.16em] text-brand-800 hover:text-brand-900">
+          <Link href={sibling.href} className="inline-flex min-h-11 items-center gap-2 text-xs font-bold uppercase tracking-[0.16em] text-brand-800 hover:text-brand-900">
             {sibling.label}
             <Icon name="arrow-right" size={14} />
           </Link>
@@ -107,16 +107,16 @@ export function LegalPage({
 
       <footer className="border-t border-stone-200/60 bg-cream-100/60">
         <div className="mx-auto flex max-w-6xl flex-col gap-6 px-5 py-10 sm:flex-row sm:items-center sm:justify-between sm:px-6">
-          <Link href="/" aria-label="DataFud — inicio" className="inline-flex items-center rounded-xl bg-white px-3 py-2 shadow-sm">
+          <Link href="/" aria-label="DataFud — inicio" className="inline-flex min-h-11 items-center self-start rounded-xl bg-white px-3 py-2 shadow-sm">
             <Image src="/logo-main.png" alt="DataFud" width={120} height={50} className="h-6 w-auto" />
           </Link>
-          <nav aria-label="Legal" className="flex flex-wrap gap-x-6 gap-y-3 text-[11px] font-bold uppercase tracking-[0.16em] text-brand-700/80">
-            <Link href="/" className="py-2 hover:text-brand-900">Inicio</Link>
-            <Link href="/#contacto" className="py-2 hover:text-brand-900">Contacto</Link>
-            <Link href="/terminos" className="py-2 hover:text-brand-900">Términos</Link>
-            <Link href="/privacidad" className="py-2 hover:text-brand-900">Privacidad</Link>
+          <nav aria-label="Legal" className="flex flex-wrap items-center gap-x-6 text-[11px] font-bold uppercase tracking-[0.16em] text-brand-700/80">
+            <Link href="/" className="inline-flex min-h-11 items-center hover:text-brand-900">Inicio</Link>
+            <Link href="/#contacto" className="inline-flex min-h-11 items-center hover:text-brand-900">Contacto</Link>
+            <Link href="/terminos" className="inline-flex min-h-11 items-center hover:text-brand-900">Términos</Link>
+            <Link href="/privacidad" className="inline-flex min-h-11 items-center hover:text-brand-900">Privacidad</Link>
           </nav>
-          <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-brand-700/60">
+          <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-brand-700/75">
             © {new Date().getFullYear()} DataFud · un producto de {SITE.maker}
           </p>
         </div>

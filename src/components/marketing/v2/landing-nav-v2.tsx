@@ -23,7 +23,7 @@ export function LandingNavV2() {
         <Link
           href="/"
           aria-label="DataFud — inicio"
-          className="group flex items-center transition-transform duration-200 active:scale-[0.98]"
+          className="group flex min-h-11 items-center transition-transform duration-200 active:scale-[0.98]"
         >
           <Image
             src="/logo-main.png"
@@ -40,7 +40,7 @@ export function LandingNavV2() {
             <a
               key={l.href}
               href={l.href}
-              className="link-underline py-2 transition-colors duration-300 ease-out-expo hover:text-brand-900"
+              className="link-underline inline-flex min-h-11 items-center transition-colors duration-300 ease-out-expo hover:text-brand-900"
             >
               {l.label}
             </a>

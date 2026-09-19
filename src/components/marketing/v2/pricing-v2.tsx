@@ -98,7 +98,7 @@ export function PricingV2() {
             <h3 className="font-display text-xl text-brand-900 mt-1">Implementación Única</h3>
             <div className="mt-4 flex items-baseline gap-2">
               <span className="font-display text-6xl text-brand-900 leading-none">${PRICING.setupFeeUsd}</span>
-              <span className="text-xs font-semibold uppercase tracking-widest text-brand-700/65">
+              <span className="text-xs font-semibold uppercase tracking-widest text-brand-700/75">
                 pago único
               </span>
             </div>
@@ -140,7 +140,7 @@ export function PricingV2() {
                   className="pointer-events-none absolute -inset-3 -z-10 rounded-[1.75rem] bg-accent-400/20 blur-2xl"
                   aria-hidden="true"
                 />
-                <span className="absolute -top-3.5 left-8 rounded-full border border-accent-300 bg-accent-500 px-3.5 py-0.5 text-[9px] font-bold uppercase tracking-widest text-white">
+                <span className="absolute -top-3.5 left-8 rounded-full border border-accent-300 bg-brand-600 px-3.5 py-1 text-[9px] font-bold uppercase tracking-widest text-white">
                   Recomendado
                 </span>
               </>
@@ -152,7 +152,7 @@ export function PricingV2() {
               
               <div className="mt-6 flex items-baseline gap-1">
                 <span className="font-display text-5xl text-brand-900">${plan.price}</span>
-                <span className="text-xs font-semibold uppercase tracking-widest text-brand-700/60">
+                <span className="text-xs font-semibold uppercase tracking-widest text-brand-700/75">
                   / mes
                 </span>
               </div>

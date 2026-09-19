@@ -139,7 +139,7 @@ export function DemoSection() {
                 Ver el panel
               </Link>
             </div>
-            <p className="reveal-up mt-4 text-[11px] font-semibold uppercase tracking-wider text-brand-700/60">
+            <p className="reveal-up mt-4 text-[11px] font-semibold uppercase tracking-wider text-brand-700/75">
               Restaurante ficticio · datos de ejemplo · nada se guarda
             </p>
           </RevealOnView>
