@@ -5,6 +5,37 @@ Todas las versiones notables del proyecto. Formato basado en
 
 ---
 
+## [Unreleased]
+
+Fachada de venta ("landing primero", decisiones D-010 a D-013). Sin backend en producción;
+cada unidad se publica en `main` desde el loop autónomo (`docs/plans/landing-loop-state.md`).
+
+### Added
+- `src/lib/site.ts`: datos de contacto centralizados (WhatsApp, correo, nombre comercial) y
+  helpers `waLink` / `waProps` / `mailLink` que degradan a `#contacto` si falta el dato.
+- `PRICING`: plazos por plan (`deliveryLabel`), nombre comercial del plan Básico como
+  "Carta", `delivery` (48 h / 15 días) y `hardware` (stand QR 3D, tarjeta NFC, stand QR 3D +
+  NFC, stand de reseñas) con precios base.
+- Sección `#contacto` con WhatsApp, correo y formulario (Server Action + Zod + honeypot +
+  Resend). El formulario solo se renderiza si el servidor tiene `RESEND_API_KEY`.
+- Botón flotante de WhatsApp en móvil. Iconos `whatsapp`, `mail`, `menu`, `x`, `chevron-down`.
+- Dependencias: `resend`; dev: `@playwright/test` (QA de la landing).
+
+### Changed
+- Todos los CTA de la landing abren WhatsApp con mensaje prellenado según el origen; ya no
+  hay enlaces a `/register`. `/register` redirige a `/#contacto`.
+- Promesas alineadas a la realidad: "Carta lista en 48 horas" y "Sistema completo en 15
+  días" en highlights, stats, planes e implementación. Plan Básico se vende como "Carta"
+  (sin pedidos en mesa) y cada plan muestra su plazo.
+- Copy en voseo; se quitaron "tiempo real", "24/7", "exportación", "trial", "crea tu
+  cuenta", "dominio propio" y las frases que insinuaban clientes existentes.
+- Footer con los datos de contacto reales. `docs/MARKETING.md` y `docs/PRODUCT.md` alineados.
+
+### Removed
+- Credenciales de la cuenta demo visibles en `/login`.
+
+---
+
 ## [1.0.1] — 2026-06-24
 
 Primera versión documentada y verificada de punta a punta. Auditoría profesional,

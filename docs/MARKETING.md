@@ -9,9 +9,15 @@
 
 ## 1. Propuesta de valor (una frase)
 
-> **El menú digital que abre apetito y cierra ventas.** Tus comensales piden desde su mesa
-> escaneando un QR o tocando una tarjeta NFC; tú gestionas platos, comandas y analíticas en
-> tiempo real — multi-idioma, multi-moneda y con tu marca. **Operando en 48 horas.**
+> **El menú digital que abre apetito y cierra ventas.** Tus comensales abren la carta desde
+> su mesa escaneando un QR o tocando una tarjeta NFC; vos gestionás platos, comandas y
+> reportes desde un panel — multi-idioma, multi-moneda y con tu marca. **Carta lista en
+> 48 horas; sistema completo en 15 días.**
+
+> **Etapa actual (2026-09-19, decisión D-010): landing primero.** No hay backend en
+> producción; la landing vende la carta digital, el hardware de mesa (QR impreso en 3D, NFC,
+> stand de reseñas) y la implementación llave en mano. Conversión por **WhatsApp** y
+> formulario de contacto. No se promete nada que no se pueda entregar en el plazo.
 
 ## 2. Posicionamiento
 
@@ -39,42 +45,45 @@ servicio, datos del negocio, atención a clientes extranjeros.
 ## 4. Mensajes clave (pilares de la landing)
 
 1. **Pide desde la mesa, sin fricción.** QR o NFC → carta al instante, sin apps ni cuentas.
-2. **Control total en tiempo real.** Platos, comandas y analíticas en un panel.
+2. **Control total desde un panel.** Platos, comandas y reportes en un solo lugar.
 3. **Listo para Latam.** 3 idiomas (ES·EN·PT) y monedas de toda la región.
-4. **Operando en 48 horas.** Implementación llave en mano, sin curva técnica.
-5. **A tu marca.** Colores, logo y dominio propio.
+4. **Carta lista en 48 horas; sistema completo en 15 días.** Implementación llave en mano, sin curva técnica.
+5. **A tu marca.** Colores, logo y fotos de tus platillos.
 
 ## 5. Estructura de la landing (embudo AIDA)
 
 | Sección | Objetivo | Copy ancla |
 |---|---|---|
-| **Hero** | Enganchar + CTA | "El menú digital que *abre apetito* y cierra ventas" · CTA "Quiero mi DataFud" / "Ver demo en vivo" |
-| **Barra de highlights** | Prueba rápida de valor | Operando en 48h · 3 idiomas · monedas Latam · órdenes en tiempo real |
-| **Cómo funciona** | Educar (4 pasos) | Crea tu menú → Activa QR/NFC → Recibe órdenes → Mide tu negocio |
+| **Hero** | Enganchar + CTA | "El menú digital que *abre apetito* y cierra ventas" · CTA "Hablemos por WhatsApp" / "Ver demo en vivo" |
+| **Barra de highlights** | Prueba rápida de valor | Carta lista en 48 h · Sistema completo en 15 días · 3 idiomas · monedas Latam |
+| **Cómo funciona** | Educar (4 pasos) | Nosotros montamos tu carta → QR y NFC en tus mesas → Recibís los pedidos → Medís tu negocio |
 | **El sistema** | Mostrar las 2 caras | Servicio al comensal + Operación del negocio |
-| **Planes y precios** | Convertir | Implementación única + 3 planes + add-on NFC |
-| **Cierre (CTA + footer)** | Última conversión | "Lleva la carta de tu restaurante al siguiente nivel" · "Crear mi cuenta gratis" |
+| **Planes y precios** | Convertir | Implementación única + 3 planes (con su plazo) + add-on NFC |
+| **Contacto** | Capturar | WhatsApp + correo + formulario (solo con `RESEND_API_KEY`) |
+| **Cierre (CTA + footer)** | Última conversión | "Llevá la carta de tu local al siguiente nivel" · "Hablemos por WhatsApp" |
 
 ## 6. Oferta y precios (línea de venta canónica)
 
 ### Implementación única — **$249 (pago único)**
 Servicio inicial llave en mano. Incluye:
-- ⚡ Listo y operando en **48 horas**.
-- 🌐 **Landing 100% personalizada con dominio propio.**
-- 🛡️ **1 año de soporte técnico** garantizado.
+- Carta publicada en **48 horas**; sistema completo (pedidos, panel, reportes) en **15 días**.
+- Carta a tu marca: colores, logo y fotos de tus platillos.
+- **1 año de soporte técnico** incluido.
 
 Después, el cliente elige su plan mensual (desde $29/mes).
 
 ### Planes mensuales
 
-| | Básico — **$29/mes** | Estándar — **$49/mes** ⭐ | Empresarial — **$99/mes** |
+| | Carta (Básico) — **$29/mes** | Estándar — **$49/mes** ⭐ | Empresarial — **$99/mes** |
 |---|---|---|---|
-| Tagline | "Para empezar tu menú digital" | "El favorito de sodas y restaurantes" | "Sin límites para tu crecimiento" |
-| Idiomas | 1 principal | 2 simultáneos | 3 (ES·EN·PT) |
+| Qué es | Carta digital por QR/NFC, sin pedidos en mesa | Carta + pedidos desde la mesa + panel | Todo, sin límites |
+| Entrega | **48 horas** | **15 días** | **15 días** |
+| Tagline | "Tu carta digital por QR y NFC, sin pedidos en mesa" | "Carta + pedidos desde la mesa + panel" | "Sin límites para tu crecimiento" |
+| Idiomas | 1 | 2 simultáneos | 3 (ES·EN·PT) |
 | Platillos | Hasta 20 | Hasta 70 | Ilimitados |
-| Reportes | Básicos | Avanzados | Avanzados + exportación |
-| Soporte | Correo | Prioritario 24/7 | Dedicado por WhatsApp |
-| Órdenes en tiempo real | ✓ | ✓ | ✓ |
+| Pedidos desde la mesa | — | ✓ | ✓ |
+| Reportes | — (cambios de menú a pedido) | Panel de comandas + reportes de venta | Reportes avanzados |
+| Soporte | WhatsApp | Prioritario por WhatsApp | Dedicado por WhatsApp |
 
 ⭐ **Estándar** es el plan destacado ("Recomendado").
 
@@ -82,7 +91,20 @@ Después, el cliente elige su plan mensual (desde $29/mes).
 Sin suscripción extra. El comensal acerca el teléfono a la tarjeta de la mesa y la carta
 aparece al instante. Se compran las unidades que el negocio necesite.
 
-> **Trial gratis de 30 días** al registrarse. Sin contratos atados.
+### Hardware de mesa (add-ons, D-013) — fuente: `PRICING.hardware`
+
+| Producto | Precio publicado |
+|---|---|
+| Stand QR impreso en 3D | desde $12 / unidad |
+| Tarjeta NFC | $15 / unidad |
+| Stand QR 3D + NFC | desde $20 / unidad |
+| Stand de reseñas de Google (QR + NFC) | desde $20 / unidad |
+
+Mensaje fijo: **"Todo es 100 % personalizable: forma, colores, tamaño y tu logo en relieve.
+Cotizá tu diseño por WhatsApp."**
+
+> En esta etapa **no hay trial de autoservicio**: la prueba es la demo en vivo (`/preview`) y
+> una demo guiada por WhatsApp. Sin contratos atados: si un mes no le sirve, lo deja.
 
 ## 7. Diferenciadores frente a alternativas
 
@@ -95,8 +117,8 @@ aparece al instante. Se compran las unidades que el negocio necesite.
 
 | Objeción | Respuesta comercial |
 |---|---|
-| "Es complicado / no soy técnico" | Implementación llave en mano, operando en 48h, nosotros lo montamos |
-| "¿Y si no me sirve?" | Trial de 30 días gratis, sin contrato atado |
+| "Es complicado / no soy técnico" | Implementación llave en mano: nosotros montamos la carta en 48 h y el sistema en 15 días |
+| "¿Y si no me sirve?" | Demo en vivo gratis y sin contratos atados: si un mes no le sirve, lo deja |
 | "Mis clientes no sabrán usarlo" | Solo escanear o tocar — sin apps ni cuentas |
 | "Ya tengo carta" | La digital se actualiza sola, te da datos y no se reimprime |
 | "Tengo clientes extranjeros" | Carta en ES/EN/PT automáticamente |
@@ -113,11 +135,14 @@ aparece al instante. Se compran las unidades que el negocio necesite.
 
 ## 10. CTAs y conversión
 
-- **CTA primario:** "Quiero mi DataFud" / "Crear mi cuenta gratis" → `/register`.
+- **CTA primario:** "Hablemos por WhatsApp" → `wa.me` con mensaje prellenado según el origen
+  (`src/lib/site.ts`, `waProps`). Botón flotante en móvil.
 - **CTA secundario:** "Ver demo en vivo" → `/preview` (demo navegable sin backend).
-- **Microcopy de confianza:** "Operando en 48 horas · desde $29/mes".
-- **Embudo:** Landing → Registro (trial 30 días) → Onboarding (super admin aprueba +
-  registra implementación/NFC) → Cliente activo (mensualidad).
+- **Alternativa:** formulario en `#contacto` (Resend; solo se muestra con `RESEND_API_KEY`).
+- **Microcopy de confianza:** "Carta lista en 48 horas · desde $29/mes".
+- **Embudo:** Landing → WhatsApp o formulario → llamada y plan elegido → implementación
+  (carta en 48 h; sistema completo en 15 días) → cliente activo (mensualidad). `/register`
+  redirige a `/#contacto`.
 
 ## 11. Identidad
 

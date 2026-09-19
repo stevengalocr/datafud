@@ -19,8 +19,13 @@ su menú, sus comandas en vivo y sus reportes desde un panel. El dueño del SaaS
 todos los negocios, sus planes y sus pagos.
 
 Tagline de marca: **"QR Menus. Orders. Analytics."**
-Promesa comercial: **operando en 48 horas**, multi-idioma (ES · EN · PT) y multi-moneda
-(toda Latam + USD).
+Promesa comercial: **carta digital lista en 48 horas y sistema completo en 15 días**,
+multi-idioma (ES · EN · PT) y multi-moneda (toda Latam + USD).
+
+> **Etapa actual (2026-09-19, decisión D-010): landing primero.** Producción no tiene backend
+> conectado; la landing es la fachada de venta (WhatsApp + formulario) y el registro de
+> autoservicio está cerrado (`/register` redirige a `/#contacto`). El backend se enciende con
+> el primer cliente de un plan con pedidos. Ver `docs/MARKETING.md`.
 
 ## 2. Para qué sirve (problema que resuelve)
 
@@ -28,7 +33,7 @@ Promesa comercial: **operando en 48 horas**, multi-idioma (ES · EN · PT) y mul
 |---|---|
 | Cartas físicas caras de imprimir y desactualizadas | Menú digital editable al instante, sin reimprimir |
 | Cambiar precios/platillos es lento | El cambio es inmediato y se ve en todas las mesas |
-| Toma de orden manual, errores y demoras | El cliente arma y envía su orden; llega a cocina en tiempo real |
+| Toma de orden manual, errores y demoras | El cliente arma y envía su orden; llega al panel de cocina |
 | Cero datos del negocio | Reportes de ventas, ticket promedio y platillos top |
 | Turistas / clientes extranjeros | Carta en español, inglés y portugués |
 | Operar en varios países | Catálogo de monedas de toda Latam |
@@ -50,8 +55,8 @@ Promesa comercial: **operando en 48 horas**, multi-idioma (ES · EN · PT) y mul
 | `/dashboard` | `restaurant_admin` | Menú, mesas/QR, órdenes, reportes, ajustes |
 | `/admin` | `super_admin` | Restaurantes, pagos, cargos, planes, resumen |
 
-También: `/login`, `/register` (auto-registro con trial), `/preview` (demo navegable sin
-Supabase) y una ruta de acceso privada y ofuscada para el super admin.
+También: `/login`, `/register` (en esta etapa redirige a `/#contacto`), `/preview` (demo
+navegable sin Supabase) y una ruta de acceso privada y ofuscada para el super admin.
 
 ## 5. Stack y arquitectura
 
@@ -102,20 +107,25 @@ docs/          PRODUCT.md · MARKETING.md · specs/ · plans/
 
 ## 8. Planes y precios (fuente de verdad: la landing)
 
-| | Básico | Estándar ⭐ | Empresarial |
+| | Carta (Básico) | Estándar ⭐ | Empresarial |
 |---|---|---|---|
 | **Mensualidad** | **$29** | **$49** | **$99** |
+| Entrega prometida | 48 horas (solo carta) | 15 días (sistema completo) | 15 días (sistema completo) |
+| Pedidos desde la mesa | — | ✓ | ✓ |
 | Idiomas | 1 | 2 | 3 (ES·EN·PT) |
 | Platillos | 20 | 70 | Ilimitados |
 | Categorías | 5 | 20 | Ilimitadas |
 | Mesas/QR | 8 | 30 | Ilimitadas |
 | Reportes avanzados | — | ✓ | ✓ |
-| Soporte | Correo | Prioritario 24/7 | Dedicado WhatsApp |
+| Soporte | WhatsApp | Prioritario por WhatsApp | Dedicado por WhatsApp |
 
-- **Implementación única: $249** (pago único) — llave en mano, landing personalizada con
-  dominio propio, 1 año de soporte.
-- **Tarjetas NFC: $15/unidad** (add-on físico, sin suscripción extra).
-- **Trial automático de 30 días** al registrarse.
+- **Implementación única: $249** (pago único) — llave en mano: carta a tu marca en 48 h,
+  sistema completo en 15 días, 1 año de soporte.
+- **Hardware de mesa** (`PRICING.hardware`): stand QR impreso en 3D desde $12, tarjeta NFC
+  $15, stand QR 3D + NFC desde $20, stand de reseñas de Google desde $20 (por unidad; todo
+  personalizable con cotización por WhatsApp).
+- El trial automático de 30 días sigue en la BD (`trial_ends_at`), pero el autoservicio
+  está cerrado en la landing (D-011).
 
 > ⚠️ **Estos números viven en tres lugares y deben coincidir:**
 > `src/components/marketing/v2/pricing-v2.tsx` (landing) · `src/lib/constants.ts`

@@ -28,32 +28,32 @@ const IMG = {
 const steps: Step[] = [
   {
     number: "01",
-    title: "Crea tu menú digital",
-    desc: "Carga categorías y platillos con fotografía, precios y descripciones en hasta 3 idiomas. Personaliza colores y logo en segundos.",
+    title: "Nosotros montamos tu carta",
+    desc: "Nos pasás el menú, las fotos y el logo. Armamos tu carta digital con tu marca, en hasta 3 idiomas, y la dejamos publicada en 48 horas.",
     image: IMG.food,
     alt: "Platillos servidos sobre una mesa de madera, listos para fotografiar el menú",
     icon: "utensils",
   },
   {
     number: "02",
-    title: "Activa tus QR y NFC",
-    desc: "Genera códigos QR de alta resolución y tarjetas NFC para cada mesa. El cliente escanea o toca para abrir la carta al instante.",
+    title: "Ponemos los QR y NFC en tus mesas",
+    desc: "Stands QR impresos en 3D y tarjetas NFC con tu logo, listos para cada mesa. El comensal escanea o toca y la carta se abre al instante.",
     image: IMG.tables,
     alt: "Mesas de un restaurante con vista al agua, preparadas para el servicio",
     icon: "qr",
   },
   {
     number: "03",
-    title: "Recibe las órdenes",
-    desc: "Las comandas llegan en tiempo real a tu pantalla de cocina. Gestiona cada estado, de preparación a entrega, sin papel.",
+    title: "Recibís los pedidos",
+    desc: "Con el sistema completo, las comandas llegan directo a tu pantalla de cocina. Gestionás cada estado, de preparación a entrega, sin papel.",
     image: IMG.communal,
     alt: "Mesa comunal llena de comensales disfrutando y ordenando",
     icon: "receipt",
   },
   {
     number: "04",
-    title: "Mide tu negocio",
-    desc: "Analiza el ticket promedio, los platillos más vendidos y tus ingresos totales en reportes claros y accionables.",
+    title: "Medís tu negocio",
+    desc: "Ticket promedio, platillos más vendidos e ingresos del día en reportes claros, para decidir con datos y no a ojo.",
     image: IMG.interior,
     alt: "Interior cálido de un restaurante en plena operación",
     icon: "chart",
@@ -61,19 +61,19 @@ const steps: Step[] = [
 ];
 
 const highlights: { icon: IconName; label: string }[] = [
-  { icon: "clock", label: "Operando en 48 horas" },
+  { icon: "clock", label: `Carta lista en ${PRICING.delivery.menuHours} horas` },
+  { icon: "zap", label: `Sistema completo en ${PRICING.delivery.fullSystemDays} días` },
   { icon: "globe", label: "Español · Inglés · Português" },
   { icon: "wallet", label: "Monedas de toda Latam" },
-  { icon: "zap", label: "Órdenes en tiempo real" },
 ];
 
 const currencies = ["₡ CRC", "$ MXN", "S/ PEN", "$ COP", "R$ BRL", "$ ARS", "Q GTQ", "Bs BOB", "$ CLP", "₲ PYG", "$U UYU", "B/. PAB", "USD"];
 
 const stats: { value: number; suffix?: string; label: string }[] = [
-  { value: 48, suffix: "h", label: "para estar operando" },
+  { value: PRICING.delivery.menuHours, suffix: "h", label: "para tener tu carta lista" },
+  { value: PRICING.delivery.fullSystemDays, label: "días para el sistema completo" },
   { value: 3, label: "idiomas listos" },
   { value: 18, label: "monedas de Latam" },
-  { value: 100, suffix: "%", label: "a tu propia marca" },
 ];
 
 const views: { icon: IconName; tag: string; title: string; image: string; alt: string; points: string[] }[] = [
@@ -84,10 +84,10 @@ const views: { icon: IconName; tag: string; title: string; image: string; alt: s
     image: IMG.tablePhone,
     alt: "Comensales compartiendo una comida con el teléfono sobre la mesa",
     points: [
-      "Escaneo rápido o toque NFC en la mesa.",
-      "Interfaz adaptable a cualquier teléfono.",
+      "Escaneo rápido o toque NFC en la mesa, sin apps ni cuentas.",
+      "Se adapta a cualquier teléfono.",
       "Disponible en español, inglés y portugués.",
-      "Arma la comanda y la envía directo a cocina.",
+      "Con el sistema completo, arma su pedido y lo envía a cocina.",
     ],
   },
   {
@@ -97,10 +97,10 @@ const views: { icon: IconName; tag: string; title: string; image: string; alt: s
     image: IMG.counter,
     alt: "Personal de un local atendiendo a una clienta en el mostrador",
     points: [
-      "Actualiza platos y categorías al instante.",
-      "Comandas en vivo, mesa por mesa.",
+      "Actualizás platos y precios al instante.",
+      "Comandas mesa por mesa, con su estado.",
       "Reportes del día y ticket promedio.",
-      "Configura monedas e idiomas locales.",
+      "Tu moneda y tus idiomas, configurados.",
     ],
   },
 ];
@@ -142,9 +142,9 @@ export default function HomePage() {
               </h1>
 
               <p className="mt-6 max-w-xl text-base font-medium leading-relaxed text-brand-800/80 sm:text-lg">
-                Tus comensales piden desde su mesa escaneando un QR o tocando una
-                tarjeta NFC. Tú gestionas todo en tiempo real: platos, comandas y
-                analíticas. Multi-idioma, multi-moneda y a tu marca.
+                Tus comensales abren la carta escaneando un QR o tocando una
+                tarjeta NFC en la mesa. Vos gestionás platos, comandas y reportes
+                desde un solo panel. Multi-idioma, multi-moneda y a tu marca.
               </p>
 
               <div className="mt-9 flex w-full flex-col gap-3 sm:mt-10 sm:w-auto sm:flex-row sm:gap-4">
@@ -164,7 +164,7 @@ export default function HomePage() {
               </div>
 
               <p className="mt-4 text-[11px] font-semibold uppercase tracking-wider text-brand-700/60">
-                Listo en 48 horas · tarifas desde ${PRICING.plans.basico.priceUsd}/mes
+                Carta lista en {PRICING.delivery.menuHours} horas · desde ${PRICING.plans.basico.priceUsd}/mes
               </p>
             </div>
 
@@ -347,8 +347,9 @@ export default function HomePage() {
               <span className="text-accent-300">Latinoamérica</span>.
             </p>
             <p className="reveal-up mx-auto mt-5 max-w-xl text-sm font-medium leading-relaxed text-cream-100/75 sm:text-base">
-              Sodas, cafeterías y restaurantes que cambiaron la carta impresa por una
-              experiencia digital que vende más y opera mejor.
+              Para sodas, cafeterías, bares, food trucks, hoteles y restaurantes que
+              quieren cambiar la carta impresa por una experiencia digital que vende
+              más y opera mejor.
             </p>
           </RevealOnView>
         </div>
@@ -374,14 +375,14 @@ export default function HomePage() {
           <div className="reveal-up mx-auto max-w-2xl px-5 pb-16 pt-24 text-center sm:px-6 sm:pb-20 sm:pt-32">
             <span className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-4 py-1.5 text-[10px] font-bold uppercase tracking-[0.18em] text-accent-200 backdrop-blur-sm">
               <span className="h-1.5 w-1.5 rounded-full bg-accent-400" />
-              Empieza hoy
+              Empezá hoy
             </span>
             <h2 className="mt-7 font-display text-[clamp(2rem,5vw,3.5rem)] leading-[1.08] text-accent-100">
-              Lleva la carta de tu restaurante al siguiente nivel
+              Llevá la carta de tu local al siguiente nivel
             </h2>
             <p className="mx-auto mt-4 max-w-lg text-sm font-medium leading-relaxed text-cream-100/80">
-              Únete a las sodas, cafeterías y restaurantes que ya digitalizaron su
-              carta y su flujo de trabajo con DataFud.
+              Contanos cómo es tu local y te proponemos la carta, el hardware de mesa
+              y el plan que le calzan. Sin compromiso.
             </p>
             <MagneticCta
               {...waProps("cierre")}
@@ -391,7 +392,7 @@ export default function HomePage() {
               Hablemos por WhatsApp
             </MagneticCta>
             <p className="mt-5 text-[11px] font-semibold uppercase tracking-wider text-cream-100/50">
-              Operando en 48 horas · desde ${PRICING.plans.basico.priceUsd}/mes
+              Carta lista en {PRICING.delivery.menuHours} horas · desde ${PRICING.plans.basico.priceUsd}/mes
             </p>
           </div>
 
@@ -406,8 +407,8 @@ export default function HomePage() {
                   <Image src="/logo-main.png" alt="DataFud" width={140} height={58} className="h-7 w-auto" />
                 </span>
                 <p className="mt-6 text-[13px] font-medium leading-relaxed text-cream-100/70">
-                  Plataforma de menú digital, comandas inalámbricas y análisis de
-                  ventas en tiempo real para sodas y restaurantes de Latinoamérica.
+                  Menú digital por QR y NFC, pedidos desde la mesa y reportes de venta
+                  para sodas, cafeterías y restaurantes de Latinoamérica.
                 </p>
               </div>
 

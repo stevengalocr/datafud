@@ -21,8 +21,8 @@
 
 ## Contador
 
-- Iteración actual: 4
-- Iteraciones consumidas: 4 / 35
+- Iteración actual: 5
+- Iteraciones consumidas: 5 / 35
 
 ## Capacidades del entorno
 
@@ -40,8 +40,8 @@
 |---|---|---|---|---|---|---|---|
 | U01 | Config central `site.ts` + `PRICING.hardware` + `deliveryLabel` | hecho | 1 | 91df1af | directo a main | READY (`dpl_EkvtvuSQmEUTVFiUMuob2etKFaBr`) | typecheck/lint/build ✓; prueba de `waLink`, `waProps`, `mailLink` en Node; sin cambios visibles |
 | U02 | Contacto (#contacto, formulario Resend, /register → /#contacto, demo fuera de /login) | hecho | 1 | 34e75a3 | directo a main | READY (`dpl_FynHV9NVoSWdrDAN16CR8zhTqhsJ`) | Capturas de #contacto con y sin formulario en 375/1440; prueba de teclado, validación Zod y error de Resend con aria-live |
-| U03 | CTAs a WhatsApp + botón flotante | hecho | 1 | (ver bitácora it. 4) | directo a main | (ver bitácora it. 4) | `grep href="/register"` = 0; 9 enlaces wa.me con target/rel correctos y data-wa-origin; flotante 56×56 solo en 375, sin tapar el footer |
-| U04 | Promesas y planes (48 h / 15 días, Básico = Carta, frases prohibidas, docs) | pendiente | 0 | | | | |
+| U03 | CTAs a WhatsApp + botón flotante | hecho | 1 | c4acd8d | directo a main | (verificar en it. 5) | `grep href="/register"` = 0; 9 enlaces wa.me con target/rel correctos y data-wa-origin; flotante 56×56 solo en 375, sin tapar el footer |
+| U04 | Promesas y planes (48 h / 15 días, Básico = Carta, frases prohibidas, docs) | hecho | 1 | (ver bitácora it. 5) | directo a main | (ver bitácora it. 5) | grep de frases prohibidas en landing = 0; capturas de hero, stats y planes; MARKETING/PRODUCT/CHANGELOG alineados |
 | U05 | Sección #hardware | pendiente | 0 | | | | |
 | U06 | Sección #demo | pendiente | 0 | | | | |
 | U07 | Sección #implementacion | pendiente | 0 | | | | |
@@ -165,3 +165,26 @@ _(se llena cuando U05 publique la sección de hardware)_
   I ✓ · J ver bitácora siguiente.
 - Capturas: hero 375/1440, planes 375, footer 375 con flotante. Autocrítica: los CTA del
   hero partían el texto en dos líneas en 1440 → `whitespace-nowrap`.
+
+### Iteración 5 — U04 Promesas y planes
+
+- Plan: highlights y stats desde `PRICING.delivery` (48 h carta / 15 días sistema); pasos
+  reescritos ("Nosotros montamos tu carta", "Ponemos los QR y NFC en tus mesas", "Recibís los
+  pedidos", "Medís tu negocio"); hero, act-break, cierre y footer sin "tiempo real" ni frases
+  que insinúan clientes existentes; copy en voseo. Planes desde `PRICING.plans` con
+  `marketingName` (Básico → "Carta", sin pedidos en mesa), chip con `deliveryLabel` por plan,
+  features honestas (sin "24/7", "exportación", "tiempo real"); implementación: "Carta
+  publicada en 48 horas y sistema completo en 15 días", "Carta a tu marca", "1 año de soporte
+  técnico incluido" (se quitó "dominio propio", que no existe). Docs: MARKETING §1, §4, §5,
+  §6, §8, §10; PRODUCT §1, §2, §4, §8; CHANGELOG "Unreleased".
+- Lo que ve un visitante: "Carta lista en 48 horas · Sistema completo en 15 días" en la barra
+  y en los stats; los planes se llaman Carta / Estándar / Empresarial y cada uno dice su plazo.
+- Puertas: A ✓ · B ✓ · C ✓ · D ✓ (page.tsx, pricing-v2.tsx, docs) · E ✓ (grep en
+  `src/app/page.tsx` y `src/components/marketing` = 0; "operando en 48" = 0) · F ✓ (sin
+  bg-clip-text/backdrop-blur nuevos, 0 emojis en archivos tocados; `curl /` sin
+  TODO/PENDIENTE) · G ✓ (375/768/1440 sin scroll horizontal, anclas ok; solo Unsplash falla
+  por el sandbox) · H n.a. · I ✓ · J en la siguiente iteración.
+- Capturas: planes 1440 (tres tarjetas con chip de plazo; "Quiero Carta / Estándar /
+  Empresarial"), stats 375 (48h · 15 · 3 · 18), hero 375 con el nuevo párrafo en voseo.
+- Nota: `PRICING.trialDays` y `trial_ends_at` siguen en código/BD (no se tocan; solo salieron
+  de la landing).

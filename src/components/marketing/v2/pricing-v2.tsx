@@ -5,68 +5,74 @@ import { RevealOnView } from "@/components/marketing/v2/reveal";
 import { PRICING, type PlanCode } from "@/lib/constants";
 import { waProps } from "@/lib/site";
 
-const plans: {
+type PlanCard = {
   code: PlanCode;
   name: string;
   price: number;
+  deliveryLabel: string;
   highlight: boolean;
   tagline: string;
   features: string[];
-}[] = [
+};
+
+const plans: PlanCard[] = [
   {
     code: "basico",
-    name: "Básico",
+    name: PRICING.plans.basico.marketingName,
     price: PRICING.plans.basico.priceUsd,
+    deliveryLabel: PRICING.plans.basico.deliveryLabel,
     highlight: false,
-    tagline: "Para empezar tu menú digital",
+    tagline: "Tu carta digital por QR y NFC, sin pedidos en mesa",
     features: [
-      "1 idioma principal",
-      "Hasta 20 platillos en total",
-      "Órdenes en tiempo real",
-      "Reportes básicos de venta",
-      "Soporte digital por correo",
+      "1 idioma",
+      "Hasta 20 platillos con foto",
+      "Carta a tu marca: colores y logo",
+      "Cambios de menú a pedido, sin reimprimir",
+      "Soporte por WhatsApp",
     ],
   },
   {
     code: "estandar",
-    name: "Estándar",
+    name: PRICING.plans.estandar.marketingName,
     price: PRICING.plans.estandar.priceUsd,
+    deliveryLabel: PRICING.plans.estandar.deliveryLabel,
     highlight: true,
-    tagline: "El favorito de sodas y restaurantes",
+    tagline: "Carta + pedidos desde la mesa + panel",
     features: [
       "2 idiomas simultáneos",
-      "Hasta 70 platillos en total",
-      "Órdenes en tiempo real",
-      "Reportes y analíticas avanzadas",
-      "Soporte prioritario 24/7",
+      "Hasta 70 platillos con foto",
+      "Pedidos desde la mesa directo a cocina",
+      "Panel de comandas y reportes de venta",
+      "Soporte prioritario por WhatsApp",
     ],
   },
   {
     code: "empresarial",
-    name: "Empresarial",
+    name: PRICING.plans.empresarial.marketingName,
     price: PRICING.plans.empresarial.priceUsd,
+    deliveryLabel: PRICING.plans.empresarial.deliveryLabel,
     highlight: false,
     tagline: "Sin límites para tu crecimiento",
     features: [
       "3 idiomas (ES · EN · PT)",
       "Platillos y categorías ilimitados",
-      "Órdenes en tiempo real ilimitadas",
-      "Reportes y exportación avanzada",
+      "Pedidos desde la mesa directo a cocina",
+      "Reportes avanzados de venta",
       "Soporte dedicado por WhatsApp",
     ],
   },
 ];
 
 const setupIncludes: { icon: IconName; label: string }[] = [
-  { icon: "zap", label: "Listo y operando en 48 horas" },
-  { icon: "globe", label: "Landing 100% personalizada con dominio propio" },
-  { icon: "shield", label: "1 año de soporte técnico garantizado" },
+  { icon: "zap", label: `Carta publicada en ${PRICING.delivery.menuHours} horas y sistema completo en ${PRICING.delivery.fullSystemDays} días` },
+  { icon: "palette", label: "Carta a tu marca: colores, logo y fotos de tus platillos" },
+  { icon: "shield", label: "1 año de soporte técnico incluido" },
 ];
 
 const nfcSteps = [
   { n: "1.", title: "Toca", desc: "El comensal acerca su teléfono a la tarjeta NFC de la mesa." },
-  { n: "2.", title: "Ordena", desc: "Navega por la carta interactiva y envía el pedido al instante." },
-  { n: "3.", title: "Disfruta", desc: "La orden llega directo a tu panel en cocina en tiempo real." },
+  { n: "2.", title: "Ordena", desc: "Navega por la carta y, si tenés pedidos activos, envía el suyo al instante." },
+  { n: "3.", title: "Disfruta", desc: "Con el sistema completo, la orden llega directo a tu panel de cocina." },
 ];
 
 export function PricingV2() {
@@ -78,10 +84,10 @@ export function PricingV2() {
             Planes y tarifas
           </p>
           <h2 className="mt-2 font-display text-3xl leading-tight text-brand-900 sm:text-5xl">
-            Una inversión gastronómica que se paga sola
+            Una inversión clara, sin letra chica
           </h2>
           <p className="mt-4 text-base font-medium text-brand-800/80">
-            Implementación inicial llave en mano y una mensualidad transparente. Sin contratos atados.
+            Implementación llave en mano y una mensualidad transparente. Sin contratos atados: si un mes no te sirve, lo dejás.
           </p>
         </div>
       </RevealOnView>
@@ -104,7 +110,7 @@ export function PricingV2() {
               </span>
             </div>
             <p className="mt-3 text-xs text-brand-700/80">
-              Después, tu plan mensual preferido desde <span className="font-semibold text-brand-900">${PRICING.plans.basico.priceUsd}/mes</span>
+              Después, el plan mensual que elijas desde <span className="font-semibold text-brand-900">${PRICING.plans.basico.priceUsd}/mes</span>
             </p>
           </div>
           
@@ -157,6 +163,10 @@ export function PricingV2() {
                   / mes
                 </span>
               </div>
+              <p className="mt-4 inline-flex items-center gap-2 rounded-full border border-accent-300/50 bg-accent-50 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.14em] text-accent-700">
+                <Icon name="clock" size={12} />
+                {plan.deliveryLabel}
+              </p>
             </div>
             
             <ul className="flex-1 space-y-4 text-[13px] text-brand-800/90 leading-relaxed font-medium">
@@ -220,7 +230,7 @@ export function PricingV2() {
             Tarjetas NFC para tus mesas
           </h3>
           <p className="mt-3 text-sm text-brand-850 leading-relaxed font-medium">
-            Simplifica el servicio físico. Tus clientes solo tienen que acercar su smartphone y la carta interactiva aparecerá en su pantalla al instante. Suma las tarjetas que necesites, sin suscripciones extra.
+            Tus clientes solo acercan el teléfono y la carta aparece en su pantalla al instante. Sumá las tarjetas que necesités, sin suscripciones extra.
           </p>
           
           <ul className="mt-8 space-y-5">
