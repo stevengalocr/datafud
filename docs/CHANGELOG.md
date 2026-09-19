@@ -19,7 +19,19 @@ cada unidad se publica en `main` desde el loop autónomo (`docs/plans/landing-lo
 - Sección `#contacto` con WhatsApp, correo y formulario (Server Action + Zod + honeypot +
   Resend). El formulario solo se renderiza si el servidor tiene `RESEND_API_KEY`.
 - Botón flotante de WhatsApp en móvil. Iconos `whatsapp`, `mail`, `menu`, `x`, `chevron-down`.
-- Dependencias: `resend`; dev: `@playwright/test` (QA de la landing).
+- Secciones nuevas de la landing: `#hardware` (cuatro productos desde `PRICING.hardware`,
+  ilustraciones SVG de marca mientras llegan las fotos), `#demo` (teaser de "Verde Limón" en
+  marco de teléfono), `#implementacion` (línea de tiempo 0 → 48 h → días 2-5 → día 15),
+  `#confianza` (cuatro compromisos), `#preguntas` (acordeón accesible con 11 preguntas en
+  `src/lib/faq.ts`). Nav final Producto · Hardware · Planes · Demo · Preguntas con menú móvil.
+- Páginas `/terminos` y `/privacidad` (borrador con `[REVISAR]` y aviso visible).
+- SEO: `sitemap.ts`, `robots.ts`, metadatos con plantilla, Open Graph y Twitter, imagen OG
+  generada por página, canonical por página y JSON-LD (Organization, Product ×3, FAQPage).
+- Analítica: `@vercel/analytics` con eventos `whatsapp_click {origen}`, `demo_open {vista}` y
+  `contact_submit {resultado}`.
+- Accesibilidad: contraste AA, áreas táctiles ≥ 44 px, foco visible global, `<main>`, orden de
+  encabezados. Lighthouse móvil 96 / 100 / 96 / 100.
+- Dependencias: `resend`, `@vercel/analytics`; dev: `@playwright/test`, `lighthouse`.
 
 ### Changed
 - Todos los CTA de la landing abren WhatsApp con mensaje prellenado según el origen; ya no
@@ -31,8 +43,14 @@ cada unidad se publica en `main` desde el loop autónomo (`docs/plans/landing-lo
   cuenta", "dominio propio" y las frases que insinuaban clientes existentes.
 - Footer con los datos de contacto reales. `docs/MARKETING.md` y `docs/PRODUCT.md` alineados.
 
+### Security
+- `next` y `eslint-config-next` a 15.5.25 (cierra las advisories críticas de Next 15.5.19).
+  `npm audit --omit=dev` queda solo con el `postcss` que Next 15 empaqueta internamente, cuyo
+  arreglo exige Next 16 (salto mayor, fuera de esta etapa).
+
 ### Removed
 - Credenciales de la cuenta demo visibles en `/login`.
+- Bloque de tarjetas NFC dentro de planes (la oferta de hardware vive en `#hardware`).
 
 ---
 

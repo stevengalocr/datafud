@@ -21,8 +21,8 @@
 
 ## Contador
 
-- Iteración actual: 14
-- Iteraciones consumidas: 14 / 35
+- Iteración actual: 15
+- Iteraciones consumidas: 15 / 35
 
 ## Capacidades del entorno
 
@@ -49,9 +49,9 @@
 | U09 | Sección #preguntas + nav final | hecho | 1 | 639eea7 | directo a main | READY (`dpl_HwTRMENDNGZeY6eW6td6dTwt4vpm`) | 11 preguntas en `src/lib/faq.ts`; prueba de teclado (Enter/Space/flechas/Home/End) y de menú móvil (aria-expanded, Escape, 44 px) |
 | U10 | Legal: /terminos y /privacidad | hecho | 1 | fd4c98c | directo a main | READY (`dpl_5K2Qm1gNvDKQAnqunz53V8fdCTfQ`) | Ambas rutas 200 y estáticas; capturas 375/1440; 29 marcas [REVISAR] resaltadas en /terminos; aviso de borrador visible |
 | U11 | SEO: sitemap, robots, metadata, OG, JSON-LD | hecho | 1 | ab7fd6c | directo a main | READY (`dpl_JA4xxhYzAejBykgL1CWZf7wwHUNX`) | robots/sitemap/OG verificados con curl; JSON-LD Organization + 3 Product + FAQPage (11); Lighthouse móvil 94/100/96/100 |
-| U12 | Analítica: @vercel/analytics + eventos | hecho | 1 | 94fa50f | directo a main | (verificar en it. 14) | `events-test.mjs`: cola `vaq` con pageview, whatsapp_click{origen:hero}, whatsapp_click{origen:plan-estandar}, demo_open{vista:cliente} |
-| U13 | Accesibilidad y rendimiento | hecho | 1 | (ver bitácora it. 14) | directo a main | (ver bitácora it. 14) | Lighthouse móvil con reduced-motion forzado: / 96/100/96/100, /terminos 99/100/96/100; 0 objetivos < 44 px; CLS 0 |
-| U14 | Seguridad de dependencias (next 15.5.x, audit) | pendiente | 0 | | | | |
+| U12 | Analítica: @vercel/analytics + eventos | hecho | 1 | 94fa50f | directo a main | READY (`dpl_FqNJKLxB5LNjaL9mWM66B9jLHtXW`) | `events-test.mjs`: cola `vaq` con pageview, whatsapp_click{origen:hero}, whatsapp_click{origen:plan-estandar}, demo_open{vista:cliente} |
+| U13 | Accesibilidad y rendimiento | hecho | 1 | 980e100 | directo a main | (verificar en it. 15) | Lighthouse móvil con reduced-motion forzado: / 96/100/96/100, /terminos 99/100/96/100; 0 objetivos < 44 px; CLS 0 |
+| U14 | Seguridad de dependencias (next 15.5.x, audit) | hecho | 1 | (ver bitácora it. 15) | directo a main | (ver bitácora it. 15) | next 15.5.25; audit prod: 0 críticas; queda 1 alta (postcss interno de Next, solo se arregla con Next 16) |
 | U15 | Carta estática /c/[slug] | omitida (CONFIG=no) | – | | | | |
 | U16 | Redirecciones /q/[code] | omitida (CONFIG=no) | – | | | | |
 | U17 | Pulido (bucle de calidad) | pendiente | 0 | | | | |
@@ -353,3 +353,18 @@ con `role="img"` y alt descriptivo. Al tener las fotos reales, basta con poner l
   `qa.mjs` ahora exige 44 px de área táctil: 0 hallazgos en `/`, `/terminos`, `/privacidad`.
 - Puertas: A ✓ · B ✓ · C ✓ · D ✓ · E ✓ · F ✓ · G ✓ · H ✓ · I ✓ (corrida con reduced-motion
   sin diferencias) · J siguiente iteración.
+
+### Iteración 15 — U14 Seguridad de dependencias
+
+- Antes: `next` 15.5.19 con 1 crítica (DoS/SSRF/cache en Server Actions) y 3 altas
+  (`nanoid`, `postcss`, `sharp`). Cambios: `next` y `eslint-config-next` → 15.5.25 (última
+  15.5.x), `npm audit fix --omit=dev` (nanoid), `npm ci` limpio desde el lockfile.
+- Después: `npm audit --omit=dev` → 0 críticas; quedan 1 alta + 1 moderada, ambas por el
+  `postcss` que Next empaqueta en `node_modules/next/node_modules/postcss`; el único arreglo
+  es `next@16` (salto mayor), fuera del alcance de la regla 3. Riesgo bajo en esta etapa: el
+  vector es un `sourceMappingURL` controlado por el atacante en el build, no en producción.
+- Puertas repetidas con Next 15.5.25: A ✓ · B ✓ · C ✓ (build ok) · D ✓ · E ✓ · F ✓ · G ✓
+  (`/`, `/terminos`, `/privacidad`, `/preview` OK en 375/768/1440; `/login` tiene un enlace
+  de 36 px, fuera del alcance de la landing) · H ✓ (96 / 100 / 96 / 100) · I ✓ · J siguiente.
+- Extra: el "Ingresar" del nav de escritorio quedó en 44 px (se había escapado en U13).
+  CHANGELOG "Unreleased" actualizado con U05–U14.

@@ -50,7 +50,7 @@ export function LandingNavV2() {
         <div className="flex items-center gap-3 sm:gap-5">
           <Link
             href="/login"
-            className="hidden py-2 text-[11px] font-bold uppercase tracking-[0.18em] text-brand-700/70 transition-colors duration-300 ease-out-expo hover:text-brand-900 lg:inline"
+            className="hidden min-h-11 items-center text-[11px] font-bold uppercase tracking-[0.18em] text-brand-700/75 transition-colors duration-300 ease-out-expo hover:text-brand-900 lg:inline-flex"
           >
             Ingresar
           </Link>
