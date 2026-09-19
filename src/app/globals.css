@@ -195,6 +195,11 @@ body {
   mix-blend-mode: overlay;
 }
 
+/* Respuesta del acordeón de preguntas: entra con opacidad y leve desplazamiento. */
+.faq-answer {
+  animation: fade-up 0.4s var(--ease-out) both;
+}
+
 /* CTA magnético: JS escribe --mx/--my (px). */
 .magnetic {
   transform: translate3d(var(--mx, 0px), var(--my, 0px), 0);

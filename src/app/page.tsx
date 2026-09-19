@@ -14,6 +14,7 @@ import { HardwareSection } from "@/components/marketing/v2/hardware-section";
 import { DemoSection } from "@/components/marketing/v2/demo-section";
 import { ImplementationSection } from "@/components/marketing/v2/implementation-section";
 import { TrustSection } from "@/components/marketing/v2/trust-section";
+import { FaqSection } from "@/components/marketing/v2/faq-section";
 import { WhatsAppFloat } from "@/components/marketing/v2/whatsapp-float";
 import { SITE, hasWhatsApp, mailLink, waProps, whatsappDisplay } from "@/lib/site";
 
@@ -374,6 +375,9 @@ export default function HomePage() {
       {/* ── Confianza ──────────────────────────────────────────── */}
       <TrustSection />
 
+      {/* ── Preguntas frecuentes ───────────────────────────────── */}
+      <FaqSection />
+
       {/* ── Contacto ───────────────────────────────────────────── */}
       <ContactSection />
 
@@ -437,6 +441,7 @@ export default function HomePage() {
                   <a href="#implementacion" className="transition-colors duration-200 hover:text-white">Implementación</a>
                   <a href="#planes" className="transition-colors duration-200 hover:text-white">Planes y precios</a>
                   <a href="#demo" className="transition-colors duration-200 hover:text-white">Demo en vivo</a>
+                  <a href="#preguntas" className="transition-colors duration-200 hover:text-white">Preguntas</a>
                   <a href="#contacto" className="transition-colors duration-200 hover:text-white">Contacto</a>
                 </nav>
               </div>

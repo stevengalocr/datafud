@@ -21,8 +21,8 @@
 
 ## Contador
 
-- Iteración actual: 9
-- Iteraciones consumidas: 9 / 35
+- Iteración actual: 10
+- Iteraciones consumidas: 10 / 35
 
 ## Capacidades del entorno
 
@@ -45,8 +45,8 @@
 | U05 | Sección #hardware | hecho | 1 | 1f7ed73 | directo a main | READY (`dpl_2D3hodjJMk8d9iJqHJRdc8BmjNsB`) | Capturas 375/1440 de #hardware; 4 productos desde PRICING.hardware; CTA de cotización a WhatsApp |
 | U06 | Sección #demo | hecho | 1 | 7311a8f | directo a main | READY (`dpl_6VRNLVhPHVyPT1boVzuCzDFX7TSm`) | Capturas 375/1440; CTA a /preview/cliente (200) y /preview/dashboard; sin desbordes en 375 |
 | U07 | Sección #implementacion | hecho | 1 | 740a182 | directo a main | READY (`dpl_FfADLZgQXR78bTBv1D7pVNjyb58R`) | Capturas 375/1440: línea de tiempo de 4 hitos y dos columnas |
-| U08 | Sección #confianza | hecho | 1 | (ver bitácora it. 9) | directo a main | (ver bitácora it. 9) | Capturas 375/1440; 4 compromisos + firma GaloDev; bloque del primer caso real comentado |
-| U09 | Sección #preguntas + nav final | pendiente | 0 | | | | |
+| U08 | Sección #confianza | hecho | 1 | 21571ae | directo a main | READY (`dpl_3HGbCcsSVf4hVkByjAhDefUrrYzi`) | Capturas 375/1440; 4 compromisos + firma GaloDev; bloque del primer caso real comentado |
+| U09 | Sección #preguntas + nav final | hecho | 1 | (ver bitácora it. 10) | directo a main | (ver bitácora it. 10) | 11 preguntas en `src/lib/faq.ts`; prueba de teclado (Enter/Space/flechas/Home/End) y de menú móvil (aria-expanded, Escape, 44 px) |
 | U10 | Legal: /terminos y /privacidad | pendiente | 0 | | | | |
 | U11 | SEO: sitemap, robots, metadata, OG, JSON-LD | pendiente | 0 | | | | |
 | U12 | Analítica: @vercel/analytics + eventos | pendiente | 0 | | | | |
@@ -255,3 +255,23 @@ con `role="img"` y alt descriptivo. Al tener las fotos reales, basta con poner l
 - Nota de honestidad: se nombra "Steven, de GaloDev" (solo nombre de pila) como la persona
   que atiende el WhatsApp; se evitó cualquier garantía no confirmada (p. ej. "garantía de
   satisfacción" quedó fuera hasta que Steven la defina).
+
+### Iteración 10 — U09 Preguntas frecuentes y nav final
+
+- Plan: `src/lib/faq.ts` (11 preguntas: las 5 objeciones de MARKETING §8 + internet en el
+  local, cambios de precio, cómo se paga, tipos de negocio, empezar solo con carta, qué
+  incluye la implementación); `faq-section.tsx` (cliente): acordeón con `button
+  aria-expanded aria-controls`, panel `role=region aria-labelledby`, flechas/Home/End,
+  sin animar altura (solo opacidad/transform en la respuesta). Nav final Producto · Hardware
+  · Planes · Demo · Preguntas con `mobile-menu.tsx` (botón `aria-expanded/aria-controls`,
+  Escape devuelve el foco, cierra al elegir, enlaces de 48 px). Footer gana "Preguntas".
+- Puertas: A ✓ · B ✓ · C ✓ · D ✓ · E ✓ · F ✓ · G ✓ (375/768/1440; `a11y-test.mjs`:
+  11 preguntas, Enter abre y cierra la anterior, ArrowDown/End mueven el foco, una sola
+  región visible; menú móvil: expanded true/false, panel visible, 0 enlaces < 44 px, Escape
+  cierra y devuelve el foco, clic en "Preguntas" cierra y llega a la sección) · H n.a. ·
+  I ✓ · J siguiente iteración.
+- Autocrítica corregida: en 768 px el nav de escritorio con cinco secciones desbordaba 3 px
+  (`hscroll 771>768`) → el nav completo aparece desde `lg` y tablet usa el menú; se quitó el
+  botón de WhatsApp duplicado dentro del panel (ya está en el header).
+- Honestidad: la respuesta "¿Cómo se paga?" no promete medios concretos (se coordinan por
+  WhatsApp) y aclara que no hay cobros automáticos, coherente con la suscripción manual.
