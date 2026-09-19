@@ -11,6 +11,7 @@ import { Icon, type IconName } from "@/components/ui/icon";
 import { PRICING } from "@/lib/constants";
 import { ContactSection } from "@/components/marketing/v2/contact-section";
 import { HardwareSection } from "@/components/marketing/v2/hardware-section";
+import { DemoSection } from "@/components/marketing/v2/demo-section";
 import { WhatsAppFloat } from "@/components/marketing/v2/whatsapp-float";
 import { SITE, hasWhatsApp, mailLink, waProps, whatsappDisplay } from "@/lib/site";
 
@@ -336,6 +337,9 @@ export default function HomePage() {
       {/* ── Hardware de mesa ───────────────────────────────────── */}
       <HardwareSection />
 
+      {/* ── Demo en vivo ───────────────────────────────────────── */}
+      <DemoSection />
+
       {/* ── Act-break atmosférico ──────────────────────────────── */}
       <section className="relative isolate overflow-hidden">
         <div className="img-grade absolute inset-0 -z-10">
@@ -423,7 +427,7 @@ export default function HomePage() {
                   <a href="#sistema" className="transition-colors duration-200 hover:text-white">El sistema</a>
                   <a href="#hardware" className="transition-colors duration-200 hover:text-white">Hardware de mesa</a>
                   <a href="#planes" className="transition-colors duration-200 hover:text-white">Planes y precios</a>
-                  <Link href="/preview" className="transition-colors duration-200 hover:text-white">Probar demo</Link>
+                  <a href="#demo" className="transition-colors duration-200 hover:text-white">Demo en vivo</a>
                   <a href="#contacto" className="transition-colors duration-200 hover:text-white">Contacto</a>
                 </nav>
               </div>

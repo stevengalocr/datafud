@@ -9,6 +9,7 @@ const links = [
   { href: "#sistema", label: "El sistema" },
   { href: "#hardware", label: "Hardware" },
   { href: "#planes", label: "Planes" },
+  { href: "#demo", label: "Demo" },
 ];
 
 export function LandingNavV2() {

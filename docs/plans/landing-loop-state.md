@@ -21,8 +21,8 @@
 
 ## Contador
 
-- Iteración actual: 6
-- Iteraciones consumidas: 6 / 35
+- Iteración actual: 7
+- Iteraciones consumidas: 7 / 35
 
 ## Capacidades del entorno
 
@@ -42,8 +42,8 @@
 | U02 | Contacto (#contacto, formulario Resend, /register → /#contacto, demo fuera de /login) | hecho | 1 | 34e75a3 | directo a main | READY (`dpl_FynHV9NVoSWdrDAN16CR8zhTqhsJ`) | Capturas de #contacto con y sin formulario en 375/1440; prueba de teclado, validación Zod y error de Resend con aria-live |
 | U03 | CTAs a WhatsApp + botón flotante | hecho | 1 | c4acd8d | directo a main | READY (`dpl_4rGKvw2931aCoaRcmUhFwUQKPv4d`) | `grep href="/register"` = 0; 9 enlaces wa.me con target/rel correctos y data-wa-origin; flotante 56×56 solo en 375, sin tapar el footer |
 | U04 | Promesas y planes (48 h / 15 días, Básico = Carta, frases prohibidas, docs) | hecho | 1 | dc4093d | directo a main | READY (`dpl_5ZvvPVUVmTvRsry7kRGbzmAR1qhX`) | grep de frases prohibidas en landing = 0; capturas de hero, stats y planes; MARKETING/PRODUCT/CHANGELOG alineados |
-| U05 | Sección #hardware | hecho | 1 | (ver bitácora it. 6) | directo a main | (ver bitácora it. 6) | Capturas 375/1440 de #hardware; 4 productos desde PRICING.hardware; CTA de cotización a WhatsApp |
-| U06 | Sección #demo | pendiente | 0 | | | | |
+| U05 | Sección #hardware | hecho | 1 | 1f7ed73 | directo a main | READY (`dpl_2D3hodjJMk8d9iJqHJRdc8BmjNsB`) | Capturas 375/1440 de #hardware; 4 productos desde PRICING.hardware; CTA de cotización a WhatsApp |
+| U06 | Sección #demo | hecho | 1 | (ver bitácora it. 7) | directo a main | (ver bitácora it. 7) | Capturas 375/1440; CTA a /preview/cliente (200) y /preview/dashboard; sin desbordes en 375 |
 | U07 | Sección #implementacion | pendiente | 0 | | | | |
 | U08 | Sección #confianza | pendiente | 0 | | | | |
 | U09 | Sección #preguntas + nav final | pendiente | 0 | | | | |
@@ -214,3 +214,19 @@ con `role="img"` y alt descriptivo. Al tener las fotos reales, basta con poner l
 - Capturas: #hardware 375 y 1440. Autocrítica corregida: texto "TU LOGO" pisaba la franja en
   la ilustración (se quitó), la tarjeta grande dejaba aire vacío en desktop (la imagen ahora
   llena la altura) y el CTA del bloque oscuro se salía en 375 (ahora envuelve).
+
+### Iteración 7 — U06 Sección #demo
+
+- Plan: `demo-section.tsx` con marco de teléfono (CSS) que muestra una composición estática
+  de la carta de "Verde Limón" usando los mismos datos de `src/lib/demo/mock.ts` (cover,
+  categorías, tres platillos en colones, barra de orden) + texto "Probalo vos mismo, sin
+  hablar con nadie", tres puntos y CTAs "Abrir la carta demo" → `/preview/cliente` y "Ver el
+  panel" → `/preview/dashboard` (con `data-demo-open` para la analítica de U12). Aviso
+  "Restaurante ficticio · datos de ejemplo · nada se guarda". Nav gana "Demo"; el footer
+  enlaza `#demo`.
+- Puertas: A ✓ · B ✓ · C ✓ · D ✓ · E ✓ · F ✓ (`curl /` sin TODO/PENDIENTE) · G ✓
+  (375/768/1440; `/preview/cliente` responde 200) · H n.a. · I ✓ · J siguiente iteración.
+- Autocrítica corregida: en 375 el CTA con `whitespace-nowrap` y un texto largo ensanchaba la
+  columna del grid y cortaba el título (no lo detectaba `scrollWidth`); se acortó el texto,
+  se permite el salto de línea y se añadió `min-w-0`. El QA ahora también detecta elementos
+  que sobresalen del viewport. Precios en colones sin decimales.
