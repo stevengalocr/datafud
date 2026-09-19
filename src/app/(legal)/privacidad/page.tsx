@@ -3,7 +3,9 @@ import { LegalPage, type LegalSection } from "@/components/marketing/v2/legal-pa
 import { SITE } from "@/lib/site";
 
 export const metadata: Metadata = {
-  title: "Política de privacidad — DataFud",
+  title: "Política de privacidad",
+  alternates: { canonical: "/privacidad" },
+  openGraph: { title: "Política de privacidad · DataFud", url: "/privacidad" },
   description:
     "Qué datos recoge DataFud a través del formulario de contacto, WhatsApp y el uso del servicio, para qué los usamos, con quién los compartimos y cómo ejercer tus derechos.",
 };

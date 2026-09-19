@@ -51,7 +51,7 @@ export function PinnedSteps({ steps }: { steps: Step[] }) {
     <section id="como-funciona" className="scroll-mt-24">
       {/* Encabezado */}
       <div className="mx-auto max-w-6xl px-5 pt-24 sm:px-6 sm:pt-32">
-        <p className="text-xs font-bold uppercase tracking-[0.2em] text-accent-600">
+        <p className="text-xs font-bold uppercase tracking-[0.2em] text-accent-700">
           Paso a paso
         </p>
         <h2 className="mt-3 max-w-2xl font-display text-[clamp(2rem,5vw,3.5rem)] leading-[1.05] tracking-tight text-brand-900">
@@ -88,7 +88,7 @@ export function PinnedSteps({ steps }: { steps: Step[] }) {
                       )}
                     >
                       <div className="flex items-baseline gap-4">
-                        <span className="font-display text-2xl leading-none text-accent-500">
+                        <span className="font-display text-2xl leading-none text-accent-700">
                           {s.number}
                         </span>
                         <div>
@@ -154,7 +154,7 @@ export function PinnedSteps({ steps }: { steps: Step[] }) {
               />
             </div>
             <div className="mt-5 flex items-baseline gap-3">
-              <span className="font-display text-xl text-accent-500">{s.number}</span>
+              <span className="font-display text-xl text-accent-700">{s.number}</span>
               <h3 className="font-display text-xl text-brand-900">{s.title}</h3>
             </div>
             <p className="mt-2 text-sm font-medium leading-relaxed text-brand-700/80">

@@ -43,7 +43,7 @@ export function LegalPage({
       <LandingNavV2 />
 
       <main className="mx-auto max-w-3xl px-5 pb-24 pt-14 sm:px-6 sm:pt-20">
-        <p className="text-xs font-bold uppercase tracking-[0.2em] text-accent-600">{eyebrow}</p>
+        <p className="text-xs font-bold uppercase tracking-[0.2em] text-accent-700">{eyebrow}</p>
         <h1 className="mt-3 font-display text-[clamp(2rem,5vw,3.2rem)] leading-[1.08] tracking-tight text-brand-900">{title}</h1>
         <p className="mt-4 text-sm font-semibold uppercase tracking-[0.14em] text-brand-700/60">Última actualización: {LEGAL_UPDATED}</p>
 
@@ -68,7 +68,7 @@ export function LegalPage({
           {sections.map((s, i) => (
             <section key={s.title} aria-labelledby={`sec-${i + 1}`}>
               <h2 id={`sec-${i + 1}`} className="flex items-baseline gap-3 font-display text-2xl text-brand-900">
-                <span className="text-base text-accent-500">{String(i + 1).padStart(2, "0")}</span>
+                <span className="text-base text-accent-700">{String(i + 1).padStart(2, "0")}</span>
                 {s.title}
               </h2>
               <div className="mt-4 space-y-4 text-[15px] font-medium leading-relaxed text-brand-800/85">

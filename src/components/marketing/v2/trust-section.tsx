@@ -38,7 +38,7 @@ export function TrustSection() {
         <div className="grid gap-12 lg:grid-cols-[0.85fr_1.15fr] lg:gap-20">
           <RevealOnView className="lg:sticky lg:top-28 lg:self-start">
             <div className="reveal-up">
-              <p className="text-xs font-bold uppercase tracking-[0.2em] text-accent-600">Confianza</p>
+              <p className="text-xs font-bold uppercase tracking-[0.2em] text-accent-700">Confianza</p>
               <h2 className="mt-3 font-display text-[clamp(2rem,5vw,3.5rem)] leading-[1.05] tracking-tight text-brand-900">
                 Lo que te prometemos cabe en cuatro líneas
               </h2>
@@ -69,17 +69,17 @@ export function TrustSection() {
           <RevealOnView>
             <dl className="divide-y divide-stone-200/80 border-y border-stone-200/80">
               {pillars.map((p, i) => (
-                <div key={p.title} className="reveal-up grid gap-4 py-7 sm:grid-cols-[3rem_1fr] sm:gap-6 sm:py-8">
-                  <span className="flex h-11 w-11 items-center justify-center rounded-xl border border-stone-200/60 bg-cream-100 text-brand-650">
-                    <Icon name={p.icon} size={20} />
-                  </span>
-                  <div>
-                    <dt className="flex items-baseline gap-3 font-display text-xl text-brand-900 sm:text-2xl">
-                      <span className="text-sm text-accent-500">{String(i + 1).padStart(2, "0")}</span>
+                <div key={p.title} className="reveal-up py-7 sm:py-8">
+                  <dt className="grid gap-4 sm:grid-cols-[3rem_1fr] sm:gap-6">
+                    <span className="flex h-11 w-11 items-center justify-center rounded-xl border border-stone-200/60 bg-cream-100 text-brand-650">
+                      <Icon name={p.icon} size={20} />
+                    </span>
+                    <span className="flex items-baseline gap-3 font-display text-xl text-brand-900 sm:text-2xl">
+                      <span className="text-sm text-accent-700">{String(i + 1).padStart(2, "0")}</span>
                       {p.title}
-                    </dt>
-                    <dd className="mt-2 max-w-xl text-sm font-medium leading-relaxed text-brand-700/80 sm:text-[15px]">{p.desc}</dd>
-                  </div>
+                    </span>
+                  </dt>
+                  <dd className="mt-2 max-w-xl text-sm font-medium leading-relaxed text-brand-700/80 sm:ml-[4.5rem] sm:text-[15px]">{p.desc}</dd>
                 </div>
               ))}
             </dl>

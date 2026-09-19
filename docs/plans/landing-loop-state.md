@@ -21,8 +21,8 @@
 
 ## Contador
 
-- Iteración actual: 11
-- Iteraciones consumidas: 11 / 35
+- Iteración actual: 12
+- Iteraciones consumidas: 12 / 35
 
 ## Capacidades del entorno
 
@@ -32,7 +32,7 @@
 | Red a datafud.com | No | `curl https://datafud.com/` → código 000 (sin salida a internet general). La puerta J se verifica con la API de GitHub/Vercel, no con curl a producción |
 | Red a images.unsplash.com | No | 403 vía proxy. En `next start` local los `/_next/image` de Unsplash devuelven 500 **solo en este entorno**; en producción cargan. Se anota como limitación, no como bug |
 | Publicar en main | Sí, push directo | `git push origin HEAD:main` fue aceptado (398bf74). No hace falta PR. Despliegue de Vercel verificado con el MCP de Vercel (proyecto `prj_n957iGSeYbe4GbTsDxlP0ytLHJSt`) |
-| Lighthouse | Pendiente (desde U11) | `lighthouse` como dev-dependency cuando toque |
+| Lighthouse | Sí, local | `lighthouse` (dev) sobre `next start` con el Chromium de `/opt/pw-browsers`, preset móvil. Limitación: las fotos de Unsplash no cargan en el sandbox, así que Performance en producción puede diferir (allí sí cargan y pesan) |
 
 ## Unidades
 
@@ -47,8 +47,8 @@
 | U07 | Sección #implementacion | hecho | 1 | 740a182 | directo a main | READY (`dpl_FfADLZgQXR78bTBv1D7pVNjyb58R`) | Capturas 375/1440: línea de tiempo de 4 hitos y dos columnas |
 | U08 | Sección #confianza | hecho | 1 | 21571ae | directo a main | READY (`dpl_3HGbCcsSVf4hVkByjAhDefUrrYzi`) | Capturas 375/1440; 4 compromisos + firma GaloDev; bloque del primer caso real comentado |
 | U09 | Sección #preguntas + nav final | hecho | 1 | 639eea7 | directo a main | READY (`dpl_HwTRMENDNGZeY6eW6td6dTwt4vpm`) | 11 preguntas en `src/lib/faq.ts`; prueba de teclado (Enter/Space/flechas/Home/End) y de menú móvil (aria-expanded, Escape, 44 px) |
-| U10 | Legal: /terminos y /privacidad | hecho | 1 | (ver bitácora it. 11) | directo a main | (ver bitácora it. 11) | Ambas rutas 200 y estáticas; capturas 375/1440; 29 marcas [REVISAR] resaltadas en /terminos; aviso de borrador visible |
-| U11 | SEO: sitemap, robots, metadata, OG, JSON-LD | pendiente | 0 | | | | |
+| U10 | Legal: /terminos y /privacidad | hecho | 1 | fd4c98c | directo a main | READY (`dpl_5K2Qm1gNvDKQAnqunz53V8fdCTfQ`) | Ambas rutas 200 y estáticas; capturas 375/1440; 29 marcas [REVISAR] resaltadas en /terminos; aviso de borrador visible |
+| U11 | SEO: sitemap, robots, metadata, OG, JSON-LD | hecho | 1 | (ver bitácora it. 12) | directo a main | (ver bitácora it. 12) | robots/sitemap/OG verificados con curl; JSON-LD Organization + 3 Product + FAQPage (11); Lighthouse móvil 94/100/96/100 |
 | U12 | Analítica: @vercel/analytics + eventos | pendiente | 0 | | | | |
 | U13 | Accesibilidad y rendimiento | pendiente | 0 | | | | |
 | U14 | Seguridad de dependencias (next 15.5.x, audit) | pendiente | 0 | | | | |
@@ -292,3 +292,28 @@ con `role="img"` y alt descriptivo. Al tener las fotos reales, basta con poner l
   F ✓ (`curl /` sin TODO/PENDIENTE; en legal solo `[REVISAR]`, que es el marcador previsto y
   va acompañado del aviso de borrador) · G ✓ (las tres rutas en 375/768/1440, sin desbordes,
   un solo h1) · H n.a. · I ✓ · J siguiente iteración.
+
+### Iteración 12 — U11 SEO
+
+- Plan: `sitemap.ts` (/, /preview, /preview/cliente, /terminos, /privacidad), `robots.ts`
+  (disallow /admin, /dashboard, /login, /register, /acceso-galodev-9f3a, /api; sitemap y
+  host), `src/lib/seo.ts` (título, descripción, JSON-LD Organization / Product ×3 / FAQPage
+  desde `FAQ_ITEMS`), `src/lib/og.tsx` + `opengraph-image.tsx` por página (home, términos,
+  privacidad; `ImageResponse` sin fuentes remotas), `layout.tsx` con `metadataBase`, plantilla
+  de título, Open Graph, Twitter, robots e iconos; canonical por página (`/`, `/terminos`,
+  `/privacidad`); `lang="es"` ya existía. Dev-dependency `lighthouse`.
+- Verificación (curl sobre `next start`): `/robots.txt` y `/sitemap.xml` correctos; `<link
+  rel="canonical">`, `og:title/url/image` y `<title>` en `/` y `/terminos`; `/opengraph-image`
+  200 `image/png` 152 kB; JSON-LD parsea: `['Organization','Product','Product','Product',
+  'FAQPage']`, 11 preguntas, "DataFud Carta" 29 USD.
+- Lighthouse móvil (puerta H) primera pasada: 76 / 86 / 96 / 100. Causas y arreglos en la
+  misma iteración: LCP 7,2 s porque el banner del hero bajaba 1080 px en móvil (sin `sizes`)
+  → `sizes` explícito; contraste: `accent-600` sobre crema daba 4,17 y los numerales
+  `accent-500` 2,78 → todos los textos dorados sobre claro pasan a `accent-700` (el h1 a
+  `accent-600`, texto grande); `<dl>` de #confianza con hijos no válidos → icono dentro de
+  `<dt>`; sin `<main>` → la landing va envuelta en `<main>`; `h4` en el footer → `h3`.
+  Segunda pasada: **Performance 94 · Accessibility 100 · Best Practices 96 · SEO 100**; LCP
+  2,8 s, CLS 0, TBT 130 ms. Único fallo restante: `errors-in-console` por los 500 de Unsplash
+  del sandbox (no ocurre en producción).
+- Puertas: A ✓ · B ✓ · C ✓ · D ✓ · E ✓ · F ✓ · G ✓ · H ✓ (con la salvedad de red anotada
+  arriba) · I ✓ · J siguiente iteración.

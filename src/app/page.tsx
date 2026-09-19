@@ -17,6 +17,8 @@ import { TrustSection } from "@/components/marketing/v2/trust-section";
 import { FaqSection } from "@/components/marketing/v2/faq-section";
 import { WhatsAppFloat } from "@/components/marketing/v2/whatsapp-float";
 import { SITE, hasWhatsApp, mailLink, waProps, whatsappDisplay } from "@/lib/site";
+import type { Metadata } from "next";
+import { faqJsonLd, organizationJsonLd, productsJsonLd } from "@/lib/seo";
 
 // Fotografía de stock (Unsplash, licencia libre), tratada con overlay de marca.
 const u = (id: string) => `https://images.unsplash.com/${id}?auto=format&fit=crop&w=1500&q=80`;
@@ -119,11 +121,24 @@ const QR_CELLS = [
   1, 1, 1, 0, 1,
 ];
 
+export const metadata: Metadata = {
+  alternates: { canonical: "/" },
+  openGraph: { url: "/" },
+};
+
 export default function HomePage() {
+  const jsonLd = [organizationJsonLd(), ...productsJsonLd(), faqJsonLd()];
   return (
     <div className="min-h-screen bg-cream-50 font-sans text-brand-900 antialiased selection:bg-accent-200 selection:text-brand-950">
+      {/* Datos estructurados: Organization, Product (3 planes) y FAQPage */}
+      <script
+        type="application/ld+json"
+        // JSON generado por nosotros desde constantes: no hay entrada del usuario.
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }}
+      />
       <LandingNavV2 />
 
+      <main>
       {/* ── Hero ───────────────────────────────────────────────── */}
       <section className="relative overflow-hidden border-b border-stone-200/60">
         <div className="qr-grid pointer-events-none absolute inset-0 opacity-70" />
@@ -143,7 +158,7 @@ export default function HomePage() {
               <h1 className="mt-7 font-display text-[clamp(2.2rem,6.4vw,3.6rem)] leading-[1.04] tracking-tight text-brand-900 sm:mt-8">
                 El menú digital que{" "}
                 <span className="italic font-normal text-brand-700">abre apetito</span>{" "}
-                <span className="text-accent-500">y cierra ventas</span>
+                <span className="text-accent-600">y cierra ventas</span>
               </h1>
 
               <p className="mt-6 max-w-xl text-base font-medium leading-relaxed text-brand-800/80 sm:text-lg">
@@ -208,6 +223,7 @@ export default function HomePage() {
                   width={920}
                   height={570}
                   priority
+                  sizes="(min-width: 1024px) 460px, (min-width: 640px) 60vw, 92vw"
                   className="h-auto w-full rounded-xl object-cover transition-transform duration-700 ease-out-expo group-hover:scale-[1.02]"
                 />
               </div>
@@ -219,7 +235,7 @@ export default function HomePage() {
                 </span>
                 <div>
                   <p className="text-[11px] font-bold leading-tight text-brand-900">Orden #18 · Mesa 4</p>
-                  <p className="text-[10px] font-semibold uppercase tracking-wide text-accent-600">Recibida en cocina</p>
+                  <p className="text-[10px] font-semibold uppercase tracking-wide text-accent-700">Recibida en cocina</p>
                 </div>
               </div>
             </Parallax>
@@ -286,7 +302,7 @@ export default function HomePage() {
         <div className="mx-auto max-w-6xl px-5 py-24 sm:px-6 sm:py-32">
           <RevealOnView className="max-w-2xl">
             <div className="reveal-up">
-              <p className="text-xs font-bold uppercase tracking-[0.2em] text-accent-600">
+              <p className="text-xs font-bold uppercase tracking-[0.2em] text-accent-700">
                 El sistema completo
               </p>
               <h2 className="mt-3 font-display text-[clamp(2rem,5vw,3.5rem)] leading-[1.05] tracking-tight text-brand-900">
@@ -314,14 +330,14 @@ export default function HomePage() {
                   </span>
                 </div>
                 <div className="flex flex-1 flex-col p-7 sm:p-8">
-                  <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-accent-600">
+                  <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-accent-700">
                     {v.tag}
                   </span>
                   <h3 className="mt-1 font-display text-2xl text-brand-900">{v.title}</h3>
                   <ul className="mt-6 space-y-3.5 text-[13px] font-medium leading-relaxed text-brand-700/80">
                     {v.points.map((p) => (
                       <li key={p} className="flex items-start gap-2.5">
-                        <span className="mt-0.5 flex-shrink-0 text-accent-500">
+                        <span className="mt-0.5 flex-shrink-0 text-accent-700">
                           <svg width="10" height="10" viewBox="0 0 10 10" className="h-2.5 w-2.5 fill-current">
                             <rect width="5" height="5" transform="rotate(45 5 0.5)" />
                           </svg>
@@ -381,6 +397,8 @@ export default function HomePage() {
       {/* ── Contacto ───────────────────────────────────────────── */}
       <ContactSection />
 
+      </main>
+
       {/* ── Cierre oscuro: CTA + Footer ────────────────────────── */}
       <footer className="relative isolate overflow-hidden bg-brand-950 text-cream-100">
         <div className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-[680px]">
@@ -433,7 +451,7 @@ export default function HomePage() {
               </div>
 
               <div>
-                <h4 className="text-[10px] font-bold uppercase tracking-[0.18em] text-accent-300/80">Explorar</h4>
+                <h3 className="text-[10px] font-bold uppercase tracking-[0.18em] text-accent-300/80">Explorar</h3>
                 <nav className="mt-6 flex flex-col gap-3.5 text-xs font-bold uppercase tracking-[0.16em] text-cream-100/75">
                   <a href="#como-funciona" className="transition-colors duration-200 hover:text-white">Cómo funciona</a>
                   <a href="#sistema" className="transition-colors duration-200 hover:text-white">El sistema</a>
@@ -447,7 +465,7 @@ export default function HomePage() {
               </div>
 
               <div>
-                <h4 className="text-[10px] font-bold uppercase tracking-[0.18em] text-accent-300/80">Contacto</h4>
+                <h3 className="text-[10px] font-bold uppercase tracking-[0.18em] text-accent-300/80">Contacto</h3>
                 <div className="mt-6 flex flex-col gap-3.5 text-xs font-semibold text-cream-100/80">
                   {hasWhatsApp() && (
                     <a {...waProps("footer")} className="flex items-center gap-2 transition-colors duration-200 hover:text-white">

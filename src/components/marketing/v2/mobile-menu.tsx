@@ -61,7 +61,7 @@ export function MobileMenu({ links }: { links: NavLink[] }) {
               className="flex min-h-12 items-center justify-between border-b border-stone-200/60 text-sm font-bold uppercase tracking-[0.16em] text-brand-800 last:border-b-0 hover:text-brand-900"
             >
               {l.label}
-              <Icon name="arrow-right" size={16} className="text-accent-500" />
+              <Icon name="arrow-right" size={16} className="text-accent-700" />
             </a>
           ))}
           <div className="mt-3 pb-3">

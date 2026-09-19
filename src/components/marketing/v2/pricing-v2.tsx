@@ -73,7 +73,7 @@ export function PricingV2() {
     <section id="planes" className="mx-auto max-w-6xl scroll-mt-24 px-5 py-24 sm:px-6 sm:py-32">
       <RevealOnView className="mb-14 max-w-2xl border-l-2 border-accent-400 pl-6 sm:mb-16">
         <div className="reveal-up">
-          <p className="text-xs font-bold uppercase tracking-widest text-accent-600">
+          <p className="text-xs font-bold uppercase tracking-widest text-accent-700">
             Planes y tarifas
           </p>
           <h2 className="mt-2 font-display text-3xl leading-tight text-brand-900 sm:text-5xl">
@@ -92,7 +92,7 @@ export function PricingV2() {
         
         <div className="relative grid gap-8 lg:grid-cols-[280px_1fr] lg:items-center">
           <div className="border-b border-accent-200/40 pb-6 lg:border-b-0 lg:border-r lg:border-accent-200/40 lg:pb-0 lg:pr-8">
-            <span className="text-[10px] font-bold uppercase tracking-widest text-accent-600">
+            <span className="text-[10px] font-bold uppercase tracking-widest text-accent-700">
               Servicio Inicial
             </span>
             <h3 className="font-display text-xl text-brand-900 mt-1">Implementación Única</h3>
@@ -165,7 +165,7 @@ export function PricingV2() {
             <ul className="flex-1 space-y-4 text-[13px] text-brand-800/90 leading-relaxed font-medium">
               {plan.features.map((f, idx) => (
                 <li key={idx} className="flex items-start gap-3">
-                  <span className="mt-1 flex-shrink-0 text-accent-500">
+                  <span className="mt-1 flex-shrink-0 text-accent-700">
                     <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg" className="h-3 w-3 fill-current">
                       <rect width="6" height="6" transform="rotate(45 6 1)" />
                     </svg>

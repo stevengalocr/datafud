@@ -60,7 +60,7 @@ export function ImplementationSection() {
       <div className="mx-auto max-w-6xl px-5 py-24 sm:px-6 sm:py-32">
         <RevealOnView className="max-w-2xl">
           <div className="reveal-up">
-            <p className="text-xs font-bold uppercase tracking-[0.2em] text-accent-600">Implementación</p>
+            <p className="text-xs font-bold uppercase tracking-[0.2em] text-accent-700">Implementación</p>
             <h2 className="mt-3 font-display text-[clamp(2rem,5vw,3.5rem)] leading-[1.05] tracking-tight text-brand-900">
               De la llamada a tu carta publicada, con fechas
             </h2>
@@ -90,7 +90,7 @@ export function ImplementationSection() {
                 </span>
                 <div className="lg:mt-6 lg:pr-6">
                   <p className="flex items-baseline gap-2">
-                    <span className="font-display text-2xl leading-none text-accent-500">{m.when}</span>
+                    <span className="font-display text-2xl leading-none text-accent-700">{m.when}</span>
                     <span className="text-[10px] font-bold uppercase tracking-[0.16em] text-brand-700/50">Paso {i + 1}</span>
                   </p>
                   <h3 className="mt-2 font-display text-xl text-brand-900">{m.title}</h3>
@@ -120,12 +120,12 @@ export function ImplementationSection() {
             </ul>
           </div>
           <div className="reveal-up rounded-3xl border border-stone-200/80 bg-white p-7 sm:p-10">
-            <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-accent-600">Lo que ponés vos</p>
+            <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-accent-700">Lo que ponés vos</p>
             <h3 className="mt-2 font-display text-2xl text-brand-900 sm:text-3xl">Poco, y lo tenés a mano</h3>
             <ul className="mt-7 space-y-4">
               {yours.map((t, i) => (
                 <li key={t} className="flex items-start gap-4 text-sm font-medium leading-relaxed text-brand-800/85 sm:text-[15px]">
-                  <span className="font-display text-lg leading-none text-accent-500">{String(i + 1).padStart(2, "0")}</span>
+                  <span className="font-display text-lg leading-none text-accent-700">{String(i + 1).padStart(2, "0")}</span>
                   <span>{t}</span>
                 </li>
               ))}

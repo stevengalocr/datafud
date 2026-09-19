@@ -90,7 +90,7 @@ export function DemoSection() {
               </div>
               {/* Chips flotantes */}
               <div className="absolute -right-4 top-24 hidden items-center gap-2 rounded-xl border border-stone-200/80 bg-white px-3 py-2 shadow-lg sm:flex">
-                <Icon name="globe" size={14} className="text-accent-600" />
+                <Icon name="globe" size={14} className="text-accent-700" />
                 <span className="text-[10px] font-bold uppercase tracking-[0.14em] text-brand-900">ES · EN</span>
               </div>
               <div className="absolute -left-6 bottom-28 hidden items-center gap-2 rounded-xl border border-stone-200/80 bg-white px-3 py-2 shadow-lg sm:flex">
@@ -103,7 +103,7 @@ export function DemoSection() {
           {/* Texto + CTA */}
           <RevealOnView className="order-1 min-w-0 lg:order-2">
             <div className="reveal-up">
-              <p className="text-xs font-bold uppercase tracking-[0.2em] text-accent-600">Demo en vivo</p>
+              <p className="text-xs font-bold uppercase tracking-[0.2em] text-accent-700">Demo en vivo</p>
               <h2 className="mt-3 font-display text-[clamp(2rem,5vw,3.5rem)] leading-[1.05] tracking-tight text-brand-900">
                 Probalo vos mismo, sin hablar con nadie
               </h2>

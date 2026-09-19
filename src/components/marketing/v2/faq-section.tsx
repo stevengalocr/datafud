@@ -35,7 +35,7 @@ export function FaqSection() {
         <div className="grid gap-12 lg:grid-cols-[0.8fr_1.2fr] lg:gap-20">
           <RevealOnView className="lg:sticky lg:top-28 lg:self-start">
             <div className="reveal-up">
-              <p className="text-xs font-bold uppercase tracking-[0.2em] text-accent-600">Preguntas frecuentes</p>
+              <p className="text-xs font-bold uppercase tracking-[0.2em] text-accent-700">Preguntas frecuentes</p>
               <h2 className="mt-3 font-display text-[clamp(2rem,5vw,3.5rem)] leading-[1.05] tracking-tight text-brand-900">
                 Lo que nos preguntan antes de decir que sí
               </h2>
@@ -75,7 +75,7 @@ export function FaqSection() {
                         className="group flex w-full items-start justify-between gap-6 py-5 text-left transition-colors duration-200 hover:text-brand-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-400 focus-visible:ring-offset-2 focus-visible:ring-offset-cream-50 sm:py-6"
                       >
                         <span className="flex items-baseline gap-4">
-                          <span className="hidden w-6 font-display text-sm text-accent-500 sm:inline">{String(i + 1).padStart(2, "0")}</span>
+                          <span className="hidden w-6 font-display text-sm text-accent-700 sm:inline">{String(i + 1).padStart(2, "0")}</span>
                           <span className="font-display text-lg leading-snug text-brand-900 sm:text-xl">{item.q}</span>
                         </span>
                         <span

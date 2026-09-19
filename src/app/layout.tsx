@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Young_Serif, Hanken_Grotesk } from "next/font/google";
 import "./globals.css";
+import { SITE } from "@/lib/site";
+import { SITE_DESCRIPTION, SITE_TITLE } from "@/lib/seo";
 
 const display = Young_Serif({
   subsets: ["latin"],
@@ -16,10 +18,40 @@ const sans = Hanken_Grotesk({
 });
 
 export const metadata: Metadata = {
-  title: "DataFud — Menú digital para restaurantes y sodas",
-  description:
-    "QR Menus. Orders. Analytics. Crea tu menú digital, recibe órdenes por QR y controla tu negocio en tiempo real. Multi-idioma, multi-moneda y 100% personalizable.",
-  icons: { icon: "/icono-main.png" },
+  metadataBase: new URL(SITE.url),
+  title: {
+    default: SITE_TITLE,
+    template: "%s · DataFud",
+  },
+  description: SITE_DESCRIPTION,
+  applicationName: SITE.name,
+  keywords: [
+    "menú digital",
+    "carta digital QR",
+    "menú QR restaurante",
+    "tarjeta NFC restaurante",
+    "stand QR impreso en 3D",
+    "pedidos desde la mesa",
+    "Costa Rica",
+    "Latinoamérica",
+  ],
+  authors: [{ name: SITE.maker, url: SITE.url }],
+  creator: SITE.maker,
+  openGraph: {
+    type: "website",
+    locale: "es_CR",
+    url: SITE.url,
+    siteName: SITE.name,
+    title: SITE_TITLE,
+    description: SITE_DESCRIPTION,
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: SITE_TITLE,
+    description: SITE_DESCRIPTION,
+  },
+  robots: { index: true, follow: true },
+  icons: { icon: "/icono-main.png", apple: "/icono-main.png" },
 };
 
 export default function RootLayout({

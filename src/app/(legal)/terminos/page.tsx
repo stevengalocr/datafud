@@ -4,7 +4,9 @@ import { PRICING } from "@/lib/constants";
 import { SITE } from "@/lib/site";
 
 export const metadata: Metadata = {
-  title: "Términos del servicio — DataFud",
+  title: "Términos del servicio",
+  alternates: { canonical: "/terminos" },
+  openGraph: { title: "Términos del servicio · DataFud", url: "/terminos" },
   description:
     "Condiciones bajo las que GaloDev ofrece DataFud: carta digital por QR y NFC, hardware de mesa e implementación llave en mano para restaurantes de Costa Rica y Latinoamérica.",
 };
