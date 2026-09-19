@@ -18,7 +18,7 @@ const links = [
 export function LandingNavV2() {
   const wa = waProps("nav");
   return (
-    <header className="sticky top-0 z-40 border-b border-stone-200/40 bg-cream-50/85 backdrop-blur-md">
+    <header className="sticky top-0 z-40 border-b border-stone-200/40 bg-cream-50/95">
       <div className="relative mx-auto flex h-[68px] max-w-6xl items-center justify-between px-5 sm:px-6">
         <Link
           href="/"

@@ -129,7 +129,7 @@ export function PinnedSteps({ steps }: { steps: Step[] }) {
                 </div>
               ))}
               {/* Insignia del paso activo */}
-              <div className="absolute bottom-5 left-5 z-10 flex items-center gap-3 rounded-full border border-white/20 bg-brand-950/55 px-4 py-2 backdrop-blur-sm">
+              <div className="absolute bottom-5 left-5 z-10 flex items-center gap-3 rounded-full border border-white/20 bg-brand-950/55 px-4 py-2">
                 <Icon name={steps[active].icon} size={16} className="text-accent-300" />
                 <span className="text-[11px] font-bold uppercase tracking-widest text-cream-100">
                   {steps[active].title}

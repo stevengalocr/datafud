@@ -21,8 +21,8 @@
 
 ## Contador
 
-- Iteración actual: 15
-- Iteraciones consumidas: 15 / 35
+- Iteración actual: 16
+- Iteraciones consumidas: 16 / 35
 
 ## Capacidades del entorno
 
@@ -50,11 +50,11 @@
 | U10 | Legal: /terminos y /privacidad | hecho | 1 | fd4c98c | directo a main | READY (`dpl_5K2Qm1gNvDKQAnqunz53V8fdCTfQ`) | Ambas rutas 200 y estáticas; capturas 375/1440; 29 marcas [REVISAR] resaltadas en /terminos; aviso de borrador visible |
 | U11 | SEO: sitemap, robots, metadata, OG, JSON-LD | hecho | 1 | ab7fd6c | directo a main | READY (`dpl_JA4xxhYzAejBykgL1CWZf7wwHUNX`) | robots/sitemap/OG verificados con curl; JSON-LD Organization + 3 Product + FAQPage (11); Lighthouse móvil 94/100/96/100 |
 | U12 | Analítica: @vercel/analytics + eventos | hecho | 1 | 94fa50f | directo a main | READY (`dpl_FqNJKLxB5LNjaL9mWM66B9jLHtXW`) | `events-test.mjs`: cola `vaq` con pageview, whatsapp_click{origen:hero}, whatsapp_click{origen:plan-estandar}, demo_open{vista:cliente} |
-| U13 | Accesibilidad y rendimiento | hecho | 1 | 980e100 | directo a main | (verificar en it. 15) | Lighthouse móvil con reduced-motion forzado: / 96/100/96/100, /terminos 99/100/96/100; 0 objetivos < 44 px; CLS 0 |
-| U14 | Seguridad de dependencias (next 15.5.x, audit) | hecho | 1 | (ver bitácora it. 15) | directo a main | (ver bitácora it. 15) | next 15.5.25; audit prod: 0 críticas; queda 1 alta (postcss interno de Next, solo se arregla con Next 16) |
+| U13 | Accesibilidad y rendimiento | hecho | 1 | 980e100 | directo a main | READY (`dpl_6APevQvwUW3skEsKtmE6Mj8RQkKN`) | Lighthouse móvil con reduced-motion forzado: / 96/100/96/100, /terminos 99/100/96/100; 0 objetivos < 44 px; CLS 0 |
+| U14 | Seguridad de dependencias (next 15.5.x, audit) | hecho | 1 | d1533fc | directo a main | READY (`dpl_85iQ4Um43VxCLzux68xE3MNrJPZx`) | next 15.5.25; audit prod: 0 críticas; queda 1 alta (postcss interno de Next, solo se arregla con Next 16) |
 | U15 | Carta estática /c/[slug] | omitida (CONFIG=no) | – | | | | |
 | U16 | Redirecciones /q/[code] | omitida (CONFIG=no) | – | | | | |
-| U17 | Pulido (bucle de calidad) | pendiente | 0 | | | | |
+| U17 | Pulido (bucle de calidad) | hecho | 1 | (ver bitácora it. 16) | directo a main | (ver bitácora it. 16) | Pasada 1: 0 hallazgos altos, 4 medios corregidos, rúbrica ≥ 4 en los 10 criterios; todas las puertas en verde |
 | U18 | Informe final | pendiente | 0 | | | | |
 
 ## PENDIENTES-STEVEN
@@ -368,3 +368,46 @@ con `role="img"` y alt descriptivo. Al tener las fotos reales, basta con poner l
   de 36 px, fuera del alcance de la landing) · H ✓ (96 / 100 / 96 / 100) · I ✓ · J siguiente.
 - Extra: el "Ingresar" del nav de escritorio quedó en 44 px (se había escapado en U13).
   CHANGELOG "Unreleased" actualizado con U05–U14.
+
+### Iteración 16 — U17 Pulido, pasada 1
+
+Revisión completa de las 13 secciones en 375 y 1440 (capturas en el scratchpad) desde las
+tres miradas.
+
+**Hallazgos**
+
+| Sev. | Mirada | Hallazgo | Archivo | Acción |
+|---|---|---|---|---|
+| media | arte | En los stats, "días para el sistema completo" chocaba con "idiomas listos" en 1440 | page.tsx | `pr-6` por columna (ahora envuelve limpio) |
+| media | ingeniero | `page.tsx` con 506 líneas, cierre + footer inline | page.tsx | Extraído a `site-footer.tsx` (page.tsx 410 líneas); lista "Explorar" como arreglo |
+| media | ingeniero | Importaciones sin uso tras la extracción (`SITE`, `hasWhatsApp`, `mailLink`, `whatsappDisplay`) | page.tsx | Eliminadas; `tsc --noUnusedLocals` limpio en la landing |
+| media | marca | `backdrop-blur` heredado en nav, hero, chips, barra de highlights, insignia de pasos y pill del cierre (regla 5: sin glassmorphism; puerta F) | nav, page, pinned-steps, site-footer | Quitado en todos; el nav pasa a `bg-cream-50/95` |
+| baja | arte | El símbolo ₡ del marquee cae a una fuente de respaldo (Young Serif no lo trae) | page.tsx | Se deja: es un detalle decorativo y cambiar la fuente del marquee rompería su ritmo |
+| baja | dueño | Etiqueta del hero "QR Menus · Orders · Analytics" en inglés | page.tsx | Se deja: es el tagline oficial de la marca (BRAND.md) |
+| baja | ingeniero | `PRICING.trialDays` ya no lo usa la landing | constants.ts | Se deja: lo usa la lógica de suscripción (fuera del alcance) |
+| baja | dueño | No se publica pedido mínimo del hardware | hardware-section | Pendiente de Steven (PENDIENTES-STEVEN) |
+
+Sin hallazgos altos. Las fotos de Unsplash y el script de insights no cargan en el sandbox;
+en producción sí (verificado por diseño: rutas remotas permitidas y Vercel sirve el script).
+
+**Rúbrica (1–5)**
+
+| Criterio | Nota | Evidencia |
+|---|---|---|
+| Claridad de la oferta | 5 | Hero + highlights dicen qué es, cuánto (desde $29/mes, $249), cuánto tarda (48 h / 15 días) y cómo pedirlo (WhatsApp) sin bajar |
+| Confianza que transmite | 4 | #confianza, #implementacion con fechas, legal y demo real; falta el primer caso real (bloque reservado) |
+| Fidelidad a la marca | 5 | Young Serif + Hanken, verde/oro/crema, sin emojis, sin degradado en texto, sin blur, asimetría en #hardware y #demo |
+| Calidad del copy | 4 | Voseo consistente, frases cortas, sin promesas vacías; el tagline en inglés y algún texto largo en móvil (planes) admiten afinado |
+| Responsive | 5 | 375/768/1024/1440 sin desbordes ni scroll horizontal; nav completo en lg, menú en tablet/móvil |
+| Accesibilidad | 5 | Lighthouse 100; teclado en acordeón y menú; foco visible; 44 px; un h1; `<main>`; contraste AA |
+| Rendimiento | 4 | Lighthouse móvil 95–96, LCP 2,7 s, CLS 0; las fotos remotas de Unsplash no se pudieron medir en el sandbox |
+| SEO | 5 | Lighthouse 100; sitemap, robots, canonical, OG por página, JSON-LD válido |
+| Honestidad comercial | 5 | 0 frases prohibidas; sin testimonios, logos ni cifras; plazos y precios desde `PRICING`; borrador legal señalado |
+| Calidad del código | 4 | Componentes de 100–220 líneas, datos en `site.ts`/`constants.ts`/`faq.ts`, sin `any` ni `eslint-disable`; `pricing-v2` conserva nombre heredado |
+
+Convergió en la primera pasada: 0 altos/medios abiertos y todos los criterios ≥ 4.
+
+- Puertas de la pasada: A ✓ · B ✓ · C ✓ · D ✓ · E ✓ (0) · F ✓ (0 bg-clip-text, 0
+  backdrop-blur en toda la landing, 0 emojis, `curl /` sin TODO/PENDIENTE) · G ✓ (`/`,
+  `/terminos`, `/privacidad` en 3 tamaños; 12 enlaces wa.me correctos; acordeón y menú por
+  teclado) · H ✓ (95 / 100 / 96 / 100) · I ✓ · J siguiente iteración.
