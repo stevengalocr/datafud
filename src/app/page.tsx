@@ -10,6 +10,7 @@ import { CountUp } from "@/components/marketing/v2/count-up";
 import { Icon, type IconName } from "@/components/ui/icon";
 import { PRICING } from "@/lib/constants";
 import { ContactSection } from "@/components/marketing/v2/contact-section";
+import { WhatsAppFloat } from "@/components/marketing/v2/whatsapp-float";
 import { SITE, hasWhatsApp, mailLink, waProps, whatsappDisplay } from "@/lib/site";
 
 // Fotografía de stock (Unsplash, licencia libre), tratada con overlay de marca.
@@ -148,14 +149,15 @@ export default function HomePage() {
 
               <div className="mt-9 flex w-full flex-col gap-3 sm:mt-10 sm:w-auto sm:flex-row sm:gap-4">
                 <MagneticCta
-                  href="/register"
-                  className="inline-flex h-12 items-center justify-center rounded-lg border border-accent-400 bg-brand-600 px-8 text-xs font-bold uppercase tracking-[0.18em] text-white shadow-sm transition-colors duration-300 ease-out-expo hover:bg-brand-700"
+                  {...waProps("hero")}
+                  className="inline-flex h-12 items-center justify-center gap-2.5 whitespace-nowrap rounded-lg border border-accent-400 bg-brand-600 px-8 text-xs font-bold uppercase tracking-[0.18em] text-white shadow-sm transition-colors duration-300 ease-out-expo hover:bg-brand-700"
                 >
-                  Quiero mi DataFud
+                  <Icon name="whatsapp" size={18} />
+                  Hablemos por WhatsApp
                 </MagneticCta>
                 <Link
                   href="/preview"
-                  className="inline-flex h-12 items-center justify-center rounded-lg border border-stone-300 bg-white/60 px-8 text-xs font-bold uppercase tracking-[0.18em] text-brand-800 backdrop-blur-sm transition-all duration-300 ease-out-expo hover:border-stone-400 hover:bg-cream-100/70 active:scale-[0.98]"
+                  className="inline-flex h-12 items-center justify-center whitespace-nowrap rounded-lg border border-stone-300 bg-white/60 px-8 text-xs font-bold uppercase tracking-[0.18em] text-brand-800 backdrop-blur-sm transition-all duration-300 ease-out-expo hover:border-stone-400 hover:bg-cream-100/70 active:scale-[0.98]"
                 >
                   Ver demo en vivo
                 </Link>
@@ -382,10 +384,11 @@ export default function HomePage() {
               carta y su flujo de trabajo con DataFud.
             </p>
             <MagneticCta
-              href="/register"
-              className="mt-10 inline-flex h-12 items-center justify-center rounded-lg border border-accent-300 bg-accent-500 px-8 text-xs font-bold uppercase tracking-[0.18em] text-brand-950 shadow-md transition-colors duration-300 ease-out-expo hover:bg-accent-400"
+              {...waProps("cierre")}
+              className="mt-10 inline-flex h-12 items-center justify-center gap-2.5 whitespace-nowrap rounded-lg border border-accent-300 bg-accent-500 px-8 text-xs font-bold uppercase tracking-[0.18em] text-brand-950 shadow-md transition-colors duration-300 ease-out-expo hover:bg-accent-400"
             >
-              Crear mi cuenta gratis
+              <Icon name="whatsapp" size={18} />
+              Hablemos por WhatsApp
             </MagneticCta>
             <p className="mt-5 text-[11px] font-semibold uppercase tracking-wider text-cream-100/50">
               Operando en 48 horas · desde ${PRICING.plans.basico.priceUsd}/mes
@@ -441,13 +444,15 @@ export default function HomePage() {
               </div>
             </div>
 
-            <div className="mt-14 flex flex-col gap-4 border-t border-white/10 pt-8 text-[10px] font-bold uppercase tracking-[0.16em] text-cream-100/50 sm:flex-row sm:items-center sm:justify-between">
+            <div className="mt-14 flex flex-col gap-4 border-t border-white/10 pb-16 pt-8 text-[10px] md:pb-0 font-bold uppercase tracking-[0.16em] text-cream-100/50 sm:flex-row sm:items-center sm:justify-between">
               <p>© {new Date().getFullYear()} DATAFUD · UN PRODUCTO DE <span className="text-accent-400">GALODEV</span></p>
               <p>DATAFUD.COM · HECHO EN LATINOAMÉRICA</p>
             </div>
           </div>
         </RevealOnView>
       </footer>
+
+      <WhatsAppFloat />
     </div>
   );
 }

@@ -4,19 +4,16 @@ import Link from "next/link";
 import { useRef } from "react";
 import { cn } from "@/lib/utils/cn";
 
-// Botón que atrae sutilmente hacia el cursor (efecto magnético). En dispositivos
-// táctiles / reduced-motion simplemente no se mueve. Es un <Link> accesible.
-export function MagneticCta({
-  href,
-  children,
-  className,
-  strength = 0.3,
-}: {
+type Props = React.ComponentPropsWithoutRef<"a"> & {
   href: string;
   children: React.ReactNode;
-  className?: string;
   strength?: number;
-}) {
+};
+
+// Botón que atrae sutilmente hacia el cursor (efecto magnético). En dispositivos
+// táctiles / reduced-motion simplemente no se mueve. Enlaces externos (WhatsApp)
+// se renderizan como <a>; los internos como <Link>.
+export function MagneticCta({ href, children, className, strength = 0.3, ...rest }: Props) {
   const ref = useRef<HTMLAnchorElement>(null);
 
   const onMove = (e: React.MouseEvent) => {
@@ -37,14 +34,18 @@ export function MagneticCta({
     el.style.setProperty("--my", "0px");
   };
 
+  const external = /^(https?:|mailto:|tel:)/.test(href);
+  const classes = cn("magnetic", className);
+
+  if (external) {
+    return (
+      <a ref={ref} href={href} onMouseMove={onMove} onMouseLeave={reset} className={classes} {...rest}>
+        {children}
+      </a>
+    );
+  }
   return (
-    <Link
-      ref={ref}
-      href={href}
-      onMouseMove={onMove}
-      onMouseLeave={reset}
-      className={cn("magnetic", className)}
-    >
+    <Link ref={ref} href={href} onMouseMove={onMove} onMouseLeave={reset} className={classes} {...rest}>
       {children}
     </Link>
   );

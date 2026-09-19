@@ -1,11 +1,18 @@
-import Link from "next/link";
 import Image from "next/image";
 import { cn } from "@/lib/utils/cn";
 import { Icon, type IconName } from "@/components/ui/icon";
 import { RevealOnView } from "@/components/marketing/v2/reveal";
-import { PRICING } from "@/lib/constants";
+import { PRICING, type PlanCode } from "@/lib/constants";
+import { waProps } from "@/lib/site";
 
-const plans = [
+const plans: {
+  code: PlanCode;
+  name: string;
+  price: number;
+  highlight: boolean;
+  tagline: string;
+  features: string[];
+}[] = [
   {
     code: "basico",
     name: "Básico",
@@ -165,17 +172,18 @@ export function PricingV2() {
               ))}
             </ul>
             
-            <Link
-              href={`/register?plan=${plan.code}`}
+            <a
+              {...waProps(`plan-${plan.code}`)}
               className={cn(
-                "mt-9 inline-flex h-11 items-center justify-center rounded-lg text-xs font-bold uppercase tracking-widest transition-all duration-300 ease-out-expo active:scale-[0.98]",
+                "mt-9 inline-flex h-11 items-center justify-center gap-2 rounded-lg text-xs font-bold uppercase tracking-widest transition-all duration-300 ease-out-expo active:scale-[0.98]",
                 plan.highlight
                   ? "bg-brand-600 text-white border border-accent-400 hover:bg-brand-700 shadow-sm"
                   : "border border-stone-300 bg-white text-brand-700 hover:bg-cream-100 hover:border-stone-400"
               )}
             >
-              Empezar con {plan.name}
-            </Link>
+              <Icon name="whatsapp" size={16} />
+              Quiero {plan.name}
+            </a>
           </div>
         ))}
       </RevealOnView>
