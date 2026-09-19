@@ -21,8 +21,9 @@
 
 ## Contador
 
-- Iteración actual: 16
-- Iteraciones consumidas: 16 / 35
+- Iteración actual: 17
+- Iteraciones consumidas: 17 / 35
+- **LOOP COMPLETO** (U01–U14 y U17 hechas, U15/U16 omitidas por CONFIG, U18 publicada)
 
 ## Capacidades del entorno
 
@@ -54,8 +55,8 @@
 | U14 | Seguridad de dependencias (next 15.5.x, audit) | hecho | 1 | d1533fc | directo a main | READY (`dpl_85iQ4Um43VxCLzux68xE3MNrJPZx`) | next 15.5.25; audit prod: 0 críticas; queda 1 alta (postcss interno de Next, solo se arregla con Next 16) |
 | U15 | Carta estática /c/[slug] | omitida (CONFIG=no) | – | | | | |
 | U16 | Redirecciones /q/[code] | omitida (CONFIG=no) | – | | | | |
-| U17 | Pulido (bucle de calidad) | hecho | 1 | (ver bitácora it. 16) | directo a main | (ver bitácora it. 16) | Pasada 1: 0 hallazgos altos, 4 medios corregidos, rúbrica ≥ 4 en los 10 criterios; todas las puertas en verde |
-| U18 | Informe final | pendiente | 0 | | | | |
+| U17 | Pulido (bucle de calidad) | hecho | 1 | 3cb86fe | directo a main | (verificar en it. 17) | Pasada 1: 0 hallazgos altos, 4 medios corregidos, rúbrica ≥ 4 en los 10 criterios; todas las puertas en verde |
+| U18 | Informe final | hecho | 1 | (commit de este archivo) | directo a main | (ver bitácora it. 17) | `docs/plans/landing-loop-report.md` |
 
 ## PENDIENTES-STEVEN
 
@@ -411,3 +412,11 @@ Convergió en la primera pasada: 0 altos/medios abiertos y todos los criterios �
   backdrop-blur en toda la landing, 0 emojis, `curl /` sin TODO/PENDIENTE) · G ✓ (`/`,
   `/terminos`, `/privacidad` en 3 tamaños; 12 enlaces wa.me correctos; acordeón y menú por
   teclado) · H ✓ (95 / 100 / 96 / 100) · I ✓ · J siguiente iteración.
+
+### Iteración 17 — U18 Informe final
+
+- Escrito `docs/plans/landing-loop-report.md`: resumen, tabla de unidades con commit y
+  despliegue, rúbrica final, Lighthouse, PENDIENTES-STEVEN, TODO-FOTO, archivos, riesgos por
+  puertas degradadas y deuda.
+- Condición de parada cumplida: U01–U14 y U17 en "hecho", U15/U16 omitidas por CONFIG, U18
+  publicada. **LOOP COMPLETO.**
