@@ -21,8 +21,8 @@
 
 ## Contador
 
-- Iteración actual: 10
-- Iteraciones consumidas: 10 / 35
+- Iteración actual: 11
+- Iteraciones consumidas: 11 / 35
 
 ## Capacidades del entorno
 
@@ -46,8 +46,8 @@
 | U06 | Sección #demo | hecho | 1 | 7311a8f | directo a main | READY (`dpl_6VRNLVhPHVyPT1boVzuCzDFX7TSm`) | Capturas 375/1440; CTA a /preview/cliente (200) y /preview/dashboard; sin desbordes en 375 |
 | U07 | Sección #implementacion | hecho | 1 | 740a182 | directo a main | READY (`dpl_FfADLZgQXR78bTBv1D7pVNjyb58R`) | Capturas 375/1440: línea de tiempo de 4 hitos y dos columnas |
 | U08 | Sección #confianza | hecho | 1 | 21571ae | directo a main | READY (`dpl_3HGbCcsSVf4hVkByjAhDefUrrYzi`) | Capturas 375/1440; 4 compromisos + firma GaloDev; bloque del primer caso real comentado |
-| U09 | Sección #preguntas + nav final | hecho | 1 | (ver bitácora it. 10) | directo a main | (ver bitácora it. 10) | 11 preguntas en `src/lib/faq.ts`; prueba de teclado (Enter/Space/flechas/Home/End) y de menú móvil (aria-expanded, Escape, 44 px) |
-| U10 | Legal: /terminos y /privacidad | pendiente | 0 | | | | |
+| U09 | Sección #preguntas + nav final | hecho | 1 | 639eea7 | directo a main | READY (`dpl_HwTRMENDNGZeY6eW6td6dTwt4vpm`) | 11 preguntas en `src/lib/faq.ts`; prueba de teclado (Enter/Space/flechas/Home/End) y de menú móvil (aria-expanded, Escape, 44 px) |
+| U10 | Legal: /terminos y /privacidad | hecho | 1 | (ver bitácora it. 11) | directo a main | (ver bitácora it. 11) | Ambas rutas 200 y estáticas; capturas 375/1440; 29 marcas [REVISAR] resaltadas en /terminos; aviso de borrador visible |
 | U11 | SEO: sitemap, robots, metadata, OG, JSON-LD | pendiente | 0 | | | | |
 | U12 | Analítica: @vercel/analytics + eventos | pendiente | 0 | | | | |
 | U13 | Accesibilidad y rendimiento | pendiente | 0 | | | | |
@@ -59,7 +59,7 @@
 
 ## PENDIENTES-STEVEN
 
-- Confirmar razón social, cédula jurídica, domicilio y jurisdicción para /terminos y /privacidad (quedan `[REVISAR]`).
+- Revisar con un profesional en derecho `/terminos` y `/privacidad` y completar los `[REVISAR]`: razón social, cédula jurídica, domicilio, jurisdicción, días de gracia por atraso, política de reembolsos, garantía del hardware, límite de responsabilidad, plazos de aviso, conservación de datos y registro ante PRODHAB si aplica. Después quitar el aviso de borrador en `legal-page.tsx`.
 - Crear `RESEND_API_KEY` en Vercel para activar el formulario de contacto y **redesplegar** (la landing es estática: la decisión de mostrar el formulario se toma en el build). Mientras tanto la sección muestra WhatsApp y correo. Con el remitente por defecto `onboarding@resend.dev`, Resend solo entrega al correo dueño de la cuenta: crear la cuenta de Resend con galodevcr@gmail.com o verificar el dominio y poner `RESEND_FROM_EMAIL`.
 - Fotos reales del hardware (ver lista TODO-FOTO).
 - Pedido mínimo del hardware, si aplica.
@@ -275,3 +275,20 @@ con `role="img"` y alt descriptivo. Al tener las fotos reales, basta con poner l
   botón de WhatsApp duplicado dentro del panel (ya está en el header).
 - Honestidad: la respuesta "¿Cómo se paga?" no promete medios concretos (se coordinan por
   WhatsApp) y aclara que no hay cobros automáticos, coherente con la suscripción manual.
+
+### Iteración 11 — U10 Legal
+
+- Plan: `legal-page.tsx` (plantilla con nav de marca, aviso visible de borrador con
+  `role="note"`, secciones numeradas, `[REVISAR]` resaltado con `<mark>`, pie propio con
+  Inicio · Contacto · Términos · Privacidad); `(legal)/terminos` (13 secciones: quién
+  ofrece, qué es, precios y pagos, sin permanencia, plazos, contenido del cliente, hardware,
+  disponibilidad y soporte, propiedad intelectual, datos, responsabilidad, cambios, ley
+  aplicable) y `(legal)/privacidad` (10 secciones: responsable, qué datos y cómo, para qué,
+  base legal con la Ley 8968, con quién se comparten —Vercel, Resend, Meta—, conservación,
+  derechos y PRODHAB, seguridad, menores, cambios). Precios y plazos salen de `PRICING`.
+  Enlaces en el footer de la landing. Las anclas del nav pasan a rutas absolutas (`/#…`)
+  para que funcionen desde las páginas legales.
+- Puertas: A ✓ · B ✓ · C ✓ (`/terminos` y `/privacidad` estáticas, 3 kB) · D ✓ · E ✓ ·
+  F ✓ (`curl /` sin TODO/PENDIENTE; en legal solo `[REVISAR]`, que es el marcador previsto y
+  va acompañado del aviso de borrador) · G ✓ (las tres rutas en 375/768/1440, sin desbordes,
+  un solo h1) · H n.a. · I ✓ · J siguiente iteración.

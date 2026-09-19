@@ -470,7 +470,11 @@ export default function HomePage() {
 
             <div className="mt-14 flex flex-col gap-4 border-t border-white/10 pb-16 pt-8 text-[10px] md:pb-0 font-bold uppercase tracking-[0.16em] text-cream-100/50 sm:flex-row sm:items-center sm:justify-between">
               <p>© {new Date().getFullYear()} DATAFUD · UN PRODUCTO DE <span className="text-accent-400">GALODEV</span></p>
-              <p>DATAFUD.COM · HECHO EN LATINOAMÉRICA</p>
+              <nav aria-label="Legal" className="flex flex-wrap gap-x-5 gap-y-2">
+                <Link href="/terminos" className="py-1 transition-colors duration-200 hover:text-white">Términos</Link>
+                <Link href="/privacidad" className="py-1 transition-colors duration-200 hover:text-white">Privacidad</Link>
+                <span className="py-1">Hecho en Latinoamérica</span>
+              </nav>
             </div>
           </div>
         </RevealOnView>

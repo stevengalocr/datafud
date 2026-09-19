@@ -5,13 +5,14 @@ import { MobileMenu } from "@/components/marketing/v2/mobile-menu";
 import { Icon } from "@/components/ui/icon";
 import { waProps } from "@/lib/site";
 
-// Cada ítem apunta a una sección que ya existe en la landing (regla 11).
+// Cada ítem apunta a una sección que ya existe en la landing (regla 11). Rutas absolutas
+// para que el nav también funcione desde /terminos y /privacidad.
 const links = [
-  { href: "#como-funciona", label: "Producto" },
-  { href: "#hardware", label: "Hardware" },
-  { href: "#planes", label: "Planes" },
-  { href: "#demo", label: "Demo" },
-  { href: "#preguntas", label: "Preguntas" },
+  { href: "/#como-funciona", label: "Producto" },
+  { href: "/#hardware", label: "Hardware" },
+  { href: "/#planes", label: "Planes" },
+  { href: "/#demo", label: "Demo" },
+  { href: "/#preguntas", label: "Preguntas" },
 ];
 
 export function LandingNavV2() {
