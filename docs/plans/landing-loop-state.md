@@ -21,8 +21,8 @@
 
 ## Contador
 
-- Iteración actual: 1
-- Iteraciones consumidas: 1 / 35
+- Iteración actual: 2
+- Iteraciones consumidas: 2 / 35
 
 ## Capacidades del entorno
 
@@ -31,14 +31,14 @@
 | Navegador real | Sí | Chromium 1194 preinstalado en `/opt/pw-browsers`; `@playwright/test` 1.63 como dev-dependency; script de QA fuera del repo (scratchpad) |
 | Red a datafud.com | No | `curl https://datafud.com/` → código 000 (sin salida a internet general). La puerta J se verifica con la API de GitHub/Vercel, no con curl a producción |
 | Red a images.unsplash.com | No | 403 vía proxy. En `next start` local los `/_next/image` de Unsplash devuelven 500 **solo en este entorno**; en producción cargan. Se anota como limitación, no como bug |
-| Publicar en main | Pendiente de prueba en esta iteración | `gh` no está disponible; se usa el MCP de GitHub para PR + merge |
+| Publicar en main | Sí, push directo | `git push origin HEAD:main` fue aceptado (398bf74). No hace falta PR. Despliegue de Vercel verificado con el MCP de Vercel (proyecto `prj_n957iGSeYbe4GbTsDxlP0ytLHJSt`) |
 | Lighthouse | Pendiente (desde U11) | `lighthouse` como dev-dependency cuando toque |
 
 ## Unidades
 
 | ID | Título | Estado | Intentos | Commit | PR | Despliegue | Evidencia |
 |---|---|---|---|---|---|---|---|
-| U01 | Config central `site.ts` + `PRICING.hardware` + `deliveryLabel` | pendiente | 0 | | | | |
+| U01 | Config central `site.ts` + `PRICING.hardware` + `deliveryLabel` | hecho | 1 | (ver bitácora it. 2) | directo a main | (ver bitácora it. 2) | typecheck/lint/build ✓; prueba de `waLink`, `waProps`, `mailLink` en Node; sin cambios visibles |
 | U02 | Contacto (#contacto, formulario Resend, /register → /#contacto, demo fuera de /login) | pendiente | 0 | | | | |
 | U03 | CTAs a WhatsApp + botón flotante | pendiente | 0 | | | | |
 | U04 | Promesas y planes (48 h / 15 días, Básico = Carta, frases prohibidas, docs) | pendiente | 0 | | | | |
@@ -98,5 +98,21 @@ _(se llena cuando U05 publique la sección de hardware)_
   Prompts-Landing, Pendientes, Decisiones D-010 a D-014, Cuentas-y-Accesos).
 - Línea base arriba. Se agregó `@playwright/test` (permitido por la regla 3) para la
   puerta G.
-- Prueba de publicación: este archivo se publica en `main` por el procedimiento oficial
-  (push directo → rechazo esperado → PR + merge) y se verifica el despliegue de Vercel.
+- Prueba de publicación: commit 398bf74 en `main` por push directo (el proxy lo aceptó, no
+  hizo falta PR). Vercel: `dpl_5N48DAZrkunuvgQ8ZgWWN3WsaCYN` → READY, alias `datafud.com`.
+
+### Iteración 2 — U01 Config central
+
+- Plan: `src/lib/site.ts` (SITE, WaOrigin, WA_MESSAGES, `waLink`, `waProps`, `mailLink`,
+  `whatsappDisplay`, `CONTACT_ANCHOR`) y en `constants.ts` tipos `Plan`, `HardwareItem`,
+  `PublishedPrice`; `PRICING.delivery`, `marketingName`/`deliveryLabel`/`tableOrdering`
+  por plan y `PRICING.hardware` con los cuatro productos. Sin cambios visibles: producción
+  queda igual. Riesgo: `PRICING.plans.*.name` lo usa `/admin/charges`; se conserva y se
+  agrega `marketingName` aparte.
+- Puertas: A ✓ (0 errores) · B ✓ (0 warnings) · C ✓ (build ok, 21 rutas) · D ✓ (solo
+  `src/lib/constants.ts` y `src/lib/site.ts`) · E/F n.a. (sin UI) · G igual a la línea
+  base (sin cambios de UI) · H n.a. · I n.a. · J ver abajo.
+- Prueba en Node de `waLink("", "hero")` → `https://wa.me/50672874779?text=Hola%2C%20vi…`;
+  `waProps("plan-basico")` → `target=_blank`, `rel=noopener noreferrer`,
+  `data-wa-origin=plan-basico`; `mailLink()` → `mailto:galodevcr@gmail.com?subject=…`;
+  `whatsappDisplay()` → `+506 7287 4779`.
