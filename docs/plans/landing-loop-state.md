@@ -21,8 +21,8 @@
 
 ## Contador
 
-- Iteración actual: 2
-- Iteraciones consumidas: 2 / 35
+- Iteración actual: 3
+- Iteraciones consumidas: 3 / 35
 
 ## Capacidades del entorno
 
@@ -39,7 +39,7 @@
 | ID | Título | Estado | Intentos | Commit | PR | Despliegue | Evidencia |
 |---|---|---|---|---|---|---|---|
 | U01 | Config central `site.ts` + `PRICING.hardware` + `deliveryLabel` | hecho | 1 | (ver bitácora it. 2) | directo a main | (ver bitácora it. 2) | typecheck/lint/build ✓; prueba de `waLink`, `waProps`, `mailLink` en Node; sin cambios visibles |
-| U02 | Contacto (#contacto, formulario Resend, /register → /#contacto, demo fuera de /login) | pendiente | 0 | | | | |
+| U02 | Contacto (#contacto, formulario Resend, /register → /#contacto, demo fuera de /login) | hecho | 1 | (ver bitácora it. 3) | directo a main | (ver bitácora it. 3) | Capturas de #contacto con y sin formulario en 375/1440; prueba de teclado, validación Zod y error de Resend con aria-live |
 | U03 | CTAs a WhatsApp + botón flotante | pendiente | 0 | | | | |
 | U04 | Promesas y planes (48 h / 15 días, Básico = Carta, frases prohibidas, docs) | pendiente | 0 | | | | |
 | U05 | Sección #hardware | pendiente | 0 | | | | |
@@ -60,7 +60,7 @@
 ## PENDIENTES-STEVEN
 
 - Confirmar razón social, cédula jurídica, domicilio y jurisdicción para /terminos y /privacidad (quedan `[REVISAR]`).
-- Crear `RESEND_API_KEY` en Vercel para activar el formulario de contacto (mientras tanto la sección muestra WhatsApp y correo).
+- Crear `RESEND_API_KEY` en Vercel para activar el formulario de contacto y **redesplegar** (la landing es estática: la decisión de mostrar el formulario se toma en el build). Mientras tanto la sección muestra WhatsApp y correo. Con el remitente por defecto `onboarding@resend.dev`, Resend solo entrega al correo dueño de la cuenta: crear la cuenta de Resend con galodevcr@gmail.com o verificar el dominio y poner `RESEND_FROM_EMAIL`.
 - Fotos reales del hardware (ver lista TODO-FOTO).
 - Pedido mínimo del hardware, si aplica.
 
@@ -116,3 +116,32 @@ _(se llena cuando U05 publique la sección de hardware)_
   `waProps("plan-basico")` → `target=_blank`, `rel=noopener noreferrer`,
   `data-wa-origin=plan-basico`; `mailLink()` → `mailto:galodevcr@gmail.com?subject=…`;
   `whatsappDisplay()` → `+506 7287 4779`.
+
+### Iteración 3 — U02 Contacto y puertas cerradas
+
+- Plan: `src/lib/contact.ts` (Zod, tipos, `isContactFormEnabled`), `src/app/actions.ts`
+  (Server Action con honeypot + Resend), `contact-form.tsx` (cliente, `useActionState`,
+  `role="status" aria-live="polite"`, foco al estado), `contact-section.tsx` (servidor:
+  sin `RESEND_API_KEY` no monta el formulario y muestra checklist "Contanos esto").
+  `page.tsx`: sección antes del cierre, footer con WhatsApp/correo desde `site.ts` y enlace
+  "Contacto". `/register` → `redirect("/#contacto")`. `/login` sin cuenta demo, enlace
+  "Hablemos" → `/#contacto`. Iconos `mail`, `whatsapp`, `menu`, `x`, `chevron-down`.
+  `.env.example`: `RESEND_API_KEY`, `RESEND_FROM_EMAIL` vacías. Dependencia nueva: `resend`.
+- Lo que ve un visitante de producción: sección "Hablemos de tu local" con WhatsApp
+  (+506 7287 4779) y correo (galodevcr@gmail.com) y la checklist; footer con los datos
+  reales (antes decía `info@datafud.com`, un buzón sin confirmar).
+- Puertas: A ✓ · B ✓ · C ✓ (build ok; `/register` ahora 136 B) · D ✓ (solo rutas
+  permitidas; `(auth)/login` y `register` son la excepción de U02) · E ✓ (0 frases en los
+  archivos nuevos; las de page.tsx/pricing se limpian en U03/U04) · F ✓ (0 bg-clip-text,
+  0 backdrop-blur en archivos nuevos, 0 emojis; `curl /` sin TODO/PENDIENTE) · G ✓
+  (375/768/1440: sin scroll horizontal, anclas ok, 1 h1; únicos fallos: Unsplash por el
+  sandbox) · G formulario (build con clave falsa): render ✓, orden de tab
+  name > business > phone > select > textarea > botón (honeypot fuera) ✓, Zod
+  "Contanos tu nombre." ✓, error de Resend "No pudimos enviar…" con enlace a WhatsApp,
+  `aria-live=polite`, foco en el estado ✓ · H n.a. · I ✓ (corrida con reduced-motion
+  sin diferencias de layout) · J ver abajo.
+- Capturas: `#contacto` 375 y 1440 con y sin formulario; formulario con estado de error
+  en 375. Se corrigió en la pasada de autocrítica: flecha del `select` (Icon
+  `chevron-down`) y el botón "Enviar mensaje" que partía en dos líneas en desktop.
+- Nota: `/register` y `/login` siguen en `/register`/`/login`, pero la landing ya no los
+  enlaza salvo "Ingresar" (footer y nav), que se mantiene para clientes con cuenta.

@@ -171,6 +171,21 @@ const paths: Record<string, React.ReactNode> = {
       <path d="M3 12h18" />
     </>
   ),
+  mail: (
+    <>
+      <rect x="3" y="5" width="18" height="14" rx="2" />
+      <path d="M3 7l9 6 9-6" />
+    </>
+  ),
+  whatsapp: (
+    <>
+      <path d="M12 3a9 9 0 00-7.8 13.5L3 21l4.6-1.2A9 9 0 1012 3z" />
+      <path d="M9.2 8.6c.2-.4.4-.4.7-.4h.5c.2 0 .4 0 .5.4l.7 1.7c.1.2.1.4 0 .6l-.5.7c-.1.2-.2.3 0 .6a6.6 6.6 0 003.1 2.8c.3.1.4.1.6-.1l.7-.8c.2-.2.4-.2.6-.1l1.6.8c.3.1.4.2.4.4a2.3 2.3 0 01-1.5 2.1c-.6.2-1.3.2-2.2-.2a10 10 0 01-4.6-4c-.6-1-.8-1.8-.8-2.5 0-.8.3-1.5.7-2z" />
+    </>
+  ),
+  menu: <path d="M4 7h16M4 12h16M4 17h16" />,
+  x: <path d="M6 6l12 12M18 6L6 18" />,
+  "chevron-down": <path d="M6 9l6 6 6-6" />,
 };
 
 export type IconName = keyof typeof paths;

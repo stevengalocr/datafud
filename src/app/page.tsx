@@ -9,6 +9,8 @@ import { MagneticCta } from "@/components/marketing/v2/magnetic-cta";
 import { CountUp } from "@/components/marketing/v2/count-up";
 import { Icon, type IconName } from "@/components/ui/icon";
 import { PRICING } from "@/lib/constants";
+import { ContactSection } from "@/components/marketing/v2/contact-section";
+import { SITE, hasWhatsApp, mailLink, waProps, whatsappDisplay } from "@/lib/site";
 
 // Fotografía de stock (Unsplash, licencia libre), tratada con overlay de marca.
 const u = (id: string) => `https://images.unsplash.com/${id}?auto=format&fit=crop&w=1500&q=80`;
@@ -353,6 +355,9 @@ export default function HomePage() {
       {/* ── Precios + NFC ──────────────────────────────────────── */}
       <PricingV2 />
 
+      {/* ── Contacto ───────────────────────────────────────────── */}
+      <ContactSection />
+
       {/* ── Cierre oscuro: CTA + Footer ────────────────────────── */}
       <footer className="relative isolate overflow-hidden bg-brand-950 text-cream-100">
         <div className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-[680px]">
@@ -410,14 +415,22 @@ export default function HomePage() {
                   <a href="#sistema" className="transition-colors duration-200 hover:text-white">El sistema</a>
                   <a href="#planes" className="transition-colors duration-200 hover:text-white">Planes y precios</a>
                   <Link href="/preview" className="transition-colors duration-200 hover:text-white">Probar demo</Link>
+                  <a href="#contacto" className="transition-colors duration-200 hover:text-white">Contacto</a>
                 </nav>
               </div>
 
               <div>
                 <h4 className="text-[10px] font-bold uppercase tracking-[0.18em] text-accent-300/80">Contacto</h4>
                 <div className="mt-6 flex flex-col gap-3.5 text-xs font-semibold text-cream-100/80">
-                  <p className="flex items-center gap-2"><span className="text-accent-400">●</span> info@datafud.com</p>
-                  <p className="flex items-center gap-2"><span className="text-accent-400">●</span> Costa Rica &amp; Latinoamérica</p>
+                  {hasWhatsApp() && (
+                    <a {...waProps("footer")} className="flex items-center gap-2 transition-colors duration-200 hover:text-white">
+                      <Icon name="whatsapp" size={14} className="text-accent-400" /> {whatsappDisplay()}
+                    </a>
+                  )}
+                  <a href={mailLink()} className="flex items-center gap-2 transition-colors duration-200 hover:text-white">
+                    <Icon name="mail" size={14} className="text-accent-400" /> {SITE.email}
+                  </a>
+                  <p className="flex items-center gap-2"><Icon name="pin" size={14} className="text-accent-400" /> {SITE.region}</p>
                   <Link
                     href="/login"
                     className="mt-2 inline-flex h-9 w-28 items-center justify-center rounded-lg border border-white/20 bg-white/5 text-[10px] font-bold uppercase tracking-[0.16em] text-cream-100 transition-all duration-200 hover:border-white/35 hover:bg-white/10"

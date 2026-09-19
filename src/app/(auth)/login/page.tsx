@@ -46,17 +46,12 @@ export default function LoginPage() {
               {pending ? "Ingresando..." : "Ingresar"}
             </Button>
           </form>
-
-          <div className="mt-6 rounded-lg bg-slate-50 p-3 text-xs text-slate-500">
-            <p className="font-medium text-slate-600">Cuenta demo</p>
-            <p>demo@datfud.com · Datfud2026!</p>
-          </div>
         </div>
 
         <p className="mt-6 text-center text-sm text-slate-500">
-          ¿No tienes cuenta?{" "}
-          <Link href="/register" className="font-medium text-brand-600 hover:text-brand-700">
-            Crea tu negocio
+          ¿Querés DataFud para tu local?{" "}
+          <Link href="/#contacto" className="font-medium text-brand-600 hover:text-brand-700">
+            Hablemos
           </Link>
         </p>
       </div>
