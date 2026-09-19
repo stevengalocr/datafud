@@ -13,6 +13,7 @@ import { ContactSection } from "@/components/marketing/v2/contact-section";
 import { HardwareSection } from "@/components/marketing/v2/hardware-section";
 import { DemoSection } from "@/components/marketing/v2/demo-section";
 import { ImplementationSection } from "@/components/marketing/v2/implementation-section";
+import { TrustSection } from "@/components/marketing/v2/trust-section";
 import { WhatsAppFloat } from "@/components/marketing/v2/whatsapp-float";
 import { SITE, hasWhatsApp, mailLink, waProps, whatsappDisplay } from "@/lib/site";
 
@@ -369,6 +370,9 @@ export default function HomePage() {
 
       {/* ── Planes y precios ───────────────────────────────────── */}
       <PricingV2 />
+
+      {/* ── Confianza ──────────────────────────────────────────── */}
+      <TrustSection />
 
       {/* ── Contacto ───────────────────────────────────────────── */}
       <ContactSection />

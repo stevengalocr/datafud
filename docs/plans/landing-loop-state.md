@@ -21,8 +21,8 @@
 
 ## Contador
 
-- Iteración actual: 8
-- Iteraciones consumidas: 8 / 35
+- Iteración actual: 9
+- Iteraciones consumidas: 9 / 35
 
 ## Capacidades del entorno
 
@@ -44,8 +44,8 @@
 | U04 | Promesas y planes (48 h / 15 días, Básico = Carta, frases prohibidas, docs) | hecho | 1 | dc4093d | directo a main | READY (`dpl_5ZvvPVUVmTvRsry7kRGbzmAR1qhX`) | grep de frases prohibidas en landing = 0; capturas de hero, stats y planes; MARKETING/PRODUCT/CHANGELOG alineados |
 | U05 | Sección #hardware | hecho | 1 | 1f7ed73 | directo a main | READY (`dpl_2D3hodjJMk8d9iJqHJRdc8BmjNsB`) | Capturas 375/1440 de #hardware; 4 productos desde PRICING.hardware; CTA de cotización a WhatsApp |
 | U06 | Sección #demo | hecho | 1 | 7311a8f | directo a main | READY (`dpl_6VRNLVhPHVyPT1boVzuCzDFX7TSm`) | Capturas 375/1440; CTA a /preview/cliente (200) y /preview/dashboard; sin desbordes en 375 |
-| U07 | Sección #implementacion | hecho | 1 | (ver bitácora it. 8) | directo a main | (ver bitácora it. 8) | Capturas 375/1440: línea de tiempo de 4 hitos y dos columnas |
-| U08 | Sección #confianza | pendiente | 0 | | | | |
+| U07 | Sección #implementacion | hecho | 1 | 740a182 | directo a main | READY (`dpl_FfADLZgQXR78bTBv1D7pVNjyb58R`) | Capturas 375/1440: línea de tiempo de 4 hitos y dos columnas |
+| U08 | Sección #confianza | hecho | 1 | (ver bitácora it. 9) | directo a main | (ver bitácora it. 9) | Capturas 375/1440; 4 compromisos + firma GaloDev; bloque del primer caso real comentado |
 | U09 | Sección #preguntas + nav final | pendiente | 0 | | | | |
 | U10 | Legal: /terminos y /privacidad | pendiente | 0 | | | | |
 | U11 | SEO: sitemap, robots, metadata, OG, JSON-LD | pendiente | 0 | | | | |
@@ -242,3 +242,16 @@ con `role="img"` y alt descriptivo. Al tener las fotos reales, basta con poner l
   · I ✓ · J siguiente iteración.
 - Autocrítica: las dos tarjetas se estiraban a la misma altura y la oscura dejaba aire vacío
   en desktop → `lg:items-start`.
+
+### Iteración 9 — U08 Sección #confianza
+
+- Plan: `trust-section.tsx` con cuatro compromisos como lista de definición (sin contratos
+  atados · soporte por WhatsApp con una persona · tus datos son tuyos · hecho en Costa Rica
+  por GaloDev), columna izquierda pegajosa con la firma de GaloDev y el WhatsApp, y un bloque
+  JSX comentado reservado para el primer caso real (solo con permiso del local). Entre
+  #planes y #contacto. Sin testimonios, logos ni cifras.
+- Puertas: A ✓ · B ✓ · C ✓ · D ✓ · E ✓ · F ✓ (`curl /` sin TODO/PENDIENTE) · G ✓ · H n.a. ·
+  I ✓ · J siguiente iteración.
+- Nota de honestidad: se nombra "Steven, de GaloDev" (solo nombre de pila) como la persona
+  que atiende el WhatsApp; se evitó cualquier garantía no confirmada (p. ej. "garantía de
+  satisfacción" quedó fuera hasta que Steven la defina).
