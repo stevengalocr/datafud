@@ -16,6 +16,7 @@ import { ImplementationSection } from "@/components/marketing/v2/implementation-
 import { TrustSection } from "@/components/marketing/v2/trust-section";
 import { FaqSection } from "@/components/marketing/v2/faq-section";
 import { WhatsAppFloat } from "@/components/marketing/v2/whatsapp-float";
+import { AnalyticsEvents } from "@/components/marketing/v2/analytics-events";
 import { SITE, hasWhatsApp, mailLink, waProps, whatsappDisplay } from "@/lib/site";
 import type { Metadata } from "next";
 import { faqJsonLd, organizationJsonLd, productsJsonLd } from "@/lib/seo";
@@ -499,6 +500,7 @@ export default function HomePage() {
       </footer>
 
       <WhatsAppFloat />
+      <AnalyticsEvents />
     </div>
   );
 }

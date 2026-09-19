@@ -21,8 +21,8 @@
 
 ## Contador
 
-- Iteración actual: 12
-- Iteraciones consumidas: 12 / 35
+- Iteración actual: 13
+- Iteraciones consumidas: 13 / 35
 
 ## Capacidades del entorno
 
@@ -48,8 +48,8 @@
 | U08 | Sección #confianza | hecho | 1 | 21571ae | directo a main | READY (`dpl_3HGbCcsSVf4hVkByjAhDefUrrYzi`) | Capturas 375/1440; 4 compromisos + firma GaloDev; bloque del primer caso real comentado |
 | U09 | Sección #preguntas + nav final | hecho | 1 | 639eea7 | directo a main | READY (`dpl_HwTRMENDNGZeY6eW6td6dTwt4vpm`) | 11 preguntas en `src/lib/faq.ts`; prueba de teclado (Enter/Space/flechas/Home/End) y de menú móvil (aria-expanded, Escape, 44 px) |
 | U10 | Legal: /terminos y /privacidad | hecho | 1 | fd4c98c | directo a main | READY (`dpl_5K2Qm1gNvDKQAnqunz53V8fdCTfQ`) | Ambas rutas 200 y estáticas; capturas 375/1440; 29 marcas [REVISAR] resaltadas en /terminos; aviso de borrador visible |
-| U11 | SEO: sitemap, robots, metadata, OG, JSON-LD | hecho | 1 | (ver bitácora it. 12) | directo a main | (ver bitácora it. 12) | robots/sitemap/OG verificados con curl; JSON-LD Organization + 3 Product + FAQPage (11); Lighthouse móvil 94/100/96/100 |
-| U12 | Analítica: @vercel/analytics + eventos | pendiente | 0 | | | | |
+| U11 | SEO: sitemap, robots, metadata, OG, JSON-LD | hecho | 1 | ab7fd6c | directo a main | READY (`dpl_JA4xxhYzAejBykgL1CWZf7wwHUNX`) | robots/sitemap/OG verificados con curl; JSON-LD Organization + 3 Product + FAQPage (11); Lighthouse móvil 94/100/96/100 |
+| U12 | Analítica: @vercel/analytics + eventos | hecho | 1 | (ver bitácora it. 13) | directo a main | (ver bitácora it. 13) | `events-test.mjs`: cola `vaq` con pageview, whatsapp_click{origen:hero}, whatsapp_click{origen:plan-estandar}, demo_open{vista:cliente} |
 | U13 | Accesibilidad y rendimiento | pendiente | 0 | | | | |
 | U14 | Seguridad de dependencias (next 15.5.x, audit) | pendiente | 0 | | | | |
 | U15 | Carta estática /c/[slug] | omitida (CONFIG=no) | – | | | | |
@@ -61,6 +61,7 @@
 
 - Revisar con un profesional en derecho `/terminos` y `/privacidad` y completar los `[REVISAR]`: razón social, cédula jurídica, domicilio, jurisdicción, días de gracia por atraso, política de reembolsos, garantía del hardware, límite de responsabilidad, plazos de aviso, conservación de datos y registro ante PRODHAB si aplica. Después quitar el aviso de borrador en `legal-page.tsx`.
 - Crear `RESEND_API_KEY` en Vercel para activar el formulario de contacto y **redesplegar** (la landing es estática: la decisión de mostrar el formulario se toma en el build). Mientras tanto la sección muestra WhatsApp y correo. Con el remitente por defecto `onboarding@resend.dev`, Resend solo entrega al correo dueño de la cuenta: crear la cuenta de Resend con galodevcr@gmail.com o verificar el dominio y poner `RESEND_FROM_EMAIL`.
+- Activar Web Analytics en el proyecto `datafud` de Vercel (Analytics → Enable) para que `@vercel/analytics` registre visitas y eventos.
 - Fotos reales del hardware (ver lista TODO-FOTO).
 - Pedido mínimo del hardware, si aplica.
 
@@ -317,3 +318,18 @@ con `role="img"` y alt descriptivo. Al tener las fotos reales, basta con poner l
   del sandbox (no ocurre en producción).
 - Puertas: A ✓ · B ✓ · C ✓ · D ✓ · E ✓ · F ✓ · G ✓ · H ✓ (con la salvedad de red anotada
   arriba) · I ✓ · J siguiente iteración.
+
+### Iteración 13 — U12 Analítica
+
+- Plan: `@vercel/analytics` (`<Analytics />` en el layout raíz), `analytics-events.tsx`
+  (delegación de clics: `whatsapp_click {origen}` desde `data-wa-origin`, `demo_open {vista}`
+  desde `data-demo-open`) y `contact_submit {resultado: ok|error}` en el formulario. Sin
+  Vercel, `track()` no envía nada y la página no se rompe.
+- Verificación en navegador sobre `next start`: tras clics en hero, plan Estándar y demo la
+  cola `window.vaq` contiene `pageview`, `whatsapp_click {origen:"hero"}`, `whatsapp_click
+  {origen:"plan-estandar"}` y `demo_open {vista:"cliente"}`; el script
+  `/_vercel/insights/script.js` está en el HTML (localmente responde 404, en Vercel existe).
+- Puertas: A ✓ · B ✓ · C ✓ · D ✓ · E ✓ · F ✓ · G ✓ (único request fallido nuevo: el script
+  de insights, que solo existe en Vercel) · H sin cambios de UI · I ✓ · J siguiente iteración.
+- PENDIENTE-STEVEN: activar **Web Analytics** en el proyecto de Vercel (pestaña Analytics);
+  sin eso el script devuelve 404 también en producción y no se registran eventos.

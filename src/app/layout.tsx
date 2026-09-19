@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Young_Serif, Hanken_Grotesk } from "next/font/google";
+import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 import { SITE } from "@/lib/site";
 import { SITE_DESCRIPTION, SITE_TITLE } from "@/lib/seo";
@@ -61,7 +62,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="es" className={`${display.variable} ${sans.variable}`}>
-      <body>{children}</body>
+      <body>
+        {children}
+        <Analytics />
+      </body>
     </html>
   );
 }

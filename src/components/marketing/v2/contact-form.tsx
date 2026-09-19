@@ -3,6 +3,7 @@
 import { useActionState, useEffect, useId, useRef } from "react";
 import { cn } from "@/lib/utils/cn";
 import { Icon } from "@/components/ui/icon";
+import { track } from "@vercel/analytics";
 import { sendContactAction } from "@/app/actions";
 import { BUSINESS_TYPES, type ContactState } from "@/lib/contact";
 
@@ -21,7 +22,10 @@ export function ContactForm({ whatsappHref }: { whatsappHref: string }) {
 
   useEffect(() => {
     if (state.status === "ok") formRef.current?.reset();
-    if (state.status !== "idle") statusRef.current?.focus();
+    if (state.status !== "idle") {
+      statusRef.current?.focus();
+      track("contact_submit", { resultado: state.status });
+    }
   }, [state]);
 
   const isExternal = whatsappHref.startsWith("http");
