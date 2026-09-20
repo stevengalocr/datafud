@@ -43,13 +43,33 @@ cada unidad se publica en `main` desde el loop autónomo (`docs/plans/landing-lo
   cuenta", "dominio propio" y las frases que insinuaban clientes existentes.
 - Footer con los datos de contacto reales. `docs/MARKETING.md` y `docs/PRODUCT.md` alineados.
 
-### Security
+### Security (correcciones post-revisión 2026-09-20)
+- Las semillas de usuarios salen de `supabase/schema.sql`: viven en `supabase/seed.dev.sql`
+  (solo desarrollo), con la contraseña por variable de psql y guardas que abortan si falta.
+  Ningún archivo vigente contiene la contraseña antigua; README avisa que está en el historial
+  público y no debe reutilizarse. `verify.sql` separa las comprobaciones que dependen del seed.
+- La ruta privada del super admin deja de anunciarse en `robots.txt`; `/login`, `/register` y
+  la ruta privada llevan `noindex, nofollow` por metadata y por cabecera `X-Robots-Tag`.
+- Formulario de contacto resistente a abuso sin infraestructura nueva: trampa de tiempo medida
+  en el cliente, tope de dos enlaces por mensaje y Cloudflare Turnstile opcional
+  (`NEXT_PUBLIC_TURNSTILE_SITE_KEY` + `TURNSTILE_SECRET_KEY`).
 - `next` y `eslint-config-next` a 15.5.25 (cierra las advisories críticas de Next 15.5.19).
   `npm audit --omit=dev` queda solo con el `postcss` que Next 15 empaqueta internamente, cuyo
   arreglo exige Next 16 (salto mayor, fuera de esta etapa).
 
+### Changed (correcciones post-revisión 2026-09-20)
+- Sin "Ingresar" en nav, menú móvil ni footer. `/login` decide en el servidor: sin variables de
+  Supabase muestra un aviso de marca con CTA a WhatsApp; con variables, el formulario de siempre.
+- Copy sin promesas de resultado: stand de reseñas, act-break y planes Estándar/Empresarial
+  (funciones reales de reportes; soporte sin adjetivos de tiempo de respuesta).
+- QA de la landing como script versionado (`npm run qa:landing`, `scripts/qa-landing.mjs`);
+  `lighthouse` fuera de las dependencias.
+- `CLAUDE.md` en la raíz con reglas, mapa, trampas y el protocolo de alineación con el vault
+  (`docs/vault-sync/`).
+
 ### Removed
 - Credenciales de la cuenta demo visibles en `/login`.
+- `PRICING.trialDays` (sin uso) y `lighthouse` de `devDependencies`.
 - Bloque de tarjetas NFC dentro de planes (la oferta de hardware vive en `#hardware`).
 
 ---

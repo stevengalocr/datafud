@@ -7,8 +7,9 @@
 
 ## Contador
 
-- Iteración actual: 9
-- Iteraciones consumidas: 9 / 25
+- Iteración actual: 11
+- Iteraciones consumidas: 11 / 25
+- **LOOP COMPLETO** (C01–C09 hechas)
 
 ## Capacidades del entorno
 
@@ -27,13 +28,13 @@
 |---|---|---|---|---|---|---|
 | C01 | Acceso cerrado con dignidad (sin "Ingresar"; /login con aviso sin backend) | hecho | 1 | 6e173b0 | READY (`dpl_A83jsKJhZcVBPxDuz4M3sDooh9Wd`) | `grep href="/login"` = 0; /login sin env → 200, 0 `<form>`, sin errores; con env falsa → 1 `<form>`; capturas nav/footer/menú/login |
 | C02 | Ruta privada fuera de robots + noindex | hecho | 1 | 94db3a5 | READY (`dpl_BsMyrnuTuMf92ErwqkivJ84U1BsP`) | robots sin "acceso"; `<meta name="robots" content="noindex…">` en /login y la ruta privada; `X-Robots-Tag` en las tres (incluida la 307 de /register); ninguna en el sitemap |
-| C03 | Credenciales fuera del repo (`seed.dev.sql`) | hecho | 1 | de882b6 | READY (`dpl_4bbZkUSq1LfWRdWmr78s19YvXtij`) | `grep -rn Datfud2026` = 0; diff de schema.sql = solo sección 10 (−139/+5); seed.dev.sql revisado línea a línea; sin BD para ejecutarlo |
+| C03 | Credenciales fuera del repo (`seed.dev.sql`) | hecho | 1 | de882b6 | READY (`dpl_4bbZkUSq1LfWRdWmr78s19YvXtij`) | `grep` de la contraseña antigua = 0; diff de schema.sql = solo sección 10 (−139/+5); seed.dev.sql revisado línea a línea; sin BD para ejecutarlo |
 | C04 | Formulario anti-abuso (trampa de tiempo, URLs, Turnstile opcional) | hecho | 1 | ae1b32a | READY (`dpl_6HuYV8MKnkbA9rWWnTTzdu86Hine`) | `abuse-test.mjs`: envío a 1,5 s → éxito silencioso + log "descartado por trampa de tiempo"; envío a 3,5 s → llega a Resend; 3 URLs → error visible; widget Turnstile solo con su clave |
 | C05 | Copy honesto | hecho | 1 | 236e674 | READY (`dpl_87hryu7YvUvfuzP44emUD48zkJee`) | 8 cambios antes → después; grep ampliado (más estrellas, mesas llenas, más ventas, vende más, prioritari, avanzad) = 0 en la landing; docs alineados |
 | C06 | QA sin peso en producción (`qa:landing`) | hecho | 1 | e27fe85 | READY (`dpl_8rELmX7LjUHRW8M5rCNG3qCptKMr`) | `lighthouse` fuera de devDependencies; `npm ci && npm run build` OK; `npm run qa:landing` → OK · 3 avisos (fotos remotas) en 32 s, con servidor previo y levantando el suyo |
-| C07 | `CLAUDE.md` en el repo | hecho | 1 | af089cb | (verificar en it. 9) | 111 líneas; cada afirmación verificada contra el código (middleware en raíz, service_role solo en registerAction, sin security_invoker aún, Zod solo en dos actions, grants de anon, restos Datfud) |
-| C08 | Verificación final y pulido (mín. 2 pasadas) | en curso | 1 | (ver bitácora it. 9) | directo a main | Pasada 1: 1 medio corregido (`<main>` en /login), 0 altos; rúbrica ≥ 4; falta la pasada 2 con lectura fresca |
-| C09 | Informe final y cierre de vault-sync | pendiente | 0 | | | |
+| C07 | `CLAUDE.md` en el repo | hecho | 1 | af089cb | READY (`dpl_9QoATAYw9JCNmAddog5xqJCNwZcM`) | 111 líneas; cada afirmación verificada contra el código (middleware en raíz, service_role solo en registerAction, sin security_invoker aún, Zod solo en dos actions, grants de anon, restos Datfud) |
+| C08 | Verificación final y pulido (mín. 2 pasadas) | hecho | 2 | 3efb23e | READY (`dpl_J8Xb9vGxu55RFAxVBr2oyjF3ykGg`) | Pasada 1: 1 medio corregido; pasada 2 (lectura fresca): 0 altos/medios, 4 notas bajas; rúbrica ≥ 4 en 11 criterios |
+| C09 | Informe final y cierre de vault-sync | hecho | 1 | (commit de este archivo) | (ver it. 11) | `correcciones-loop-report.md`, CHANGELOG Unreleased, resumen arriba del vault-sync, puente subido a Drive |
 
 ## PENDIENTES-STEVEN
 
@@ -114,7 +115,7 @@
   declaraciones, mismos `insert … on conflict`, mismas categorías/productos/mesas/orden; los
   únicos cambios son la fuente de la contraseña y de los correos y el `full_name` del super
   admin ("Super Admin (dev)").
-- Evidencia: `grep -rn "Datfud2026" . --exclude-dir=node_modules --exclude-dir=.git
+- Evidencia: `grep -rn "<contraseña antigua>" . --exclude-dir=node_modules --exclude-dir=.git
   --exclude-dir=.next` = 0; `grep stevengalocr|demo@datfud.com supabase/*.sql` = 0;
   `git diff --stat supabase/schema.sql` = 1 archivo, +5/−138, todo dentro de la sección 10 y
   su cabecera; typecheck/lint/build en verde. **No hay base de datos** en este entorno ni
@@ -256,3 +257,33 @@ Sin hallazgos altos.
 
 - Puertas: A ✓ · B ✓ · C ✓ · D ✓ · E ✓ · F ✓ · G ✓ (`qa:landing` OK) · H ✓ (95 / 100 / 96 /
   100 en `/`) · I ✓ · J siguiente · K ✓.
+
+### Iteración 10 — C08 · pasada 2 (lectura fresca de los archivos, no de memoria)
+
+Releídos completos: `src/app/actions.ts`, `src/lib/contact.ts`, `contact-form.tsx`,
+`turnstile.ts`, `turnstile-widget.tsx`, `next.config.mjs`, `robots.ts`, `(auth)/login/page.tsx`,
+`mobile-menu.tsx`, `landing-nav-v2.tsx`, `site-footer.tsx`, `seed.dev.sql`, `verify.sql`,
+`CLAUDE.md`, `scripts/qa-landing.mjs`, README §1 y §5.
+
+| Sev. | Mirada | Nota | Acción |
+|---|---|---|---|
+| baja | ingeniero | Un envío legítimo con la pestaña abierta más de 2 h se descarta en silencio (es lo que pide la unidad: se trata como honeypot). El reinicio de `mountedAt` tras un envío exitoso evita el falso positivo en el segundo mensaje | Aceptado por especificación; documentado en D-019 |
+| baja | ingeniero | Tres helpers de entorno en tres archivos (`env.ts`, `contact.ts`, `turnstile.ts`) | Aceptado: cada uno vive junto a su dominio |
+| baja | seguridad | `next.config.mjs` nombra la ruta privada en `headers()`; el código ya era público | Aceptado; la protección real es el rol en /admin (S8 mitigado) |
+| baja | docs | `CLAUDE.md` dice que cada cambio visible entra en CHANGELOG; el CHANGELOG del loop de correcciones se completa en C09 | Hecho en C09 |
+
+Sin hallazgos altos ni medios; sin cambios de código en esta pasada. Rúbrica igual que la
+pasada 1 (todos ≥ 4). C08 queda **hecho** (2 pasadas, la primera con un medio corregido, la
+segunda limpia).
+
+### Iteración 11 — C09 Informe final y cierre
+
+- `docs/plans/correcciones-loop-report.md`, `docs/CHANGELOG.md` ("Unreleased": Security /
+  Changed / Added / Removed de este loop), resumen "qué cambiar en cada página del vault"
+  arriba del puente `docs/vault-sync/2026-09-20-correcciones.md`.
+- Aplicación al vault desde esta sesión: el conector de Google Drive de esta sesión solo
+  permite **crear** archivos y cambiar título/carpeta, no editar el contenido de los `.md`
+  existentes. Se sube el puente completo como archivo nuevo al nodo Datafud del vault
+  (`02-Proyectos/Datafud/vault-sync-2026-09-20-correcciones.md`) para que quede a mano en
+  Obsidian; las páginas (Pendientes, Decisiones, Seguridad, log, etc.) se actualizan con
+  "sincronizá el vault" desde Cowork. Estado en el puente: "aplicado en vault: parcial".

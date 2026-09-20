@@ -6,7 +6,81 @@
 > `## [AAAA-MM-DD] ingest | Título`). El resumen "qué cambiar en cada página" se agrega arriba
 > de todo al cerrar el loop (C09).
 
-Aplicado en vault: no (esta sesión tiene Drive por MCP; se aplica en bloque al cerrar C09).
+Aplicado en vault: **parcial**. El conector de Google Drive de esta sesión solo crea archivos y
+cambia título/carpeta (no edita el contenido de los `.md` existentes), así que este puente se
+subió completo como archivo nuevo al nodo Datafud del vault
+(`02-Proyectos/Datafud/vault-sync-2026-09-20-correcciones.md`). Las páginas se actualizan con
+"sincronizá el vault" desde Cowork usando el resumen de abajo.
+
+## Resumen · qué cambiar en cada página (aplicar tal cual)
+
+**Pendientes.md**
+- Datos que esperan a Steven — agregar: "Decidir si el eslogan 'El menú digital que abre apetito
+  y cierra ventas' se mantiene (identidad de marca) o se cambia por uno sin promesa de resultado";
+  "Si alguna vez se corrió el `schema.sql` antiguo en una BD real, cambiar la contraseña de esas
+  cuentas (la antigua está en el historial público)"; "Opcional: Turnstile con
+  `NEXT_PUBLIC_TURNSTILE_SITE_KEY` + `TURNSTILE_SECRET_KEY` en Vercel si hay spam".
+- L — Fachada de venta — marcar cerrados (2026-09-20): "Copiar `CLAUDE.md` al repo" (la rama
+  `feat/landing-ventas` no aplica), "Sacar las contraseñas semilla del repo y de `/login` (S2)",
+  y los ítems L1–L7 y L9 del loop anterior si siguen abiertos; agregar cerrado: "Loop de
+  correcciones post-revisión 2026-09-20 (C01–C09), estado en
+  `docs/plans/correcciones-loop-state.md`".
+- P0 — en "Proyecto Supabase + `schema.sql` sin cuentas semilla + variables en Vercel": la parte
+  "`schema.sql` sin cuentas semilla" queda hecha; siguen el proyecto y las variables. Agregar:
+  "Mover `middleware.ts` a `src/middleware.ts`" ya está (sin cambios).
+- P1 — en "S5 Captcha + verificación de correo en /register": anotar "el formulario de contacto ya
+  soporta Turnstile opcional; /register sigue cerrado".
+- P2 — en "Tests de aislamiento + Playwright…": anotar "ya existe `npm run qa:landing` para la
+  landing; el flujo QR → orden sigue pendiente".
+- P3 — "S8 Retirar o reubicar la ruta privada": mitigado (fuera de robots, noindex por meta y
+  cabecera, fuera del sitemap); agregar "Quitar `backdrop-blur` de `menu-client.tsx` y
+  `preview/page.tsx` cuando se toquen esas rutas".
+
+**Decisiones.md** — agregar D-016 (protocolo de alineación repo → vault), D-017 (sin "Ingresar"
+mientras no haya backend), D-018 (semillas de usuarios solo en `seed.dev.sql`), D-019 (anti-abuso
+del formulario sin infraestructura), D-020 (sin promesas de resultado en la landing), D-021
+(lighthouse fuera del repo; QA como script). Texto completo en los bloques de abajo.
+
+**Seguridad.md** — S2: cerrado en el repo (queda la acción operativa de cambiar la contraseña si
+se usó en una BD real). S8: mitigado 2026-09-20. S14 (nuevo, cerrado): formulario de contacto sin
+anti-bots → honeypot, trampa de tiempo, tope de URLs, Turnstile opcional. S1 y S10 sin cambios,
+ahora escritos como reglas en `CLAUDE.md`. "Arreglo sugerido 1": hecho salvo la acción operativa
+y la decisión del repo privado.
+
+**Cuentas-y-Accesos.md** — tabla de variables: agregar `RESEND_API_KEY`, `RESEND_FROM_EMAIL`
+(formulario) y `NEXT_PUBLIC_TURNSTILE_SITE_KEY`, `TURNSTILE_SECRET_KEY` (opcionales). Tabla
+"Cuentas sembradas por `schema.sql`": reemplazar por "`schema.sql` ya no siembra cuentas;
+`seed.dev.sql` (solo desarrollo) crea `admin@datafud.test` y `demo@datafud.test` con la
+contraseña que se pase por psql". "Acceso del super admin": agregar "no está en robots.txt ni en
+el sitemap; responde noindex/nofollow por meta y `X-Robots-Tag`".
+
+**Paneles-Y-Vistas.md** — `/login`: "sin variables de Supabase muestra un aviso ('El acceso al
+panel se activa con tu implementación') con CTA a WhatsApp; el formulario solo aparece con
+backend". La landing ya no enlaza "Ingresar".
+
+**Arquitectura-Y-Base-De-Datos.md** — `schema.sql` solo siembra monedas y planes; semillas de
+usuarios/tenant demo en `seed.dev.sql`; `next.config.mjs` define `headers()` con `X-Robots-Tag`;
+piezas nuevas: `src/lib/{env,contact,turnstile}.ts`, `turnstile-widget.tsx`,
+`scripts/qa-landing.mjs`; `lighthouse` fuera de las dependencias de desarrollo.
+
+**Guia-De-Desarrollo.md** — comandos: `npm run qa:landing` (capturas en `.qa/`, `QA_CHROMIUM`) y
+`psql "$DBURL" -v seed_password='…' -f supabase/seed.dev.sql`; referenciar `CLAUDE.md` como
+fuente de reglas.
+
+**Marca-Y-Marketing.md** — regla "sin promesas de resultado" en Mensajes clave / Voz; planes:
+Estándar "soporte por WhatsApp en horario de oficina", Empresarial "ventas por día, ticket
+promedio y platillos más vendidos" y "soporte por WhatsApp con contacto directo".
+
+**Producto-Y-Modelo-De-Negocio.md** — misma corrección de reportes y soporte por plan.
+
+**Plan-Landing-First.md** — stand de reseñas "lleva directo a dejar la reseña" (quitar "para subir
+valoraciones").
+
+**Claude-Code/CLAUDE-repo.md** — `estado: activo`; el archivo vivo es `CLAUDE.md` en el repo
+(commit af089cb); enlazar el protocolo de vault-sync. **Claude-Code/Flujo-Obsidian-Claude-Code.md**
+— paso 2 hecho; agregar "las sesiones en la nube dejan `docs/vault-sync/…` y Cowork lo aplica".
+
+**log.md** — pegar las entradas `## [2026-09-20] ingest | …` de cada bloque (C00 a C09).
 
 ---
 
@@ -97,7 +171,7 @@ de seed `psql "$DBURL" -v seed_password='…' -f supabase/seed.dev.sql`.
 - Sección 10 de `schema.sql` movida a `supabase/seed.dev.sql`; contraseña por variable de psql con guardas.
 - `schema.sql` sin usuarios ni correos; `verify.sql` con parte 2 condicionada al seed.
 - README, PRODUCT, USER_MANUAL, spec y plan de fase 0 sin la contraseña; aviso de contraseña quemada en README.
-- `grep Datfud2026` en el repo = 0. Sin BD disponible: el SQL no se ejecutó (revisión línea a línea).
+- `grep` de la contraseña antigua en el repo = 0. Sin BD disponible: el SQL no se ejecutó (revisión línea a línea).
 
 ### C04 · Formulario resistente a abuso · commit (ver estado, it. 5) · despliegue (ver estado)
 **Pendientes.md** — ítem nuevo en "Datos que esperan a Steven": "Opcional: crear un sitio en
@@ -203,3 +277,17 @@ Guia-De-Desarrollo: referenciar `CLAUDE.md` como fuente de reglas y comandos.
 - `/login` con landmark `<main>` (Lighthouse a11y 100). Performance de `/` 95/95 en dos corridas.
 - `npm run qa:landing` OK en 375/768/1440; grep de honestidad ampliado = 0.
 - Rúbrica ≥ 4 en los 11 criterios; queda la pasada 2 con lectura fresca de los archivos.
+
+### C08 · Verificación final · pasada 2 · commit 3efb23e (sin cambios de código) · despliegue READY
+**Pendientes.md** — nada. **Decisiones.md** — ninguna. **Seguridad.md** — sin cambios.
+**Otras páginas** — ninguna.
+**log.md** — `## [2026-09-20] ingest | C08 pasada 2: lectura fresca sin hallazgos altos ni medios`
+- Releídos los 16 archivos tocados; 4 notas bajas aceptadas; rúbrica ≥ 4 en 11 criterios.
+
+### C09 · Informe final y cierre · commit (este archivo) · despliegue (ver estado)
+**Pendientes.md** — ver el resumen de arriba (cierra el loop). **Decisiones.md** — ninguna nueva.
+**Seguridad.md** — sin cambios. **Otras páginas** — ver el resumen de arriba.
+**log.md** — `## [2026-09-20] ingest | Cierre del loop de correcciones (C01–C09)`
+- Informe en `docs/plans/correcciones-loop-report.md`; CHANGELOG "Unreleased" actualizado.
+- 11 iteraciones, 10 commits en `main`, todos desplegados (READY) en Vercel.
+- Puente subido al nodo Datafud de Drive; páginas del vault pendientes de "sincronizá el vault".
