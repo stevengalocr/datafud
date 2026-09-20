@@ -83,7 +83,7 @@ export const PRICING = {
       pricing: "desde",
       priceUsd: 12,
       unit: "unidad",
-      photo: null, // TODO-FOTO: foto real del stand QR 3D
+      photo: "/stand-qr-3d.webp", // Render temporal hasta tener foto real
     },
     {
       code: "tarjeta-nfc",
@@ -101,7 +101,7 @@ export const PRICING = {
       pricing: "desde",
       priceUsd: 20,
       unit: "unidad",
-      photo: null, // TODO-FOTO: foto real del stand QR 3D + NFC
+      photo: "/stand-qr-3d-nfc.webp", // Render temporal hasta tener foto real
     },
     {
       code: "stand-resenas",
@@ -110,7 +110,7 @@ export const PRICING = {
       pricing: "desde",
       priceUsd: 20,
       unit: "unidad",
-      photo: null, // TODO-FOTO: foto real del stand de reseñas
+      photo: "/stand-resenas.webp", // Render temporal hasta tener foto real
     },
   ] satisfies readonly HardwareItem[],
 } as const;
