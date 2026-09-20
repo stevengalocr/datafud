@@ -1,9 +1,15 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
 import { Icon } from "@/components/ui/icon";
 import { hasSupabaseEnv } from "@/lib/env";
 import { waProps } from "@/lib/site";
 import { LoginForm } from "./login-form";
+
+export const metadata: Metadata = {
+  title: "Acceso al panel",
+  robots: { index: false, follow: false },
+};
 
 // Server Component: decide en el servidor si existe backend. Sin variables de Supabase
 // (etapa "landing primero") no hay formulario: aviso de marca + WhatsApp + vuelta a la landing.

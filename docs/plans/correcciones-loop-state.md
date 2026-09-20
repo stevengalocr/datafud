@@ -7,8 +7,8 @@
 
 ## Contador
 
-- Iteración actual: 2
-- Iteraciones consumidas: 2 / 25
+- Iteración actual: 3
+- Iteraciones consumidas: 3 / 25
 
 ## Capacidades del entorno
 
@@ -25,8 +25,8 @@
 
 | ID | Título | Estado | Intentos | Commit | Despliegue | Evidencia |
 |---|---|---|---|---|---|---|
-| C01 | Acceso cerrado con dignidad (sin "Ingresar"; /login con aviso sin backend) | hecho | 1 | (ver bitácora it. 2) | directo a main | `grep href="/login"` = 0; /login sin env → 200, 0 `<form>`, sin errores; con env falsa → 1 `<form>`; capturas nav/footer/menú/login |
-| C02 | Ruta privada fuera de robots + noindex | pendiente | 0 | | | |
+| C01 | Acceso cerrado con dignidad (sin "Ingresar"; /login con aviso sin backend) | hecho | 1 | 6e173b0 | READY (`dpl_A83jsKJhZcVBPxDuz4M3sDooh9Wd`) | `grep href="/login"` = 0; /login sin env → 200, 0 `<form>`, sin errores; con env falsa → 1 `<form>`; capturas nav/footer/menú/login |
+| C02 | Ruta privada fuera de robots + noindex | hecho | 1 | (ver bitácora it. 3) | directo a main | robots sin "acceso"; `<meta name="robots" content="noindex…">` en /login y la ruta privada; `X-Robots-Tag` en las tres (incluida la 307 de /register); ninguna en el sitemap |
 | C03 | Credenciales fuera del repo (`seed.dev.sql`) | pendiente | 0 | | | |
 | C04 | Formulario anti-abuso (trampa de tiempo, URLs, Turnstile opcional) | pendiente | 0 | | | |
 | C05 | Copy honesto | pendiente | 0 | | | |
@@ -77,3 +77,18 @@
 - Autocrítica: el CTA del aviso partía en dos líneas en 375 con altura fija → `min-h-12`.
 - Puertas: A ✓ · B ✓ · C ✓ · D ✓ (nav, menú, footer, `(auth)/login`, `lib/env.ts`) · E ✓ ·
   F ✓ · G ✓ · H n.a. · I ✓ · J siguiente iteración · K ✓ (bloque abajo en vault-sync).
+
+### Iteración 3 — C02 Ruta privada sin anunciar
+
+- Plan: quitar `/acceso-galodev-9f3a` de `robots.ts`; `robots: { index:false, follow:false }`
+  en `/login` (page servidor), `/register` (page servidor) y `layout.tsx` nuevo de la ruta
+  privada (su page es "use client"); además cabecera `X-Robots-Tag: noindex, nofollow` para
+  las tres en `next.config.mjs`, porque `/register` responde 307 sin HTML y el meta no
+  alcanzaría.
+- Evidencia (`next start` sin variables): `/robots.txt` sin "acceso"; `/login` 200 con
+  `X-Robots-Tag` y `<meta name="robots" content="noindex, nofollow">`; ruta privada 200 con
+  cabecera y `<meta … "noindex, nofollow, nocache">`; `/register` 307 → `/#contacto` con la
+  cabecera; `sitemap.xml` sin ninguna de las tres. QA en 375/768/1440 de `/`, `/login` y la
+  ruta privada sin hallazgos.
+- Puertas: A ✓ · B ✓ · C ✓ · D ✓ (`robots.ts`, `(auth)/*`, `next.config.mjs`) · E ✓ · F ✓ ·
+  G ✓ · H n.a. · I n.a. · J siguiente iteración · K ✓.

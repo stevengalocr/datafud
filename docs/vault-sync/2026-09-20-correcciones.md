@@ -45,3 +45,21 @@ sembradas, la nota "visible en `/login`" ya no aplica.
 - `/login` partido en Server Component + `login-form.tsx`; `src/lib/env.ts` con `hasSupabaseEnv()`.
 - Verificado con dos builds: con variables falsas hay formulario; sin variables hay aviso y 200.
 - QA de navegador en 375/768/1440 sobre `/`, `/login`, `/terminos`, `/privacidad` sin hallazgos.
+
+### C02 · Ruta privada sin anunciar · commit (ver estado, it. 3) · despliegue (ver estado)
+**Pendientes.md** — cerrar en P3: "S8 Retirar o reubicar `/acceso-galodev-9f3a`" pasa a
+**mitigado** (ya no se anuncia en robots.txt, lleva noindex/nofollow por meta y por cabecera
+`X-Robots-Tag`, y no está en el sitemap); la reubicación completa queda para cuando se encienda
+el backend. Ítem nuevo: ninguno.
+**Decisiones.md** — ninguna.
+**Seguridad.md** — S8: de "Media · a la vista en un repo público" a "Media · mitigado
+2026-09-20: fuera de robots.txt, noindex por meta y cabecera, fuera del sitemap. Sigue en el
+código público; la protección real continúa siendo el rol en /admin".
+**Otras páginas** — Cuentas-y-Accesos, sección "Acceso del super admin": agregar "No aparece en
+robots.txt ni en el sitemap y responde noindex/nofollow (meta + `X-Robots-Tag`)".
+Arquitectura-Y-Base-De-Datos (si menciona `next.config.mjs`): ahora define `headers()` con
+`X-Robots-Tag` para `/login`, `/register` y la ruta privada.
+**log.md** — `## [2026-09-20] ingest | C02: ruta privada fuera de robots y rutas de acceso con noindex`
+- `robots.ts` ya no lista la ruta privada; `/login`, `/register` y la ruta privada llevan noindex.
+- `next.config.mjs` añade `X-Robots-Tag: noindex, nofollow` (cubre la 307 de `/register`).
+- Verificado con curl sobre `next start`: robots sin "acceso", metas y cabeceras presentes, sitemap limpio.
