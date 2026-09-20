@@ -6,6 +6,7 @@ import { Icon } from "@/components/ui/icon";
 import { track } from "@vercel/analytics";
 import { sendContactAction } from "@/app/actions";
 import { BUSINESS_TYPES, type ContactState } from "@/lib/contact";
+import { TurnstileWidget } from "@/components/marketing/v2/turnstile-widget";
 
 const field =
   "h-12 w-full rounded-lg border border-stone-250 bg-cream-50 px-4 text-sm font-medium text-brand-900 placeholder:text-brand-700/45 transition-colors duration-200 focus:border-brand-600 focus:outline-none focus:ring-2 focus:ring-accent-400/60";
@@ -14,14 +15,20 @@ const label = "mb-1.5 block text-[11px] font-bold uppercase tracking-[0.16em] te
 const initial: ContactState = { status: "idle" };
 
 // Formulario de contacto. Solo se monta cuando el servidor confirmó que hay RESEND_API_KEY.
-export function ContactForm({ whatsappHref }: { whatsappHref: string }) {
+export function ContactForm({ whatsappHref, turnstileSiteKey }: { whatsappHref: string; turnstileSiteKey?: string | null }) {
   const [state, formAction, pending] = useActionState<ContactState, FormData>(sendContactAction, initial);
   const formRef = useRef<HTMLFormElement>(null);
+  // Trampa de tiempo: se mide en el cliente (sin depender del reloj del servidor ni del build).
+  const mountedAt = useRef<number>(Date.now());
+  const elapsedRef = useRef<HTMLInputElement>(null);
   const statusRef = useRef<HTMLParagraphElement>(null);
   const id = useId();
 
   useEffect(() => {
-    if (state.status === "ok") formRef.current?.reset();
+    if (state.status === "ok") {
+      formRef.current?.reset();
+      mountedAt.current = Date.now();
+    }
     if (state.status !== "idle") {
       statusRef.current?.focus();
       track("contact_submit", { resultado: state.status });
@@ -34,6 +41,9 @@ export function ContactForm({ whatsappHref }: { whatsappHref: string }) {
     <form
       ref={formRef}
       action={formAction}
+      onSubmit={() => {
+        if (elapsedRef.current) elapsedRef.current.value = String(Date.now() - mountedAt.current);
+      }}
       noValidate={false}
       className="rounded-2xl border border-stone-200/80 bg-white p-6 shadow-[0_24px_60px_-28px_rgba(34,80,58,0.28)] sm:p-8"
       aria-describedby={`${id}-status`}
@@ -70,6 +80,15 @@ export function ContactForm({ whatsappHref }: { whatsappHref: string }) {
           <textarea id={`${id}-message`} name="message" rows={4} maxLength={1500} placeholder="Contanos cuántas mesas tenés, si ya usás carta digital o qué te gustaría resolver." className={cn(field, "h-auto py-3 leading-relaxed")} />
         </div>
       </div>
+
+      {/* Tiempo de llenado en ms; lo escribe onSubmit. Sin JS queda vacío y el servidor lo descarta. */}
+      <input ref={elapsedRef} type="hidden" name="elapsedMs" defaultValue="" />
+
+      {turnstileSiteKey && (
+        <div className="mt-6">
+          <TurnstileWidget siteKey={turnstileSiteKey} />
+        </div>
+      )}
 
       {/* Honeypot: fuera de la vista y del orden de tabulación. */}
       <div className="absolute -left-[9999px] top-auto h-px w-px overflow-hidden" aria-hidden="true">

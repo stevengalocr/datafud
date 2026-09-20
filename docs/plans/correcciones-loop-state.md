@@ -7,8 +7,8 @@
 
 ## Contador
 
-- Iteración actual: 4
-- Iteraciones consumidas: 4 / 25
+- Iteración actual: 5
+- Iteraciones consumidas: 5 / 25
 
 ## Capacidades del entorno
 
@@ -27,8 +27,8 @@
 |---|---|---|---|---|---|---|
 | C01 | Acceso cerrado con dignidad (sin "Ingresar"; /login con aviso sin backend) | hecho | 1 | 6e173b0 | READY (`dpl_A83jsKJhZcVBPxDuz4M3sDooh9Wd`) | `grep href="/login"` = 0; /login sin env → 200, 0 `<form>`, sin errores; con env falsa → 1 `<form>`; capturas nav/footer/menú/login |
 | C02 | Ruta privada fuera de robots + noindex | hecho | 1 | 94db3a5 | READY (`dpl_BsMyrnuTuMf92ErwqkivJ84U1BsP`) | robots sin "acceso"; `<meta name="robots" content="noindex…">` en /login y la ruta privada; `X-Robots-Tag` en las tres (incluida la 307 de /register); ninguna en el sitemap |
-| C03 | Credenciales fuera del repo (`seed.dev.sql`) | hecho | 1 | (ver bitácora it. 4) | directo a main | `grep -rn Datfud2026` = 0; diff de schema.sql = solo sección 10 (−139/+5); seed.dev.sql revisado línea a línea; sin BD para ejecutarlo |
-| C04 | Formulario anti-abuso (trampa de tiempo, URLs, Turnstile opcional) | pendiente | 0 | | | |
+| C03 | Credenciales fuera del repo (`seed.dev.sql`) | hecho | 1 | de882b6 | READY (`dpl_4bbZkUSq1LfWRdWmr78s19YvXtij`) | `grep -rn Datfud2026` = 0; diff de schema.sql = solo sección 10 (−139/+5); seed.dev.sql revisado línea a línea; sin BD para ejecutarlo |
+| C04 | Formulario anti-abuso (trampa de tiempo, URLs, Turnstile opcional) | hecho | 1 | (ver bitácora it. 5) | directo a main | `abuse-test.mjs`: envío a 1,5 s → éxito silencioso + log "descartado por trampa de tiempo"; envío a 3,5 s → llega a Resend; 3 URLs → error visible; widget Turnstile solo con su clave |
 | C05 | Copy honesto | pendiente | 0 | | | |
 | C06 | QA sin peso en producción (`qa:landing`) | pendiente | 0 | | | |
 | C07 | `CLAUDE.md` en el repo | pendiente | 0 | | | |
@@ -120,3 +120,27 @@
   psql (`\if :{?var}`, `\set`, `set_config`) es la estándar desde psql 10.
 - Puertas: A ✓ · B ✓ · C ✓ · D ✓ (supabase/ solo en esta unidad) · E ✓ · F ✓ · G n.a. (sin
   cambios de UI) · H n.a. · I n.a. · J siguiente iteración · K ✓.
+
+### Iteración 5 — C04 Formulario resistente a abuso
+
+- Plan: (a) trampa de tiempo medida en el **cliente** (`elapsedMs` = envío − montaje, escrito
+  en `onSubmit`), no con la hora de render: la landing es estática y una marca de tiempo del
+  servidor sería la del build, y una marca del cliente comparada con el reloj del servidor
+  fallaría con relojes desfasados. El servidor descarta en silencio si falta, no es número,
+  es < 3 s o > 2 h (`looksAutomated`). Sin JS el campo va vacío y se descarta (sin JS el
+  formulario tampoco podía mostrar sus estados). (b) `contactSchema.message` con `refine`:
+  más de 2 URLs (`https?://` o `www.`) → error visible. (c) Turnstile opcional:
+  `src/lib/turnstile.ts` (site key, `isTurnstileEnabled` solo con las dos variables,
+  `verifyTurnstileToken` vía fetch a siteverify con `remoteip`) y `turnstile-widget.tsx`
+  (script oficial con `next/script`, modo declarativo `.cf-turnstile`). Sin variables no se
+  carga nada. `.env.example` con `NEXT_PUBLIC_TURNSTILE_SITE_KEY` y `TURNSTILE_SECRET_KEY`.
+  Logs `[contacto] descartado por …` para evidencia. Sin dependencias nuevas.
+- Evidencia (build con `RESEND_API_KEY` falsa): envío automatizado a 1,07 s → la UI muestra
+  "Recibimos tu mensaje" y el log dice `descartado por trampa de tiempo (elapsedMs=1535)`;
+  **no** hay llamada a Resend. Envío humano a 3,5 s → "No pudimos enviar tu mensaje" y en el
+  log `Resend devolvió error: Unable to fetch data` (llegó a Resend; falla por la clave falsa
+  y la red del sandbox). Mensaje con 3 URLs → "Tu mensaje tiene demasiados enlaces…". HTML
+  sin claves de Turnstile: 0 `cf-turnstile`; con `NEXT_PUBLIC_TURNSTILE_SITE_KEY` el widget
+  aparece con su `data-sitekey`. Build de producción sin variables: 0 `<form>` (solo accesos
+  directos), QA 375/768/1440 OK.
+- Puertas: A ✓ · B ✓ · C ✓ · D ✓ · E ✓ · F ✓ · G ✓ · H n.a. · I ✓ · J siguiente · K ✓.

@@ -2,17 +2,29 @@
 
 import { Resend } from "resend";
 import { SITE } from "@/lib/site";
-import { contactSchema, type ContactState } from "@/lib/contact";
+import { headers } from "next/headers";
+import { contactSchema, looksAutomated, type ContactState } from "@/lib/contact";
+import { isTurnstileEnabled, verifyTurnstileToken } from "@/lib/turnstile";
 
 const FALLBACK_ERROR = "No pudimos enviar tu mensaje. Probá de nuevo o escribinos por WhatsApp.";
 
 // Formulario de contacto de la landing. Sin RESEND_API_KEY el formulario no se renderiza
 // (lo decide el servidor en contact-section.tsx); esta acción además responde con un
 // error amable si llegara a llamarse sin la clave.
+// Anti-abuso sin infraestructura: honeypot, trampa de tiempo (elapsedMs medido en el
+// cliente), tope de enlaces en el mensaje y, si está configurado, Cloudflare Turnstile.
+// Los envíos automatizados reciben un éxito silencioso: nada llega a Resend.
 export async function sendContactAction(
   _prev: ContactState,
   formData: FormData
 ): Promise<ContactState> {
+  const elapsedRaw = formData.get("elapsedMs");
+  const elapsedMs = typeof elapsedRaw === "string" && elapsedRaw !== "" ? Number(elapsedRaw) : null;
+  if (looksAutomated(elapsedMs)) {
+    console.info(`[contacto] descartado por trampa de tiempo (elapsedMs=${elapsedRaw ?? "vacío"})`);
+    return { status: "ok" };
+  }
+
   const parsed = contactSchema.safeParse({
     name: formData.get("name"),
     business: formData.get("business"),
@@ -24,11 +36,26 @@ export async function sendContactAction(
 
   if (!parsed.success) {
     // Un honeypot lleno se trata como éxito silencioso: no le damos pistas al bot.
-    if (parsed.error.issues.some((i) => i.path[0] === "website")) return { status: "ok" };
+    if (parsed.error.issues.some((i) => i.path[0] === "website")) {
+      console.info("[contacto] descartado por honeypot");
+      return { status: "ok" };
+    }
     return {
       status: "error",
       message: parsed.error.issues[0]?.message ?? "Revisá los datos del formulario.",
     };
+  }
+
+  if (isTurnstileEnabled()) {
+    const token = formData.get("cf-turnstile-response");
+    const ip = (await headers()).get("x-forwarded-for")?.split(",")[0]?.trim() ?? null;
+    const ok = await verifyTurnstileToken(typeof token === "string" ? token : null, ip);
+    if (!ok) {
+      return {
+        status: "error",
+        message: "No pudimos confirmar que sos una persona. Probá de nuevo o escribinos por WhatsApp.",
+      };
+    }
   }
 
   const apiKey = process.env.RESEND_API_KEY;

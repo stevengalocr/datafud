@@ -98,3 +98,28 @@ de seed `psql "$DBURL" -v seed_password='…' -f supabase/seed.dev.sql`.
 - `schema.sql` sin usuarios ni correos; `verify.sql` con parte 2 condicionada al seed.
 - README, PRODUCT, USER_MANUAL, spec y plan de fase 0 sin la contraseña; aviso de contraseña quemada en README.
 - `grep Datfud2026` en el repo = 0. Sin BD disponible: el SQL no se ejecutó (revisión línea a línea).
+
+### C04 · Formulario resistente a abuso · commit (ver estado, it. 5) · despliegue (ver estado)
+**Pendientes.md** — ítem nuevo en "Datos que esperan a Steven": "Opcional: crear un sitio en
+Cloudflare Turnstile y poner `NEXT_PUBLIC_TURNSTILE_SITE_KEY` y `TURNSTILE_SECRET_KEY` en
+Vercel (+ redeploy) si el formulario recibe spam; sin eso ya hay honeypot, trampa de tiempo y
+tope de enlaces". En P1, "S5 Captcha + verificación de correo en /register": anotar que el
+formulario de contacto ya soporta Turnstile opcional; /register sigue cerrado.
+**Decisiones.md** — D-019 · Anti-abuso del formulario sin infraestructura nueva.
+- Fecha: 2026-09-20 · Estado: aceptada · Fuente: revisión independiente 2026-09-20.
+- Decisión: honeypot + trampa de tiempo medida en el cliente (< 3 s o > 2 h se descarta en
+  silencio) + máximo 2 enlaces por mensaje; Cloudflare Turnstile solo si están sus dos
+  variables. Nada de esto añade dependencias ni servicios obligatorios.
+- Consecuencias: los envíos sin JavaScript se descartan (el formulario ya dependía de JS para
+  mostrar estados); si aparece spam, activar Turnstile es poner dos variables.
+**Seguridad.md** — agregar hallazgo nuevo cerrado: "S14 · Media · Formulario de contacto sin
+protección anti-bots → cerrado 2026-09-20 (honeypot, trampa de tiempo, tope de URLs, Turnstile
+opcional)". S5 sin cambios (aplica a /register cuando vuelva a abrirse).
+**Otras páginas** — Cuentas-y-Accesos, tabla de variables: agregar `NEXT_PUBLIC_TURNSTILE_SITE_KEY`
+y `TURNSTILE_SECRET_KEY` (opcionales, formulario de contacto) junto a `RESEND_API_KEY` y
+`RESEND_FROM_EMAIL`. Arquitectura-Y-Base-De-Datos: `src/lib/turnstile.ts` y
+`turnstile-widget.tsx` como piezas del formulario.
+**log.md** — `## [2026-09-20] ingest | C04: formulario de contacto resistente a abuso`
+- Trampa de tiempo en el cliente (`elapsedMs`), tope de 2 enlaces, Turnstile opcional por variables.
+- Probado con clave falsa de Resend: envío a 1 s se descarta en silencio (log), envío a 3,5 s llega a Resend, 3 URLs se rechazan.
+- Sin claves de Turnstile no se carga ningún script; sin `RESEND_API_KEY` la sección sigue sin formulario.

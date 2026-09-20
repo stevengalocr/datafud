@@ -2,6 +2,7 @@ import { Icon } from "@/components/ui/icon";
 import { RevealOnView } from "@/components/marketing/v2/reveal";
 import { ContactForm } from "@/components/marketing/v2/contact-form";
 import { isContactFormEnabled } from "@/lib/contact";
+import { turnstileSiteKey } from "@/lib/turnstile";
 import { SITE, hasEmail, hasWhatsApp, mailLink, waProps, whatsappDisplay } from "@/lib/site";
 
 // Sección #contacto. Server Component: decide en el servidor si existe RESEND_API_KEY.
@@ -79,7 +80,7 @@ export function ContactSection() {
           <RevealOnView className="relative">
             {formEnabled ? (
               <div className="reveal-up relative">
-                <ContactForm whatsappHref={wa.href} />
+                <ContactForm whatsappHref={wa.href} turnstileSiteKey={turnstileSiteKey()} />
               </div>
             ) : (
               <div className="reveal-up relative rounded-2xl border border-stone-200/80 bg-white p-7 sm:p-9">
