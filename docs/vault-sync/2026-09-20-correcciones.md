@@ -168,3 +168,27 @@ de las de desarrollo si las lista.
 - `scripts/qa-landing.mjs` + `npm run qa:landing`: 3 tamaños, consola, requests, anclas, CTAs, teclado, rutas.
 - `lighthouse` eliminado de devDependencies; `npm ci && npm run build` en verde.
 - Corrida completa en 32 s: OK con 3 avisos (fotos remotas que no cargan en el sandbox).
+
+### C07 · CLAUDE.md en el repo · commit (ver estado, it. 8) · despliegue (ver estado)
+**Pendientes.md** — cerrar en "L — Fachada de venta": "Copiar `CLAUDE.md` al repo y crear la
+rama `feat/landing-ventas`" → la parte de `CLAUDE.md` **cerrada 2026-09-20** (la rama no
+aplica: los loops publican directo en `main` desde la rama de sesión).
+**Decisiones.md** — D-016 · Protocolo de alineación repo → vault (formalizado en `CLAUDE.md`).
+- Fecha: 2026-09-20 · Estado: aceptada · Fuente: Steven (prompt del loop de correcciones).
+- Decisión: toda sesión que cambie código, oferta, seguridad o decisiones deja un bloque en
+  `docs/vault-sync/AAAA-MM-DD-<tema>.md` (Pendientes, Decisiones, Seguridad, otras páginas, log)
+  o actualiza el vault directo si tiene acceso; una unidad sin su bloque no está terminada.
+- Consecuencias: el vault deja de depender de que alguien recuerde sincronizar; `CLAUDE.md`
+  lo exige a todas las sesiones futuras.
+**Seguridad.md** — sin cambios de estado. `CLAUDE.md` deja escritas como reglas S1 (vistas con
+`security_invoker`, aún no aplicado) y S10 (Zod en todas las Server Actions, aún no en paneles).
+**Otras páginas** — Claude-Code/CLAUDE-repo: pasa de `estado: pendiente` a `estado: activo`;
+reemplazar el bloque propuesto por una nota "ya está en el repo (commit de C07); el archivo vivo
+manda" y enlazar el protocolo de vault-sync. Claude-Code/Flujo-Obsidian-Claude-Code: en
+"Montaje", el paso 2 ("`CLAUDE.md` en la raíz del repo") queda hecho; agregar el paso "las
+sesiones en la nube dejan `docs/vault-sync/…` y Cowork lo aplica con 'sincronizá el vault'".
+Guia-De-Desarrollo: referenciar `CLAUDE.md` como fuente de reglas y comandos.
+**log.md** — `## [2026-09-20] ingest | C07: CLAUDE.md en el repo con el protocolo de alineación con el vault`
+- `CLAUDE.md` (111 líneas): etapa, comandos, mapa, 11 reglas, convenciones, trampas y protocolo de vault-sync.
+- Cada afirmación verificada contra el código; S1 y S10 quedan señalados como pendientes, no como hechos.
+- La página CLAUDE-repo del vault pasa a activa y deja de ser la copia maestra.

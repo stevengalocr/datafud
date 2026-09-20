@@ -7,8 +7,8 @@
 
 ## Contador
 
-- Iteración actual: 7
-- Iteraciones consumidas: 7 / 25
+- Iteración actual: 8
+- Iteraciones consumidas: 8 / 25
 
 ## Capacidades del entorno
 
@@ -30,8 +30,8 @@
 | C03 | Credenciales fuera del repo (`seed.dev.sql`) | hecho | 1 | de882b6 | READY (`dpl_4bbZkUSq1LfWRdWmr78s19YvXtij`) | `grep -rn Datfud2026` = 0; diff de schema.sql = solo sección 10 (−139/+5); seed.dev.sql revisado línea a línea; sin BD para ejecutarlo |
 | C04 | Formulario anti-abuso (trampa de tiempo, URLs, Turnstile opcional) | hecho | 1 | ae1b32a | READY (`dpl_6HuYV8MKnkbA9rWWnTTzdu86Hine`) | `abuse-test.mjs`: envío a 1,5 s → éxito silencioso + log "descartado por trampa de tiempo"; envío a 3,5 s → llega a Resend; 3 URLs → error visible; widget Turnstile solo con su clave |
 | C05 | Copy honesto | hecho | 1 | 236e674 | READY (`dpl_87hryu7YvUvfuzP44emUD48zkJee`) | 8 cambios antes → después; grep ampliado (más estrellas, mesas llenas, más ventas, vende más, prioritari, avanzad) = 0 en la landing; docs alineados |
-| C06 | QA sin peso en producción (`qa:landing`) | hecho | 1 | (ver bitácora it. 7) | directo a main | `lighthouse` fuera de devDependencies; `npm ci && npm run build` OK; `npm run qa:landing` → OK · 3 avisos (fotos remotas) en 32 s, con servidor previo y levantando el suyo |
-| C07 | `CLAUDE.md` en el repo | pendiente | 0 | | | |
+| C06 | QA sin peso en producción (`qa:landing`) | hecho | 1 | e27fe85 | (verificar en it. 8) | `lighthouse` fuera de devDependencies; `npm ci && npm run build` OK; `npm run qa:landing` → OK · 3 avisos (fotos remotas) en 32 s, con servidor previo y levantando el suyo |
+| C07 | `CLAUDE.md` en el repo | hecho | 1 | (ver bitácora it. 8) | directo a main | 111 líneas; cada afirmación verificada contra el código (middleware en raíz, service_role solo en registerAction, sin security_invoker aún, Zod solo en dos actions, grants de anon, restos Datfud) |
 | C08 | Verificación final y pulido (mín. 2 pasadas) | pendiente | 0 | | | |
 | C09 | Informe final y cierre de vault-sync | pendiente | 0 | | | |
 
@@ -203,3 +203,22 @@ Regla 8: MARKETING §6 (tabla de planes: reportes y soporte; nota de honestidad 
   `.qa/`. `grep lighthouse package.json package-lock.json` = 0.
 - Puertas: A ✓ · B ✓ · C ✓ · D ✓ · E ✓ · F ✓ · G ✓ (la corre el propio script) · H n.a. ·
   I ✓ · J siguiente · K ✓.
+
+### Iteración 8 — C07 CLAUDE.md
+
+- Plan: `CLAUDE.md` en la raíz (111 líneas, español): qué es y etapa actual (landing primero,
+  sin backend, /register → /#contacto, /login con aviso, sin "Ingresar"); comandos (incluido
+  `qa:landing` y el seed con contraseña por variable); mapa; 11 reglas que no se rompen;
+  convenciones; trampas conocidas; y la sección "Vault de Obsidian — protocolo de alineación"
+  con el formato exacto del bloque de vault-sync y la regla "aplicado en vault: sí/no".
+- Verificación de cada afirmación antes de escribirla: `middleware.ts` está en la raíz y no
+  hay `src/middleware.ts`; `createAdminClient` solo se usa en `(auth)/actions.ts`
+  (`registerAction`); `schema.sql` no tiene `security_invoker` (se escribe como regla para
+  vistas nuevas y se señala S1 como pendiente); `anon` solo recibe `grant execute` en
+  `get_menu` y `place_order` tras `revoke all … from public`; Zod solo en `(auth)/actions.ts`
+  y `app/actions.ts` (se señala S10); `NEXT_PUBLIC_SITE_URL` se usa en `dashboard/tables`;
+  `enforce_plan_limit` hace `raise exception`; restos "Datfud" en `package.json`,
+  `types.ts` y los `.sql`; `revalidatePath` en `dashboard/actions.ts`. Nada de lo escrito
+  contradice el código.
+- Puertas: A ✓ · B ✓ · C ✓ · D ✓ (solo `CLAUDE.md` + estado + vault-sync) · E n.a. · F n.a. ·
+  G n.a. (sin UI) · H n.a. · I n.a. · J siguiente · K ✓.
