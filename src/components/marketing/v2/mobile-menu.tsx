@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { useEffect, useId, useRef, useState } from "react";
 import { Icon } from "@/components/ui/icon";
 
@@ -8,7 +7,7 @@ type NavLink = { href: string; label: string };
 
 // Menú móvil del nav: botón con aria-expanded/aria-controls, panel debajo del header,
 // se cierra con Escape, al tocar un enlace o al pasar a escritorio (lg). El CTA de WhatsApp
-// ya está en el header, así que el panel solo suma las secciones e "Ingresar". Hasta 1023 px el
+// ya está en el header, así que el panel solo lista las secciones. Hasta 1023 px el
 // nav completo no cabe con cinco secciones, así que tablet también usa el menú.
 export function MobileMenu({ links }: { links: NavLink[] }) {
   const [open, setOpen] = useState(false);
@@ -52,7 +51,7 @@ export function MobileMenu({ links }: { links: NavLink[] }) {
         hidden={!open}
         className="absolute inset-x-0 top-full border-b border-stone-200/60 bg-cream-50 shadow-[0_24px_48px_-24px_rgba(17,42,32,0.35)]"
       >
-        <nav aria-label="Secciones" className="mx-auto flex max-w-6xl flex-col px-5 py-3">
+        <nav aria-label="Secciones" className="mx-auto flex max-w-6xl flex-col px-5 py-2">
           {links.map((l) => (
             <a
               key={l.href}
@@ -64,15 +63,6 @@ export function MobileMenu({ links }: { links: NavLink[] }) {
               <Icon name="arrow-right" size={16} className="text-accent-700" />
             </a>
           ))}
-          <div className="mt-3 pb-3">
-            <Link
-              href="/login"
-              onClick={() => setOpen(false)}
-              className="inline-flex h-12 w-full items-center justify-center rounded-lg border border-stone-300 bg-white text-xs font-bold uppercase tracking-[0.18em] text-brand-800"
-            >
-              Ingresar
-            </Link>
-          </div>
         </nav>
       </div>
     </div>

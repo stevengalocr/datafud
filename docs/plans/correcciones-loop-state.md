@@ -7,8 +7,8 @@
 
 ## Contador
 
-- Iteración actual: 1
-- Iteraciones consumidas: 1 / 25
+- Iteración actual: 2
+- Iteraciones consumidas: 2 / 25
 
 ## Capacidades del entorno
 
@@ -25,7 +25,7 @@
 
 | ID | Título | Estado | Intentos | Commit | Despliegue | Evidencia |
 |---|---|---|---|---|---|---|
-| C01 | Acceso cerrado con dignidad (sin "Ingresar"; /login con aviso sin backend) | pendiente | 0 | | | |
+| C01 | Acceso cerrado con dignidad (sin "Ingresar"; /login con aviso sin backend) | hecho | 1 | (ver bitácora it. 2) | directo a main | `grep href="/login"` = 0; /login sin env → 200, 0 `<form>`, sin errores; con env falsa → 1 `<form>`; capturas nav/footer/menú/login |
 | C02 | Ruta privada fuera de robots + noindex | pendiente | 0 | | | |
 | C03 | Credenciales fuera del repo (`seed.dev.sql`) | pendiente | 0 | | | |
 | C04 | Formulario anti-abuso (trampa de tiempo, URLs, Turnstile opcional) | pendiente | 0 | | | |
@@ -54,5 +54,26 @@
 
 ### Iteración 1 — arranque y prueba de publicación
 
-- Estado y `docs/vault-sync/2026-09-20-correcciones.md` creados. Prueba de publicación con
-  estos dos archivos por el procedimiento oficial.
+- Estado y `docs/vault-sync/2026-09-20-correcciones.md` creados. Prueba de publicación:
+  commit 8b788f9 en `main` por push directo (aceptado).
+
+### Iteración 2 — C01 Acceso cerrado con dignidad
+
+- Plan: quitar "Ingresar" de `landing-nav-v2.tsx`, `mobile-menu.tsx` (desaparece el bloque
+  inferior del panel; el nav queda solo con secciones) y `site-footer.tsx` (la columna
+  Contacto queda con WhatsApp, correo y región). `/login` se parte en `page.tsx` (Server
+  Component que decide con `hasSupabaseEnv()` de `src/lib/env.ts`) y `login-form.tsx` (el
+  formulario cliente existente, sin cambios). Sin variables: aviso de marca "El acceso al
+  panel se activa con tu implementación" + CTA WhatsApp (`waProps("contacto")`) + "Volver a
+  la landing".
+- Lo que ve un visitante: ni el nav ni el footer ofrecen "Ingresar"; si alguien entra a
+  /login por URL ve el aviso con el WhatsApp, nunca un formulario que no funciona.
+- Evidencia: `grep -rn 'href="/login"' src/components/marketing src/app/page.tsx` = 0;
+  build con `NEXT_PUBLIC_SUPABASE_URL/ANON_KEY` falsas → `/login` 200 con 1 `<form>`; build
+  sin variables → `/login` 200 con 0 `<form>`, `/register` 307 → `/#contacto`; QA en
+  375/768/1440 de `/`, `/login`, `/terminos`, `/privacidad` sin hallazgos; menú móvil por
+  teclado OK (5 secciones, Escape devuelve el foco). El log del servidor solo tiene los
+  `fetch failed` del optimizador de imágenes con Unsplash (sandbox), ninguno de /login.
+- Autocrítica: el CTA del aviso partía en dos líneas en 375 con altura fija → `min-h-12`.
+- Puertas: A ✓ · B ✓ · C ✓ · D ✓ (nav, menú, footer, `(auth)/login`, `lib/env.ts`) · E ✓ ·
+  F ✓ · G ✓ · H n.a. · I ✓ · J siguiente iteración · K ✓ (bloque abajo en vault-sync).

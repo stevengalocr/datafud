@@ -20,3 +20,28 @@ correcciones post-revisión 2026-09-20 en curso (`docs/plans/correcciones-loop-s
 - Segundo bucle autónomo desde Claude Code en la nube sobre `main` @ f90bfd7.
 - Línea base en verde (typecheck, lint, build). Estado en `docs/plans/correcciones-loop-state.md`.
 - El puente vault-sync vive en `docs/vault-sync/2026-09-20-correcciones.md`.
+
+### C01 · Acceso cerrado con dignidad · commit (ver estado, it. 2) · despliegue (ver estado)
+**Pendientes.md** — cerrar en "L — Fachada de venta": "Sacar las contraseñas semilla del repo y
+de `/login` (S2)" queda **parcial**: la parte de `/login` está cerrada (ya no muestra la cuenta
+demo y sin backend no muestra formulario); la parte del repo se cierra en C03. Ítem nuevo: ninguno.
+**Decisiones.md** — D-017 · La landing no ofrece "Ingresar" mientras no haya backend.
+- Fecha: 2026-09-20 · Estado: aceptada · Fuente: revisión independiente 2026-09-20.
+- Contexto: el enlace "Ingresar" llevaba a un formulario que no podía autenticar a nadie
+  (Vercel sin variables de Supabase).
+- Decisión: se quita "Ingresar" del nav, del menú móvil y del footer. `/login` decide en el
+  servidor: sin `NEXT_PUBLIC_SUPABASE_URL`/`ANON_KEY` muestra un aviso de marca con WhatsApp;
+  con variables muestra el formulario de siempre.
+- Consecuencias: cuando se encienda el backend (P0) solo hay que poner las variables; el
+  enlace "Ingresar" se vuelve a agregar en ese momento.
+**Seguridad.md** — S2: la exposición en `/login` queda cerrada; el hallazgo sigue **abierto**
+por las credenciales en el repo hasta C03. S8: sin cambios (C02).
+**Otras páginas** — Paneles-Y-Vistas: donde describa `/login`, agregar "Sin variables de Supabase
+muestra un aviso ('El acceso al panel se activa con tu implementación') con CTA a WhatsApp; el
+formulario solo aparece con backend configurado". Cuentas-y-Accesos: en la tabla de cuentas
+sembradas, la nota "visible en `/login`" ya no aplica.
+**log.md** — `## [2026-09-20] ingest | C01: se quita "Ingresar" y /login degrada sin backend`
+- Nav, menú móvil y footer sin "Ingresar" (`grep href="/login"` en marketing = 0).
+- `/login` partido en Server Component + `login-form.tsx`; `src/lib/env.ts` con `hasSupabaseEnv()`.
+- Verificado con dos builds: con variables falsas hay formulario; sin variables hay aviso y 200.
+- QA de navegador en 375/768/1440 sobre `/`, `/login`, `/terminos`, `/privacidad` sin hallazgos.

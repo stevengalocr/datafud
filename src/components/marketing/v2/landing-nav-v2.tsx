@@ -47,13 +47,7 @@ export function LandingNavV2() {
           ))}
         </nav>
 
-        <div className="flex items-center gap-3 sm:gap-5">
-          <Link
-            href="/login"
-            className="hidden min-h-11 items-center text-[11px] font-bold uppercase tracking-[0.18em] text-brand-700/75 transition-colors duration-300 ease-out-expo hover:text-brand-900 lg:inline-flex"
-          >
-            Ingresar
-          </Link>
+        <div className="flex items-center gap-3">
           <a
             {...wa}
             className="inline-flex h-11 items-center justify-center gap-2 rounded-lg border border-accent-300 bg-brand-600 px-4 text-[11px] font-bold uppercase tracking-[0.18em] text-white shadow-sm transition-all duration-300 ease-out-expo hover:border-accent-400 hover:bg-brand-700 active:scale-[0.98] sm:px-5"

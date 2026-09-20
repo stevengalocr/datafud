@@ -93,12 +93,6 @@ export function SiteFooter() {
                     <Icon name="mail" size={14} className="text-accent-400" /> {SITE.email}
                   </a>
                   <p className="flex min-h-11 items-center gap-2"><Icon name="pin" size={14} className="text-accent-400" /> {SITE.region}</p>
-                  <Link
-                    href="/login"
-                    className="mt-2 inline-flex h-11 w-32 items-center justify-center rounded-lg border border-white/20 bg-white/5 text-[10px] font-bold uppercase tracking-[0.16em] text-cream-100 transition-all duration-200 hover:border-white/35 hover:bg-white/10"
-                  >
-                    Ingresar
-                  </Link>
                 </div>
               </div>
             </div>
