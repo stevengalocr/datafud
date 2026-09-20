@@ -121,7 +121,7 @@ export function HardwareSection() {
           <article className="reveal-up group grid overflow-hidden rounded-3xl border border-stone-200/80 bg-white transition-all duration-300 ease-out-expo hover:-translate-y-1 hover:border-accent-300/60 hover:shadow-[0_24px_60px_-24px_rgba(34,80,58,0.3)] lg:col-span-7 lg:grid-cols-[0.8fr_1.2fr]">
             <Visual item={reviews} className="aspect-[16/10] rounded-none border-0 lg:aspect-auto lg:min-h-[220px]" sizes="(min-width: 1024px) 25vw, 100vw" />
             <div className="flex flex-col p-6 sm:p-8">
-              <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-accent-700">Para subir tus estrellas</span>
+              <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-accent-700">Para pedir reseñas</span>
               <h3 className="mt-2 font-display text-2xl text-brand-900">{reviews.name}</h3>
               <p className="mt-2 text-sm font-medium leading-relaxed text-brand-700/80">{reviews.benefit}</p>
               <div className="mt-5 border-t border-stone-200/70 pt-5">

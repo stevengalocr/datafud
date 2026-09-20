@@ -7,8 +7,8 @@
 
 ## Contador
 
-- Iteración actual: 5
-- Iteraciones consumidas: 5 / 25
+- Iteración actual: 6
+- Iteraciones consumidas: 6 / 25
 
 ## Capacidades del entorno
 
@@ -28,8 +28,8 @@
 | C01 | Acceso cerrado con dignidad (sin "Ingresar"; /login con aviso sin backend) | hecho | 1 | 6e173b0 | READY (`dpl_A83jsKJhZcVBPxDuz4M3sDooh9Wd`) | `grep href="/login"` = 0; /login sin env → 200, 0 `<form>`, sin errores; con env falsa → 1 `<form>`; capturas nav/footer/menú/login |
 | C02 | Ruta privada fuera de robots + noindex | hecho | 1 | 94db3a5 | READY (`dpl_BsMyrnuTuMf92ErwqkivJ84U1BsP`) | robots sin "acceso"; `<meta name="robots" content="noindex…">` en /login y la ruta privada; `X-Robots-Tag` en las tres (incluida la 307 de /register); ninguna en el sitemap |
 | C03 | Credenciales fuera del repo (`seed.dev.sql`) | hecho | 1 | de882b6 | READY (`dpl_4bbZkUSq1LfWRdWmr78s19YvXtij`) | `grep -rn Datfud2026` = 0; diff de schema.sql = solo sección 10 (−139/+5); seed.dev.sql revisado línea a línea; sin BD para ejecutarlo |
-| C04 | Formulario anti-abuso (trampa de tiempo, URLs, Turnstile opcional) | hecho | 1 | (ver bitácora it. 5) | directo a main | `abuse-test.mjs`: envío a 1,5 s → éxito silencioso + log "descartado por trampa de tiempo"; envío a 3,5 s → llega a Resend; 3 URLs → error visible; widget Turnstile solo con su clave |
-| C05 | Copy honesto | pendiente | 0 | | | |
+| C04 | Formulario anti-abuso (trampa de tiempo, URLs, Turnstile opcional) | hecho | 1 | ae1b32a | READY (`dpl_6HuYV8MKnkbA9rWWnTTzdu86Hine`) | `abuse-test.mjs`: envío a 1,5 s → éxito silencioso + log "descartado por trampa de tiempo"; envío a 3,5 s → llega a Resend; 3 URLs → error visible; widget Turnstile solo con su clave |
+| C05 | Copy honesto | hecho | 1 | (ver bitácora it. 6) | directo a main | 8 cambios antes → después; grep ampliado (más estrellas, mesas llenas, más ventas, vende más, prioritari, avanzad) = 0 en la landing; docs alineados |
 | C06 | QA sin peso en producción (`qa:landing`) | pendiente | 0 | | | |
 | C07 | `CLAUDE.md` en el repo | pendiente | 0 | | | |
 | C08 | Verificación final y pulido (mín. 2 pasadas) | pendiente | 0 | | | |
@@ -38,7 +38,9 @@
 ## PENDIENTES-STEVEN
 
 - Los del informe anterior siguen vigentes: `RESEND_API_KEY` + redeploy, Web Analytics en Vercel, fotos del hardware, revisión legal, prueba en teléfono real.
-- Se agregan los que salgan de este loop (ver bitácora).
+- Decidir si el eslogan "El menú digital que abre apetito y cierra ventas" (hero y OG) se mantiene como identidad de marca o se cambia por uno sin promesa de resultado (C05).
+- Opcional: activar Cloudflare Turnstile con sus dos variables si el formulario recibe spam (C04).
+- Si alguna vez se corrió `schema.sql` en una BD real, cambiar la contraseña de esas cuentas (C03).
 
 ## Línea base (iteración 1, `main` @ f90bfd7)
 
@@ -144,3 +146,37 @@
   aparece con su `data-sitekey`. Build de producción sin variables: 0 `<form>` (solo accesos
   directos), QA 375/768/1440 OK.
 - Puertas: A ✓ · B ✓ · C ✓ · D ✓ · E ✓ · F ✓ · G ✓ · H n.a. · I ✓ · J siguiente · K ✓.
+
+### Iteración 6 — C05 Copy honesto
+
+Pasada completa por page.tsx, componentes de marketing, `faq.ts`, `seo.ts`, `constants.ts`,
+`og.tsx`, legal y metadatos buscando promesas de resultado o funciones que el sistema no
+entrega en 15 días. Cambios (antes → después):
+
+| Dónde | Antes | Después |
+|---|---|---|
+| `constants.ts` · stand de reseñas | "QR y NFC que llevan directo a dejar la reseña. Más estrellas, más mesas llenas." | "QR y NFC que llevan al comensal directo a tu ficha de Google para dejar la reseña, sin buscar nada." |
+| `hardware-section.tsx` · etiqueta | "Para subir tus estrellas" | "Para pedir reseñas" |
+| `page.tsx` · act-break título | "Hecho para llenar mesas en Latinoamérica." | "Hecho para las mesas de Latinoamérica." |
+| `page.tsx` · act-break texto | "…una experiencia digital que vende más y opera mejor." | "…una carta digital que se ve mejor, se actualiza sola y habla el idioma de cada cliente." |
+| `pricing-v2.tsx` · Estándar | "Soporte prioritario por WhatsApp" | "Soporte por WhatsApp en horario de oficina" |
+| `pricing-v2.tsx` · Empresarial | "Reportes avanzados de venta" | "Ventas por día, ticket promedio y platillos más vendidos" (lo que hay: `v_daily_sales`, `v_top_products`, `v_order_summary`) |
+| `pricing-v2.tsx` · Empresarial | "Soporte dedicado por WhatsApp" | "Soporte por WhatsApp con contacto directo" |
+| `pricing-v2.tsx` · Empresarial tagline | "Sin límites para tu crecimiento" | "Sin límites de platillos, categorías ni mesas" |
+
+Revisados y sin cambios (describen funciones que sí existen): "Actualizás platos y precios al
+instante" (panel), "la carta se abre al instante" (QR/NFC), FAQ, JSON-LD (usa `deliveryLabel`
+y límites), descripciones de metadatos. `PRICING.trialDays` (sin uso en el código) se elimina.
+Regla 8: MARKETING §6 (tabla de planes: reportes y soporte; nota de honestidad en hardware),
+§9 (voz: prohibidas las promesas de resultado) y PRODUCT §8 alineados.
+
+- Decisión que queda para Steven: el titular "El menú digital que abre apetito **y cierra
+  ventas**" (hero, OG, MARKETING §1) es el eslogan de marca definido en BRAND/MARKETING; es una
+  promesa de resultado en tono de eslogan. No se cambió por ser identidad de marca; se anota
+  en PENDIENTES-STEVEN para que decida si lo conserva.
+- Puerta E: el grep ampliado da 0 en la landing y en `faq.ts`/`seo.ts`; en `constants.ts`
+  quedan solo `trial: "Prueba"` y su color en `TENANT_STATUS_LABEL/COLOR`, que son la
+  etiqueta del enum `tenant_status` de la base de datos usada por los paneles, no copy de la
+  landing (no se puede renombrar sin tocar `src/app/admin` y `dashboard`, prohibidos).
+- Puertas: A ✓ · B ✓ · C ✓ · D ✓ · E ✓ (con la salvedad anterior) · F ✓ · G ✓ · H n.a. ·
+  I n.a. · J siguiente · K ✓.

@@ -123,3 +123,28 @@ y `TURNSTILE_SECRET_KEY` (opcionales, formulario de contacto) junto a `RESEND_AP
 - Trampa de tiempo en el cliente (`elapsedMs`), tope de 2 enlaces, Turnstile opcional por variables.
 - Probado con clave falsa de Resend: envío a 1 s se descarta en silencio (log), envío a 3,5 s llega a Resend, 3 URLs se rechazan.
 - Sin claves de Turnstile no se carga ningún script; sin `RESEND_API_KEY` la sección sigue sin formulario.
+
+### C05 · Copy honesto · commit (ver estado, it. 6) · despliegue (ver estado)
+**Pendientes.md** — ítem nuevo en "Datos que esperan a Steven": "Decidir si el eslogan 'El menú
+digital que abre apetito y cierra ventas' se mantiene (es identidad de marca) o se reemplaza por
+uno sin promesa de resultado". Nada que cerrar.
+**Decisiones.md** — D-020 · Sin promesas de resultado en la landing.
+- Fecha: 2026-09-20 · Estado: aceptada · Fuente: revisión independiente 2026-09-20.
+- Decisión: la landing describe lo que el producto hace, no lo que va a lograr. Fuera "más
+  estrellas", "más mesas llenas", "vende más", "llenar mesas"; los planes nombran las funciones
+  reales (ventas por día, ticket promedio, platillos más vendidos) y el soporte sin adjetivos
+  que impliquen tiempos de respuesta no definidos. El eslogan de marca queda a decisión de Steven.
+- Consecuencias: MARKETING §9 incorpora la regla; el grep de la puerta E de los loops incluye
+  esas frases.
+**Seguridad.md** — sin cambios.
+**Otras páginas** — Marca-Y-Marketing: en "Mensajes clave" y "Voz", agregar la regla "sin
+promesas de resultado" y actualizar la tabla de planes si la reproduce (reportes y soporte con
+el texto nuevo). Producto-Y-Modelo-De-Negocio: fila de reportes de Empresarial = "ventas por
+día, ticket promedio y platillos más vendidos"; soporte = "WhatsApp en horario de oficina"
+(Estándar) / "WhatsApp con contacto directo" (Empresarial). Plan-Landing-First: en la tabla de
+hardware, el stand de reseñas "lleva directo a dejar la reseña" (quitar "para subir
+valoraciones").
+**log.md** — `## [2026-09-20] ingest | C05: copy de la landing sin promesas de resultado`
+- 8 textos cambiados (stand de reseñas, act-break, planes Estándar y Empresarial); lista antes → después en el estado del loop.
+- MARKETING §6 y §9 y PRODUCT §8 alineados; `PRICING.trialDays` eliminado por no usarse.
+- El eslogan "abre apetito y cierra ventas" se conserva como identidad de marca, pendiente de decisión de Steven.

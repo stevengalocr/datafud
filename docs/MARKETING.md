@@ -76,14 +76,14 @@ Después, el cliente elige su plan mensual (desde $29/mes).
 
 | | Carta (Básico) — **$29/mes** | Estándar — **$49/mes** ⭐ | Empresarial — **$99/mes** |
 |---|---|---|---|
-| Qué es | Carta digital por QR/NFC, sin pedidos en mesa | Carta + pedidos desde la mesa + panel | Todo, sin límites |
+| Qué es | Carta digital por QR/NFC, sin pedidos en mesa | Carta + pedidos desde la mesa + panel | Todo, sin límites de platillos, categorías ni mesas |
 | Entrega | **48 horas** | **15 días** | **15 días** |
-| Tagline | "Tu carta digital por QR y NFC, sin pedidos en mesa" | "Carta + pedidos desde la mesa + panel" | "Sin límites para tu crecimiento" |
+| Tagline | "Tu carta digital por QR y NFC, sin pedidos en mesa" | "Carta + pedidos desde la mesa + panel" | "Sin límites de platillos, categorías ni mesas" |
 | Idiomas | 1 | 2 simultáneos | 3 (ES·EN·PT) |
 | Platillos | Hasta 20 | Hasta 70 | Ilimitados |
 | Pedidos desde la mesa | — | ✓ | ✓ |
-| Reportes | — (cambios de menú a pedido) | Panel de comandas + reportes de venta | Reportes avanzados |
-| Soporte | WhatsApp | Prioritario por WhatsApp | Dedicado por WhatsApp |
+| Reportes | — (cambios de menú a pedido) | Panel de comandas + reportes de venta | Ventas por día, ticket promedio y platillos más vendidos |
+| Soporte | WhatsApp | WhatsApp en horario de oficina | WhatsApp con contacto directo |
 
 ⭐ **Estándar** es el plan destacado ("Recomendado").
 
@@ -101,7 +101,9 @@ aparece al instante. Se compran las unidades que el negocio necesite.
 | Stand de reseñas de Google (QR + NFC) | desde $20 / unidad |
 
 Mensaje fijo: **"Todo es 100 % personalizable: forma, colores, tamaño y tu logo en relieve.
-Cotizá tu diseño por WhatsApp."**
+Cotizá tu diseño por WhatsApp."** El stand de reseñas se describe por lo que hace (lleva al
+comensal directo a la ficha de Google para dejar la reseña), nunca por resultados ("más
+estrellas", "más mesas llenas").
 
 > En esta etapa **no hay trial de autoservicio**: la prueba es la demo en vivo (`/preview`) y
 > una demo guiada por WhatsApp. Sin contratos atados: si un mes no le sirve, lo deja.
@@ -129,7 +131,9 @@ Cotizá tu diseño por WhatsApp."**
   no necesariamente en el marketing.
 - **Voz:** cálida, apetitosa, segura. Verbos de acción. Frases cortas.
 - **Léxico de marca:** "comensal", "carta", "soda", "llave en mano", "en tu marca".
-- **Evitar:** jerga corporativa fría, promesas vagas, anglicismos innecesarios.
+- **Evitar:** jerga corporativa fría, promesas vagas, anglicismos innecesarios y **promesas de
+  resultado** ("más ventas", "más estrellas", "llená tus mesas"): la landing describe lo que
+  el producto hace, no lo que va a lograr.
 - **Reglas visuales (de `.impeccable.md`):** sin emojis como iconos (solo SVG), sin texto
   con degradado, sin glassmorphism, fotografía de comida real, oro como acento del 10%.
 

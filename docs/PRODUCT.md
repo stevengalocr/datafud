@@ -116,8 +116,8 @@ docs/          PRODUCT.md · MARKETING.md · specs/ · plans/
 | Platillos | 20 | 70 | Ilimitados |
 | Categorías | 5 | 20 | Ilimitadas |
 | Mesas/QR | 8 | 30 | Ilimitadas |
-| Reportes avanzados | — | ✓ | ✓ |
-| Soporte | WhatsApp | Prioritario por WhatsApp | Dedicado por WhatsApp |
+| Reportes de venta (ventas por día, ticket promedio, platillos más vendidos) | — | ✓ | ✓ |
+| Soporte | WhatsApp | WhatsApp en horario de oficina | WhatsApp con contacto directo |
 
 - **Implementación única: $249** (pago único) — llave en mano: carta a tu marca en 48 h,
   sistema completo en 15 días, 1 año de soporte.

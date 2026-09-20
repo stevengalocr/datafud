@@ -40,7 +40,6 @@ export type HardwareItem = {
 export const PRICING = {
   setupFeeUsd: 249, // Implementación única llave en mano (pago único)
   nfcUnitUsd: 15, // Tarjeta NFC física por unidad (también en hardware)
-  trialDays: 30,
   /** Plazos prometidos (decisión D-012): 48 h solo la carta; sistema completo en 15 días. */
   delivery: {
     menuHours: 48,
@@ -107,7 +106,7 @@ export const PRICING = {
     {
       code: "stand-resenas",
       name: "Stand de reseñas de Google",
-      benefit: "QR y NFC que llevan directo a dejar la reseña. Más estrellas, más mesas llenas.",
+      benefit: "QR y NFC que llevan al comensal directo a tu ficha de Google para dejar la reseña, sin buscar nada.",
       pricing: "desde",
       priceUsd: 20,
       unit: "unidad",

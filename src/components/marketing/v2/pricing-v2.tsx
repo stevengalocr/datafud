@@ -42,7 +42,7 @@ const plans: PlanCard[] = [
       "Hasta 70 platillos con foto",
       "Pedidos desde la mesa directo a cocina",
       "Panel de comandas y reportes de venta",
-      "Soporte prioritario por WhatsApp",
+      "Soporte por WhatsApp en horario de oficina",
     ],
   },
   {
@@ -51,13 +51,13 @@ const plans: PlanCard[] = [
     price: PRICING.plans.empresarial.priceUsd,
     deliveryLabel: PRICING.plans.empresarial.deliveryLabel,
     highlight: false,
-    tagline: "Sin límites para tu crecimiento",
+    tagline: "Sin límites de platillos, categorías ni mesas",
     features: [
       "3 idiomas (ES · EN · PT)",
       "Platillos y categorías ilimitados",
       "Pedidos desde la mesa directo a cocina",
-      "Reportes avanzados de venta",
-      "Soporte dedicado por WhatsApp",
+      "Ventas por día, ticket promedio y platillos más vendidos",
+      "Soporte por WhatsApp con contacto directo",
     ],
   },
 ];

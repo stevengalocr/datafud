@@ -372,13 +372,13 @@ export default function HomePage() {
         <div className="mx-auto max-w-4xl px-5 py-28 text-center sm:px-6 sm:py-36">
           <RevealOnView>
             <p className="reveal-up font-display text-[clamp(1.8rem,4.5vw,3rem)] leading-[1.15] text-cream-100">
-              Hecho para llenar mesas en{" "}
+              Hecho para las mesas de{" "}
               <span className="text-accent-300">Latinoamérica</span>.
             </p>
             <p className="reveal-up mx-auto mt-5 max-w-xl text-sm font-medium leading-relaxed text-cream-100/75 sm:text-base">
               Para sodas, cafeterías, bares, food trucks, hoteles y restaurantes que
-              quieren cambiar la carta impresa por una experiencia digital que vende
-              más y opera mejor.
+              quieren cambiar la carta impresa por una carta digital que se ve mejor,
+              se actualiza sola y habla el idioma de cada cliente.
             </p>
           </RevealOnView>
         </div>
