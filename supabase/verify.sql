@@ -1,7 +1,11 @@
 -- =====================================================================
 -- Datfud — verify.sql · smoke test post-ejecución
 -- Correr después de schema.sql:  psql "$DBURL" -f supabase/verify.sql
+-- Las comprobaciones de la parte 2 solo aplican si además corriste
+-- supabase/seed.dev.sql (entorno de desarrollo).
 -- =====================================================================
+
+\echo '################ PARTE 1 · Esquema (siempre) ################'
 
 \echo '== Enums =='
 select typname from pg_type where typname in ('user_role','tenant_status','order_status','payment_status') order by typname;
@@ -36,8 +40,17 @@ select count(*) as currency_count from public.currencies;
 \echo '== Planes =='
 select code, price_usd, features->>'max_products' as max_products from public.plans order by sort_order;
 
-\echo '== Usuarios semilla =='
-select email from auth.users where email in ('stevengalocr@gmail.com','demo@datfud.com') order by email;
+
+\echo ''
+\echo '################ PARTE 2 · SOLO SI CORRISTE seed.dev.sql ################'
+\echo '(En producción estas consultas deben devolver 0 filas: no hay semillas)'
+
+\echo '== Usuarios semilla (esperado: los correos que pasaste a seed.dev.sql) =='
+select email from auth.users u
+  join public.profiles p on p.id = u.id
+ where p.role = 'super_admin'
+    or p.tenant_id = (select id from public.tenants where slug = 'demo')
+ order by email;
 
 \echo '== Tenant demo =='
 select slug, status from public.tenants where slug='demo';

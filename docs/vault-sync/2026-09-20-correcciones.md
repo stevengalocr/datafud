@@ -63,3 +63,38 @@ Arquitectura-Y-Base-De-Datos (si menciona `next.config.mjs`): ahora define `head
 - `robots.ts` ya no lista la ruta privada; `/login`, `/register` y la ruta privada llevan noindex.
 - `next.config.mjs` añade `X-Robots-Tag: noindex, nofollow` (cubre la 307 de `/register`).
 - Verificado con curl sobre `next start`: robots sin "acceso", metas y cabeceras presentes, sitemap limpio.
+
+### C03 · Credenciales fuera del repo · commit (ver estado, it. 4) · despliegue (ver estado)
+**Pendientes.md** — cerrar en "L — Fachada de venta": "Sacar las contraseñas semilla del repo y
+de `/login` (S2)" → **cerrado 2026-09-20** (C01 + C03). Cerrar también en P0 la parte
+"`schema.sql` sin cuentas semilla" del ítem "Proyecto Supabase + schema.sql sin cuentas semilla
++ variables en Vercel" (queda pendiente crear el proyecto y las variables). Ítem nuevo en "Datos
+que esperan a Steven": "Si alguna vez se corrió `schema.sql` en una BD real, cambiar la
+contraseña de esas cuentas: la antigua está en el historial público del repo".
+**Decisiones.md** — D-018 · Las semillas de usuarios viven en `seed.dev.sql`, nunca en `schema.sql`.
+- Fecha: 2026-09-20 · Estado: aceptada · Fuente: revisión independiente 2026-09-20 (S2).
+- Contexto: `schema.sql` creaba dos usuarios con una contraseña escrita en el archivo y en la
+  documentación de un repo público.
+- Decisión: `schema.sql` no crea usuarios, correos ni contraseñas. `supabase/seed.dev.sql`
+  (solo desarrollo) crea super admin + demo con la contraseña pasada por `-v seed_password` y
+  aborta si falta; correos por defecto `admin@datafud.test` / `demo@datafud.test`. En
+  producción el super admin se crea a mano en Supabase. La contraseña antigua se considera
+  quemada: no se reutiliza. No se reescribe el historial de git.
+- Consecuencias: `verify.sql` tiene una parte 2 que solo aplica con el seed; README, PRODUCT y
+  USER_MANUAL explican el flujo; D-009 (schema único idempotente) sigue vigente para el esquema.
+**Seguridad.md** — S2: **cerrado en el repo** (sin contraseñas en archivos vigentes; `/login`
+sin cuenta demo). Queda la acción operativa: si esa contraseña se usó en alguna BD real,
+cambiarla. Actualizar el "Arreglo sugerido 1" como hecho salvo esa acción y la decisión de repo
+privado (pendiente de Steven).
+**Otras páginas** — Cuentas-y-Accesos, tabla "Cuentas sembradas por `schema.sql`": reemplazar por
+"`schema.sql` ya no siembra cuentas. `seed.dev.sql` (solo desarrollo) crea
+`admin@datafud.test` (super_admin) y `demo@datafud.test` (restaurant_admin del tenant `demo`)
+con la contraseña que se pase por psql". Arquitectura-Y-Base-De-Datos: donde describa
+`schema.sql` y sus semillas, indicar que las semillas de usuarios/tenant demo están en
+`seed.dev.sql` y que `schema.sql` solo siembra monedas y planes. Guia-De-Desarrollo: comando
+de seed `psql "$DBURL" -v seed_password='…' -f supabase/seed.dev.sql`.
+**log.md** — `## [2026-09-20] ingest | C03: semillas de usuarios fuera de schema.sql (seed.dev.sql)`
+- Sección 10 de `schema.sql` movida a `supabase/seed.dev.sql`; contraseña por variable de psql con guardas.
+- `schema.sql` sin usuarios ni correos; `verify.sql` con parte 2 condicionada al seed.
+- README, PRODUCT, USER_MANUAL, spec y plan de fase 0 sin la contraseña; aviso de contraseña quemada en README.
+- `grep Datfud2026` en el repo = 0. Sin BD disponible: el SQL no se ejecutó (revisión línea a línea).

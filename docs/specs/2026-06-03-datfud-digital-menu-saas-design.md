@@ -138,8 +138,11 @@ Límites en `plans.features` jsonb; se validan en la capa de app y, donde aplica
 
 ## 8. Cuenta demo + super admin (semillas)
 
-- **super_admin:** `stevengalocr@gmail.com` / contraseña temporal (`Datfud2026!`).
-- **Tenant demo:** `demo@datfud.com` / `Datfud2026!`, slug `demo`, plan estándar, settings en CRC + español, categorías y platillos de soda tica, mesas con QR, y órdenes de ejemplo para que los reportes muestren datos reales.
+> Nota 2026-09-20: las semillas de usuarios salieron de `schema.sql` y viven en
+> `supabase/seed.dev.sql` (solo desarrollo, contraseña por variable de psql).
+
+- **super_admin:** `stevengalocr@gmail.com` / contraseña temporal (`<definida-por-vos>`).
+- **Tenant demo:** `demo@datfud.com` / `<definida-por-vos>`, slug `demo`, plan estándar, settings en CRC + español, categorías y platillos de soda tica, mesas con QR, y órdenes de ejemplo para que los reportes muestren datos reales.
 
 ---
 

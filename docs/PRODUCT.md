@@ -166,7 +166,8 @@ docs/          PRODUCT.md · MARKETING.md · specs/ · plans/
 ## 12. Puesta en marcha (rápida)
 
 ```bash
-# 1. BD: pega supabase/schema.sql en el SQL Editor de Supabase (idempotente)
+# 1. BD: pega supabase/schema.sql en el SQL Editor de Supabase (idempotente, sin usuarios)
+#    Solo en desarrollo: psql "$DBURL" -v seed_password='<definida-por-vos>' -f supabase/seed.dev.sql
 # 2. Entorno
 cp .env.example .env.local   # completa las 4 variables de Supabase
 # 3. Local
@@ -175,5 +176,8 @@ npm install && npm run dev   # http://localhost:3000
 npm run typecheck && npm run build
 ```
 
-Cuentas demo (de las semillas): super admin `stevengalocr@gmail.com` · restaurante
-`demo@datfud.com` — ambas con contraseña `Datfud2026!` (temporal, cambiar en producción).
+Cuentas de desarrollo: `schema.sql` ya no crea usuarios. Para un super admin y un
+restaurante demo en local, corré `supabase/seed.dev.sql` con tu propia contraseña
+(`psql "$DBURL" -v seed_password='<definida-por-vos>' -f supabase/seed.dev.sql`). En
+producción el super admin se crea a mano desde el panel de Supabase. La contraseña que
+traían versiones anteriores del repo está en el historial público y no se reutiliza.

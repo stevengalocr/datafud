@@ -889,7 +889,7 @@ git commit -m "feat(db): seed plans with limits in features jsonb"
 - Modify: `supabase/schema.sql`
 - Modify: `supabase/verify.sql`
 
-> Crea usuarios reales en `auth.users` con contraseña encriptada vía `crypt()` (pgcrypto). Funciona en Supabase. Email super admin: `stevengalocr@gmail.com`. Demo: `demo@datfud.com`. Contraseña temporal: `Datfud2026!`.
+> Crea usuarios reales en `auth.users` con contraseña encriptada vía `crypt()` (pgcrypto). Funciona en Supabase. Email super admin: `stevengalocr@gmail.com`. Demo: `demo@datfud.com`. Contraseña temporal: `<definida-por-vos>`.
 
 - [ ] **Step 1: Verificación que falla**
 
@@ -938,7 +938,7 @@ begin
     insert into auth.users (id, instance_id, aud, role, email, encrypted_password,
       email_confirmed_at, created_at, updated_at, raw_app_meta_data, raw_user_meta_data)
     values (v_super_id, '00000000-0000-0000-0000-000000000000', 'authenticated','authenticated',
-      'stevengalocr@gmail.com', crypt('Datfud2026!', gen_salt('bf')),
+      'stevengalocr@gmail.com', crypt('<definida-por-vos>', gen_salt('bf')),
       now(), now(), now(), '{"provider":"email","providers":["email"]}', '{}');
   end if;
 
@@ -949,7 +949,7 @@ begin
     insert into auth.users (id, instance_id, aud, role, email, encrypted_password,
       email_confirmed_at, created_at, updated_at, raw_app_meta_data, raw_user_meta_data)
     values (v_demo_user_id, '00000000-0000-0000-0000-000000000000','authenticated','authenticated',
-      'demo@datfud.com', crypt('Datfud2026!', gen_salt('bf')),
+      'demo@datfud.com', crypt('<definida-por-vos>', gen_salt('bf')),
       now(), now(), now(), '{"provider":"email","providers":["email"]}', '{}');
   end if;
 

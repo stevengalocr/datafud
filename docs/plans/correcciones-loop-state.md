@@ -7,8 +7,8 @@
 
 ## Contador
 
-- Iteración actual: 3
-- Iteraciones consumidas: 3 / 25
+- Iteración actual: 4
+- Iteraciones consumidas: 4 / 25
 
 ## Capacidades del entorno
 
@@ -26,8 +26,8 @@
 | ID | Título | Estado | Intentos | Commit | Despliegue | Evidencia |
 |---|---|---|---|---|---|---|
 | C01 | Acceso cerrado con dignidad (sin "Ingresar"; /login con aviso sin backend) | hecho | 1 | 6e173b0 | READY (`dpl_A83jsKJhZcVBPxDuz4M3sDooh9Wd`) | `grep href="/login"` = 0; /login sin env → 200, 0 `<form>`, sin errores; con env falsa → 1 `<form>`; capturas nav/footer/menú/login |
-| C02 | Ruta privada fuera de robots + noindex | hecho | 1 | (ver bitácora it. 3) | directo a main | robots sin "acceso"; `<meta name="robots" content="noindex…">` en /login y la ruta privada; `X-Robots-Tag` en las tres (incluida la 307 de /register); ninguna en el sitemap |
-| C03 | Credenciales fuera del repo (`seed.dev.sql`) | pendiente | 0 | | | |
+| C02 | Ruta privada fuera de robots + noindex | hecho | 1 | 94db3a5 | READY (`dpl_BsMyrnuTuMf92ErwqkivJ84U1BsP`) | robots sin "acceso"; `<meta name="robots" content="noindex…">` en /login y la ruta privada; `X-Robots-Tag` en las tres (incluida la 307 de /register); ninguna en el sitemap |
+| C03 | Credenciales fuera del repo (`seed.dev.sql`) | hecho | 1 | (ver bitácora it. 4) | directo a main | `grep -rn Datfud2026` = 0; diff de schema.sql = solo sección 10 (−139/+5); seed.dev.sql revisado línea a línea; sin BD para ejecutarlo |
 | C04 | Formulario anti-abuso (trampa de tiempo, URLs, Turnstile opcional) | pendiente | 0 | | | |
 | C05 | Copy honesto | pendiente | 0 | | | |
 | C06 | QA sin peso en producción (`qa:landing`) | pendiente | 0 | | | |
@@ -92,3 +92,31 @@
   ruta privada sin hallazgos.
 - Puertas: A ✓ · B ✓ · C ✓ · D ✓ (`robots.ts`, `(auth)/*`, `next.config.mjs`) · E ✓ · F ✓ ·
   G ✓ · H n.a. · I n.a. · J siguiente iteración · K ✓.
+
+### Iteración 4 — C03 Credenciales fuera del repo
+
+- Plan: (a) `supabase/seed.dev.sql` nuevo con la sección 10 completa; la contraseña llega por
+  `-v seed_password=…` (`\if :{?seed_password}` … `\quit`), se pasa al bloque `do $$` por
+  `set_config('seed.password', …)` porque psql no interpola dentro de `$$`, y el bloque
+  aborta con `raise exception` si la contraseña falta o tiene menos de 12 caracteres (cubre
+  el SQL Editor de Supabase) o si no existe el plan estándar (schema sin correr). Correos por
+  variable con valor por defecto `admin@datafud.test` / `demo@datafud.test` (los personales
+  salen del archivo vigente). Encabezado en mayúsculas SOLO DESARROLLO, NUNCA EN PRODUCCIÓN;
+  al final se limpia el setting de la contraseña. (b) `schema.sql`: la sección 10 se
+  reemplaza por una nota de 5 líneas; el resto del archivo intacto. (c) `verify.sql`: parte 1
+  esquema (siempre) y parte 2 "SOLO SI CORRISTE seed.dev.sql" (usuarios por rol/tenant demo,
+  productos, reportes). (d) README (flujo nuevo + aviso de contraseña quemada), PRODUCT §12,
+  USER_MANUAL §7, spec §8 (nota) y plan de fase 0: literal reemplazado por
+  `<definida-por-vos>`.
+- Revisión línea por línea de `seed.dev.sql` contra la sección original: mismas
+  declaraciones, mismos `insert … on conflict`, mismas categorías/productos/mesas/orden; los
+  únicos cambios son la fuente de la contraseña y de los correos y el `full_name` del super
+  admin ("Super Admin (dev)").
+- Evidencia: `grep -rn "Datfud2026" . --exclude-dir=node_modules --exclude-dir=.git
+  --exclude-dir=.next` = 0; `grep stevengalocr|demo@datfud.com supabase/*.sql` = 0;
+  `git diff --stat supabase/schema.sql` = 1 archivo, +5/−138, todo dentro de la sección 10 y
+  su cabecera; typecheck/lint/build en verde. **No hay base de datos** en este entorno ni
+  proyecto Supabase de Datafud: `seed.dev.sql` y `verify.sql` no se ejecutaron; la sintaxis
+  psql (`\if :{?var}`, `\set`, `set_config`) es la estándar desde psql 10.
+- Puertas: A ✓ · B ✓ · C ✓ · D ✓ (supabase/ solo en esta unidad) · E ✓ · F ✓ · G n.a. (sin
+  cambios de UI) · H n.a. · I n.a. · J siguiente iteración · K ✓.

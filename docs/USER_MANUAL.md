@@ -125,8 +125,10 @@ negocio y crea tu cuenta. Entras directo a tu panel con un periodo de prueba act
 
 ## 7. 🔐 Cuentas de demostración (entorno de pruebas)
 
-Creadas por las semillas de `supabase/schema.sql` (contraseña temporal `Datfud2026!`):
-- **Super admin:** `stevengalocr@gmail.com`
-- **Restaurante demo:** `demo@datfud.com`
+`supabase/schema.sql` no crea cuentas. En un entorno de desarrollo, `supabase/seed.dev.sql`
+crea un super admin y un restaurante demo con la contraseña que vos le pasás por variable de
+psql (`-v seed_password='<definida-por-vos>'`); los correos por defecto son
+`admin@datafud.test` y `demo@datafud.test`.
 
-> Cámbialas antes de usar en producción. Para una vista sin backend, usa **`/preview`**.
+> El seed es solo para desarrollo: nunca lo corras en producción. Para una vista sin backend,
+> usa **`/preview`**.

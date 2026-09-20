@@ -38,14 +38,28 @@ Centro de documentación en [`docs/`](docs/README.md). **Versión actual: v1.0.1
 ### 1. Base de datos (Supabase)
 
 1. Crea un proyecto en [supabase.com](https://supabase.com).
-2. En el **SQL Editor**, pega y ejecuta `supabase/schema.sql` (es idempotente).
+2. En el **SQL Editor**, pega y ejecuta `supabase/schema.sql` (es idempotente). Crea
+   tablas, RLS, vistas de reportes, las monedas de Latam y los 3 planes. **No crea
+   usuarios ni contraseñas.**
 3. (Opcional) Ejecuta `supabase/verify.sql` para validar que todo quedó bien.
 
-Esto crea todas las tablas, RLS, vistas de reportes, las monedas de Latam, los 3
-planes y dos cuentas de demostración:
+**Solo en desarrollo**, para tener un super admin, un restaurante demo con menú y una orden
+de ejemplo, corré `supabase/seed.dev.sql` con **tu propia contraseña** (el script aborta si
+no la pasás):
 
-- **Super admin:** `stevengalocr@gmail.com` · `Datfud2026!`
-- **Restaurante demo:** `demo@datfud.com` · `Datfud2026!`
+```bash
+psql "$DBURL" -v seed_password='<definida-por-vos>' -f supabase/seed.dev.sql
+```
+
+Los correos son opcionales (`-v seed_super_email=… -v seed_demo_email=…`; por defecto
+`admin@datafud.test` y `demo@datafud.test`). **Nunca corras el seed en producción:** ahí el
+super admin se crea a mano en Supabase → Authentication → Users y se le asigna
+`role = 'super_admin'` en `public.profiles`.
+
+> **Aviso de seguridad.** Versiones anteriores de este repositorio (público) traían una
+> contraseña semilla escrita en `schema.sql`, `README.md` y la documentación. Esa
+> contraseña está en el historial de git y se considera comprometida: **no la reutilices**
+> en ninguna cuenta.
 
 ### 2. Variables de entorno
 
