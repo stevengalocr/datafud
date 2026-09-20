@@ -34,7 +34,7 @@
 | C06 | QA sin peso en producción (`qa:landing`) | hecho | 1 | e27fe85 | READY (`dpl_8rELmX7LjUHRW8M5rCNG3qCptKMr`) | `lighthouse` fuera de devDependencies; `npm ci && npm run build` OK; `npm run qa:landing` → OK · 3 avisos (fotos remotas) en 32 s, con servidor previo y levantando el suyo |
 | C07 | `CLAUDE.md` en el repo | hecho | 1 | af089cb | READY (`dpl_9QoATAYw9JCNmAddog5xqJCNwZcM`) | 111 líneas; cada afirmación verificada contra el código (middleware en raíz, service_role solo en registerAction, sin security_invoker aún, Zod solo en dos actions, grants de anon, restos Datfud) |
 | C08 | Verificación final y pulido (mín. 2 pasadas) | hecho | 2 | 3efb23e | READY (`dpl_J8Xb9vGxu55RFAxVBr2oyjF3ykGg`) | Pasada 1: 1 medio corregido; pasada 2 (lectura fresca): 0 altos/medios, 4 notas bajas; rúbrica ≥ 4 en 11 criterios |
-| C09 | Informe final y cierre de vault-sync | hecho | 1 | (commit de este archivo) | (ver it. 11) | `correcciones-loop-report.md`, CHANGELOG Unreleased, resumen arriba del vault-sync, puente subido a Drive |
+| C09 | Informe final y cierre de vault-sync | hecho | 1 | 65b7a4f | READY (`dpl_9bSo2vdNcDMSmMKDzeSBujwhJc3d`) | `correcciones-loop-report.md`, CHANGELOG Unreleased, resumen arriba del vault-sync, puente subido a Drive |
 
 ## PENDIENTES-STEVEN
 
@@ -287,3 +287,6 @@ segunda limpia).
   (`02-Proyectos/Datafud/vault-sync-2026-09-20-correcciones.md`) para que quede a mano en
   Obsidian; las páginas (Pendientes, Decisiones, Seguridad, log, etc.) se actualizan con
   "sincronizá el vault" desde Cowork. Estado en el puente: "aplicado en vault: parcial".
+- Cierre: commit 65b7a4f en `main`, despliegue `dpl_9bSo2vdNcDMSmMKDzeSBujwhJc3d` READY con
+  alias datafud.com. Puente subido a Drive como `vault-sync-2026-09-20-correcciones.md`
+  (id `1caYT_XktG37-XLX3Xi68t5FdvalbXswd`) en el nodo Datafud.

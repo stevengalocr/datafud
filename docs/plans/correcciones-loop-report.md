@@ -29,7 +29,7 @@ protocolo de alineación con el vault; y la verificación final pasó dos pasada
 | C06 | QA sin peso en producción | e27fe85 | READY `dpl_8rELmX7LjUHRW8M5rCNG3qCptKMr` |
 | C07 | `CLAUDE.md` | af089cb | READY `dpl_9QoATAYw9JCNmAddog5xqJCNwZcM` |
 | C08 | Verificación final (2 pasadas) | 3efb23e | READY `dpl_J8Xb9vGxu55RFAxVBr2oyjF3ykGg` |
-| C09 | Este informe + CHANGELOG + cierre del vault-sync | (commit de este archivo) | ver estado (it. 11) |
+| C09 | Este informe + CHANGELOG + cierre del vault-sync | 65b7a4f | READY (`dpl_9bSo2vdNcDMSmMKDzeSBujwhJc3d`) |
 
 ## Rúbrica final (1–5)
 

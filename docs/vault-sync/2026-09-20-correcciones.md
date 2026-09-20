@@ -284,7 +284,7 @@ Guia-De-Desarrollo: referenciar `CLAUDE.md` como fuente de reglas y comandos.
 **log.md** — `## [2026-09-20] ingest | C08 pasada 2: lectura fresca sin hallazgos altos ni medios`
 - Releídos los 16 archivos tocados; 4 notas bajas aceptadas; rúbrica ≥ 4 en 11 criterios.
 
-### C09 · Informe final y cierre · commit (este archivo) · despliegue (ver estado)
+### C09 · Informe final y cierre · commit 65b7a4f · despliegue READY (`dpl_9bSo2vdNcDMSmMKDzeSBujwhJc3d`)
 **Pendientes.md** — ver el resumen de arriba (cierra el loop). **Decisiones.md** — ninguna nueva.
 **Seguridad.md** — sin cambios. **Otras páginas** — ver el resumen de arriba.
 **log.md** — `## [2026-09-20] ingest | Cierre del loop de correcciones (C01–C09)`
