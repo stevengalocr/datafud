@@ -192,3 +192,14 @@ Guia-De-Desarrollo: referenciar `CLAUDE.md` como fuente de reglas y comandos.
 - `CLAUDE.md` (111 líneas): etapa, comandos, mapa, 11 reglas, convenciones, trampas y protocolo de vault-sync.
 - Cada afirmación verificada contra el código; S1 y S10 quedan señalados como pendientes, no como hechos.
 - La página CLAUDE-repo del vault pasa a activa y deja de ser la copia maestra.
+
+### C08 · Verificación final y pulido · pasada 1 · commit (ver estado, it. 9) · despliegue (ver estado)
+**Pendientes.md** — nada que cerrar; ítem nuevo en P3: "Quitar `backdrop-blur` de
+`menu-client.tsx` y `preview/page.tsx` (regla de marca) cuando se toquen esas rutas".
+**Decisiones.md** — ninguna.
+**Seguridad.md** — sin cambios.
+**Otras páginas** — ninguna.
+**log.md** — `## [2026-09-20] ingest | C08 pasada 1: verificación de las correcciones`
+- `/login` con landmark `<main>` (Lighthouse a11y 100). Performance de `/` 95/95 en dos corridas.
+- `npm run qa:landing` OK en 375/768/1440; grep de honestidad ampliado = 0.
+- Rúbrica ≥ 4 en los 11 criterios; queda la pasada 2 con lectura fresca de los archivos.

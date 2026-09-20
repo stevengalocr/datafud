@@ -7,8 +7,8 @@
 
 ## Contador
 
-- Iteración actual: 8
-- Iteraciones consumidas: 8 / 25
+- Iteración actual: 9
+- Iteraciones consumidas: 9 / 25
 
 ## Capacidades del entorno
 
@@ -30,9 +30,9 @@
 | C03 | Credenciales fuera del repo (`seed.dev.sql`) | hecho | 1 | de882b6 | READY (`dpl_4bbZkUSq1LfWRdWmr78s19YvXtij`) | `grep -rn Datfud2026` = 0; diff de schema.sql = solo sección 10 (−139/+5); seed.dev.sql revisado línea a línea; sin BD para ejecutarlo |
 | C04 | Formulario anti-abuso (trampa de tiempo, URLs, Turnstile opcional) | hecho | 1 | ae1b32a | READY (`dpl_6HuYV8MKnkbA9rWWnTTzdu86Hine`) | `abuse-test.mjs`: envío a 1,5 s → éxito silencioso + log "descartado por trampa de tiempo"; envío a 3,5 s → llega a Resend; 3 URLs → error visible; widget Turnstile solo con su clave |
 | C05 | Copy honesto | hecho | 1 | 236e674 | READY (`dpl_87hryu7YvUvfuzP44emUD48zkJee`) | 8 cambios antes → después; grep ampliado (más estrellas, mesas llenas, más ventas, vende más, prioritari, avanzad) = 0 en la landing; docs alineados |
-| C06 | QA sin peso en producción (`qa:landing`) | hecho | 1 | e27fe85 | (verificar en it. 8) | `lighthouse` fuera de devDependencies; `npm ci && npm run build` OK; `npm run qa:landing` → OK · 3 avisos (fotos remotas) en 32 s, con servidor previo y levantando el suyo |
-| C07 | `CLAUDE.md` en el repo | hecho | 1 | (ver bitácora it. 8) | directo a main | 111 líneas; cada afirmación verificada contra el código (middleware en raíz, service_role solo en registerAction, sin security_invoker aún, Zod solo en dos actions, grants de anon, restos Datfud) |
-| C08 | Verificación final y pulido (mín. 2 pasadas) | pendiente | 0 | | | |
+| C06 | QA sin peso en producción (`qa:landing`) | hecho | 1 | e27fe85 | READY (`dpl_8rELmX7LjUHRW8M5rCNG3qCptKMr`) | `lighthouse` fuera de devDependencies; `npm ci && npm run build` OK; `npm run qa:landing` → OK · 3 avisos (fotos remotas) en 32 s, con servidor previo y levantando el suyo |
+| C07 | `CLAUDE.md` en el repo | hecho | 1 | af089cb | (verificar en it. 9) | 111 líneas; cada afirmación verificada contra el código (middleware en raíz, service_role solo en registerAction, sin security_invoker aún, Zod solo en dos actions, grants de anon, restos Datfud) |
+| C08 | Verificación final y pulido (mín. 2 pasadas) | en curso | 1 | (ver bitácora it. 9) | directo a main | Pasada 1: 1 medio corregido (`<main>` en /login), 0 altos; rúbrica ≥ 4; falta la pasada 2 con lectura fresca |
 | C09 | Informe final y cierre de vault-sync | pendiente | 0 | | | |
 
 ## PENDIENTES-STEVEN
@@ -222,3 +222,37 @@ Regla 8: MARKETING §6 (tabla de planes: reportes y soporte; nota de honestidad 
   contradice el código.
 - Puertas: A ✓ · B ✓ · C ✓ · D ✓ (solo `CLAUDE.md` + estado + vault-sync) · E n.a. · F n.a. ·
   G n.a. (sin UI) · H n.a. · I n.a. · J siguiente · K ✓.
+
+### Iteración 9 — C08 Verificación final y pulido · pasada 1
+
+Revisión de todo lo tocado en C01–C07 y de la landing entera (capturas de `npm run
+qa:landing` en 375/768/1440, hero y /login) con las tres miradas.
+
+| Sev. | Mirada | Hallazgo | Acción |
+|---|---|---|---|
+| media | ingeniero/a11y | El aviso de `/login` no tenía landmark `<main>` (Lighthouse a11y 98) | Envuelto en `<main>`; a11y 100 |
+| baja | ingeniero | Lighthouse de `/` dio Performance 64 (TBT 500 ms) justo después de la corrida de QA | Repetido dos veces con la máquina libre: 95 / 95 (LCP 2,9 s y 2,7 s, TBT 90–140 ms). Era contención de CPU del sandbox, no una regresión |
+| baja | SEO | `/login` da SEO 66 en Lighthouse por `is-crawlable` | Es lo buscado (noindex por C02); no se toca |
+| baja | dueño | En 375 el CTA de la tarjeta de contacto y el texto largo de la checklist se ven bien; el botón flotante tapa parcialmente "tarjetas NFC" en la checklist mientras se hace scroll | Aceptado: el flotante es fijo y el texto se lee al seguir bajando |
+| baja | ingeniero | `backdrop-blur` sigue en `menu-client.tsx` y `preview/page.tsx` | Fuera del alcance (rutas prohibidas); anotado en deuda |
+
+Sin hallazgos altos.
+
+**Rúbrica (1–5) · pasada 1**
+
+| Criterio | Nota | Evidencia |
+|---|---|---|
+| Claridad de la oferta | 5 | Hero, highlights y planes dicen qué, cuánto, cuándo y cómo pedirlo |
+| Confianza | 4 | Sin "Ingresar" roto, /login con aviso claro, legal, compromisos; falta caso real |
+| Marca | 5 | Sin blur ni degradados en la landing; tipografía y paleta de BRAND.md |
+| Copy | 5 | Sin promesas de resultado; voseo; planes con funciones reales |
+| Responsive | 5 | `qa:landing` OK en 3 tamaños; sin desbordes |
+| Accesibilidad | 5 | Lighthouse 100 en `/` y `/login`; teclado en acordeón y menú |
+| Rendimiento | 4 | 95 / 95 en móvil (LCP < 3 s, CLS 0); fotos remotas no medibles acá |
+| SEO | 5 | 100 en `/`; robots y sitemap sin rutas privadas; noindex donde toca |
+| Honestidad comercial | 5 | Grep ampliado = 0; eslogan pendiente de decisión de Steven |
+| Calidad del código | 4 | Sin locals sin uso, sin `any`; `page.tsx` 410 líneas |
+| Seguridad básica | 4 | Sin credenciales en el repo, noindex/robots, anti-abuso en el formulario; quedan S1/S3/S10 para el encendido del backend |
+
+- Puertas: A ✓ · B ✓ · C ✓ · D ✓ · E ✓ · F ✓ · G ✓ (`qa:landing` OK) · H ✓ (95 / 100 / 96 /
+  100 en `/`) · I ✓ · J siguiente · K ✓.

@@ -18,7 +18,7 @@ export default function LoginPage() {
 
   const wa = waProps("contacto");
   return (
-    <div className="flex min-h-screen items-center justify-center bg-cream-50 px-5 py-10 font-sans text-brand-900 antialiased">
+    <main className="flex min-h-screen items-center justify-center bg-cream-50 px-5 py-10 font-sans text-brand-900 antialiased">
       <div className="w-full max-w-md">
         <Link href="/" className="mb-8 flex items-center justify-center" aria-label="DataFud — inicio">
           <Image src="/logo-main.png" alt="DataFud" width={170} height={70} priority className="h-11 w-auto" />
@@ -48,6 +48,6 @@ export default function LoginPage() {
           </Link>
         </div>
       </div>
-    </div>
+    </main>
   );
 }
