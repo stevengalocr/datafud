@@ -7,8 +7,8 @@
 
 ## Contador
 
-- Iteración actual: 6
-- Iteraciones consumidas: 6 / 25
+- Iteración actual: 7
+- Iteraciones consumidas: 7 / 25
 
 ## Capacidades del entorno
 
@@ -29,8 +29,8 @@
 | C02 | Ruta privada fuera de robots + noindex | hecho | 1 | 94db3a5 | READY (`dpl_BsMyrnuTuMf92ErwqkivJ84U1BsP`) | robots sin "acceso"; `<meta name="robots" content="noindex…">` en /login y la ruta privada; `X-Robots-Tag` en las tres (incluida la 307 de /register); ninguna en el sitemap |
 | C03 | Credenciales fuera del repo (`seed.dev.sql`) | hecho | 1 | de882b6 | READY (`dpl_4bbZkUSq1LfWRdWmr78s19YvXtij`) | `grep -rn Datfud2026` = 0; diff de schema.sql = solo sección 10 (−139/+5); seed.dev.sql revisado línea a línea; sin BD para ejecutarlo |
 | C04 | Formulario anti-abuso (trampa de tiempo, URLs, Turnstile opcional) | hecho | 1 | ae1b32a | READY (`dpl_6HuYV8MKnkbA9rWWnTTzdu86Hine`) | `abuse-test.mjs`: envío a 1,5 s → éxito silencioso + log "descartado por trampa de tiempo"; envío a 3,5 s → llega a Resend; 3 URLs → error visible; widget Turnstile solo con su clave |
-| C05 | Copy honesto | hecho | 1 | (ver bitácora it. 6) | directo a main | 8 cambios antes → después; grep ampliado (más estrellas, mesas llenas, más ventas, vende más, prioritari, avanzad) = 0 en la landing; docs alineados |
-| C06 | QA sin peso en producción (`qa:landing`) | pendiente | 0 | | | |
+| C05 | Copy honesto | hecho | 1 | 236e674 | READY (`dpl_87hryu7YvUvfuzP44emUD48zkJee`) | 8 cambios antes → después; grep ampliado (más estrellas, mesas llenas, más ventas, vende más, prioritari, avanzad) = 0 en la landing; docs alineados |
+| C06 | QA sin peso en producción (`qa:landing`) | hecho | 1 | (ver bitácora it. 7) | directo a main | `lighthouse` fuera de devDependencies; `npm ci && npm run build` OK; `npm run qa:landing` → OK · 3 avisos (fotos remotas) en 32 s, con servidor previo y levantando el suyo |
 | C07 | `CLAUDE.md` en el repo | pendiente | 0 | | | |
 | C08 | Verificación final y pulido (mín. 2 pasadas) | pendiente | 0 | | | |
 | C09 | Informe final y cierre de vault-sync | pendiente | 0 | | | |
@@ -180,3 +180,26 @@ Regla 8: MARKETING §6 (tabla de planes: reportes y soporte; nota de honestidad 
   landing (no se puede renombrar sin tocar `src/app/admin` y `dashboard`, prohibidos).
 - Puertas: A ✓ · B ✓ · C ✓ · D ✓ · E ✓ (con la salvedad anterior) · F ✓ · G ✓ · H n.a. ·
   I n.a. · J siguiente · K ✓.
+
+### Iteración 7 — C06 QA sin peso en producción
+
+- Plan: `npm uninstall lighthouse` (−96 paquetes; queda `@playwright/test`), script
+  `scripts/qa-landing.mjs` versionado con las comprobaciones de los dos loops (3 tamaños,
+  consola, requests, scroll horizontal y desbordes, anclas, CTAs de WhatsApp, h1, alt, áreas
+  táctiles, TODO/PENDIENTE, acordeón y menú por teclado, `/register` 307, robots y sitemap,
+  capturas por sección en `.qa/` ignorada), `npm run qa:landing`, sección 5 en README.
+  El script levanta `next start` si el puerto está libre (grupo de procesos `detached`, se
+  apaga al final) y usa `/opt/pw-browsers/chromium` si existe o `QA_CHROMIUM`.
+- Autocrítica (3 ciclos): (1) con `waitUntil: "networkidle"` la corrida se colgó 14 min en
+  el sandbox porque las fotos remotas tardan en fallar → `load` + pausa corta (32 s en
+  total); (2) los enlaces `/#sección` del nav en `/terminos` se contaban como anclas rotas →
+  solo se exigen las anclas de la misma página y las absolutas en `/`; (3) al levantar el
+  servidor propio, el optimizador de imágenes devuelve 403 vía proxy y llenaba la consola →
+  los "Failed to load resource" se evalúan por request, y las fotos remotas (`/_next/image?
+  url=https…`) son aviso, no fallo, porque dependen de la red del entorno.
+- Evidencia: `npm ci` (416 paquetes) + `npm run build` OK; `npm run qa:landing` con servidor
+  previo → `OK · 3 avisos`; `QA_BASE=http://localhost:3100 npm run qa:landing` sin servidor →
+  levanta, `OK · 3 avisos`, y al terminar no queda nada escuchando en 3100. 30 capturas en
+  `.qa/`. `grep lighthouse package.json package-lock.json` = 0.
+- Puertas: A ✓ · B ✓ · C ✓ · D ✓ · E ✓ · F ✓ · G ✓ (la corre el propio script) · H n.a. ·
+  I ✓ · J siguiente · K ✓.

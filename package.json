@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "qa:landing": "node scripts/qa-landing.mjs"
   },
   "dependencies": {
     "@supabase/ssr": "^0.5.2",
@@ -29,7 +30,6 @@
     "autoprefixer": "^10.4.20",
     "eslint": "^8.57.1",
     "eslint-config-next": "^15.5.25",
-    "lighthouse": "^13.5.0",
     "postcss": "^8.4.49",
     "tailwindcss": "^3.4.17",
     "typescript": "^5.6.3"

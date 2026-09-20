@@ -89,6 +89,21 @@ npm run typecheck   # tipos
 npm run build       # build de producción
 ```
 
+### 5. QA de la landing (navegador real)
+
+```bash
+npm run build
+npm run qa:landing        # levanta next start si hace falta y lo apaga al terminar
+```
+
+`scripts/qa-landing.mjs` recorre `/`, `/login`, `/terminos` y `/privacidad` en 375, 768 y
+1440 px con Chromium (Playwright): errores de consola, requests fallidos, scroll horizontal,
+anclas, CTAs de WhatsApp, un solo `h1`, `alt`, áreas táctiles, acordeón y menú móvil por
+teclado, `/register` → `/#contacto`, `robots.txt` y `sitemap.xml`. Deja capturas por sección
+en `.qa/` (ignorada por git) y sale con código 1 si algo falla. Si no tenés Chromium:
+`npx playwright install chromium` (o `QA_CHROMIUM=/ruta/a/chrome`). Lighthouse no está en las
+dependencias: cuando haga falta, `npx lighthouse@13 http://localhost:3000/ --form-factor=mobile`.
+
 ## Despliegue en Vercel
 
 1. Importa el repo en Vercel.

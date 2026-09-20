@@ -148,3 +148,23 @@ valoraciones").
 - 8 textos cambiados (stand de reseñas, act-break, planes Estándar y Empresarial); lista antes → después en el estado del loop.
 - MARKETING §6 y §9 y PRODUCT §8 alineados; `PRICING.trialDays` eliminado por no usarse.
 - El eslogan "abre apetito y cierra ventas" se conserva como identidad de marca, pendiente de decisión de Steven.
+
+### C06 · QA sin peso en producción · commit (ver estado, it. 7) · despliegue (ver estado)
+**Pendientes.md** — en P2, el ítem "Tests de aislamiento entre tenants + Playwright del flujo
+QR → orden → cocina": anotar que ya existe `npm run qa:landing` (Playwright) para la landing;
+el flujo QR → orden sigue pendiente. Nada que cerrar.
+**Decisiones.md** — D-021 · Lighthouse no es dependencia del repo; el QA de la landing es un script versionado.
+- Fecha: 2026-09-20 · Estado: aceptada · Fuente: revisión independiente 2026-09-20.
+- Decisión: `lighthouse` sale de `devDependencies` (se corre con `npx lighthouse@13` cuando
+  haga falta); `@playwright/test` se queda y `scripts/qa-landing.mjs` (`npm run qa:landing`)
+  reúne las comprobaciones de navegador de los loops.
+- Consecuencias: `npm ci` instala 96 paquetes menos; cualquier sesión puede repetir la puerta G
+  con un comando; las capturas van a `.qa/` (ignorada).
+**Seguridad.md** — sin cambios.
+**Otras páginas** — Guia-De-Desarrollo: agregar `npm run qa:landing` a los comandos y una línea
+sobre `.qa/` y `QA_CHROMIUM`. Arquitectura-Y-Base-De-Datos (dependencias): quitar `lighthouse`
+de las de desarrollo si las lista.
+**log.md** — `## [2026-09-20] ingest | C06: QA de la landing como script versionado, sin lighthouse`
+- `scripts/qa-landing.mjs` + `npm run qa:landing`: 3 tamaños, consola, requests, anclas, CTAs, teclado, rutas.
+- `lighthouse` eliminado de devDependencies; `npm ci && npm run build` en verde.
+- Corrida completa en 32 s: OK con 3 avisos (fotos remotas que no cargan en el sandbox).

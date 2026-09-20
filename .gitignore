@@ -32,3 +32,6 @@ yarn-error.log*
 
 # claude code / herramientas locales
 .claude/
+
+# capturas de QA de la landing (npm run qa:landing)
+.qa/
