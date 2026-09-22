@@ -1,6 +1,8 @@
 import Link from "next/link";
 import Image from "next/image";
 import { LandingNavV2 } from "@/components/marketing/v2/landing-nav-v2";
+import { AnalyticsEvents } from "@/components/marketing/v2/analytics-events";
+import { MetaPixel } from "@/components/marketing/v2/meta-pixel";
 import { Icon } from "@/components/ui/icon";
 import { SITE, mailLink } from "@/lib/site";
 
@@ -95,6 +97,8 @@ export function LegalPage({
           </p>
         </div>
       </footer>
+      <AnalyticsEvents />
+      <MetaPixel />
     </div>
   );
 }

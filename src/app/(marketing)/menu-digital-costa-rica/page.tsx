@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { pageSocial } from "@/lib/seo";
 import { GuidePage, type GuideFaq, type GuideSection } from "@/components/marketing/v2/guide-page";
 import { PRICING } from "@/lib/constants";
 import { formatCrc } from "@/lib/currency/format";
@@ -6,12 +7,14 @@ import { formatCrc } from "@/lib/currency/format";
 const PATH = "/menu-digital-costa-rica";
 const TITLE = "Menú digital en Costa Rica: qué es, cuánto cuesta y cómo tenerlo";
 
+const DESCRIPTION =
+  `Guía para restaurantes, sodas y cafeterías de Costa Rica: qué es un menú digital con QR, cuánto cuesta según el tipo de servicio y qué incluye DataFud, desde ${formatCrc(PRICING.plans.basico.priceCrc)} al mes.`;
+
 export const metadata: Metadata = {
   title: "Menú digital con QR en Costa Rica: precios y cómo tenerlo",
-  description:
-    `Guía para restaurantes, sodas y cafeterías de Costa Rica: qué es un menú digital con QR, cuánto cuesta según el tipo de servicio y qué incluye DataFud, desde ${formatCrc(PRICING.plans.basico.priceCrc)} al mes.`,
+  description: DESCRIPTION,
   alternates: { canonical: PATH },
-  openGraph: { title: "Menú digital con QR en Costa Rica · DataFud", url: PATH },
+  ...pageSocial(PATH, "Menú digital con QR en Costa Rica · DataFud", DESCRIPTION),
 };
 
 const { plans, delivery, terms } = PRICING;
@@ -65,7 +68,7 @@ const sections: GuideSection[] = [
   {
     title: "Cómo se pone en marcha",
     paragraphs: [
-      "Hablamos por WhatsApp, elegís el plan y nos mandás el material. Te mostramos la carta antes de publicarla para que revisés precios y descripciones. Mientras llegan los stands, te dejamos un QR provisional para empezar a usarla el mismo día.",
+      "Hablamos por WhatsApp, elegís el plan y nos mandás el material. Cuando la publicamos, revisás precios y descripciones; si algo no está bien, lo corregimos sin costo. Mientras llegan los stands, te dejamos un QR provisional para empezar a usarla el mismo día.",
     ],
   },
 ];

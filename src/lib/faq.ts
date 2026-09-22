@@ -44,7 +44,7 @@ export const FAQ_ITEMS: FaqItem[] = [
   {
     id: "contrato",
     q: "¿Hay contrato?",
-    a: `No hay contrato de permanencia: cancelás con ${terms.noticeDays} días de aviso por WhatsApp o correo, y el servicio sigue hasta el final del mes ya pagado. Antes de decidir podés probar la demo, sin hablar con nadie.`,
+    a: `No hay contrato de permanencia: cancelás con ${terms.noticeDays} días de aviso por WhatsApp o correo, y el servicio sigue hasta el final del mes ya pagado. ${terms.lateNotice} Antes de decidir podés probar la demo, sin hablar con nadie.`,
   },
   {
     id: "no-soy-tecnico",
@@ -54,7 +54,7 @@ export const FAQ_ITEMS: FaqItem[] = [
   {
     id: "garantia-48",
     q: "¿Qué pasa si no cumplen el plazo?",
-    a: `${terms.guarantee48h} ${terms.guaranteeRefund} El plazo corre desde que tenemos todo; si falta algo, te avisamos qué.`,
+    a: `${terms.guarantee48h} ${terms.guaranteeRefund} ${terms.guaranteeScope} El plazo corre desde que tenemos todo; si falta algo, te avisamos qué.`,
   },
   {
     id: "cambios-de-precio",
@@ -64,7 +64,7 @@ export const FAQ_ITEMS: FaqItem[] = [
   {
     id: "empezar-con-carta",
     q: "¿Puedo empezar solo con la carta y sumar pedidos después?",
-    a: "Sí, es lo más común. Arrancás con la Carta y, cuando quieras recibir pedidos desde la mesa, pasás a Estándar o Empresarial. Los stands y las tarjetas que ya tenés siguen funcionando.",
+    a: `Sí, es lo más común. Arrancás con la Carta y, cuando quieras recibir pedidos desde la mesa, pasás a Estándar o Empresarial: el cambio lleva la implementación del sistema completo (${formatCrc(PRICING.setupFee.sistema.crc)}) y desde ahí la mensualidad del plan nuevo. Los stands y las tarjetas que ya tenés siguen funcionando.`,
   },
   {
     id: "pedido-minimo",
@@ -89,6 +89,6 @@ export const FAQ_ITEMS: FaqItem[] = [
   {
     id: "si-algo-falla",
     q: "¿Qué pasa si algo falla?",
-    a: "Tu carta vive en la nube; si algo no carga, escribinos por WhatsApp y lo revisamos. Si hace falta, te mandamos un PDF de tu carta para imprimir mientras tanto. Para la carta no necesitás internet en el local: el comensal usa los datos de su teléfono; para recibir pedidos en cocina sí hace falta WiFi o datos.",
+    a: "Tu carta vive en la nube; si algo no carga, escribinos por WhatsApp y lo revisamos. Si hace falta, te mandamos un PDF de tu carta para imprimir mientras tanto. Para la carta no necesitás internet en el local: el comensal usa los datos de su teléfono (sin datos ni WiFi no se abre, así que si tus clientes suelen llegar sin datos conviene ofrecerles WiFi). Para recibir pedidos en cocina sí hace falta conexión en el local.",
   },
 ];

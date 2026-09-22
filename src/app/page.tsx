@@ -19,7 +19,7 @@ import { SiteFooter } from "@/components/marketing/v2/site-footer";
 import { waProps } from "@/lib/site";
 import { formatCrc } from "@/lib/currency/format";
 import type { Metadata } from "next";
-import { faqJsonLd, localBusinessJsonLd, organizationJsonLd, productsJsonLd } from "@/lib/seo";
+import { SITE_DESCRIPTION, SITE_TITLE, faqJsonLd, localBusinessJsonLd, organizationJsonLd, pageSocial, productsJsonLd } from "@/lib/seo";
 
 
 // Glifo QR firma de la marca: celdas que se ensamblan al cargar.
@@ -33,7 +33,7 @@ const QR_CELLS = [
 
 export const metadata: Metadata = {
   alternates: { canonical: "/" },
-  openGraph: { url: "/" },
+  ...pageSocial("/", SITE_TITLE, SITE_DESCRIPTION),
 };
 
 const { founderOffer } = PRICING;

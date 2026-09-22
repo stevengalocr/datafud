@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { pageSocial } from "@/lib/seo";
 import { GuidePage, type GuideFaq, type GuideSection } from "@/components/marketing/v2/guide-page";
 import { PRICING, hardwareBy } from "@/lib/constants";
 import { formatCrc, formatUsd } from "@/lib/currency/format";
@@ -6,12 +7,14 @@ import { formatCrc, formatUsd } from "@/lib/currency/format";
 const PATH = "/menu-qr-restaurantes-turisticos";
 const TITLE = "Menú QR para restaurantes turísticos: carta en español e inglés";
 
+const DESCRIPTION =
+  "Carta digital en español e inglés para restaurantes con clientes turistas en Costa Rica: el comensal cambia de idioma con un toque, ve ingredientes y alérgenos, y abre la carta con QR o NFC.";
+
 export const metadata: Metadata = {
   title: "Menú QR bilingüe para restaurantes turísticos en Costa Rica",
-  description:
-    "Carta digital en español e inglés para restaurantes con clientes turistas en Costa Rica: el comensal cambia de idioma con un toque, ve ingredientes y alérgenos, y abre la carta con QR o NFC.",
+  description: DESCRIPTION,
   alternates: { canonical: PATH },
-  openGraph: { title: "Menú QR bilingüe para restaurantes turísticos · DataFud", url: PATH },
+  ...pageSocial(PATH, "Menú QR bilingüe para restaurantes turísticos · DataFud", DESCRIPTION),
 };
 
 const { plans, delivery } = PRICING;
@@ -62,14 +65,14 @@ sections.push({
   title: "In English: what DataFud does for your restaurant",
   paragraphs: [
     `DataFud builds your digital menu for you: we design it with your brand, upload your dishes with photos, and translate it into English. Guests open it by scanning a QR code or tapping an NFC card at the table, with no app. Every plan includes Spanish and English; the Empresarial plan adds Portuguese.`,
-    `Prices are in Costa Rican colones: the Carta plan is ${formatCrc(plans.basico.priceCrc)} per month (about ${formatUsd(plans.basico.priceUsd)}) plus a one-time setup fee of ${formatCrc(PRICING.setupFee.carta.crc)}. Menu and price changes by WhatsApp are included. If you want guests to order from the table, the Estándar plan (${formatCrc(plans.estandar.priceCrc)} per month) adds table ordering and a kitchen panel. No long-term contract: cancel with ${PRICING.terms.noticeDays} days' notice. Write to us on WhatsApp to get started.`,
+    `Prices are in Costa Rican colones: the Carta plan is ${formatCrc(plans.basico.priceCrc)} per month (about ${formatUsd(plans.basico.priceUsd)}) plus a one-time setup fee of ${formatCrc(PRICING.setupFee.carta.crc)}. Menu and price changes by WhatsApp are included. If you want guests to order from the table, the Estándar plan (${formatCrc(plans.estandar.priceCrc)} per month plus a one-time setup fee of ${formatCrc(PRICING.setupFee.sistema.crc)}) adds table ordering and a kitchen panel. No long-term contract: cancel with ${PRICING.terms.noticeDays} days' notice. Write to us on WhatsApp to get started.`,
   ],
 });
 
 const faqs: GuideFaq[] = [
   {
     q: "¿La traducción la hago yo?",
-    a: "No. La hacemos nosotros al montar la carta y te la mostramos antes de publicarla para que la revisés.",
+    a: "No. La hacemos nosotros al montar la carta; cuando la publicamos la revisás y corregimos lo que haga falta, sin costo.",
   },
   {
     q: "¿Qué pasa si cambio un platillo?",
@@ -77,7 +80,7 @@ const faqs: GuideFaq[] = [
   },
   {
     q: "¿Funciona si el turista no tiene datos móviles?",
-    a: "La carta se abre con cualquier conexión: si el local ofrece WiFi a los clientes, les basta con eso.",
+    a: "Necesita conexión: datos móviles o el WiFi del local. Sin ninguna de las dos no se abre, así que si recibís muchos turistas sin roaming conviene ofrecer WiFi a los clientes. Si algo falla, te mandamos un PDF de la carta para imprimir.",
   },
   {
     q: "¿Pueden entregar fuera de la GAM?",

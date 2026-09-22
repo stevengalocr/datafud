@@ -95,7 +95,7 @@ algún momento querés actualizar la carta, acá estoy. Te dejo mi contacto guar
 ## Guion de 60 segundos (visita presencial, con el stand en la mano)
 
 1. **(10 s) Presentación.** "Hola, soy Steven, de DataFud. Hacemos cartas digitales para locales de acá. ¿Tiene un minuto?"
-2. **(15 s) Mostrar.** Poner el stand en la mesa: "Escanee este código con su celular." Dejar que lo abra (carta demo de Verde Limón).
+2. **(15 s) Mostrar.** Poner el stand en la mesa: "Escanee este código con su celular." Dejar que lo abra: cae en la sección demo de datafud.com y toca "Abrir la carta demo" (Verde Limón).
 3. **(15 s) Explicar.** "Así se vería su carta: con fotos, en colones, en español e inglés. Nosotros la montamos; usted solo nos pasa el menú y el logo. Si cambia un precio, me escribe y lo actualizo."
 4. **(10 s) Precio.** "Desde ₡14 900 al mes, con ₡24 900 de implementación. Sin contrato de permanencia."
 5. **(10 s) Siguiente paso.** "¿Le dejo mi WhatsApp y le mando una muestra con su propio menú?" Dejar tarjeta o escanear el QR de contacto.

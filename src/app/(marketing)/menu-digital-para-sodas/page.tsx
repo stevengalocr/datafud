@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { pageSocial } from "@/lib/seo";
 import { GuidePage, type GuideFaq, type GuideSection } from "@/components/marketing/v2/guide-page";
 import { PRICING, firstPaymentFor, hardwareBy } from "@/lib/constants";
 import { formatCrc } from "@/lib/currency/format";
@@ -6,12 +7,14 @@ import { formatCrc } from "@/lib/currency/format";
 const PATH = "/menu-digital-para-sodas";
 const TITLE = "Menú digital para sodas: tu carta con QR, en colones y fácil de cambiar";
 
+const DESCRIPTION =
+  `Carta digital con QR para sodas: precios en colones, cambios por WhatsApp cuando sube el precio del casado y stands impresos en 3D que aguantan el día a día. Desde ${formatCrc(PRICING.plans.basico.priceCrc)} al mes.`;
+
 export const metadata: Metadata = {
   title: "Menú digital para sodas en Costa Rica",
-  description:
-    `Carta digital con QR para sodas: precios en colones, cambios por WhatsApp cuando sube el precio del casado y stands impresos en 3D que aguantan el día a día. Desde ${formatCrc(PRICING.plans.basico.priceCrc)} al mes.`,
+  description: DESCRIPTION,
   alternates: { canonical: PATH },
-  openGraph: { title: "Menú digital para sodas · DataFud", url: PATH },
+  ...pageSocial(PATH, "Menú digital para sodas · DataFud", DESCRIPTION),
 };
 
 const { plans, terms, annualCarta, hardwareDelivery } = PRICING;
@@ -40,14 +43,14 @@ const sections: GuideSection[] = [
     bullets: [
       `Stand QR 3D desde ${formatCrc(hardwareBy("stand-qr-3d").priceCrc)} por unidad; ${hardwareDelivery.minimum.charAt(0).toLowerCase()}${hardwareDelivery.minimum.slice(1)}`,
       `Tarjeta NFC a ${formatCrc(hardwareBy("tarjeta-nfc").priceCrc)}, para quien prefiere acercar el teléfono.`,
-      `${hardwareDelivery.gam} Fuera de la GAM, por Correos de Costa Rica.`,
+      `${hardwareDelivery.gam} ${hardwareDelivery.outside}`,
     ],
   },
   {
     title: "El plan que le calza a una soda",
     paragraphs: [
       `Para la mayoría de sodas alcanza con el plan Carta: ${formatCrc(carta.priceCrc)} al mes, con una implementación de ${formatCrc(PRICING.setupFee.carta.crc)}. Incluye hasta ${carta.maxProducts} platillos con foto en hasta ${carta.maxCategories} categorías, ${carta.maxTables} mesas con QR, español e inglés, tus colores y tu logo. Si preferís pagar el año, son ${formatCrc(annualCarta.crc)}, con dos meses gratis y la implementación incluida.`,
-      "Si más adelante querés que los clientes pidan desde la mesa y que las comandas lleguen a la cocina, pasás a Estándar sin cambiar los stands que ya tenés.",
+      `Si más adelante querés que los clientes pidan desde la mesa y que las comandas lleguen a la cocina, pasás a Estándar (${formatCrc(plans.estandar.priceCrc)} al mes, con la implementación del sistema de ${formatCrc(PRICING.setupFee.sistema.crc)}) sin cambiar los stands que ya tenés.`,
     ],
   },
   {

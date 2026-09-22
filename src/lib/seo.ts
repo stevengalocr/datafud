@@ -8,6 +8,14 @@ import { formatCrc } from "@/lib/currency/format";
 export const SITE_TITLE = "Menú digital con QR para restaurantes en Costa Rica · DataFud";
 export const SITE_DESCRIPTION = `Menú digital con QR y NFC para sodas, cafeterías y restaurantes de Costa Rica. Te lo montamos nosotros en ${PRICING.delivery.menuHours} horas, en español e inglés, desde ${formatCrc(PRICING.plans.basico.priceCrc)} al mes. Stands QR impresos en 3D y cambios por WhatsApp.`;
 
+/** Base de Open Graph y Twitter por página: Next reemplaza (no fusiona) `openGraph` del layout. */
+export function pageSocial(path: string, title: string, description: string) {
+  return {
+    openGraph: { type: "website" as const, locale: "es_CR", siteName: SITE.name, url: path, title, description },
+    twitter: { card: "summary_large_image" as const, title, description },
+  };
+}
+
 export const LEGAL_UPDATED_ISO = "2026-09-22";
 
 // Solo datos reales: sin dirección postal (no se publica), sin reseñas ni cifras de clientes.

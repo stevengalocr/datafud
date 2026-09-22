@@ -1,15 +1,18 @@
 import type { Metadata } from "next";
+import { pageSocial } from "@/lib/seo";
 import { LegalPage, type LegalSection } from "@/components/marketing/v2/legal-page";
 import { PLAN_CODES, PRICING, setupFeeFor, tablesLabel } from "@/lib/constants";
 import { formatCrc } from "@/lib/currency/format";
 import { SITE } from "@/lib/site";
 
+const DESCRIPTION =
+  "Condiciones de DataFud: planes, plazos, garantía de 48 horas, pagos, cancelación, reembolsos, hardware de mesa y entrega, para restaurantes de Costa Rica.";
+
 export const metadata: Metadata = {
   title: "Términos del servicio",
   alternates: { canonical: "/terminos" },
-  openGraph: { title: "Términos del servicio · DataFud", url: "/terminos" },
-  description:
-    "Condiciones de DataFud: planes, plazos, garantía de 48 horas, pagos, cancelación, reembolsos, hardware de mesa y entrega, para restaurantes de Costa Rica.",
+  description: DESCRIPTION,
+  ...pageSocial("/terminos", "Términos del servicio · DataFud", DESCRIPTION),
 };
 
 const { plans, terms, delivery, hardwareDelivery } = PRICING;
@@ -49,7 +52,7 @@ const sections: LegalSection[] = [
     title: "Plazos y garantía de 48 horas",
     paragraphs: [
       `Publicamos tu carta digital en ${delivery.menuHours} horas hábiles y dejamos el sistema completo (pedidos, panel y reportes) en ${delivery.fullSystemDays} días. El reloj empieza a correr cuando recibimos el menú con precios, las fotos y el logo; la implementación se paga antes, al aprobar la propuesta (si llegara después, el plazo corre desde el pago).`,
-      `Garantía: ${terms.guarantee48h} ${terms.guaranteeRefund} Si recibimos materiales incompletos, te avisamos qué falta y el plazo empieza cuando lleguen.`,
+      `Garantía: ${terms.guarantee48h} ${terms.guaranteeRefund} ${terms.guaranteeScope} Si recibimos materiales incompletos, te avisamos qué falta y el plazo empieza cuando lleguen.`,
     ],
   },
   {
@@ -63,7 +66,7 @@ const sections: LegalSection[] = [
   {
     title: "Cancelación, sin permanencia",
     paragraphs: [
-      `No hay contrato de permanencia. Cancelás cuando quieras avisándonos por WhatsApp o correo con ${terms.noticeDays} días de anticipación; el servicio sigue activo hasta el final del período ya pagado y no se cobra nada más. Si avisás al menos ${terms.noticeDays} días antes de tu próxima fecha de pago, ese período ya no se cobra.`,
+      `No hay contrato de permanencia. Cancelás cuando quieras avisándonos por WhatsApp o correo con ${terms.noticeDays} días de anticipación; el servicio sigue activo hasta el final del período ya pagado y no se cobra nada más. Si avisás al menos ${terms.noticeDays} días antes de tu próxima fecha de pago, ese período ya no se cobra. ${terms.lateNotice}`,
       "Si pagaste el año de la Carta, el período pagado son esos 12 meses: al cancelar, el servicio sigue activo hasta que terminen.",
     ],
   },

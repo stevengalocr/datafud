@@ -8,7 +8,7 @@ import { PRICING } from "@/lib/constants";
 
 type Milestone = { when: string; title: string; desc: string; icon: IconName; accent?: boolean };
 
-const lead = PRICING.hardwareDelivery.leadTime.replace(/^de /, "");
+const lead = PRICING.hardwareDelivery.leadTime.replace(/^en /, "");
 
 const milestones: Milestone[] = [
   {
@@ -72,8 +72,8 @@ export function ImplementationSection() {
 
         {/* Línea de tiempo */}
         <RevealOnView className="relative mt-12 sm:mt-14">
+          <div className="pointer-events-none absolute left-[19px] top-2 h-[calc(100%-1rem)] w-px bg-stone-250 lg:left-0 lg:top-[19px] lg:h-px lg:w-full" aria-hidden="true" />
           <ol className="relative grid gap-6 lg:grid-cols-4 lg:gap-6">
-            <div className="pointer-events-none absolute left-[19px] top-2 h-[calc(100%-1rem)] w-px bg-stone-250 lg:left-0 lg:top-[19px] lg:h-px lg:w-full" aria-hidden="true" />
             {milestones.map((m) => (
               <li key={m.when} className="reveal-up relative flex gap-5 lg:flex-col lg:gap-0">
                 <span

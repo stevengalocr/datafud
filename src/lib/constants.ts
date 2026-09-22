@@ -131,6 +131,9 @@ export const PRICING = {
       "Si tu carta no está publicada en 48 horas hábiles desde que recibimos menú, fotos y logo, no pagás la implementación.",
     /** Cómo se aplica la garantía si la implementación ya se pagó (se paga al aprobar la propuesta). */
     guaranteeRefund: "Si ya la pagaste, te la devolvemos completa.",
+    /** Alcance publicado de la garantía (lectura conservadora de D-025; Steven confirma si se extiende al sistema). */
+    guaranteeScope: "Aplica a la implementación de la Carta.",
+    lateNotice: "Si avisás con menos de 15 días, se cobra un período más y el servicio sigue activo hasta que termine.",
     support: "Soporte por WhatsApp incluido mientras tengás el plan activo",
     menuChanges: "Cambios de precios y platillos por WhatsApp incluidos en todos los planes",
     permanence: "Sin contrato de permanencia: cancelás con 15 días de aviso por WhatsApp o correo.",
@@ -163,7 +166,7 @@ export const PRICING = {
     {
       code: "stand-qr-3d-nfc",
       name: "Stand QR 3D + NFC",
-      benefit: "El mismo stand con chip NFC adentro: escaneás o tocás, como prefiera cada cliente.",
+      benefit: "El mismo stand con chip NFC adentro: el cliente escanea o toca, como prefiera.",
       pricing: "desde",
       priceUsd: 20,
       priceCrc: 10000,
@@ -189,7 +192,7 @@ export const PRICING = {
     custom: "Diseño 100 % personalizado (forma, colores, logo) se cotiza por WhatsApp.",
     gam: "Entrega gratis en la GAM, en persona.",
     outside: "Fuera de la GAM, envío por Correos de Costa Rica con el costo de la tarifa, que se cotiza por WhatsApp.",
-    leadTime: "de 3 a 5 días hábiles",
+    leadTime: "en 3 a 5 días hábiles",
   },
 } as const;
 

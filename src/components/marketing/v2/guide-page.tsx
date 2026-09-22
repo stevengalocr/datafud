@@ -70,7 +70,7 @@ export function GuidePage({
           <div className="qr-grid pointer-events-none absolute inset-0 opacity-60" />
           <div className="relative mx-auto max-w-3xl px-5 py-14 sm:px-6 sm:py-20">
             <nav aria-label="Ruta" className="text-sm font-semibold text-brand-700/85">
-              <Link href="/" className="inline-flex min-h-11 items-center underline decoration-accent-400 underline-offset-4 hover:text-brand-900">
+              <Link href="/" className="inline-flex min-h-11 min-w-11 items-center underline decoration-accent-400 underline-offset-4 hover:text-brand-900">
                 Inicio
               </Link>
               <span className="mx-2" aria-hidden="true">/</span>

@@ -1,14 +1,17 @@
 import type { Metadata } from "next";
+import { pageSocial } from "@/lib/seo";
 import { LegalPage, type LegalSection } from "@/components/marketing/v2/legal-page";
 import { SITE, isPixelEnabled } from "@/lib/site";
 import { isTurnstileEnabled } from "@/lib/turnstile";
 
+const DESCRIPTION =
+  "Qué datos recoge DataFud por el formulario, WhatsApp y el uso del servicio, para qué los usamos, con quién los compartimos y cómo ejercer tus derechos según la Ley 8968 de Costa Rica.";
+
 export const metadata: Metadata = {
   title: "Política de privacidad",
   alternates: { canonical: "/privacidad" },
-  openGraph: { title: "Política de privacidad · DataFud", url: "/privacidad" },
-  description:
-    "Qué datos recoge DataFud por el formulario, WhatsApp y el uso del servicio, para qué los usamos, con quién los compartimos y cómo ejercer tus derechos según la Ley 8968 de Costa Rica.",
+  description: DESCRIPTION,
+  ...pageSocial("/privacidad", "Política de privacidad · DataFud", DESCRIPTION),
 };
 
 // El píxel de Meta solo se menciona como activo si la variable existe en el build.

@@ -1,7 +1,7 @@
 import { cn } from "@/lib/utils/cn";
 import { Icon, type IconName } from "@/components/ui/icon";
 import { RevealOnView } from "@/components/marketing/v2/reveal";
-import { PRICING, firstPaymentFor, limitsLabel, setupFeeFor, type PlanCode } from "@/lib/constants";
+import { PRICING, firstPaymentFor, hardwareBy, limitsLabel, setupFeeFor, type PlanCode } from "@/lib/constants";
 import { formatCrc, formatUsd } from "@/lib/currency/format";
 import { waProps } from "@/lib/site";
 
@@ -32,7 +32,7 @@ const plans: PlanCard[] = [
       P.estandar.languagesLabel,
       limitsLabel("estandar"),
       "Pedidos desde la mesa directo a cocina",
-      "Panel de comandas y reportes de venta",
+      "Panel de comandas y reportes: ventas por día, ticket promedio y más vendidos",
     ],
   },
   {
@@ -41,8 +41,7 @@ const plans: PlanCard[] = [
     tagline: "Sin límites de platillos, categorías ni mesas",
     features: [
       P.empresarial.languagesLabel,
-      "Pedidos desde la mesa directo a cocina",
-      "Ventas por día, ticket promedio y platillos más vendidos",
+      "Todo lo de Estándar: pedidos desde la mesa, panel y reportes",
     ],
   },
 ];
@@ -189,6 +188,10 @@ export function PricingV2() {
           </div>
         ))}
       </RevealOnView>
+      <p className="mt-4 text-sm font-medium leading-relaxed text-brand-700/85">
+        Los stands QR y las tarjetas NFC se cobran aparte, desde {formatCrc(hardwareBy("stand-qr-3d").priceCrc)} por unidad.{" "}
+        <a href="#hardware" className="font-semibold text-brand-800 underline decoration-accent-400 underline-offset-4 hover:text-brand-900">Ver hardware de mesa</a>
+      </p>
 
     </section>
   );
