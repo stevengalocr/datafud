@@ -76,3 +76,14 @@ existentes). Se aplica con "sincronizá el vault" desde Cowork.
 - 15 preguntas ordenadas por lo que pregunta primero un dueño de soda.
 - Respuestas desde `PRICING` y las decisiones cerradas; sin "1 año de soporte".
 - Verificado: JSON-LD FAQPage idéntico a lo visible (Playwright).
+
+### V07 · Demo sin errores y QR · commit (ver V08) · despliegue (ver V08)
+**Pendientes.md** — cerrar: "Errores de la demo: ₡2800,00, MESA MESA, top sin ordenar, tuteo, /preview/admin" y "No hay QR para escanear la demo desde la compu".
+**Decisiones.md** — D-028 (nueva): colones siempre sin decimales en toda la app. Contexto: la BD guarda CRC con 2 decimales y la demo mostraba "₡2800,00". Decisión: `formatMoney` usa `formatCrc` para CRC ("₡2 800"), sin tocar la BD. Consecuencia: el panel y la carta real también muestran colones sin decimales; las demás monedas siguen igual.
+**Seguridad.md** — S8 (ruta privada): sin cambios; además /preview/admin (vista demo del super admin) queda con `noindex` y sin enlaces públicos.
+**Otras páginas** — Paneles-Y-Vistas: /preview ahora muestra dos vistas (carta del comensal y panel del restaurante); /preview/admin existe pero no se enlaza ni se indexa. La sección demo de la landing tiene un QR real a https://datafud.com/preview/cliente desde tablet en adelante.
+**log.md** — `## [2026-09-22] ingest | Demo sin errores y QR`
+- Colones sin decimales, "Mesa 1" sin duplicar, top ordenado, voseo.
+- /preview/admin fuera del recorrido público y con noindex.
+- QR real generado con `qrcode` en el build.
+- `qa:landing` ahora cubre la demo y verifica el QR contra la URL esperada.

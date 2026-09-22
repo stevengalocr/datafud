@@ -1,29 +1,29 @@
 import Link from "next/link";
 import Image from "next/image";
 import { Icon, type IconName } from "@/components/ui/icon";
+import type { Metadata } from "next";
 import { RESTAURANT } from "@/lib/demo/mock";
+
+export const metadata: Metadata = {
+  title: "Demo: Verde Limón",
+  description: "Probá DataFud con un restaurante de ejemplo: la carta del comensal y el panel del local, sin registrarte.",
+  alternates: { canonical: "/preview" },
+};
 
 const cards: { href: string; title: string; desc: string; icon: IconName; tag: string }[] = [
   {
     href: "/preview/cliente",
     title: "Menú del comensal",
-    desc: "Lo que ve el cliente al escanear el QR. Carta interactiva, arma su pedido y lo envía a cocina. Pruébalo: es funcional.",
+    desc: "Lo que ve el comensal al escanear el QR: carta interactiva donde arma su pedido y lo manda a cocina. Probalo, funciona.",
     icon: "smartphone",
     tag: "Interactivo",
   },
   {
     href: "/preview/dashboard",
     title: "Panel del restaurante",
-    desc: "El centro de mando: comandas en vivo, menú, ventas del día y platillos más vendidos.",
+    desc: "Lo que ves vos con el sistema completo: comandas, menú, ventas del día y platillos más vendidos.",
     icon: "store",
     tag: "Operación",
-  },
-  {
-    href: "/preview/admin",
-    title: "Administración del SaaS",
-    desc: "La vista del dueño de DataFud: restaurantes, planes, pagos y cargos de todos los clientes.",
-    icon: "shield",
-    tag: "Super admin",
   },
 ];
 
@@ -39,17 +39,17 @@ export default function PreviewIndex() {
           style={{ backgroundImage: "linear-gradient(to right,#fff 1px,transparent 1px),linear-gradient(to bottom,#fff 1px,transparent 1px)", backgroundSize: "22px 22px" }}
         />
         <div className="relative mx-auto max-w-3xl px-5 py-16 text-center sm:py-20">
-          <span className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-1.5 text-[10px] font-bold uppercase tracking-[0.18em] text-accent-200 backdrop-blur-sm">
+          <span className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-1.5 text-xs font-bold uppercase tracking-[0.16em] text-accent-200">
             <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-accent-400" />
             Recorrido demo
           </span>
           <h1 className="mt-6 font-display text-4xl leading-tight text-cream-100 sm:text-5xl">
-            Conoce DataFud con <span className="text-accent-300">{RESTAURANT.name}</span>
+            Conocé DataFud con <span className="text-accent-300">{RESTAURANT.name}</span>
           </h1>
           <p className="mx-auto mt-4 max-w-xl text-sm font-medium leading-relaxed text-cream-100/80 sm:text-base">
-            Un restaurante ficticio montado de punta a punta. Recorre las tres caras del
-            sistema tal como las vive un cliente real — los datos son de ejemplo, pero el
-            flujo es 100% funcional.
+            Un restaurante ficticio montado de punta a punta. Recorré la carta del comensal y
+            el panel del local tal como los vería tu negocio: los datos son de ejemplo, pero el
+            flujo funciona.
           </p>
         </div>
       </header>
@@ -66,7 +66,7 @@ export default function PreviewIndex() {
                 <Icon name={c.icon} size={24} />
               </span>
               <div className="min-w-0">
-                <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-accent-600">{c.tag}</span>
+                <span className="text-xs font-bold uppercase tracking-[0.16em] text-accent-700">{c.tag}</span>
                 <p className="font-display text-xl text-brand-900">{c.title}</p>
                 <p className="mt-1 text-sm leading-relaxed text-brand-700/75">{c.desc}</p>
               </div>
@@ -79,7 +79,7 @@ export default function PreviewIndex() {
           ))}
         </div>
 
-        <p className="mt-10 text-center text-xs font-semibold uppercase tracking-widest text-brand-700/40">
+        <p className="mt-10 text-center text-xs font-semibold uppercase tracking-widest text-brand-700/75">
           Un producto de GaloDev · DataFud
         </p>
       </main>

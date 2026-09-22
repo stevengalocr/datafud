@@ -38,7 +38,7 @@ export const mockPlans: Plan[] = [
     price_usd: 29,
     is_active: true,
     sort_order: 1,
-    features: { max_languages: 1, max_products: 20, max_categories: 5, max_tables: 8, advanced_reports: false, full_branding: false },
+    features: { max_languages: 2, max_products: 60, max_categories: 5, max_tables: 8, advanced_reports: false, full_branding: false },
   },
   {
     id: "plan-estandar",
@@ -47,7 +47,7 @@ export const mockPlans: Plan[] = [
     price_usd: 49,
     is_active: true,
     sort_order: 2,
-    features: { max_languages: 2, max_products: 70, max_categories: 20, max_tables: 30, advanced_reports: true, full_branding: true },
+    features: { max_languages: 2, max_products: 150, max_categories: 20, max_tables: 30, advanced_reports: true, full_branding: true },
   },
   {
     id: "plan-empresarial",
@@ -242,17 +242,18 @@ export const mockDailySales = [
   { day: iso(0).slice(0, 10), orders_count: 33, revenue: 174200, currency_code: "CRC" },
 ];
 
+// Ordenados por unidades vendidas, de mayor a menor.
 export const mockTopProducts = [
   { name: "Casado Completo", units: 86, revenue: 361200 },
   { name: "Hamburguesa Casera", units: 64, revenue: 288000 },
   { name: "Gallo Pinto con huevo", units: 58, revenue: 162400 },
   { name: "Fresco Natural de Naranja", units: 71, revenue: 99400 },
   { name: "Lomito en salsa", units: 29, revenue: 188500 },
-];
+].sort((a, b) => b.units - a.units);
 
 export const mockMenuPayload: MenuPayload = {
   tenant: { id: "t-demo", name: RESTAURANT.name, slug: RESTAURANT.slug },
-  table: { id: "tab-1", label: "Mesa 1" },
+  table: { id: "tab-1", label: "1" }, // la UI antepone "Mesa"
   settings: {
     currency_code: "CRC",
     default_language: "es",

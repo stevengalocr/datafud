@@ -47,6 +47,8 @@ export function formatMoney(
   currencyCode: string = "USD",
   currency?: Currency
 ): string {
+  // Colones: siempre es-CR y sin decimales ("₡2 800"), aunque la BD diga 2 decimales.
+  if ((currency?.code ?? currencyCode) === "CRC") return formatCrc(amount);
   const symbol = currency?.symbol ?? SYMBOLS[currencyCode] ?? "$";
   const digits =
     currency?.decimal_digits ?? (ZERO_DECIMAL.has(currencyCode) ? 0 : 2);

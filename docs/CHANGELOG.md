@@ -23,6 +23,9 @@ Todas las versiones notables del proyecto. Formato basado en
   ilustrativo"; redes en el footer solo con URL.
 - Preguntas frecuentes: 15, con las de Costa Rica (SINPE, factura, contrato, garantía de 48 h,
   pedido mínimo, envíos fuera de la GAM, Uber Eats/PedidosYa, qué pasa si algo falla).
+- Demo: colones sin decimales ("₡2 800") en toda la app, "Mesa 1" sin duplicar, platillos más
+  vendidos ordenados, voseo, /preview/admin fuera del recorrido (noindex). QR real a la carta demo
+  en la landing desde tablet. `qa:landing` cubre /preview y verifica el QR.
 
 Fachada de venta ("landing primero", decisiones D-010 a D-013). Sin backend en producción;
 cada unidad se publica en `main` desde el loop autónomo (`docs/plans/landing-loop-state.md`).

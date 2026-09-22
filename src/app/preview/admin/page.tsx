@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { PreviewBanner } from "@/components/preview/preview-banner";
 import { StatCard } from "@/components/shell/stat-card";
 import { Card, CardBody, CardHeader } from "@/components/ui/card";
@@ -12,6 +13,9 @@ import {
   mockPlans,
   mockTenants,
 } from "@/lib/demo/mock";
+
+// Vista interna del dueño del SaaS: fuera del recorrido público, sin enlaces y sin indexar.
+export const metadata: Metadata = { robots: { index: false, follow: false } };
 
 const PAYMENT_COLOR: Record<string, string> = {
   paid: "bg-brand-100 text-brand-800",

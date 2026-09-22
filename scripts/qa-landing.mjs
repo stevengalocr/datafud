@@ -12,15 +12,21 @@
 // scroll horizontal y elementos fuera del viewport, anclas que resuelven, CTAs de WhatsApp
 // (wa.me + target/rel + data-wa-origin), un solo h1, alt en imágenes, áreas táctiles ≥ 44 px,
 // sin "TODO"/"PENDIENTE" visible, acordeón y menú móvil por teclado, y las rutas
-// /, /login, /register (307 → /#contacto), /terminos, /privacidad, /robots.txt, /sitemap.xml.
+// /, /login, /register (307 → /#contacto), /terminos, /privacidad, /preview, /preview/cliente,
+// /preview/dashboard, las páginas de nicho, /robots.txt, /sitemap.xml. También: montos en colones
+// sin ",00", ningún "MESA MESA", ningún "[REVISAR"/"Borrador", /preview/admin sin enlaces y con
+// noindex, y el QR de la demo igual al que genera qrcode para https://datafud.com/preview/cliente.
 // Las fotos remotas que fallen por falta de red (500 en /_next/image?url=https…) se reportan
 // como aviso, no como fallo, porque dependen del entorno.
 
 import { chromium } from "@playwright/test";
+import QRCode from "qrcode";
 import { spawn } from "node:child_process";
 import { existsSync, mkdirSync } from "node:fs";
 import path from "node:path";
 
+// Páginas de marketing por nicho (V10). Se agregan acá cuando existen.
+const MARKETING_PAGES = [];
 const BASE = process.env.QA_BASE || "http://localhost:3000";
 const PORT = Number(new URL(BASE).port || 80);
 const OUT = path.resolve(".qa");
@@ -31,9 +37,9 @@ const VIEWPORTS = [
   { name: "768x1024", width: 768, height: 1024, mobile: false },
   { name: "1440x900", width: 1440, height: 900, mobile: false },
 ];
-const PAGES = ["/", "/login", "/terminos", "/privacidad"];
+const PAGES = ["/", "/login", "/terminos", "/privacidad", "/preview", "/preview/cliente", "/preview/dashboard", ...MARKETING_PAGES];
 const IGNORED_URL = /_vercel\/insights/;
-const REMOTE_IMAGE = /\/_next\/image\?url=https?%3A/;
+const REMOTE_IMAGE = /\/_next\/image\?url=https?%3A|^https:\/\/images\.unsplash\.com\//;
 
 const failures = [];
 const warnings = new Set();
@@ -73,7 +79,30 @@ try {
     if (p === "/robots.txt" && /acceso/.test(await r.text())) fail(`/robots.txt anuncia la ruta privada`);
   }
   const sitemap = await (await fetch(BASE + "/sitemap.xml")).text();
-  if (/login|register|acceso/.test(sitemap)) fail("sitemap.xml lista rutas privadas");
+  if (/login|register|acceso|preview\/admin/.test(sitemap)) fail("sitemap.xml lista rutas privadas o /preview/admin");
+  for (const p of MARKETING_PAGES) if (!sitemap.includes(p)) fail(`sitemap.xml no lista ${p}`);
+
+  // /preview/admin fuera del recorrido público: sin enlaces y con noindex.
+  for (const p of ["/", "/preview", "/preview/cliente", "/preview/dashboard"]) {
+    const html = await (await fetch(BASE + p)).text();
+    if (html.includes('href="/preview/admin"')) fail(`${p} enlaza /preview/admin`);
+  }
+  {
+    const html = await (await fetch(BASE + "/preview/admin")).text();
+    if (!/<meta name="robots" content="noindex/.test(html)) fail("/preview/admin sin noindex");
+  }
+
+  // QR de la demo: el SVG servido es exactamente el que genera qrcode para la URL esperada.
+  {
+    const html = await (await fetch(BASE + "/")).text();
+    const url = html.match(/data-demo-qr="([^"]+)"/)?.[1];
+    if (url !== "https://datafud.com/preview/cliente") fail(`QR de la demo apunta a ${url}`);
+    else {
+      const expected = await QRCode.toString(url, { type: "svg", margin: 0, errorCorrectionLevel: "M", color: { dark: "#112a20", light: "#ffffff" } });
+      const path = (svg) => svg.match(/<path[^>]*stroke="#112a20"[^>]*d="([^"]+)"/)?.[1];
+      if (!path(expected) || path(expected) !== path(html)) fail("QR de la demo: el SVG servido no coincide con el de la URL esperada");
+    }
+  }
 
   for (const p of PAGES) {
     for (const vp of VIEWPORTS) {
@@ -127,7 +156,7 @@ try {
         const waBad = wa.filter((a) => a.target !== "_blank" || !/noopener/.test(a.rel) || !a.dataset.waOrigin).length;
         const overflow = [...document.querySelectorAll("body *")].filter((el) => {
           const r = el.getBoundingClientRect();
-          return r.width > 0 && r.right > window.innerWidth + 1 && getComputedStyle(el).position !== "fixed" && !el.closest(".marquee-host, .overflow-hidden");
+          return r.width > 0 && r.right > window.innerWidth + 1 && getComputedStyle(el).position !== "fixed" && !el.closest(".marquee-host, .overflow-hidden, .overflow-x-auto");
         }).length;
         const small = [...document.querySelectorAll("a, button")].filter((el) => {
           const r = el.getBoundingClientRect();
@@ -142,6 +171,9 @@ try {
           h1: document.querySelectorAll("h1").length,
           imgsNoAlt: [...document.querySelectorAll("img")].filter((i) => !i.hasAttribute("alt")).length,
           todo: /\bTODO\b|\bPENDIENTE\b/.test(document.body.innerText),
+          crcDecimals: (document.body.innerText.match(/₡[\d\s\u00a0\u202f.]*\d,\d{2}(?!\d)/g) || []).slice(0, 3),
+          mesaMesa: /mesa\s+mesa/i.test(document.body.innerText),
+          revisar: /\[REVISAR|Borrador/.test(document.body.innerText),
           emptyHrefs: [...document.querySelectorAll("a")].filter((a) => !a.getAttribute("href") || a.getAttribute("href") === "#" || a.getAttribute("href").startsWith("/register")).length,
           small,
         };
@@ -153,10 +185,13 @@ try {
       if (m.overflow) fail(`${tag}: ${m.overflow} elementos fuera del viewport`);
       if (m.missing.length) fail(`${tag}: anclas sin destino: ${m.missing.join(", ")}`);
       if (m.waBad) fail(`${tag}: ${m.waBad} enlaces de WhatsApp sin target/rel/data-wa-origin`);
-      if (p === "/" && m.waCount < 5) fail(`${tag}: solo ${m.waCount} enlaces de WhatsApp`);
+      if ((p === "/" || MARKETING_PAGES.includes(p)) && m.waCount < (p === "/" ? 5 : 1)) fail(`${tag}: solo ${m.waCount} enlaces de WhatsApp`);
       if (m.h1 !== 1) fail(`${tag}: ${m.h1} h1`);
       if (m.imgsNoAlt) fail(`${tag}: ${m.imgsNoAlt} imágenes sin alt`);
       if (m.todo) fail(`${tag}: TODO/PENDIENTE visible`);
+      if (m.crcDecimals.length) fail(`${tag}: montos en colones con decimales: ${m.crcDecimals.join(" | ")}`);
+      if (m.mesaMesa) fail(`${tag}: "MESA MESA" visible`);
+      if (m.revisar) fail(`${tag}: "[REVISAR" o "Borrador" visible`);
       if (m.emptyHrefs) fail(`${tag}: ${m.emptyHrefs} enlaces vacíos o a /register`);
       if (m.small.length) warn(`${tag}: áreas táctiles < 44 px: ${m.small.join(", ")}`);
 

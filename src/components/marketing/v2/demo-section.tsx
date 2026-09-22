@@ -2,7 +2,10 @@ import Link from "next/link";
 import Image from "next/image";
 import { Icon } from "@/components/ui/icon";
 import { RevealOnView } from "@/components/marketing/v2/reveal";
+import QRCode from "qrcode";
 import { RESTAURANT, mockProducts, mockCategories } from "@/lib/demo/mock";
+import { formatCrc } from "@/lib/currency/format";
+import { SITE } from "@/lib/site";
 
 // Sección #demo: teaser de la demo "Verde Limón" (restaurante ficticio) dentro de un marco
 // de teléfono, con CTA a /preview/cliente. El marco es una composición estática con los
@@ -10,16 +13,23 @@ import { RESTAURANT, mockProducts, mockCategories } from "@/lib/demo/mock";
 
 const SAMPLE_IDS = ["p-casado", "p-gallo", "p-limonada"] as const;
 
-// Colones sin decimales, como se muestran en la carta real.
-const crc = (n: number) => `₡${n.toLocaleString("es-CR", { maximumFractionDigits: 0 })}`;
+// URL que codifica el QR de escritorio: la carta demo, en producción.
+export const DEMO_QR_URL = `${SITE.url}/preview/cliente`;
 
 const highlights = [
   { icon: "smartphone", text: "La carta tal como la ve el comensal, con fotos y precios en colones." },
-  { icon: "receipt", text: "Armá un pedido de prueba y mandalo a cocina: el flujo completo, sin backend." },
-  { icon: "store", text: "Mirá también el panel del restaurante y la vista del administrador." },
+  { icon: "receipt", text: "Armá un pedido de prueba y mandalo a cocina, sin registrarte." },
+  { icon: "store", text: "Mirá también el panel que tendrías con el sistema completo." },
 ] as const;
 
-export function DemoSection() {
+export async function DemoSection() {
+  // QR real generado en el servidor (build estático): sin llamadas externas.
+  const qrSvg = await QRCode.toString(DEMO_QR_URL, {
+    type: "svg",
+    margin: 0,
+    errorCorrectionLevel: "M",
+    color: { dark: "#112a20", light: "#ffffff" },
+  });
   const products = SAMPLE_IDS.map((id) => mockProducts.find((p) => p.id === id)).filter((p): p is NonNullable<typeof p> => Boolean(p));
   const categories = mockCategories.slice(0, 4);
   const cartTotal = products.slice(0, 2).reduce((acc, p) => acc + p.price, 0);
@@ -72,7 +82,7 @@ export function DemoSection() {
                             <p className="mt-0.5 line-clamp-2 text-[10px] leading-snug text-brand-700/70">{p.description_i18n?.es}</p>
                           </div>
                           <div className="flex items-center justify-between">
-                            <span className="text-[12px] font-bold text-brand-900">{crc(p.price)}</span>
+                            <span className="text-[12px] font-bold text-brand-900">{formatCrc(p.price)}</span>
                             <span className={i < 2 ? "flex h-6 w-6 items-center justify-center rounded-full bg-brand-600 text-white" : "flex h-6 w-6 items-center justify-center rounded-full border border-stone-250 text-brand-700"}>
                               <Icon name={i < 2 ? "check" : "plus"} size={12} />
                             </span>
@@ -84,7 +94,7 @@ export function DemoSection() {
                   {/* Barra de orden */}
                   <div className="absolute inset-x-4 bottom-4 flex items-center justify-between rounded-xl bg-brand-950 px-4 py-3 text-cream-50 shadow-lg">
                     <span className="text-[11px] font-bold uppercase tracking-[0.14em]">Ver orden · 2</span>
-                    <span className="font-display text-base text-accent-300">{crc(cartTotal)}</span>
+                    <span className="font-display text-base text-accent-300">{formatCrc(cartTotal)}</span>
                   </div>
                 </div>
               </div>
@@ -139,9 +149,26 @@ export function DemoSection() {
                 Ver el panel
               </Link>
             </div>
-            <p className="reveal-up mt-4 text-[11px] font-semibold uppercase tracking-wider text-brand-700/75">
+            <p className="reveal-up mt-4 text-xs font-semibold uppercase tracking-wider text-brand-700/80">
               Restaurante ficticio · datos de ejemplo · nada se guarda
             </p>
+
+            {/* Desde la compu: QR real a la carta demo. En móvil sobra (el botón abre directo). */}
+            <div className="reveal-up mt-8 hidden items-center gap-5 rounded-2xl border border-stone-200/80 bg-cream-50 p-5 md:flex" data-demo-qr={DEMO_QR_URL}>
+              <div
+                className="h-28 w-28 flex-shrink-0 rounded-lg bg-white p-2 [&>svg]:h-full [&>svg]:w-full"
+                role="img"
+                aria-label={`Código QR que abre la carta demo en ${DEMO_QR_URL.replace("https://", "")}`}
+                // SVG generado por nosotros con la librería qrcode a partir de una URL fija.
+                dangerouslySetInnerHTML={{ __html: qrSvg }}
+              />
+              <div>
+                <p className="font-display text-xl text-brand-900">Escaneá con tu teléfono</p>
+                <p className="mt-1 text-sm font-medium leading-relaxed text-brand-700/85">
+                  Abrí la carta de {RESTAURANT.name} en tu celular, como si estuvieras sentado en la mesa.
+                </p>
+              </div>
+            </div>
           </RevealOnView>
         </div>
       </div>
