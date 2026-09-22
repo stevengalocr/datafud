@@ -9,13 +9,19 @@ import { SITE, hasWhatsApp, mailLink, socialLinks, waProps, whatsappDisplay } fr
 
 // Cierre oscuro (CTA final) + footer de la landing.
 const explore = [
-  { href: "#como-funciona", label: "Cómo funciona" },
-  { href: "#demo", label: "Demo" },
-  { href: "#planes", label: "Planes y precios" },
-  { href: "#hardware", label: "Hardware de mesa" },
-  { href: "#confianza", label: "Por qué DataFud" },
-  { href: "#preguntas", label: "Preguntas" },
-  { href: "#contacto", label: "Contacto" },
+  { href: "/#como-funciona", label: "Cómo funciona" },
+  { href: "/#demo", label: "Demo" },
+  { href: "/#planes", label: "Planes y precios" },
+  { href: "/#hardware", label: "Hardware de mesa" },
+  { href: "/#confianza", label: "Por qué DataFud" },
+  { href: "/#preguntas", label: "Preguntas" },
+  { href: "/#contacto", label: "Contacto" },
+];
+
+const guides = [
+  { href: "/menu-digital-costa-rica", label: "Menú digital en Costa Rica" },
+  { href: "/menu-digital-para-sodas", label: "Menú digital para sodas" },
+  { href: "/menu-qr-restaurantes-turisticos", label: "Menú QR para restaurantes turísticos" },
 ];
 
 export function SiteFooter() {
@@ -68,6 +74,13 @@ export function SiteFooter() {
                   Menú digital por QR y NFC, stands impresos en 3D y, con el sistema completo, pedidos desde la mesa
                   para sodas, cafeterías y restaurantes de Costa Rica.
                 </p>
+                <nav aria-label="Guías" className="mt-5 flex flex-col items-start text-sm font-semibold text-cream-100/80">
+                  {guides.map((g) => (
+                    <Link key={g.href} href={g.href} className="inline-flex min-h-11 items-center gap-2 underline decoration-accent-400/60 underline-offset-4 transition-colors duration-200 hover:text-white">
+                      {g.label}
+                    </Link>
+                  ))}
+                </nav>
               </div>
 
               <div>

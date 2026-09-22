@@ -26,7 +26,7 @@ import { existsSync, mkdirSync } from "node:fs";
 import path from "node:path";
 
 // Páginas de marketing por nicho (V10). Se agregan acá cuando existen.
-const MARKETING_PAGES = [];
+const MARKETING_PAGES = ["/menu-digital-costa-rica", "/menu-digital-para-sodas", "/menu-qr-restaurantes-turisticos"];
 const BASE = process.env.QA_BASE || "http://localhost:3000";
 const PORT = Number(new URL(BASE).port || 80);
 const OUT = path.resolve(".qa");

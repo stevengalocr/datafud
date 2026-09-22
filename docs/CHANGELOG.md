@@ -33,6 +33,11 @@ Todas las versiones notables del proyecto. Formato basado en
 - Medición: UTMs en los eventos de Vercel y Meta Pixel opcional (`NEXT_PUBLIC_META_PIXEL_ID`) con
   PageView, Lead (WhatsApp y formulario) y ViewContent (demo). Sin la variable no se carga nada.
 
+### Added — Loop "lista para vender"
+- Guías de SEO local: `/menu-digital-costa-rica`, `/menu-digital-para-sodas` y
+  `/menu-qr-restaurantes-turisticos`, con precios desde `PRICING`, FAQ propia, OG y sitemap.
+- JSON-LD `LocalBusiness` (sin dirección postal) junto a `Organization`.
+
 Fachada de venta ("landing primero", decisiones D-010 a D-013). Sin backend en producción;
 cada unidad se publica en `main` desde el loop autónomo (`docs/plans/landing-loop-state.md`).
 

@@ -19,7 +19,7 @@ import { SiteFooter } from "@/components/marketing/v2/site-footer";
 import { waProps } from "@/lib/site";
 import { formatCrc } from "@/lib/currency/format";
 import type { Metadata } from "next";
-import { faqJsonLd, organizationJsonLd, productsJsonLd } from "@/lib/seo";
+import { faqJsonLd, localBusinessJsonLd, organizationJsonLd, productsJsonLd } from "@/lib/seo";
 
 
 // Glifo QR firma de la marca: celdas que se ensamblan al cargar.
@@ -39,7 +39,7 @@ export const metadata: Metadata = {
 const { founderOffer } = PRICING;
 
 export default function HomePage() {
-  const jsonLd = [organizationJsonLd(), ...productsJsonLd(), faqJsonLd()];
+  const jsonLd = [organizationJsonLd(), localBusinessJsonLd(), ...productsJsonLd(), faqJsonLd()];
   return (
     <div className="min-h-screen bg-cream-50 font-sans text-brand-900 antialiased selection:bg-accent-200 selection:text-brand-950">
       {/* Datos estructurados: Organization, Product (3 planes) y FAQPage */}

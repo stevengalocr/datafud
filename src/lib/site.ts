@@ -60,7 +60,10 @@ export type WaOrigin =
   | "footer"
   | "plan-basico"
   | "plan-estandar"
-  | "plan-empresarial";
+  | "plan-empresarial"
+  | "guia-costa-rica"
+  | "guia-sodas"
+  | "guia-turisticos";
 
 /** Mensaje prellenado por origen. Español de Latam, voseo natural, sin promesas. */
 export const WA_MESSAGES: Record<WaOrigin, string> = {
@@ -78,6 +81,9 @@ export const WA_MESSAGES: Record<WaOrigin, string> = {
   "plan-basico": "Hola, me interesa el plan Carta (Básico) de DataFud para mi local.",
   "plan-estandar": "Hola, me interesa el plan Estándar de DataFud para mi local.",
   "plan-empresarial": "Hola, me interesa el plan Empresarial de DataFud para mi local.",
+  "guia-costa-rica": "Hola, leí la guía de menú digital en Costa Rica de datafud.com y quiero cotizar para mi local.",
+  "guia-sodas": "Hola, tengo una soda y quiero la carta digital con QR de DataFud. ¿Cómo empezamos?",
+  "guia-turisticos": "Hola, tengo un restaurante con clientes turistas y quiero la carta en español e inglés de DataFud.",
 };
 
 /** Ancla de la sección de contacto: el destino de todo CTA cuando falta WhatsApp. */

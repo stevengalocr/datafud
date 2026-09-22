@@ -1,6 +1,7 @@
 import { PRICING, PLAN_CODES, setupFeeFor } from "@/lib/constants";
 import { FAQ_ITEMS } from "@/lib/faq";
 import { SITE } from "@/lib/site";
+import { formatCrc } from "@/lib/currency/format";
 
 // Metadatos y datos estructurados de la landing. Fuente única para layout, páginas y JSON-LD.
 
@@ -10,27 +11,50 @@ export const SITE_DESCRIPTION =
 
 export const LEGAL_UPDATED_ISO = "2026-09-22";
 
+// Solo datos reales: sin dirección postal (no se publica), sin reseñas ni cifras de clientes.
 export function organizationJsonLd() {
   return {
     "@context": "https://schema.org",
     "@type": "Organization",
+    "@id": `${SITE.url}/#organization`,
     name: SITE.name,
     url: SITE.url,
     logo: `${SITE.url}/icono-main.png`,
     email: SITE.email,
     telephone: `+${SITE.whatsapp}`,
+    founder: { "@type": "Person", name: SITE.founder.name },
     parentOrganization: { "@type": "Organization", name: SITE.maker },
-    address: { "@type": "PostalAddress", addressCountry: "CR" },
-    areaServed: ["CR", "Latin America"],
+    areaServed: { "@type": "Country", name: SITE.country },
     contactPoint: [
       {
         "@type": "ContactPoint",
         contactType: "sales",
         telephone: `+${SITE.whatsapp}`,
         email: SITE.email,
-        availableLanguage: ["es", "en", "pt"],
+        areaServed: "CR",
+        availableLanguage: ["es", "en"],
       },
     ],
+  };
+}
+
+export function localBusinessJsonLd() {
+  const monthly = PLAN_CODES.map((c) => PRICING.plans[c].priceCrc);
+  return {
+    "@context": "https://schema.org",
+    "@type": "LocalBusiness",
+    "@id": `${SITE.url}/#localbusiness`,
+    name: SITE.name,
+    description: SITE_DESCRIPTION,
+    url: SITE.url,
+    image: `${SITE.url}/icono-main.png`,
+    telephone: `+${SITE.whatsapp}`,
+    email: SITE.email,
+    areaServed: { "@type": "Country", name: SITE.country },
+    currenciesAccepted: "CRC",
+    paymentAccepted: "SINPE Móvil, transferencia bancaria",
+    priceRange: `${formatCrc(Math.min(...monthly))} – ${formatCrc(Math.max(...monthly))} al mes`,
+    parentOrganization: { "@id": `${SITE.url}/#organization` },
   };
 }
 

@@ -108,3 +108,14 @@ existentes). Se aplica con "sincronizá el vault" desde Cowork.
 - UTMs guardados en la sesión y sumados a los eventos de Vercel y Meta.
 - Meta Pixel con snippet oficial solo con variable; Lead y ViewContent.
 - Verificado con Playwright: 0 requests a facebook.net sin variable; con ID falso, Lead en la cola.
+
+### V10 · SEO local · commit (ver V11) · despliegue (ver V11)
+**Pendientes.md** — cerrar: "SEO local débil: H1 sin Costa Rica, sin páginas por nicho, sin LocalBusiness". Nuevo en "Datos que esperan a Steven": "Crear el Google Business Profile de DataFud (área de servicio Costa Rica, sin dirección pública) y enlazarlo a datafud.com".
+**Decisiones.md** — D-031 (nueva): tres guías de SEO local. Contexto: la landing sola no posiciona búsquedas como "menú digital para sodas". Decisión: `/menu-digital-costa-rica` (pilar), `/menu-digital-para-sodas` y `/menu-qr-restaurantes-turisticos`, estáticas, con precios desde PRICING y sin nombrar competidores. Consecuencia: todo cambio de oferta se refleja solo; cada guía nueva debe aportar contenido propio (no duplicado).
+**Seguridad.md** — sin cambios.
+**Otras páginas** — Paneles-Y-Vistas: agregar las tres rutas públicas nuevas y el bloque "Guías" del footer. Marca-Y-Marketing: JSON-LD con Organization + LocalBusiness (sin dirección postal) y FAQPage/BreadcrumbList en las guías. Analisis-Venta-Y-Competencia: hallazgo de SEO local cerrado.
+**log.md** — `## [2026-09-22] ingest | SEO local`
+- LocalBusiness y Organization con datos reales, sin dirección.
+- Tres guías de 650 a 840 palabras con precios desde PRICING y CTA de WhatsApp propio.
+- Sitemap, canonical y OG por página.
+- Verificado: build estático, un h1 por página, qa:landing en 3 viewports.
