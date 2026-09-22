@@ -56,7 +56,7 @@ servicio, datos del negocio, atención a clientes extranjeros.
 | Sección | Objetivo | Copy ancla |
 |---|---|---|
 | **Hero** | Enganchar + CTA | "Tu carta digital con QR, *lista en 48 horas*" · "Quiero mi carta" / "Ver la demo" · "Desde ₡14 900/mes" |
-| **Cómo funciona** (`#como-funciona`) | Educar con plazos | Línea de tiempo Día 0 → Día 2 → Días 3 a 5 → Día 15 + "Lo que hacemos nosotros" / "Lo que ponés vos" |
+| **Cómo funciona** (`#como-funciona`) | Educar con plazos | Línea de tiempo Día 0 → 2 días hábiles → 3 a 5 días hábiles (stands) → Día 15 + "Lo que hacemos nosotros" / "Lo que ponés vos" |
 | **Demo** (`#demo`) | Probar sin hablar con nadie | "Probalo vos mismo" · QR real desde tablet |
 | **Planes y precios** (`#planes`) | Convertir | CRC primero, implementación y primer pago por plan, garantía, fundadores |
 | **Hardware** (`#hardware`) | Vender lo que va en la mesa | Precios en colones, sin mínimo, entrega GAM/Correos |
@@ -65,7 +65,7 @@ servicio, datos del negocio, atención a clientes extranjeros.
 | **Contacto + cierre** | Capturar | WhatsApp + correo + formulario (solo con `RESEND_API_KEY`) |
 
 Regla de repetición (V08): "48" y "15 días" aparecen como máximo 3 veces cada uno en el texto
-visible de `/` (hero, planes y FAQ); la línea de tiempo habla en días ("Día 2", "Día 15").
+visible de `/` (hero, planes y FAQ); la línea de tiempo habla en días ("2 días hábiles", "Día 15").
 
 ## 6. Oferta y precios (línea de venta canónica)
 

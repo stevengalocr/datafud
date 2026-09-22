@@ -34,7 +34,7 @@ export const metadata: Metadata = {
     "stand QR impreso en 3D",
     "pedidos desde la mesa",
     "Costa Rica",
-    "Latinoamérica",
+    "menú digital para sodas",
   ],
   authors: [{ name: SITE.maker, url: SITE.url }],
   creator: SITE.maker,

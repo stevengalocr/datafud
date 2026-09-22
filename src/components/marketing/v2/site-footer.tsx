@@ -3,8 +3,6 @@ import Image from "next/image";
 import { RevealOnView } from "@/components/marketing/v2/reveal";
 import { MagneticCta } from "@/components/marketing/v2/magnetic-cta";
 import { Icon } from "@/components/ui/icon";
-import { PRICING } from "@/lib/constants";
-import { formatCrc } from "@/lib/currency/format";
 import { SITE, hasWhatsApp, mailLink, socialLinks, waProps, whatsappDisplay } from "@/lib/site";
 
 // Cierre oscuro (CTA final) + footer de la landing.
@@ -55,9 +53,6 @@ export function SiteFooter() {
               <Icon name="whatsapp" size={18} />
               Hablemos por WhatsApp
             </MagneticCta>
-            <p className="mt-5 text-xs font-semibold uppercase tracking-wider text-cream-100/50">
-              Desde {formatCrc(PRICING.plans.basico.priceCrc)}/mes · Te la montamos nosotros
-            </p>
           </div>
 
           <div className="mx-auto max-w-6xl px-5 sm:px-6">

@@ -19,7 +19,7 @@ export const FAQ_ITEMS: FaqItem[] = [
   {
     id: "primer-mes",
     q: "¿Cuánto pago en total el primer mes?",
-    a: `${firstMonth} Después pagás solo la mensualidad.${founderOffer.enabled ? ` Oferta de fundadores: ${founderOffer.text.charAt(0).toLowerCase()}${founderOffer.text.slice(1)}` : ""}`,
+    a: `${firstMonth} Después pagás solo la mensualidad.${founderOffer.enabled ? ` Si entrás entre los primeros ${founderOffer.spots} locales, la implementación de la Carta no se cobra y te damos 1 stand QR 3D, a cambio de dejarnos mostrar tu local como caso.` : ""}`,
   },
   {
     id: "que-incluye",

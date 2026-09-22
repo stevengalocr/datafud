@@ -72,9 +72,6 @@ export function ContactSection() {
               )}
             </div>
 
-            <p className="reveal-up mt-8 text-xs font-semibold uppercase tracking-[0.14em] text-brand-700/75">
-              {SITE.maker} · {SITE.region}
-            </p>
           </RevealOnView>
 
           <RevealOnView className="relative">

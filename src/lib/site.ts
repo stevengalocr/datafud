@@ -12,7 +12,7 @@ export const SITE = {
   owner: "Steven Galo",
   legalResponsible: "Steven Galo, que opera bajo el nombre comercial GaloDev",
   country: "Costa Rica",
-  region: "Costa Rica y Latinoamérica",
+  region: "Costa Rica",
   // Formato internacional sin "+", como lo exige wa.me.
   whatsapp: "50672874779",
   // Correo donde llegan los leads (formulario y enlaces mailto).

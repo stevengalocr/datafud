@@ -9,6 +9,7 @@ import { PRICING } from "@/lib/constants";
 type Milestone = { when: string; title: string; desc: string; icon: IconName; accent?: boolean };
 
 const menuDay = Math.ceil(PRICING.delivery.menuHours / 24);
+// Los stands se cuentan desde que aprobás el diseño (PRICING.hardwareDelivery.leadTime).
 
 const milestones: Milestone[] = [
   {
@@ -18,16 +19,16 @@ const milestones: Milestone[] = [
     icon: "phone",
   },
   {
-    when: `Día ${menuDay}`,
+    when: `${menuDay} días hábiles`,
     title: "Tu carta, en línea",
     desc: "Publicada con tu marca, en español e inglés, y con un QR provisional para usarla ese mismo día.",
     icon: "qr",
     accent: true,
   },
   {
-    when: "Días 3 a 5",
+    when: "3 a 5 días hábiles",
     title: "Tus stands, impresos",
-    desc: "Diseñamos e imprimimos los stands QR en 3D y grabamos las tarjetas NFC con tu logo.",
+    desc: "Desde que aprobás el diseño: imprimimos los stands QR en 3D y grabamos las tarjetas NFC con tu logo.",
     icon: "printer",
   },
   {

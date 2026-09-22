@@ -9,6 +9,9 @@ tiene variables de Supabase y no se montan ahora. La landing es la fachada de ve
 formulario); `/register` redirige a `/#contacto`; `/login` sin variables muestra un aviso, no
 un formulario; el nav no ofrece "Ingresar". El backend se enciende con el primer cliente de un
 plan con pedidos. No prometas en la landing nada que no exista: ver `docs/MARKETING.md` §9.
+Desde el loop "lista para vender" (2026-09-22, D-023 a D-031) la oferta se muestra en colones
+primero, la landing tiene 8 secciones, hay tres guías de SEO local y el material de venta vive en
+`docs/ventas/`.
 
 ## Comandos
 
@@ -20,17 +23,23 @@ plan con pedidos. No prometas en la landing nada que no exista: ver `docs/MARKET
 
 ## Mapa
 
-- `src/app/page.tsx` landing · `src/components/marketing/v2/` secciones (nav, hero en page,
-  hardware, demo, implementación, planes, confianza, preguntas, contacto, footer).
+- `src/app/page.tsx` landing (hero → cómo funciona → demo → planes → hardware → por qué DataFud →
+  preguntas → contacto) · `src/components/marketing/v2/` secciones, `guide-page.tsx` (plantilla de
+  guías), `tracking.ts` (eventos + UTMs) y `meta-pixel.tsx` (solo con `NEXT_PUBLIC_META_PIXEL_ID`).
+- `src/app/(marketing)/` guías de SEO local: `/menu-digital-costa-rica`, `/menu-digital-para-sodas`,
+  `/menu-qr-restaurantes-turisticos`.
 - `src/app/(auth)/` login (Server Component + `login-form.tsx`), register (redirige), `actions.ts`
   (único uso de `service_role`), ruta privada del super admin (no enlazada, noindex).
-- `src/app/(legal)/` términos y privacidad (borrador con `[REVISAR]`).
+- `src/app/(legal)/` términos y privacidad, versión 1.0 (cifras desde `PRICING`).
 - `src/app/dashboard/` panel del restaurante · `src/app/admin/` super admin · `src/app/m/[tenant]/[table]/`
   menú del comensal (RPC `get_menu` / `place_order`) · `src/app/preview/` demo sin backend.
-- `src/lib/site.ts` contacto y `waProps` · `constants.ts` `PRICING` · `faq.ts` · `seo.ts` · `contact.ts` +
+- `src/lib/site.ts` contacto, `waProps`, fundador, redes y `metaPixelId()` · `constants.ts` `PRICING`
+  (CRC y USD, implementación por tipo, fundadores, textos de garantía) y `TESTIMONIALS` ·
+  `currency/format.ts` `formatCrc()` · `faq.ts` · `seo.ts` · `contact.ts` +
   `src/app/actions.ts` formulario · `turnstile.ts` · `env.ts` · `supabase/` clientes · `auth/` guardas.
 - `supabase/schema.sql` tablas, RLS, RPC, vistas, monedas y planes · `seed.dev.sql` semillas de desarrollo.
-- `docs/` PRODUCT (leer primero), USER_MANUAL, MARKETING, BRAND, CHANGELOG, `specs/`, `plans/`
+- `docs/` PRODUCT (leer primero), USER_MANUAL, MARKETING, BRAND, CHANGELOG, `ventas/` (kit de
+  prospección y contenido), `specs/`, `plans/`
   (estados e informes de los loops), `vault-sync/` (puente al vault, ver abajo).
 
 ## Reglas que no se rompen
@@ -44,9 +53,10 @@ plan con pedidos. No prometas en la landing nada que no exista: ver `docs/MARKET
 4. Nunca usar un `tenant_id` ni un precio que venga del navegador: `place_order` lee precios de
    `products` y guarda snapshots.
 5. `createAdminClient()` (`service_role`) solo en `registerAction`. Para usarlo en otro lado, preguntar.
-6. Precios y límites viven en tres lugares y deben coincidir: `pricing-v2.tsx`, `src/lib/constants.ts`
-   (`PRICING`) y las semillas de planes de `schema.sql`. La landing manda. Actualizar también
-   `docs/MARKETING.md` y `docs/PRODUCT.md`.
+6. Precios y límites viven en `PRICING` (`src/lib/constants.ts`) y de ahí los leen planes, hero, FAQ,
+   términos, JSON-LD y guías; deben coincidir con las semillas de planes de `schema.sql` (USD y
+   límites). Colones con `formatCrc()` ("₡14 900", sin decimales). Actualizar también
+   `docs/MARKETING.md`, `docs/PRODUCT.md` y `docs/ventas/`.
 7. `schema.sql` sigue idempotente y **sin usuarios, correos ni contraseñas**. Las semillas de personas
    solo en `seed.dev.sql`, con contraseña por variable. La contraseña que hubo en el historial está
    quemada: no se reutiliza. Nunca reescribir el historial de git.
@@ -80,6 +90,9 @@ plan con pedidos. No prometas en la landing nada que no exista: ver `docs/MARKET
 - `/preview` no toca la BD: que se vea bien ahí no prueba el flujo real.
 - La landing es estática: lo que dependa de variables de entorno (formulario con `RESEND_API_KEY`,
   aviso de `/login`, Turnstile) se decide en el build. Cambiar una variable en Vercel exige redeploy.
+- Foto del fundador (`public/equipo/steven.webp`) y fotos reales del hardware
+  (`public/hardware/<código>.webp`) se detectan en el build: subirlas exige redeploy.
+- La imagen OG no puede dibujar "₡" (la fuente dinámica no baja en el build): escribir "colones".
 - Quedan restos del nombre viejo "Datfud" en `package.json`, `src/lib/supabase/types.ts` y los `.sql`.
 - Los triggers de límite de plan lanzan excepción: la UI tiene que mostrarla.
 
