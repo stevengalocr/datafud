@@ -33,8 +33,8 @@ Las 13 unidades están publicadas en `main` y todos los despliegues de producci�
 | V09 | Medición y contacto | 3e033d9 | READY `dpl_DU9Y8riYKNP92U869DVsZQbg4AKS` |
 | V10 | SEO local | b9f6828 | READY `dpl_53vLK2ijMkuV3awaN5KNSrsbmxcE` |
 | V11 | Kit de prospección y contenido | 85e9308 | READY `dpl_4Fa6FBao5fXimPtFGit6k1gze4ya` |
-| V12 | Verificación final (5 pasadas) | 53a3dc7 · 12b5cd3 · d8e53ad · 23e6894 · ddaa54c | READY (las cuatro primeras); ddaa54c en cola al escribir este informe |
-| V13 | Informe y cierre del puente | commit de este informe | ver bitácora del estado |
+| V12 | Verificación final (5 pasadas) | 53a3dc7 · 12b5cd3 · d8e53ad · 23e6894 · ddaa54c | READY (las cinco; ddaa54c `dpl_DpQGcaFVC2gXhuj3WYTdvMzbEqy3`) |
+| V13 | Informe y cierre del puente | de3f93a | `dpl_BbMbtdQr1unPiShXnRXyouYpWbZF` (solo docs y versión) |
 
 ## Antes → después
 

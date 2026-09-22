@@ -8,7 +8,7 @@
 
 Aplicado en vault: **parcial**. El conector de Google Drive de esta sesión solo crea archivos y
 cambia título/carpeta (no edita el contenido de los `.md` existentes), así que este puente se subió
-completo como archivo nuevo al nodo Datafud del vault (`vault-sync-2026-09-22-lista-para-vender.md`).
+completo como archivo nuevo al nodo Datafud del vault (`vault-sync-2026-09-22-lista-para-vender.md`, id de Drive `10sc7LqtPcAkjgpuQZ_hVl4zujXt1mvQ9`).
 Las páginas se actualizan con "sincronizá el vault" desde Cowork usando el resumen de abajo.
 
 ## Resumen · qué cambiar en cada página (aplicar tal cual)
@@ -226,7 +226,7 @@ Las páginas se actualizan con "sincronizá el vault" desde Cowork usando el res
 - Topes de la Carta publicados, contenido visible sin JS, garantía y cancelación sin ambigüedad.
 - Lighthouse móvil 95/100/96/100; qa:landing en verde en 10 rutas × 3 viewports.
 
-### V13 · Informe final y cierre del puente · commit (ver git log) · despliegue READY (docs y versión)
+### V13 · Informe final y cierre del puente · commit de3f93a · despliegue READY (docs y versión)
 **Pendientes.md** — ver el resumen de arriba.
 **Decisiones.md** — ninguna nueva.
 **Seguridad.md** — sin cambios.
