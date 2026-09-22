@@ -71,10 +71,10 @@ const steps: Step[] = [
 ];
 
 const highlights: { icon: IconName; label: string }[] = [
-  { icon: "clock", label: `Carta lista en ${PRICING.delivery.menuHours} horas` },
-  { icon: "zap", label: `Sistema completo en ${PRICING.delivery.fullSystemDays} días` },
-  { icon: "globe", label: "Español · Inglés · Português" },
-  { icon: "wallet", label: "Monedas de toda Latam" },
+  { icon: "utensils", label: "Te la montamos nosotros" },
+  { icon: "globe", label: "Español e inglés" },
+  { icon: "printer", label: "Stands QR 3D y NFC hechos acá" },
+  { icon: "whatsapp", label: "Cambios por WhatsApp" },
 ];
 
 const currencies = ["₡ CRC", "$ MXN", "S/ PEN", "$ COP", "R$ BRL", "$ ARS", "Q GTQ", "Bs BOB", "$ CLP", "₲ PYG", "$U UYU", "B/. PAB", "USD"];
@@ -129,6 +129,8 @@ export const metadata: Metadata = {
   openGraph: { url: "/" },
 };
 
+const { founderOffer } = PRICING;
+
 export default function HomePage() {
   const jsonLd = [organizationJsonLd(), ...productsJsonLd(), faqJsonLd()];
   return (
@@ -150,45 +152,55 @@ export default function HomePage() {
         <div className="pointer-events-none absolute bottom-0 left-[8%] top-0 hidden border-l border-stone-200/30 xl:block" />
         <div className="pointer-events-none absolute bottom-0 right-[8%] top-0 hidden border-r border-stone-200/30 xl:block" />
 
-        <div className="relative mx-auto max-w-6xl px-5 py-16 sm:px-6 sm:py-20 lg:py-28">
+        <div className="relative mx-auto max-w-6xl px-5 py-8 sm:px-6 sm:py-20 lg:py-28">
           <div className="grid items-center gap-12 lg:grid-cols-[1.08fr_0.92fr] lg:gap-16">
             <div className="reveal flex flex-col items-start">
-              <span className="inline-flex items-center gap-2 rounded-full border border-accent-300/60 bg-accent-50/60 px-4 py-1.5 text-[10px] font-bold uppercase tracking-[0.18em] text-accent-700 shadow-sm">
-                <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-accent-500" />
-                QR Menus · Orders · Analytics
+              <span className="inline-flex items-center gap-2 rounded-full border border-accent-300/60 bg-accent-50/60 px-4 py-1.5 text-xs font-bold uppercase tracking-[0.14em] text-accent-800 shadow-sm">
+                <span className="h-1.5 w-1.5 rounded-full bg-accent-500" />
+                Menú digital QR · Costa Rica
               </span>
 
-              <h1 className="mt-7 font-display text-[clamp(2.2rem,6.4vw,3.6rem)] leading-[1.04] tracking-tight text-brand-900 sm:mt-8">
-                El menú digital que{" "}
-                <span className="italic font-normal text-brand-700">abre apetito</span>{" "}
-                <span className="text-accent-600">y cierra ventas</span>
+              <h1 className="mt-5 font-display text-[clamp(2.1rem,6.4vw,3.6rem)] leading-[1.04] tracking-tight text-brand-900 sm:mt-8">
+                Tu carta digital con QR,{" "}
+                <span className="italic font-normal text-brand-700">lista en {PRICING.delivery.menuHours} horas</span>
               </h1>
 
-              <p className="mt-6 max-w-xl text-base font-medium leading-relaxed text-brand-800/80 sm:text-lg">
-                Tus comensales abren la carta escaneando un QR o tocando una
-                tarjeta NFC en la mesa. Vos gestionás platos, comandas y reportes
-                desde un solo panel. Multi-idioma, multi-moneda y a tu marca.
+              <p className="mt-4 max-w-xl text-base font-medium leading-relaxed text-brand-800/85 sm:mt-6 sm:text-lg">
+                Para sodas, cafeterías y restaurantes de Costa Rica. Te montamos la carta con tu
+                marca, en español e inglés, y tus comensales la abren con un QR o una tarjeta NFC
+                en la mesa. Pedidos y panel, con el sistema completo.
               </p>
 
-              <div className="mt-9 flex w-full flex-col gap-3 sm:mt-10 sm:w-auto sm:flex-row sm:gap-4">
+              <div className="mt-6 flex w-full flex-col gap-3 sm:mt-10 sm:w-auto sm:flex-row sm:gap-4">
                 <MagneticCta
                   {...waProps("hero")}
                   className="inline-flex h-12 items-center justify-center gap-2.5 whitespace-nowrap rounded-lg border border-accent-400 bg-brand-600 px-8 text-xs font-bold uppercase tracking-[0.18em] text-white shadow-sm transition-colors duration-300 ease-out-expo hover:bg-brand-700"
                 >
                   <Icon name="whatsapp" size={18} />
-                  Hablemos por WhatsApp
+                  Quiero mi carta
                 </MagneticCta>
                 <Link
-                  href="/preview"
+                  href="/preview/cliente"
+                  data-demo-open="hero"
                   className="inline-flex h-12 items-center justify-center whitespace-nowrap rounded-lg border border-stone-300 bg-white/60 px-8 text-xs font-bold uppercase tracking-[0.18em] text-brand-800 transition-all duration-300 ease-out-expo hover:border-stone-400 hover:bg-cream-100/70 active:scale-[0.98]"
                 >
-                  Ver demo en vivo
+                  Ver la demo
                 </Link>
               </div>
 
-              <p className="mt-4 text-[11px] font-semibold uppercase tracking-wider text-brand-700/75">
-                Carta lista en {PRICING.delivery.menuHours} horas · desde {formatCrc(PRICING.plans.basico.priceCrc)}/mes
+              <p className="mt-4 text-sm font-semibold text-brand-800">
+                Desde {formatCrc(PRICING.plans.basico.priceCrc)}/mes · Te la montamos nosotros · Cambios por WhatsApp
               </p>
+              {founderOffer.enabled && (
+                <a
+                  href="#planes"
+                  className="mt-3 inline-flex min-h-11 items-center gap-2 rounded-full border border-accent-300/70 bg-white/70 px-3.5 text-xs font-bold text-accent-800 transition-colors hover:border-accent-400 hover:bg-accent-50"
+                >
+                  <Icon name="star" size={13} />
+                  {founderOffer.short}
+                  <Icon name="arrow-right" size={13} />
+                </a>
+              )}
             </div>
 
             {/* Imagen del producto + acentos flotantes */}
@@ -234,11 +246,11 @@ export default function HomePage() {
               {/* Chip flotante: orden recibida */}
               <div className="absolute -bottom-4 -right-1 z-20 hidden items-center gap-3 rounded-xl border border-stone-200/80 bg-white/95 px-4 py-3 shadow-xl sm:flex">
                 <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-brand-600 text-white">
-                  <Icon name="check-circle" size={18} />
+                  <Icon name="globe" size={18} />
                 </span>
                 <div>
-                  <p className="text-[11px] font-bold leading-tight text-brand-900">Orden #18 · Mesa 4</p>
-                  <p className="text-[10px] font-semibold uppercase tracking-wide text-accent-700">Recibida en cocina</p>
+                  <p className="text-xs font-bold leading-tight text-brand-900">Carta publicada</p>
+                  <p className="text-xs font-semibold text-accent-800">Español · English</p>
                 </div>
               </div>
             </Parallax>

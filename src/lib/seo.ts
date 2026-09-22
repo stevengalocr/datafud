@@ -4,9 +4,9 @@ import { SITE } from "@/lib/site";
 
 // Metadatos y datos estructurados de la landing. Fuente única para layout, páginas y JSON-LD.
 
-export const SITE_TITLE = "DataFud · Menú digital por QR y NFC para restaurantes";
+export const SITE_TITLE = "Menú digital con QR para restaurantes en Costa Rica · DataFud";
 export const SITE_DESCRIPTION =
-  "Carta digital por QR y NFC para restaurantes, sodas y cafeterías de Costa Rica y Latinoamérica. Carta lista en 48 horas; sistema completo con pedidos y reportes en 15 días. Stands QR impresos en 3D y tarjetas NFC con tu logo.";
+  "Menú digital con QR y NFC para sodas, cafeterías y restaurantes de Costa Rica. Te lo montamos nosotros en 48 horas, en español e inglés, desde ₡14 900 al mes. Stands QR impresos en 3D y cambios por WhatsApp."
 
 export const LEGAL_UPDATED_ISO = "2026-09-19";
 

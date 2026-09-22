@@ -33,3 +33,14 @@ existentes). Se aplica con "sincronizá el vault" desde Cowork.
 - Planes muestran implementación y primer pago por plan; hardware en CRC con USD de referencia.
 - Semillas de `schema.sql`: Básico 2 idiomas / 60 platillos, Estándar 150.
 - Verificado: typecheck, lint, build, qa:landing, capturas 375/1440 y grep de cifras viejas = 0.
+
+### V03 · Hero y mensaje · commit (ver V04) · despliegue (ver V04)
+**Pendientes.md** — cerrar: "El hero promete panel y comandas junto a 'desde $29'" y "Decidir si el eslogan 'abre apetito y cierra ventas' se mantiene" (resuelto por D-026).
+**Decisiones.md** — D-026 pasa de propuesta a aceptada: H1 "Tu carta digital con QR, lista en 48 horas"; "cierra ventas" sale de todo el sitio; "abre apetito" queda disponible como frase secundaria de marca.
+**Seguridad.md** — sin cambios.
+**Otras páginas** — Marca-Y-Marketing: eslogan principal → "Tu carta digital con QR, lista en 48 horas"; microcopy → "Desde ₡14 900/mes · Te la montamos nosotros · Cambios por WhatsApp"; CTA principal → "Quiero mi carta". Plan-Landing-First: el hero ya no muestra la comanda de cocina.
+**log.md** — `## [2026-09-22] ingest | Hero nuevo`
+- H1, etiqueta en español, subtítulo con Costa Rica y CTA de WhatsApp con mensaje de Carta.
+- Línea de precio en colones y pastilla de fundadores.
+- Title, description y OG con "menú digital", "QR" y "Costa Rica".
+- Verificado con captura a 375×812: todo lo clave sin scroll.

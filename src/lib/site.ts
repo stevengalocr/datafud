@@ -45,7 +45,7 @@ export type WaOrigin =
 /** Mensaje prellenado por origen. Español de Latam, voseo natural, sin promesas. */
 export const WA_MESSAGES: Record<WaOrigin, string> = {
   nav: "Hola, vengo de datafud.com y quiero saber más del menú digital.",
-  hero: "Hola, vi datafud.com y me interesa el menú digital para mi local. ¿Me cuentan cómo funciona?",
+  hero: "Hola, vi datafud.com y quiero la Carta digital con QR para mi local. ¿Cómo empezamos?",
   flotante: "Hola, estoy viendo datafud.com y tengo una consulta.",
   hardware: "Hola, quiero cotizar hardware de mesa (stands QR 3D / NFC) para mi local.",
   demo: "Hola, probé la demo de datafud.com y quiero una carta así para mi local.",

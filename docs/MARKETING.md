@@ -9,10 +9,11 @@
 
 ## 1. Propuesta de valor (una frase)
 
-> **El menú digital que abre apetito y cierra ventas.** Tus comensales abren la carta desde
-> su mesa escaneando un QR o tocando una tarjeta NFC; vos gestionás platos, comandas y
-> reportes desde un panel — multi-idioma, multi-moneda y con tu marca. **Carta lista en
-> 48 horas; sistema completo en 15 días.**
+> **Tu carta digital con QR, lista en 48 horas.** Para sodas, cafeterías y restaurantes de
+> Costa Rica: te la montamos nosotros con tu marca, en español e inglés, y tus comensales la
+> abren con un QR o una tarjeta NFC en la mesa. Pedidos y panel, con el sistema completo
+> (15 días). "Abre apetito" puede usarse como frase secundaria de marca; "cierra ventas" salió
+> de todo el sitio (D-021, D-026).
 
 > **Etapa actual (2026-09-19, decisión D-010): landing primero.** No hay backend en
 > producción; la landing vende la carta digital, el hardware de mesa (QR impreso en 3D, NFC,
@@ -54,7 +55,7 @@ servicio, datos del negocio, atención a clientes extranjeros.
 
 | Sección | Objetivo | Copy ancla |
 |---|---|---|
-| **Hero** | Enganchar + CTA | "El menú digital que *abre apetito* y cierra ventas" · CTA "Hablemos por WhatsApp" / "Ver demo en vivo" |
+| **Hero** | Enganchar + CTA | "Tu carta digital con QR, *lista en 48 horas*" · CTA "Quiero mi carta" (WhatsApp) / "Ver la demo" · "Desde ₡14 900/mes · Te la montamos nosotros · Cambios por WhatsApp" |
 | **Barra de highlights** | Prueba rápida de valor | Carta lista en 48 h · Sistema completo en 15 días · 3 idiomas · monedas Latam |
 | **Cómo funciona** | Educar (4 pasos) | Nosotros montamos tu carta → QR y NFC en tus mesas → Recibís los pedidos → Medís tu negocio |
 | **El sistema** | Mostrar las 2 caras | Servicio al comensal + Operación del negocio |
