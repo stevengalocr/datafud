@@ -28,7 +28,7 @@ const sections: GuideSection[] = [
   {
     title: "Cuánto cuesta un menú QR en Costa Rica",
     paragraphs: [
-      "Antes de comparar precios conviene separar tres tipos de servicio, porque resuelven cosas distintas:",
+      "Antes de comparar precios conviene separar tres tipos de servicio, porque resuelven cosas distintas. Los montos son rangos de referencia del mercado local a setiembre de 2026 y cambian según el proveedor:",
     ],
     bullets: [
       "Autoservicio o PDF con QR: una plataforma donde vos mismo armás la carta, o un PDF de tu menú detrás de un código. En el mercado local suelen andar entre ₡30 000 y ₡60 000 al año. Es lo más económico, pero el trabajo de cargar, traducir y mantener la carta queda de tu lado.",

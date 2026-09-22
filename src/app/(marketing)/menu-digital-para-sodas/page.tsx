@@ -51,7 +51,7 @@ const sections: GuideSection[] = [
     ],
   },
   {
-    title: "Mirá un ejemplo real de carta",
+    title: "Mirá una carta de ejemplo",
     paragraphs: [
       "Montamos una soda de ejemplo, Verde Limón, con gallo pinto, casados, bocas y frescos, para que veás cómo se ve una carta de soda en el teléfono antes de decidir. Los datos son de ejemplo y nada se guarda.",
     ],

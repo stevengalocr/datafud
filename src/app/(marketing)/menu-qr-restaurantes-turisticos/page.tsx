@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { GuidePage, type GuideFaq, type GuideSection } from "@/components/marketing/v2/guide-page";
 import { PRICING, hardwareBy } from "@/lib/constants";
-import { formatCrc } from "@/lib/currency/format";
+import { formatCrc, formatUsd } from "@/lib/currency/format";
 
 const PATH = "/menu-qr-restaurantes-turisticos";
 const TITLE = "Menú QR para restaurantes turísticos: carta en español e inglés";
@@ -62,7 +62,7 @@ sections.push({
   title: "In English: what DataFud does for your restaurant",
   paragraphs: [
     `DataFud builds your digital menu for you: we design it with your brand, upload your dishes with photos, and translate it into English. Guests open it by scanning a QR code or tapping an NFC card at the table, with no app. Every plan includes Spanish and English; the Empresarial plan adds Portuguese.`,
-    `Prices are in Costa Rican colones: the Carta plan is ${formatCrc(plans.basico.priceCrc)} per month (about US$${plans.basico.priceUsd}) plus a one-time setup fee of ${formatCrc(PRICING.setupFee.carta.crc)}. Menu and price changes by WhatsApp are included. No long-term contract: cancel with ${PRICING.terms.noticeDays} days' notice. Write to us on WhatsApp to get started.`,
+    `Prices are in Costa Rican colones: the Carta plan is ${formatCrc(plans.basico.priceCrc)} per month (about ${formatUsd(plans.basico.priceUsd)}) plus a one-time setup fee of ${formatCrc(PRICING.setupFee.carta.crc)}. Menu and price changes by WhatsApp are included. If you want guests to order from the table, the Estándar plan (${formatCrc(plans.estandar.priceCrc)} per month) adds table ordering and a kitchen panel. No long-term contract: cancel with ${PRICING.terms.noticeDays} days' notice. Write to us on WhatsApp to get started.`,
   ],
 });
 

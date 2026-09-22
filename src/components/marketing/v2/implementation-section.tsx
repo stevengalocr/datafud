@@ -14,7 +14,7 @@ const milestones: Milestone[] = [
   {
     when: "Día 0",
     title: "Hablamos y arrancamos",
-    desc: "Por WhatsApp elegís el plan, pagás la implementación y nos pasás el menú, las fotos y el logo.",
+    desc: "Por WhatsApp elegís el plan, pagás la implementación (si aplica) y nos pasás el menú, las fotos y el logo.",
     icon: "phone",
   },
   {
@@ -65,7 +65,7 @@ export function ImplementationSection() {
             </h2>
             <p className="mt-5 text-base font-medium leading-relaxed text-brand-800/80">
               Vos seguís atendiendo tu local; nosotros hacemos el resto. El reloj corre desde que
-              tenemos el pago de la implementación, el menú, las fotos y el logo.
+              tenemos el menú, las fotos y el logo.
             </p>
           </div>
         </RevealOnView>

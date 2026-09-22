@@ -53,7 +53,7 @@ export function TrustSection() {
                 Lo que te llevás, dicho sin vueltas
               </h2>
               <p className="mt-5 max-w-md text-base font-medium leading-relaxed text-brand-800/80">
-                Somos un equipo chico en Costa Rica: sabés quién te atiende, qué pagás y qué pasa
+                Somos un proyecto chico en Costa Rica: sabés quién te atiende, qué pagás y qué pasa
                 si un día querés irte.
               </p>
             </div>

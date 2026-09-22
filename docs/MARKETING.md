@@ -45,7 +45,7 @@ servicio, datos del negocio, atención a clientes extranjeros.
 
 ## 4. Mensajes clave (pilares de la landing)
 
-1. **Pide desde la mesa, sin fricción.** QR o NFC → carta al instante, sin apps ni cuentas.
+1. **Pedí desde la mesa, sin fricción.** QR o NFC → carta al instante, sin apps ni cuentas.
 2. **Control total desde un panel.** Platos, comandas y reportes en un solo lugar.
 3. **Bilingüe.** Español e inglés en todos los planes; portugués en Empresarial.
 4. **Carta lista en 48 horas; sistema completo en 15 días.** Implementación llave en mano, sin curva técnica.
@@ -56,7 +56,7 @@ servicio, datos del negocio, atención a clientes extranjeros.
 | Sección | Objetivo | Copy ancla |
 |---|---|---|
 | **Hero** | Enganchar + CTA | "Tu carta digital con QR, *lista en 48 horas*" · "Quiero mi carta" / "Ver la demo" · "Desde ₡14 900/mes" |
-| **Cómo funciona** (`#como-funciona`) | Educar con plazos | Línea de tiempo Día 0 → 2 días hábiles → 3 a 5 días hábiles (stands) → Día 15 + "Lo que hacemos nosotros" / "Lo que ponés vos" |
+| **Cómo funciona** (`#como-funciona`) | Educar con plazos | Línea de tiempo Día 0 → Plazo de la Carta → de 3 a 5 días hábiles (stands) → Día 15 + "Lo que hacemos nosotros" / "Lo que ponés vos" |
 | **Demo** (`#demo`) | Probar sin hablar con nadie | "Probalo vos mismo" · QR real desde tablet |
 | **Planes y precios** (`#planes`) | Convertir | CRC primero, implementación y primer pago por plan, garantía, fundadores |
 | **Hardware** (`#hardware`) | Vender lo que va en la mesa | Precios en colones, sin mínimo, entrega GAM/Correos |
@@ -65,7 +65,7 @@ servicio, datos del negocio, atención a clientes extranjeros.
 | **Contacto + cierre** | Capturar | WhatsApp + correo + formulario (solo con `RESEND_API_KEY`) |
 
 Regla de repetición (V08): "48" y "15 días" aparecen como máximo 3 veces cada uno en el texto
-visible de `/` (hero, planes y FAQ); la línea de tiempo habla en días ("2 días hábiles", "Día 15").
+visible de `/` (hero, planes y FAQ); la línea de tiempo no repite el plazo de la carta ("Plazo de la Carta").
 
 ## 6. Oferta y precios (línea de venta canónica)
 
@@ -149,7 +149,7 @@ por resultados.
 | Objeción | Respuesta comercial |
 |---|---|
 | "Es complicado / no soy técnico" | Te la montamos nosotros: carta en 48 h y sistema en 15 días |
-| "¿Y si no me sirve?" | Demo en vivo gratis y sin contratos atados: si un mes no le sirve, lo deja |
+| "¿Y si no me sirve?" | Demo sin hablar con nadie y sin permanencia: cancelás con 15 días de aviso |
 | "Mis clientes no sabrán usarlo" | Solo escanear o tocar — sin apps ni cuentas |
 | "Ya tengo carta" | La digital se lee mejor en el celular y los cambios no requieren reimprimir; con el sistema completo, además, reportes de venta |
 | "Tengo clientes extranjeros" | Carta en español e inglés en todos los planes (la traducción la hacemos nosotros); portugués en Empresarial |

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { LegalPage, type LegalSection } from "@/components/marketing/v2/legal-page";
 import { SITE, isPixelEnabled } from "@/lib/site";
+import { isTurnstileEnabled } from "@/lib/turnstile";
 
 export const metadata: Metadata = {
   title: "Política de privacidad",
@@ -12,6 +13,7 @@ export const metadata: Metadata = {
 
 // El píxel de Meta solo se menciona como activo si la variable existe en el build.
 const pixel = isPixelEnabled();
+const turnstile = isTurnstileEnabled();
 
 const sections: LegalSection[] = [
   {
@@ -57,6 +59,7 @@ const sections: LegalSection[] = [
     bullets: [
       "Vercel Inc. (Estados Unidos): aloja datafud.com y procesa las métricas agregadas.",
       "Resend, Inc. (Estados Unidos): envía por correo los mensajes del formulario de contacto.",
+      ...(turnstile ? ["Cloudflare, Inc. (Estados Unidos): verifica con Turnstile que el formulario lo envía una persona y no un programa automático."] : []),
       pixel
         ? "Meta Platforms: WhatsApp, el canal que elegís para escribirnos, y el píxel de medición de campañas."
         : "Meta Platforms (WhatsApp): el canal de mensajería que elegís vos para escribirnos.",

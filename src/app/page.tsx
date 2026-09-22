@@ -150,7 +150,7 @@ export default function HomePage() {
                 />
               </div>
 
-              {/* Chip flotante: orden recibida */}
+              {/* Chip flotante: carta publicada */}
               <div className="absolute -bottom-4 -right-1 z-20 hidden items-center gap-3 rounded-xl border border-stone-200/80 bg-white/95 px-4 py-3 shadow-xl sm:flex">
                 <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-brand-600 text-white">
                   <Icon name="globe" size={18} />

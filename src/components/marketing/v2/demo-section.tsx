@@ -18,7 +18,7 @@ export const DEMO_QR_URL = `${SITE.url}/preview/cliente`;
 
 const highlights = [
   { icon: "smartphone", text: "La carta tal como la ve el comensal, con fotos y precios en colones." },
-  { icon: "receipt", text: "Armá un pedido de prueba y mandalo a cocina, sin registrarte." },
+  { icon: "receipt", text: "Armá un pedido de prueba y mandalo a cocina, sin registrarte (pedidos en mesa: Estándar y Empresarial)." },
   { icon: "store", text: "Mirá también el panel que tendrías con el sistema completo." },
 ] as const;
 

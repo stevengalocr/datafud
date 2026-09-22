@@ -48,7 +48,7 @@ const sections: LegalSection[] = [
   {
     title: "Plazos y garantía de 48 horas",
     paragraphs: [
-      `Publicamos tu carta digital en ${delivery.menuHours} horas hábiles y dejamos el sistema completo (pedidos, panel y reportes) en ${delivery.fullSystemDays} días. El reloj empieza a correr cuando recibimos el pago de la implementación y los materiales: el menú con precios, las fotos y el logo.`,
+      `Publicamos tu carta digital en ${delivery.menuHours} horas hábiles y dejamos el sistema completo (pedidos, panel y reportes) en ${delivery.fullSystemDays} días. El reloj empieza a correr cuando recibimos el menú con precios, las fotos y el logo; la implementación se paga antes, al aprobar la propuesta (si llegara después, el plazo corre desde el pago).`,
       `Garantía: ${terms.guarantee48h} ${terms.guaranteeRefund} Si recibimos materiales incompletos, te avisamos qué falta y el plazo empieza cuando lleguen.`,
     ],
   },
@@ -63,7 +63,7 @@ const sections: LegalSection[] = [
   {
     title: "Cancelación, sin permanencia",
     paragraphs: [
-      `No hay contrato de permanencia. Cancelás cuando quieras avisándonos por WhatsApp o correo con ${terms.noticeDays} días de anticipación; el servicio sigue activo hasta el final del período ya pagado y no se cobra nada más.`,
+      `No hay contrato de permanencia. Cancelás cuando quieras avisándonos por WhatsApp o correo con ${terms.noticeDays} días de anticipación; el servicio sigue activo hasta el final del período ya pagado y no se cobra nada más. Si avisás al menos ${terms.noticeDays} días antes de tu próxima fecha de pago, ese período ya no se cobra.`,
       "Si pagaste el año de la Carta, el período pagado son esos 12 meses: al cancelar, el servicio sigue activo hasta que terminen.",
     ],
   },
