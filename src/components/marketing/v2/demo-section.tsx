@@ -36,13 +36,13 @@ export async function DemoSection() {
 
   return (
     <section id="demo" className="scroll-mt-24 border-b border-stone-200/60 bg-white">
-      <div className="mx-auto max-w-6xl px-5 py-24 sm:px-6 sm:py-32">
+      <div className="mx-auto max-w-6xl px-5 py-16 sm:px-6 sm:py-28">
         <div className="grid items-center gap-14 lg:grid-cols-[1fr_0.9fr] lg:gap-20">
           {/* Marco de teléfono */}
-          <RevealOnView className="relative order-2 flex min-w-0 justify-center lg:order-1 lg:justify-start">
+          <RevealOnView className="relative order-2 hidden min-w-0 justify-center sm:flex lg:order-1 lg:justify-start">
             <div className="reveal-up relative">
               <div className="pointer-events-none absolute -inset-10 -z-10 rounded-full bg-brand-100/50 blur-3xl" />
-              <div className="relative w-[280px] rounded-[2.6rem] border-[10px] border-brand-950 bg-brand-950 shadow-[0_40px_80px_-30px_rgba(10,26,19,0.5)] sm:w-[300px]">
+              <div aria-hidden="true" className="relative w-[280px] rounded-[2.6rem] border-[10px] border-brand-950 bg-brand-950 shadow-[0_40px_80px_-30px_rgba(10,26,19,0.5)] sm:w-[300px]">
                 <div className="absolute left-1/2 top-0 z-20 h-6 w-28 -translate-x-1/2 rounded-b-2xl bg-brand-950" aria-hidden="true" />
                 <div className="relative aspect-[9/19] overflow-hidden rounded-[2rem] bg-cream-50">
                   {/* Cabecera con cover */}
@@ -99,11 +99,11 @@ export async function DemoSection() {
                 </div>
               </div>
               {/* Chips flotantes */}
-              <div className="absolute -right-4 top-24 hidden items-center gap-2 rounded-xl border border-stone-200/80 bg-white px-3 py-2 shadow-lg sm:flex">
+              <div aria-hidden="true" className="absolute -right-4 top-24 hidden items-center gap-2 rounded-xl border border-stone-200/80 bg-white px-3 py-2 shadow-lg sm:flex">
                 <Icon name="globe" size={14} className="text-accent-700" />
                 <span className="text-[10px] font-bold uppercase tracking-[0.14em] text-brand-900">ES · EN</span>
               </div>
-              <div className="absolute -left-6 bottom-28 hidden items-center gap-2 rounded-xl border border-stone-200/80 bg-white px-3 py-2 shadow-lg sm:flex">
+              <div aria-hidden="true" className="absolute -left-6 bottom-28 hidden items-center gap-2 rounded-xl border border-stone-200/80 bg-white px-3 py-2 shadow-lg sm:flex">
                 <Icon name="qr" size={14} className="text-brand-600" />
                 <span className="text-[10px] font-bold uppercase tracking-[0.14em] text-brand-900">Sin app · sin cuenta</span>
               </div>

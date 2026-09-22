@@ -26,6 +26,10 @@ Todas las versiones notables del proyecto. Formato basado en
 - Demo: colones sin decimales ("₡2 800") en toda la app, "Mesa 1" sin duplicar, platillos más
   vendidos ordenados, voseo, /preview/admin fuera del recorrido (noindex). QR real a la carta demo
   en la landing desde tablet. `qa:landing` cubre /preview y verifica el QR.
+- Landing más corta (−30 % de alto en móvil): 8 secciones en orden hero → cómo funciona → demo →
+  planes → hardware → por qué DataFud → preguntas → contacto. Fuera la tira de monedas, las cifras,
+  "El sistema", el bloque de ambiente y el paso a paso con fotos. Textos mínimos de 12 px.
+  "Hecho en Costa Rica" en el footer.
 
 Fachada de venta ("landing primero", decisiones D-010 a D-013). Sin backend en producción;
 cada unidad se publica en `main` desde el loop autónomo (`docs/plans/landing-loop-state.md`).

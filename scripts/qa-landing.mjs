@@ -196,7 +196,7 @@ try {
       if (m.small.length) warn(`${tag}: áreas táctiles < 44 px: ${m.small.join(", ")}`);
 
       if (p === "/") {
-        for (const sel of ["#como-funciona", "#sistema", "#hardware", "#demo", "#implementacion", "#planes", "#confianza", "#preguntas", "#contacto", "footer"]) {
+        for (const sel of ["#como-funciona", "#demo", "#planes", "#hardware", "#confianza", "#preguntas", "#contacto", "footer"]) {
           const el = page.locator(sel).first();
           if (await el.count()) {
             await el.scrollIntoViewIfNeeded();

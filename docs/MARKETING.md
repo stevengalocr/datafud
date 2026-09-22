@@ -55,13 +55,17 @@ servicio, datos del negocio, atención a clientes extranjeros.
 
 | Sección | Objetivo | Copy ancla |
 |---|---|---|
-| **Hero** | Enganchar + CTA | "Tu carta digital con QR, *lista en 48 horas*" · CTA "Quiero mi carta" (WhatsApp) / "Ver la demo" · "Desde ₡14 900/mes · Te la montamos nosotros · Cambios por WhatsApp" |
-| **Barra de highlights** | Prueba rápida de valor | Carta lista en 48 h · Sistema completo en 15 días · 3 idiomas · monedas Latam |
-| **Cómo funciona** | Educar (4 pasos) | Nosotros montamos tu carta → QR y NFC en tus mesas → Recibís los pedidos → Medís tu negocio |
-| **El sistema** | Mostrar las 2 caras | Servicio al comensal + Operación del negocio |
-| **Planes y precios** | Convertir | Implementación única + 3 planes (con su plazo) + add-on NFC |
-| **Contacto** | Capturar | WhatsApp + correo + formulario (solo con `RESEND_API_KEY`) |
-| **Cierre (CTA + footer)** | Última conversión | "Llevá la carta de tu local al siguiente nivel" · "Hablemos por WhatsApp" |
+| **Hero** | Enganchar + CTA | "Tu carta digital con QR, *lista en 48 horas*" · "Quiero mi carta" / "Ver la demo" · "Desde ₡14 900/mes" |
+| **Cómo funciona** (`#como-funciona`) | Educar con plazos | Línea de tiempo Día 0 → Día 2 → Días 3 a 5 → Día 15 + "Lo que hacemos nosotros" / "Lo que ponés vos" |
+| **Demo** (`#demo`) | Probar sin hablar con nadie | "Probalo vos mismo" · QR real desde tablet |
+| **Planes y precios** (`#planes`) | Convertir | CRC primero, implementación y primer pago por plan, garantía, fundadores |
+| **Hardware** (`#hardware`) | Vender lo que va en la mesa | Precios en colones, sin mínimo, entrega GAM/Correos |
+| **Por qué DataFud** (`#confianza`) | Confianza verificable | 4 puntos + firma de Steven Galo |
+| **Preguntas** (`#preguntas`) | Resolver objeciones | 15 preguntas de Costa Rica |
+| **Contacto + cierre** | Capturar | WhatsApp + correo + formulario (solo con `RESEND_API_KEY`) |
+
+Regla de repetición (V08): "48" y "15 días" aparecen como máximo 3 veces cada uno en el texto
+visible de `/` (hero, planes y FAQ); la línea de tiempo habla en días ("Día 2", "Día 15").
 
 ## 6. Oferta y precios (línea de venta canónica)
 

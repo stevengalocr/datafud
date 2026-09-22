@@ -23,8 +23,8 @@ export function ContactSection() {
   return (
     <section id="contacto" className="relative scroll-mt-24 border-t border-stone-200/60 bg-cream-100/60">
       <div className="qr-grid pointer-events-none absolute inset-0 opacity-40" />
-      <div className="relative mx-auto max-w-6xl px-5 py-24 sm:px-6 sm:py-32">
-        <div className="grid gap-12 lg:grid-cols-[0.9fr_1.1fr] lg:gap-16">
+      <div className="relative mx-auto max-w-6xl px-5 py-16 sm:px-6 sm:py-28">
+        <div className="grid gap-8 lg:grid-cols-[0.9fr_1.1fr] lg:gap-16">
           <RevealOnView className="flex flex-col">
             <div className="reveal-up">
               <p className="text-xs font-bold uppercase tracking-[0.2em] text-accent-700">Contacto</p>
@@ -33,7 +33,7 @@ export function ContactSection() {
               </h2>
               <p className="mt-5 max-w-md text-base font-medium leading-relaxed text-brand-800/80">
                 Contanos qué tenés hoy y qué querés lograr. Te respondemos con una propuesta
-                clara, sin compromiso y sin vueltas.
+                clara: carta, hardware de mesa y el plan que le calza a tu local, sin compromiso.
               </p>
             </div>
 
@@ -47,7 +47,7 @@ export function ContactSection() {
                     <Icon name="whatsapp" size={20} />
                   </span>
                   <span className="flex flex-col">
-                    <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-accent-700">WhatsApp</span>
+                    <span className="text-xs font-bold uppercase tracking-[0.18em] text-accent-700">WhatsApp</span>
                     <span className="font-display text-lg leading-tight text-brand-900">{whatsappDisplay()}</span>
                     <span className="mt-0.5 text-xs font-medium text-brand-700/70">La vía más rápida. Respondemos en horario de oficina.</span>
                   </span>
@@ -63,7 +63,7 @@ export function ContactSection() {
                     <Icon name="mail" size={20} />
                   </span>
                   <span className="flex min-w-0 flex-col">
-                    <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-accent-700">Correo</span>
+                    <span className="text-xs font-bold uppercase tracking-[0.18em] text-accent-700">Correo</span>
                     <span className="truncate font-display text-lg leading-tight text-brand-900">{SITE.email}</span>
                     <span className="mt-0.5 text-xs font-medium text-brand-700/70">Para cotizaciones formales o si preferís escribir largo.</span>
                   </span>
@@ -84,7 +84,7 @@ export function ContactSection() {
               </div>
             ) : (
               <div className="reveal-up relative rounded-2xl border border-stone-200/80 bg-white p-7 sm:p-9">
-                <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-accent-700">Para responderte rápido</p>
+                <p className="text-xs font-bold uppercase tracking-[0.18em] text-accent-700">Para responderte rápido</p>
                 <h3 className="mt-2 font-display text-2xl text-brand-900">Contanos esto en tu mensaje</h3>
                 <ul className="mt-6 space-y-4">
                   {checklist.map((item, i) => (
@@ -94,12 +94,6 @@ export function ContactSection() {
                     </li>
                   ))}
                 </ul>
-                <div className="mt-8 border-t border-stone-200/70 pt-6">
-                  <p className="text-sm font-medium leading-relaxed text-brand-700/80">
-                    Con eso armamos una propuesta a tu medida: carta digital, hardware de mesa y
-                    el plan que mejor le calce a tu local.
-                  </p>
-                </div>
               </div>
             )}
           </RevealOnView>

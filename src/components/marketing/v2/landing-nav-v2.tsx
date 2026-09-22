@@ -8,7 +8,7 @@ import { waProps } from "@/lib/site";
 // Cada ítem apunta a una sección que ya existe en la landing (regla 11). Rutas absolutas
 // para que el nav también funcione desde /terminos y /privacidad.
 const links = [
-  { href: "/#como-funciona", label: "Producto" },
+  { href: "/#como-funciona", label: "Cómo funciona" },
   { href: "/#hardware", label: "Hardware" },
   { href: "/#planes", label: "Planes" },
   { href: "/#demo", label: "Demo" },
@@ -35,7 +35,7 @@ export function LandingNavV2() {
           />
         </Link>
 
-        <nav aria-label="Secciones" className="hidden items-center gap-8 text-[11px] font-bold uppercase tracking-[0.18em] text-brand-700/80 lg:flex">
+        <nav aria-label="Secciones" className="hidden items-center gap-8 text-xs font-bold uppercase tracking-[0.18em] text-brand-700/80 lg:flex">
           {links.map((l) => (
             <a
               key={l.href}
@@ -50,7 +50,7 @@ export function LandingNavV2() {
         <div className="flex items-center gap-3">
           <a
             {...wa}
-            className="inline-flex h-11 items-center justify-center gap-2 rounded-lg border border-accent-300 bg-brand-600 px-4 text-[11px] font-bold uppercase tracking-[0.18em] text-white shadow-sm transition-all duration-300 ease-out-expo hover:border-accent-400 hover:bg-brand-700 active:scale-[0.98] sm:px-5"
+            className="inline-flex h-11 items-center justify-center gap-2 rounded-lg border border-accent-300 bg-brand-600 px-4 text-xs font-bold uppercase tracking-[0.18em] text-white shadow-sm transition-all duration-300 ease-out-expo hover:border-accent-400 hover:bg-brand-700 active:scale-[0.98] sm:px-5"
           >
             <Icon name="whatsapp" size={16} />
             <span className="hidden sm:inline">Hablemos</span>

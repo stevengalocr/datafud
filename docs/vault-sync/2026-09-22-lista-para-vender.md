@@ -87,3 +87,14 @@ existentes). Se aplica con "sincronizá el vault" desde Cowork.
 - /preview/admin fuera del recorrido público y con noindex.
 - QR real generado con `qrcode` en el build.
 - `qa:landing` ahora cubre la demo y verifica el QR contra la URL esperada.
+
+### V08 · Página más corta y coherente · commit (ver V09) · despliegue (ver V09)
+**Pendientes.md** — cerrar: "Página de ~26 pantallas en móvil, claims repetidos, incoherencias" (ahora ~18 pantallas: 14 754 px a 375).
+**Decisiones.md** — D-029 (nueva): estructura de la landing en 8 secciones (hero → cómo funciona → demo → planes → hardware → por qué DataFud → preguntas → contacto). Contexto: 21 174 px en móvil y plazos repetidos 10 veces. Decisión: fuera tira de monedas, stats, "El sistema", ambiente y paso a paso con fotos; plazos en una sola línea de tiempo en días. Consecuencia: "48" y "15 días" como máximo 3 veces cada uno; la landing ya no muestra "18 monedas" ni "Latinoamérica" como origen.
+**Seguridad.md** — sin cambios.
+**Otras páginas** — Paneles-Y-Vistas (landing): secciones `#como-funciona`, `#demo`, `#planes`, `#hardware`, `#confianza` (Por qué DataFud), `#preguntas`, `#contacto`; desaparecen `#sistema` e `#implementacion`. Marca-Y-Marketing: cierre de marca "Hecho en Costa Rica" (antes "Hecho en Latinoamérica"). Plan-Landing-First: estructura nueva.
+**log.md** — `## [2026-09-22] ingest | Landing más corta`
+- De 21 174 a 14 754 px en móvil (−30,3 %) y de 12 a 8 secciones.
+- Plazos en una línea de tiempo; "48" y "15 días" ×3 cada uno.
+- Textos mínimos de 12 px; "Hecho en Costa Rica".
+- Lighthouse móvil local 96 / 100 / 96 / 100.

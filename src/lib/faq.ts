@@ -48,7 +48,7 @@ export const FAQ_ITEMS: FaqItem[] = [
   },
   {
     id: "garantia-48",
-    q: "¿Qué pasa si no está en 48 horas?",
+    q: "¿Qué pasa si no cumplen el plazo?",
     a: `${terms.guarantee48h} El plazo corre desde que tenemos todo; si falta algo, te avisamos qué.`,
   },
   {

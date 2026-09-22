@@ -44,8 +44,8 @@ export function TrustSection() {
   const wa = waProps("confianza");
   return (
     <section id="confianza" className="scroll-mt-24 border-y border-stone-200/60 bg-white">
-      <div className="mx-auto max-w-6xl px-5 py-24 sm:px-6 sm:py-32">
-        <div className="grid gap-12 lg:grid-cols-[0.85fr_1.15fr] lg:gap-20">
+      <div className="mx-auto max-w-6xl px-5 py-16 sm:px-6 sm:py-28">
+        <div className="grid gap-8 lg:grid-cols-[0.85fr_1.15fr] lg:gap-20">
           <RevealOnView className="lg:sticky lg:top-28 lg:self-start">
             <div className="reveal-up">
               <p className="text-xs font-bold uppercase tracking-[0.2em] text-accent-700">Por qué DataFud</p>
@@ -103,8 +103,8 @@ export function TrustSection() {
           <RevealOnView>
             <dl className="divide-y divide-stone-200/80 border-y border-stone-200/80">
               {points.map((p, i) => (
-                <div key={p.title} className="reveal-up py-7 sm:py-8">
-                  <dt className="grid gap-4 sm:grid-cols-[3rem_1fr] sm:gap-6">
+                <div key={p.title} className="reveal-up py-5 sm:py-8">
+                  <dt className="flex items-center gap-4 sm:grid sm:grid-cols-[3rem_1fr] sm:gap-6">
                     <span className="flex h-11 w-11 items-center justify-center rounded-xl border border-stone-200/60 bg-cream-100 text-brand-650">
                       <Icon name={p.icon} size={20} />
                     </span>

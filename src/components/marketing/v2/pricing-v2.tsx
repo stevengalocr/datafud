@@ -57,7 +57,7 @@ const allPlansInclude: { icon: IconName; label: string }[] = [
 
 export function PricingV2() {
   return (
-    <section id="planes" className="mx-auto max-w-6xl scroll-mt-24 px-5 py-24 sm:px-6 sm:py-32">
+    <section id="planes" className="mx-auto max-w-6xl scroll-mt-24 px-5 py-16 sm:px-6 sm:py-28">
       <RevealOnView className="mb-12 max-w-2xl border-l-2 border-accent-400 pl-6 sm:mb-14">
         <div className="reveal-up">
           <p className="text-xs font-bold uppercase tracking-widest text-accent-700">Planes y tarifas</p>
@@ -101,7 +101,7 @@ export function PricingV2() {
             <div
               key={card.code}
               className={cn(
-                "reveal-up relative flex flex-col rounded-2xl border bg-white p-7 transition-all duration-300 ease-out-expo hover:-translate-y-1.5 hover:shadow-[0_16px_48px_rgba(34,80,58,0.08)] sm:p-8",
+                "reveal-up relative flex flex-col rounded-2xl border bg-white p-6 transition-all duration-300 ease-out-expo hover:-translate-y-1.5 hover:shadow-[0_16px_48px_rgba(34,80,58,0.08)] sm:p-8",
                 card.highlight ? "border-accent-400 bg-cream-50/20 ring-1 ring-accent-450/40" : "border-stone-200/80"
               )}
             >
@@ -111,11 +111,11 @@ export function PricingV2() {
                 </span>
               )}
 
-              <div className="mb-6 border-b border-stone-200/50 pb-6">
+              <div className="mb-5 border-b border-stone-200/50 pb-5">
                 <h3 className="font-display text-3xl text-brand-900">{plan.marketingName}</h3>
                 <p className="mt-2 text-sm font-medium text-brand-700/80">{card.tagline}</p>
 
-                <div className="mt-6 flex flex-wrap items-baseline gap-x-2 gap-y-1">
+                <div className="mt-5 flex flex-wrap items-baseline gap-x-2 gap-y-1">
                   <span className="font-display text-[2.6rem] leading-none text-brand-900 sm:text-5xl">{formatCrc(plan.priceCrc)}</span>
                   <span className="text-xs font-semibold uppercase tracking-widest text-brand-700/75">/ mes</span>
                   <span className="text-xs font-semibold text-brand-700/75">≈ {formatUsd(plan.priceUsd)}</span>
@@ -143,7 +143,7 @@ export function PricingV2() {
                 )}
               </div>
 
-              <ul className="flex-1 space-y-4 text-sm font-medium leading-relaxed text-brand-800/90">
+              <ul className="flex-1 space-y-2.5 text-sm font-medium leading-relaxed text-brand-800/90">
                 {card.features.map((f) => (
                   <li key={f} className="flex items-start gap-3">
                     <span className="mt-1.5 flex-shrink-0 text-accent-700">
@@ -159,14 +159,14 @@ export function PricingV2() {
               {card.code === "basico" && (
                 <p className="mt-6 flex items-start gap-2.5 rounded-xl border border-brand-100 bg-brand-50 px-4 py-3 text-[13px] font-medium leading-relaxed text-brand-800">
                   <Icon name="shield" size={16} className="mt-0.5 flex-shrink-0 text-brand-600" />
-                  <span><span className="font-bold">Garantía de 48 horas.</span> {terms.guarantee48h}</span>
+                  <span><span className="font-bold">Garantía de entrega.</span> {terms.guarantee48h}</span>
                 </p>
               )}
 
               <a
                 {...waProps(`plan-${card.code}`)}
                 className={cn(
-                  "mt-8 inline-flex h-11 items-center justify-center gap-2 rounded-lg text-xs font-bold uppercase tracking-widest transition-all duration-300 ease-out-expo active:scale-[0.98]",
+                  "mt-7 inline-flex h-11 items-center justify-center gap-2 rounded-lg text-xs font-bold uppercase tracking-widest transition-all duration-300 ease-out-expo active:scale-[0.98]",
                   card.highlight
                     ? "border border-accent-400 bg-brand-600 text-white shadow-sm hover:bg-brand-700"
                     : "border border-stone-300 bg-white text-brand-700 hover:border-stone-400 hover:bg-cream-100"
@@ -181,39 +181,17 @@ export function PricingV2() {
       </RevealOnView>
 
       {/* Lo que incluyen todos los planes */}
-      <RevealOnView className="reveal-up mt-10 grid gap-6 rounded-2xl border border-accent-300/40 bg-cream-100/60 p-7 sm:grid-cols-3 sm:p-9">
+      <RevealOnView className="reveal-up mt-8 grid gap-4 rounded-2xl border border-accent-300/40 bg-cream-100/60 p-6 sm:grid-cols-3 sm:gap-6 sm:p-9">
         {allPlansInclude.map((s) => (
           <div key={s.label} className="flex items-start gap-3">
-            <span className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg border border-stone-200/60 bg-white/70 text-brand-600 shadow-sm">
-              <Icon name={s.icon} size={18} />
+            <span className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg border border-stone-200/60 bg-white/70 text-brand-600 shadow-sm">
+              <Icon name={s.icon} size={16} />
             </span>
             <p className="text-sm font-medium leading-relaxed text-brand-850">{s.label}</p>
           </div>
         ))}
       </RevealOnView>
 
-      {/* Puente al hardware de mesa (la oferta completa vive en #hardware) */}
-      <RevealOnView className="reveal-up mt-8 flex flex-col gap-5 rounded-2xl border border-stone-200/80 bg-white px-7 py-6 sm:flex-row sm:items-center sm:justify-between sm:px-9">
-        <div className="flex items-start gap-4">
-          <span className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-xl border border-accent-300 bg-brand-600 text-white">
-            <Icon name="qr" size={20} />
-          </span>
-          <div>
-            <h3 className="font-display text-xl text-brand-900">¿Y lo que va en la mesa?</h3>
-            <p className="mt-1 text-sm font-medium leading-relaxed text-brand-700/85">
-              Stands QR impresos en 3D desde {formatCrc(PRICING.hardware[0].priceCrc)} y tarjetas NFC a{" "}
-              {formatCrc(PRICING.hardware[1].priceCrc)} por unidad, con tu logo. {PRICING.hardwareDelivery.minimum}
-            </p>
-          </div>
-        </div>
-        <a
-          href="#hardware"
-          className="inline-flex h-11 flex-shrink-0 items-center justify-center gap-2 whitespace-nowrap rounded-lg border border-stone-300 bg-white px-6 text-xs font-bold uppercase tracking-[0.16em] text-brand-800 transition-all duration-300 ease-out-expo hover:border-stone-400 hover:bg-cream-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-400 focus-visible:ring-offset-2"
-        >
-          Ver hardware de mesa
-          <Icon name="arrow-right" size={16} />
-        </a>
-      </RevealOnView>
     </section>
   );
 }

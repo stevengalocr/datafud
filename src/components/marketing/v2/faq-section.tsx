@@ -31,8 +31,8 @@ export function FaqSection() {
 
   return (
     <section id="preguntas" className="scroll-mt-24 border-b border-stone-200/60 bg-cream-50">
-      <div className="mx-auto max-w-6xl px-5 py-24 sm:px-6 sm:py-32">
-        <div className="grid gap-12 lg:grid-cols-[0.8fr_1.2fr] lg:gap-20">
+      <div className="mx-auto max-w-6xl px-5 py-16 sm:px-6 sm:py-28">
+        <div className="grid gap-8 lg:grid-cols-[0.8fr_1.2fr] lg:gap-20">
           <RevealOnView className="lg:sticky lg:top-28 lg:self-start">
             <div className="reveal-up">
               <p className="text-xs font-bold uppercase tracking-[0.2em] text-accent-700">Preguntas frecuentes</p>
@@ -72,11 +72,11 @@ export function FaqSection() {
                         aria-controls={panelId}
                         onClick={() => setOpen(expanded ? null : item.id)}
                         onKeyDown={(e) => onKeyDown(e, i)}
-                        className="group flex w-full items-start justify-between gap-6 py-5 text-left transition-colors duration-200 hover:text-brand-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-400 focus-visible:ring-offset-2 focus-visible:ring-offset-cream-50 sm:py-6"
+                        className="group flex w-full items-start justify-between gap-6 py-4 text-left transition-colors duration-200 hover:text-brand-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-400 focus-visible:ring-offset-2 focus-visible:ring-offset-cream-50 sm:py-6"
                       >
                         <span className="flex items-baseline gap-4">
                           <span className="hidden w-6 font-display text-sm text-accent-700 sm:inline">{String(i + 1).padStart(2, "0")}</span>
-                          <span className="font-display text-lg leading-snug text-brand-900 sm:text-xl">{item.q}</span>
+                          <span className="font-display text-base leading-snug text-brand-900 sm:text-xl">{item.q}</span>
                         </span>
                         <span
                           className={cn(
@@ -96,7 +96,7 @@ export function FaqSection() {
                       role="region"
                       aria-labelledby={btnId}
                       hidden={!expanded}
-                      className="pb-6 pr-2 sm:pl-10"
+                      className="pb-5 pr-2 sm:pl-10"
                     >
                       <p className="faq-answer max-w-2xl text-sm font-medium leading-relaxed text-brand-700/85 sm:text-[15px]">
                         {item.a}

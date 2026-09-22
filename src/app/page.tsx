@@ -2,12 +2,9 @@ import Link from "next/link";
 import Image from "next/image";
 import { LandingNavV2 } from "@/components/marketing/v2/landing-nav-v2";
 import { PricingV2 } from "@/components/marketing/v2/pricing-v2";
-import { RevealOnView } from "@/components/marketing/v2/reveal";
-import { PinnedSteps, type Step } from "@/components/marketing/v2/pinned-steps";
 import { Parallax } from "@/components/marketing/v2/parallax";
 import { MagneticCta } from "@/components/marketing/v2/magnetic-cta";
-import { CountUp } from "@/components/marketing/v2/count-up";
-import { Icon, type IconName } from "@/components/ui/icon";
+import { Icon } from "@/components/ui/icon";
 import { PRICING } from "@/lib/constants";
 import { ContactSection } from "@/components/marketing/v2/contact-section";
 import { HardwareSection } from "@/components/marketing/v2/hardware-section";
@@ -23,98 +20,6 @@ import { formatCrc } from "@/lib/currency/format";
 import type { Metadata } from "next";
 import { faqJsonLd, organizationJsonLd, productsJsonLd } from "@/lib/seo";
 
-// Fotografía de stock (Unsplash, licencia libre), tratada con overlay de marca. Son fotos
-// ilustrativas: los alt las describen como tales y nunca se presentan como clientes.
-const u = (id: string) => `https://images.unsplash.com/${id}?auto=format&fit=crop&w=1500&q=80`;
-const IMG = {
-  food: u("photo-1504674900247-0877df9cc836"),
-  tables: u("photo-1559339352-11d035aa65de"),
-  communal: u("photo-1528605248644-14dd04022da1"),
-  interior: u("photo-1552566626-52f8b828add9"),
-  tablePhone: u("photo-1466978913421-dad2ebd01d17"),
-  counter: u("photo-1556742049-0cfed4f6a45d"),
-  dark: u("photo-1517248135467-4c7edcad34c4"),
-};
-
-const steps: Step[] = [
-  {
-    number: "01",
-    title: "Nosotros montamos tu carta",
-    desc: "Nos pasás el menú, las fotos y el logo. Armamos tu carta digital con tu marca, en hasta 3 idiomas, y la dejamos publicada en 48 horas.",
-    image: IMG.food,
-    alt: "Foto ilustrativa de platillos servidos sobre una mesa de madera",
-    icon: "utensils",
-  },
-  {
-    number: "02",
-    title: "Ponemos los QR y NFC en tus mesas",
-    desc: "Stands QR impresos en 3D y tarjetas NFC con tu logo, listos para cada mesa. El comensal escanea o toca y la carta se abre al instante.",
-    image: IMG.tables,
-    alt: "Foto ilustrativa de mesas de un restaurante preparadas para el servicio",
-    icon: "qr",
-  },
-  {
-    number: "03",
-    title: "Recibís los pedidos",
-    desc: "Con el sistema completo, las comandas llegan directo a tu pantalla de cocina. Gestionás cada estado, de preparación a entrega, sin papel.",
-    image: IMG.communal,
-    alt: "Foto ilustrativa de una mesa comunal con comensales",
-    icon: "receipt",
-  },
-  {
-    number: "04",
-    title: "Medís tu negocio",
-    desc: "Ticket promedio, platillos más vendidos e ingresos del día en reportes claros, para decidir con datos y no a ojo.",
-    image: IMG.interior,
-    alt: "Foto ilustrativa del interior de un restaurante",
-    icon: "chart",
-  },
-];
-
-const highlights: { icon: IconName; label: string }[] = [
-  { icon: "utensils", label: "Te la montamos nosotros" },
-  { icon: "globe", label: "Español e inglés" },
-  { icon: "printer", label: "Stands QR 3D y NFC hechos acá" },
-  { icon: "whatsapp", label: "Cambios por WhatsApp" },
-];
-
-const currencies = ["₡ CRC", "$ MXN", "S/ PEN", "$ COP", "R$ BRL", "$ ARS", "Q GTQ", "Bs BOB", "$ CLP", "₲ PYG", "$U UYU", "B/. PAB", "USD"];
-
-const stats: { value: number; suffix?: string; label: string }[] = [
-  { value: PRICING.delivery.menuHours, suffix: "h", label: "para tener tu carta lista" },
-  { value: PRICING.delivery.fullSystemDays, label: "días para el sistema completo" },
-  { value: 3, label: "idiomas listos" },
-  { value: 18, label: "monedas de Latam" },
-];
-
-const views: { icon: IconName; tag: string; title: string; image: string; alt: string; points: string[] }[] = [
-  {
-    icon: "smartphone",
-    tag: "Servicio al comensal",
-    title: "Menú interactivo y veloz",
-    image: IMG.tablePhone,
-    alt: "Foto ilustrativa de comensales compartiendo una comida con el teléfono sobre la mesa",
-    points: [
-      "Escaneo rápido o toque NFC en la mesa, sin apps ni cuentas.",
-      "Se adapta a cualquier teléfono.",
-      "Disponible en español, inglés y portugués.",
-      "Con el sistema completo, arma su pedido y lo envía a cocina.",
-    ],
-  },
-  {
-    icon: "store",
-    tag: "Operación del negocio",
-    title: "Tu restaurante, bajo control",
-    image: IMG.counter,
-    alt: "Foto ilustrativa de personal atendiendo en el mostrador de un local",
-    points: [
-      "Actualizás platos y precios al instante.",
-      "Comandas mesa por mesa, con su estado.",
-      "Reportes del día y ticket promedio.",
-      "Tu moneda y tus idiomas, configurados.",
-    ],
-  },
-];
 
 // Glifo QR firma de la marca: celdas que se ensamblan al cargar.
 const QR_CELLS = [
@@ -258,153 +163,21 @@ export default function HomePage() {
           </div>
         </div>
 
-        {/* Barra de highlights */}
-        <RevealOnView className="relative border-t border-stone-200/60 bg-white/60">
-          <div className="mx-auto grid max-w-6xl grid-cols-2 gap-y-6 px-5 py-7 sm:px-6 md:grid-cols-4 md:gap-y-0">
-            {highlights.map((h) => (
-              <div
-                key={h.label}
-                className="reveal-up flex items-center gap-3 px-1 sm:px-2 md:border-r md:border-stone-250/60 md:last:border-r-0"
-              >
-                <span className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg border border-stone-200/40 bg-cream-100 text-brand-650">
-                  <Icon name={h.icon} size={15} />
-                </span>
-                <span className="text-[10px] font-bold uppercase tracking-[0.14em] text-brand-800">
-                  {h.label}
-                </span>
-              </div>
-            ))}
-          </div>
-        </RevealOnView>
       </section>
 
-      {/* ── Tira de monedas + stats ────────────────────────────── */}
-      <section className="border-b border-stone-200/60 bg-brand-950 py-10 text-cream-100">
-        <div className="marquee-host relative overflow-hidden">
-          <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-24 bg-gradient-to-r from-brand-950 to-transparent" />
-          <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-24 bg-gradient-to-l from-brand-950 to-transparent" />
-          <div className="marquee gap-10 pr-10">
-            {[...currencies, ...currencies].map((c, i) => (
-              <span
-                key={i}
-                className="flex shrink-0 items-center gap-3 font-display text-2xl text-cream-100/85"
-              >
-                {c}
-                <span className="h-1 w-1 rounded-full bg-accent-400/70" />
-              </span>
-            ))}
-          </div>
-        </div>
-
-        <RevealOnView className="mx-auto mt-10 grid max-w-6xl grid-cols-2 gap-y-8 px-5 sm:px-6 md:grid-cols-4">
-          {stats.map((s) => (
-            <div key={s.label} className="reveal-up flex flex-col items-start pr-6">
-              <span className="font-display text-[clamp(2.4rem,5vw,3.4rem)] leading-none text-accent-300">
-                <CountUp to={s.value} suffix={s.suffix} />
-              </span>
-              <span className="mt-2 text-[11px] font-bold uppercase tracking-[0.16em] text-cream-100/65">
-                {s.label}
-              </span>
-            </div>
-          ))}
-        </RevealOnView>
-      </section>
-
-      {/* ── Cómo funciona (pinneado) ───────────────────────────── */}
-      <PinnedSteps steps={steps} />
-
-      {/* ── El sistema (dos caras) ─────────────────────────────── */}
-      <section id="sistema" className="scroll-mt-24 border-y border-stone-200/60 bg-white">
-        <div className="mx-auto max-w-6xl px-5 py-24 sm:px-6 sm:py-32">
-          <RevealOnView className="max-w-2xl">
-            <div className="reveal-up">
-              <p className="text-xs font-bold uppercase tracking-[0.2em] text-accent-700">
-                El sistema completo
-              </p>
-              <h2 className="mt-3 font-display text-[clamp(2rem,5vw,3.5rem)] leading-[1.05] tracking-tight text-brand-900">
-                Una experiencia para cada lado de la mesa
-              </h2>
-            </div>
-          </RevealOnView>
-
-          <RevealOnView className="mt-14 grid gap-8 sm:mt-16 lg:grid-cols-2">
-            {views.map((v) => (
-              <div
-                key={v.title}
-                className="reveal-up group flex flex-col overflow-hidden rounded-3xl border border-stone-200/80 bg-cream-50/40 transition-all duration-300 ease-out-expo hover:-translate-y-1 hover:border-accent-300/60 hover:shadow-[0_24px_60px_-24px_rgba(34,80,58,0.3)]"
-              >
-                <div className="img-grade relative aspect-[16/10] overflow-hidden">
-                  <Image
-                    src={v.image}
-                    alt={v.alt}
-                    fill
-                    sizes="(min-width: 1024px) 50vw, 100vw"
-                    className="object-cover transition-transform duration-700 ease-out-expo group-hover:scale-[1.04]"
-                  />
-                  <span className="absolute left-5 top-5 z-10 flex h-11 w-11 items-center justify-center rounded-xl border border-accent-300 bg-brand-600 text-white shadow-lg">
-                    <Icon name={v.icon} size={20} />
-                  </span>
-                </div>
-                <div className="flex flex-1 flex-col p-7 sm:p-8">
-                  <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-accent-700">
-                    {v.tag}
-                  </span>
-                  <h3 className="mt-1 font-display text-2xl text-brand-900">{v.title}</h3>
-                  <ul className="mt-6 space-y-3.5 text-[13px] font-medium leading-relaxed text-brand-700/80">
-                    {v.points.map((p) => (
-                      <li key={p} className="flex items-start gap-2.5">
-                        <span className="mt-0.5 flex-shrink-0 text-accent-700">
-                          <svg width="10" height="10" viewBox="0 0 10 10" className="h-2.5 w-2.5 fill-current">
-                            <rect width="5" height="5" transform="rotate(45 5 0.5)" />
-                          </svg>
-                        </span>
-                        <span>{p}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </div>
-            ))}
-          </RevealOnView>
-        </div>
-      </section>
-
-      {/* ── Hardware de mesa ───────────────────────────────────── */}
-      <HardwareSection />
+      {/* ── Cómo funciona: una sola línea de tiempo con plazos ───── */}
+      <ImplementationSection />
 
       {/* ── Demo en vivo ───────────────────────────────────────── */}
       <DemoSection />
 
-      {/* ── Act-break atmosférico ──────────────────────────────── */}
-      <section className="relative isolate overflow-hidden">
-        <div className="img-grade absolute inset-0 -z-10">
-          <Parallax strength={50} className="absolute inset-0 scale-110">
-            <Image src={IMG.dark} alt="" fill sizes="100vw" className="object-cover" />
-          </Parallax>
-          <div className="absolute inset-0 bg-brand-950/70" />
-        </div>
-        <div className="mx-auto max-w-4xl px-5 py-28 text-center sm:px-6 sm:py-36">
-          <RevealOnView>
-            <p className="reveal-up font-display text-[clamp(1.8rem,4.5vw,3rem)] leading-[1.15] text-cream-100">
-              Hecho para las mesas de{" "}
-              <span className="text-accent-300">Latinoamérica</span>.
-            </p>
-            <p className="reveal-up mx-auto mt-5 max-w-xl text-sm font-medium leading-relaxed text-cream-100/75 sm:text-base">
-              Para sodas, cafeterías, bares, food trucks, hoteles y restaurantes que
-              quieren cambiar la carta impresa por una carta digital que se ve mejor,
-              se actualiza sola y habla el idioma de cada cliente.
-            </p>
-          </RevealOnView>
-        </div>
-      </section>
-
-      {/* ── Implementación ─────────────────────────────────────── */}
-      <ImplementationSection />
-
       {/* ── Planes y precios ───────────────────────────────────── */}
       <PricingV2 />
 
-      {/* ── Confianza ──────────────────────────────────────────── */}
+      {/* ── Hardware de mesa ───────────────────────────────────── */}
+      <HardwareSection />
+
+      {/* ── Por qué DataFud ────────────────────────────────────── */}
       <TrustSection />
 
       {/* ── Preguntas frecuentes ───────────────────────────────── */}

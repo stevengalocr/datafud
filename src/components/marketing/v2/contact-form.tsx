@@ -10,7 +10,7 @@ import { TurnstileWidget } from "@/components/marketing/v2/turnstile-widget";
 
 const field =
   "h-12 w-full rounded-lg border border-stone-250 bg-cream-50 px-4 text-sm font-medium text-brand-900 placeholder:text-brand-700/45 transition-colors duration-200 focus:border-brand-600 focus:outline-none focus:ring-2 focus:ring-accent-400/60";
-const label = "mb-1.5 block text-[11px] font-bold uppercase tracking-[0.16em] text-brand-800";
+const label = "mb-1.5 block text-xs font-bold uppercase tracking-[0.16em] text-brand-800";
 
 const initial: ContactState = { status: "idle" };
 

@@ -10,11 +10,10 @@ import { SITE, hasWhatsApp, mailLink, socialLinks, waProps, whatsappDisplay } fr
 // Cierre oscuro (CTA final) + footer de la landing.
 const explore = [
   { href: "#como-funciona", label: "Cómo funciona" },
-  { href: "#sistema", label: "El sistema" },
-  { href: "#hardware", label: "Hardware de mesa" },
-  { href: "#implementacion", label: "Implementación" },
+  { href: "#demo", label: "Demo" },
   { href: "#planes", label: "Planes y precios" },
-  { href: "#demo", label: "Demo en vivo" },
+  { href: "#hardware", label: "Hardware de mesa" },
+  { href: "#confianza", label: "Por qué DataFud" },
   { href: "#preguntas", label: "Preguntas" },
   { href: "#contacto", label: "Contacto" },
 ];
@@ -31,8 +30,8 @@ export function SiteFooter() {
         <div className="pointer-events-none absolute left-1/2 top-24 -z-10 h-72 w-[36rem] max-w-[88%] -translate-x-1/2 rounded-full bg-accent-500/10 blur-3xl" />
 
         <RevealOnView className="relative">
-          <div className="reveal-up mx-auto max-w-2xl px-5 pb-16 pt-24 text-center sm:px-6 sm:pb-20 sm:pt-32">
-            <span className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-4 py-1.5 text-[10px] font-bold uppercase tracking-[0.18em] text-accent-200">
+          <div className="reveal-up mx-auto max-w-2xl px-5 pb-12 pt-16 text-center sm:px-6 sm:pb-20 sm:pt-32">
+            <span className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-4 py-1.5 text-xs font-bold uppercase tracking-[0.18em] text-accent-200">
               <span className="h-1.5 w-1.5 rounded-full bg-accent-400" />
               Empezá hoy
             </span>
@@ -50,8 +49,8 @@ export function SiteFooter() {
               <Icon name="whatsapp" size={18} />
               Hablemos por WhatsApp
             </MagneticCta>
-            <p className="mt-5 text-[11px] font-semibold uppercase tracking-wider text-cream-100/50">
-              Carta lista en {PRICING.delivery.menuHours} horas · desde {formatCrc(PRICING.plans.basico.priceCrc)}/mes
+            <p className="mt-5 text-xs font-semibold uppercase tracking-wider text-cream-100/50">
+              Desde {formatCrc(PRICING.plans.basico.priceCrc)}/mes · Te la montamos nosotros
             </p>
           </div>
 
@@ -59,21 +58,21 @@ export function SiteFooter() {
             <div className="h-px bg-gradient-to-r from-transparent via-white/15 to-transparent" />
           </div>
 
-          <div className="mx-auto max-w-6xl px-5 py-14 sm:px-6 sm:py-16">
-            <div className="grid gap-12 md:grid-cols-[1.5fr_1fr_1fr]">
+          <div className="mx-auto max-w-6xl px-5 py-10 sm:px-6 sm:py-16">
+            <div className="grid gap-8 md:grid-cols-[1.5fr_1fr_1fr] md:gap-12">
               <div className="flex max-w-sm flex-col items-start">
                 <span className="inline-flex items-center rounded-xl bg-white px-3 py-2 shadow-sm">
                   <Image src="/logo-main.png" alt="DataFud" width={140} height={58} className="h-7 w-auto" />
                 </span>
                 <p className="mt-6 text-[13px] font-medium leading-relaxed text-cream-100/70">
-                  Menú digital por QR y NFC, pedidos desde la mesa y reportes de venta
-                  para sodas, cafeterías y restaurantes de Latinoamérica.
+                  Menú digital por QR y NFC, stands impresos en 3D y, con el sistema completo, pedidos desde la mesa
+                  para sodas, cafeterías y restaurantes de Costa Rica.
                 </p>
               </div>
 
               <div>
-                <h3 className="text-[10px] font-bold uppercase tracking-[0.18em] text-accent-300/80">Explorar</h3>
-                <nav aria-label="Explorar" className="mt-4 flex flex-col items-start text-xs font-bold uppercase tracking-[0.16em] text-cream-100/75">
+                <h3 className="text-xs font-bold uppercase tracking-[0.18em] text-accent-300/80">Explorar</h3>
+                <nav aria-label="Explorar" className="mt-4 grid grid-cols-2 gap-x-4 md:flex md:flex-col md:items-start text-xs font-bold uppercase tracking-[0.16em] text-cream-100/75">
                   {explore.map((l) => (
                     <a key={l.href} href={l.href} className="inline-flex min-h-11 items-center transition-colors duration-200 hover:text-white">
                       {l.label}
@@ -83,7 +82,7 @@ export function SiteFooter() {
               </div>
 
               <div>
-                <h3 className="text-[10px] font-bold uppercase tracking-[0.18em] text-accent-300/80">Contacto</h3>
+                <h3 className="text-xs font-bold uppercase tracking-[0.18em] text-accent-300/80">Contacto</h3>
                 <div className="mt-4 flex flex-col items-start text-xs font-semibold text-cream-100/80">
                   {hasWhatsApp() && (
                     <a {...waProps("footer")} className="inline-flex min-h-11 items-center gap-2 transition-colors duration-200 hover:text-white">
@@ -104,12 +103,12 @@ export function SiteFooter() {
               </div>
             </div>
 
-            <div className="mt-14 flex flex-col gap-4 border-t border-white/10 pb-16 pt-8 text-[10px] md:pb-0 font-bold uppercase tracking-[0.16em] text-cream-100/50 sm:flex-row sm:items-center sm:justify-between">
+            <div className="mt-10 flex flex-col gap-4 border-t border-white/10 pb-16 pt-8 text-xs md:pb-0 font-bold uppercase tracking-[0.16em] text-cream-100/50 sm:flex-row sm:items-center sm:justify-between">
               <p>© {new Date().getFullYear()} DATAFUD · UN PRODUCTO DE <span className="text-accent-400">GALODEV</span></p>
               <nav aria-label="Legal" className="flex flex-wrap items-center gap-x-5">
                 <Link href="/terminos" className="inline-flex min-h-11 items-center transition-colors duration-200 hover:text-white">Términos</Link>
                 <Link href="/privacidad" className="inline-flex min-h-11 items-center transition-colors duration-200 hover:text-white">Privacidad</Link>
-                <span className="inline-flex min-h-11 items-center">Hecho en Latinoamérica</span>
+                <span className="inline-flex min-h-11 items-center">Hecho en Costa Rica</span>
               </nav>
             </div>
           </div>
