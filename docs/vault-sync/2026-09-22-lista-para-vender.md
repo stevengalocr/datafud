@@ -119,3 +119,13 @@ existentes). Se aplica con "sincronizá el vault" desde Cowork.
 - Tres guías de 650 a 840 palabras con precios desde PRICING y CTA de WhatsApp propio.
 - Sitemap, canonical y OG por página.
 - Verificado: build estático, un h1 por página, qa:landing en 3 viewports.
+
+### V11 · Kit de prospección y contenido · commit (ver V12) · despliegue (ver V12)
+**Pendientes.md** — cerrar: "Sin material para prospectar ni para contenido". Nuevos en "Ventas": "Imprimir un stand de muestra con el QR `utm_source=visita` del kit", "Grabar c01, c03 y c11 del plan de 30 días".
+**Decisiones.md** — ninguna.
+**Seguridad.md** — sin cambios.
+**Otras páginas** — Marca-Y-Marketing: enlazar `docs/ventas/KIT-PROSPECCION.md` y `docs/ventas/CONTENIDO-30-DIAS.md`; convención de UTM `utm_source=<canal>&utm_medium=prospeccion|social|stand-muestra&utm_campaign=<zona o id>`.
+**log.md** — `## [2026-09-22] ingest | Kit de prospección y contenido`
+- Kit con UTMs, 3 mensajes de primer contacto, seguimientos, cierre, guion de 60 s y objeciones.
+- Plan de 12 publicaciones sin clientes ni cifras inventados.
+- Verificado: grep cruzado de cifras contra PRICING y de frases vetadas = 0.

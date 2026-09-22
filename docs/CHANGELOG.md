@@ -37,6 +37,8 @@ Todas las versiones notables del proyecto. Formato basado en
 - Guías de SEO local: `/menu-digital-costa-rica`, `/menu-digital-para-sodas` y
   `/menu-qr-restaurantes-turisticos`, con precios desde `PRICING`, FAQ propia, OG y sitemap.
 - JSON-LD `LocalBusiness` (sin dirección postal) junto a `Organization`.
+- `docs/ventas/`: kit de prospección (enlaces con UTM, mensajes, guion, objeciones) y plan de
+  contenido de 30 días.
 
 Fachada de venta ("landing primero", decisiones D-010 a D-013). Sin backend en producción;
 cada unidad se publica en `main` desde el loop autónomo (`docs/plans/landing-loop-state.md`).
