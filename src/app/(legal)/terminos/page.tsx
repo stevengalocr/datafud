@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { LegalPage, type LegalSection } from "@/components/marketing/v2/legal-page";
-import { PLAN_CODES, PRICING, setupFeeFor } from "@/lib/constants";
+import { PLAN_CODES, PRICING, setupFeeFor, tablesLabel } from "@/lib/constants";
 import { formatCrc } from "@/lib/currency/format";
 import { SITE } from "@/lib/site";
 
@@ -18,7 +18,7 @@ const { plans, terms, delivery, hardwareDelivery } = PRICING;
 const planBullets = PLAN_CODES.map((code) => {
   const p = plans[code];
   const setup = setupFeeFor(code);
-  return `${p.marketingName}: ${formatCrc(p.priceCrc)} al mes y ${formatCrc(setup.crc)} de implementación. ${p.languagesLabel}; ${p.maxProducts ? `hasta ${p.maxProducts} platillos` : "platillos ilimitados"}; ${p.tableOrdering ? "carta digital, pedidos desde la mesa, panel de comandas y reportes de venta" : "carta digital por QR y NFC, sin pedidos desde la mesa"}. Plazo: ${p.deliveryLabel.toLowerCase()}.`;
+  return `${p.marketingName}: ${formatCrc(p.priceCrc)} al mes y ${formatCrc(setup.crc)} de implementación. ${p.languagesLabel}; ${p.maxProducts ? `hasta ${p.maxProducts} platillos` : "platillos ilimitados"}; ${tablesLabel(code).charAt(0).toLowerCase()}${tablesLabel(code).slice(1)}; ${p.tableOrdering ? "carta digital, pedidos desde la mesa, panel de comandas y reportes de venta" : "carta digital por QR y NFC, sin pedidos desde la mesa"}. Plazo: ${p.deliveryLabel.toLowerCase()}.`;
 });
 
 const sections: LegalSection[] = [
@@ -49,7 +49,7 @@ const sections: LegalSection[] = [
     title: "Plazos y garantía de 48 horas",
     paragraphs: [
       `Publicamos tu carta digital en ${delivery.menuHours} horas hábiles y dejamos el sistema completo (pedidos, panel y reportes) en ${delivery.fullSystemDays} días. El reloj empieza a correr cuando recibimos el pago de la implementación y los materiales: el menú con precios, las fotos y el logo.`,
-      `Garantía: ${terms.guarantee48h} Si recibimos materiales incompletos, te avisamos qué falta y el plazo empieza cuando lleguen.`,
+      `Garantía: ${terms.guarantee48h} ${terms.guaranteeRefund} Si recibimos materiales incompletos, te avisamos qué falta y el plazo empieza cuando lleguen.`,
     ],
   },
   {
@@ -64,13 +64,14 @@ const sections: LegalSection[] = [
     title: "Cancelación, sin permanencia",
     paragraphs: [
       `No hay contrato de permanencia. Cancelás cuando quieras avisándonos por WhatsApp o correo con ${terms.noticeDays} días de anticipación; el servicio sigue activo hasta el final del período ya pagado y no se cobra nada más.`,
+      "Si pagaste el año de la Carta, el período pagado son esos 12 meses: al cancelar, el servicio sigue activo hasta que terminen.",
     ],
   },
   {
     title: "Reembolsos",
     paragraphs: [
       "Si cancelás antes de que empecemos la implementación, te devolvemos el 100 % de lo que pagaste por ella dentro de 10 días hábiles.",
-      "Una vez publicada la carta, la implementación no es reembolsable, salvo que aplique la garantía de 48 horas. Las mensualidades pagadas no se prorratean.",
+      "Una vez publicada la carta, la implementación no es reembolsable, salvo que aplique la garantía de 48 horas. Las mensualidades y el pago anual ya pagados no se prorratean.",
     ],
   },
   {

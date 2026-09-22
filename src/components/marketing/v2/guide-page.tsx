@@ -6,7 +6,7 @@ import { AnalyticsEvents } from "@/components/marketing/v2/analytics-events";
 import { MetaPixel } from "@/components/marketing/v2/meta-pixel";
 import { MagneticCta } from "@/components/marketing/v2/magnetic-cta";
 import { Icon } from "@/components/ui/icon";
-import { PLAN_CODES, PRICING, setupFeeFor } from "@/lib/constants";
+import { PLAN_CODES, PRICING, hardwareBy, setupFeeFor } from "@/lib/constants";
 import { formatCrc, formatUsd } from "@/lib/currency/format";
 import { SITE, waProps, type WaOrigin } from "@/lib/site";
 import { organizationJsonLd } from "@/lib/seo";
@@ -15,7 +15,7 @@ import { organizationJsonLd } from "@/lib/seo";
 // /menu-qr-restaurantes-turisticos): mismo nav y footer que la landing, un solo h1, secciones de
 // texto, resumen de precios leído de PRICING, preguntas propias y enlaces internos.
 
-export type GuideSection = { title: string; paragraphs: string[]; bullets?: string[] };
+export type GuideSection = { title: string; paragraphs: string[]; bullets?: string[]; lang?: "en" };
 export type GuideFaq = { q: string; a: string };
 
 export function GuidePage({
@@ -100,7 +100,7 @@ export function GuidePage({
         <article className="mx-auto max-w-3xl px-5 py-14 sm:px-6 sm:py-20">
           <div className="space-y-12">
             {sections.map((s) => (
-              <section key={s.title}>
+              <section key={s.title} lang={s.lang}>
                 <h2 className="font-display text-2xl leading-tight text-brand-900 sm:text-3xl">{s.title}</h2>
                 <div className="mt-4 space-y-4 text-base font-medium leading-relaxed text-brand-800/85">
                   {s.paragraphs.map((p) => (
@@ -210,7 +210,7 @@ function PriceSummary() {
         </table>
       </div>
       <p className="mt-4 text-sm font-medium leading-relaxed text-brand-700/85">
-        Stand QR 3D desde {formatCrc(PRICING.hardware[0].priceCrc)} y tarjeta NFC a {formatCrc(PRICING.hardware[1].priceCrc)} por
+        Stand QR 3D desde {formatCrc(hardwareBy("stand-qr-3d").priceCrc)} y tarjeta NFC a {formatCrc(hardwareBy("tarjeta-nfc").priceCrc)} por
         unidad. {PRICING.terms.permanence}{" "}
         <Link href="/#planes" className="font-semibold text-brand-800 underline decoration-accent-400 underline-offset-4 hover:text-brand-900">
           Ver los planes completos

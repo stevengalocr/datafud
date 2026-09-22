@@ -94,6 +94,7 @@ export function FaqSection() {
                     <div
                       id={panelId}
                       role="region"
+                      data-faq-panel
                       aria-labelledby={btnId}
                       hidden={!expanded}
                       className="pb-5 pr-2 sm:pl-10"

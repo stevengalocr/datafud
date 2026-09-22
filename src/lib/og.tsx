@@ -1,4 +1,5 @@
 import { ImageResponse } from "next/og";
+import { PRICING } from "@/lib/constants";
 
 // Imagen Open Graph de marca (1200×630) generada en el build. Sin fuentes remotas: el
 // build no depende de la red. Colores de docs/BRAND.md.
@@ -52,9 +53,9 @@ export function ogImage({ title, subtitle, kicker = "datafud.com" }: { title: st
           </div>
         </div>
         <div style={{ display: "flex", gap: 36, fontSize: 18, letterSpacing: 3, color: "#dcb65a", fontFamily: "Arial, Helvetica, sans-serif" }}>
-          <span>CARTA LISTA EN 48 HORAS</span>
+          <span>{`CARTA LISTA EN ${PRICING.delivery.menuHours} HORAS`}</span>
           <span>·</span>
-          <span>SISTEMA COMPLETO EN 15 DÍAS</span>
+          <span>{`SISTEMA COMPLETO EN ${PRICING.delivery.fullSystemDays} DÍAS`}</span>
           <span>·</span>
           <span>HECHO EN COSTA RICA</span>
         </div>

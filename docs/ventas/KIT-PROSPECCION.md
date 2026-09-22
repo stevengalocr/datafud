@@ -31,15 +31,17 @@ Reemplazá `<zona>` por la zona o campaña, en minúsculas y sin tildes (ej. `he
 | Canal | Enlace |
 |---|---|
 | WhatsApp (prospección) | `https://datafud.com/?utm_source=whatsapp&utm_medium=prospeccion&utm_campaign=<zona>` |
-| WhatsApp, directo a la demo | `https://datafud.com/preview/cliente?utm_source=whatsapp&utm_medium=prospeccion&utm_campaign=<zona>` |
+| WhatsApp, sección de la demo | `https://datafud.com/?utm_source=whatsapp&utm_medium=prospeccion&utm_campaign=<zona>#demo` |
 | Instagram (bio o historia) | `https://datafud.com/?utm_source=instagram&utm_medium=social&utm_campaign=<zona>` |
 | Facebook (publicación o grupo) | `https://datafud.com/?utm_source=facebook&utm_medium=social&utm_campaign=<zona>` |
-| Visita presencial (QR impreso en el stand de muestra) | `https://datafud.com/preview/cliente?utm_source=visita&utm_medium=stand-muestra&utm_campaign=<zona>` |
+| Visita presencial (QR impreso en el stand de muestra) | `https://datafud.com/?utm_source=visita&utm_medium=stand-muestra&utm_campaign=<zona>#demo` |
 | Guía para sodas | `https://datafud.com/menu-digital-para-sodas?utm_source=whatsapp&utm_medium=prospeccion&utm_campaign=<zona>` |
 | Guía para turísticos | `https://datafud.com/menu-qr-restaurantes-turisticos?utm_source=whatsapp&utm_medium=prospeccion&utm_campaign=<zona>` |
 
-> Nota: la analítica guarda los UTM de la visita de entrada. Si una misma persona entra dos veces
-> con enlaces distintos, vale el último.
+> Nota: la analítica guarda los UTM de la visita de entrada en la landing y en las guías. La demo
+> (`/preview/…`) no mide: por eso los enlaces medidos llevan a `/#demo`, desde donde se abre la carta
+> demo con un toque. Si querés que el cliente caiga directo en la carta demo, usá
+> `https://datafud.com/preview/cliente` sin UTM (esa visita no queda medida).
 
 ## Primer contacto por WhatsApp (máximo 5 líneas)
 
@@ -48,7 +50,7 @@ Reemplazá `<zona>` por la zona o campaña, en minúsculas y sin tildes (ej. `he
 > Hola, ¿qué tal? Soy Steven, de DataFud, acá en Costa Rica.
 > Montamos cartas digitales con QR para sodas: la carta en el celular del cliente, en colones y con fotos.
 > Cuando cambia un precio, nos escribís y lo actualizamos, sin reimprimir.
-> Mirá cómo se ve una soda de ejemplo: https://datafud.com/preview/cliente?utm_source=whatsapp&utm_medium=prospeccion&utm_campaign=<zona>
+> Mirá cómo se ve una soda de ejemplo: https://datafud.com/?utm_source=whatsapp&utm_medium=prospeccion&utm_campaign=<zona>#demo
 > Desde ₡14 900 al mes. ¿Te interesa que te cuente más?
 
 **2 · Restaurante turístico**
@@ -64,7 +66,7 @@ Reemplazá `<zona>` por la zona o campaña, en minúsculas y sin tildes (ej. `he
 > Hola, soy Steven, de DataFud. Vi que la carta de ustedes está en PDF (o impresa) y quería mostrarles otra opción.
 > Una carta digital que se lee bien en el celular, con fotos y categorías, y que se actualiza sin reimprimir.
 > La montamos nosotros con su marca, y los cambios por WhatsApp están incluidos.
-> Así se ve: https://datafud.com/preview/cliente?utm_source=whatsapp&utm_medium=prospeccion&utm_campaign=<zona>
+> Así se ve: https://datafud.com/?utm_source=whatsapp&utm_medium=prospeccion&utm_campaign=<zona>#demo
 > ¿Les interesa?
 
 ## Seguimientos
@@ -105,14 +107,17 @@ algún momento querés actualizar la carta, acá estoy. Te dejo mi contacto guar
 - **"Hay gratis."** "Sí, hay opciones donde vos mismo armás la carta. Si tenés el tiempo, te sirven. Lo nuestro es que te la montamos nosotros, en español e inglés, con tus fotos y tu marca, y los cambios por WhatsApp están incluidos: no tenés que aprender nada."
 - **"Ya tengo menú en PDF."** "El PDF se ve pequeño en el celular y cada cambio es volver a diseñarlo. La carta digital se lee cómoda, tiene categorías, fotos y cambio de idioma, y los precios se actualizan sin tocar el QR."
 - **"¿Y la factura?"** "Recibís comprobante de cada pago. Si tu negocio necesita factura electrónica, avisame antes de contratar y lo coordinamos. Ojo: DataFud no reemplaza tu sistema de facturación, convive con el que ya usás."
-- **"Está caro."** "El plan Carta es ₡14 900 al mes, y si pagás el año son ₡149 000 con dos meses gratis y la implementación incluida. Incluye el montaje, la traducción y los cambios. Si la carta no está publicada en 48 horas hábiles desde que tengo tu material, no pagás la implementación."
+- **"Está caro."** "El plan Carta es ₡14 900 al mes; el primer año sale ₡203 700 pagando mes a mes, o ₡149 000 si pagás el año, con dos meses gratis y la implementación incluida. Incluye el montaje, la traducción y los cambios. Si la carta no está publicada en 48 horas hábiles desde que tengo tu material, no pagás la implementación."
+- **"¿Cuántas mesas y categorías incluye?"** "La Carta llega hasta 5 categorías y 8 mesas con QR (y 60 platillos). Si tenés más, Estándar llega a 20 categorías y 30 mesas."
+- **"¿El precio lleva IVA?"** Pendiente de decisión (ver PENDIENTES-STEVEN en `docs/plans/venta-loop-state.md`): no responder de memoria; decir "te lo confirmo en la propuesta".
 - **"Mis clientes no escanean."** "Para eso está la tarjeta NFC (₡7 500): el cliente acerca el teléfono y la carta se abre sola, sin cámara. También hay stand con QR y NFC juntos, desde ₡10 000."
 - **"¿Y si no me gusta?"** "No hay contrato de permanencia: cancelás con 15 días de aviso. Y antes de decidir podés ver la carta demo desde tu celular."
 
 ## Qué no decir nunca
 
-Promesas de resultado (sobre ventas, reseñas u ocupación del local), superlativos, comparaciones de
-precio con la competencia, tiempos de respuesta del soporte, cifras de clientes o testimonios que no
+Promesas de resultado (sobre ventas, reseñas u ocupación del local), superlativos, comparaciones con
+marcas concretas o decir que somos más económicos (los rangos genéricos del mercado de la guía
+`/menu-digital-costa-rica` sí se pueden citar), tiempos de respuesta del soporte, cifras de clientes o testimonios que no
 existan. La lista completa de frases vetadas está en `docs/MARKETING.md` §9 y en la regla 10 de
 `CLAUDE.md`. Si preguntan cuántos clientes tenemos, se responde con la verdad.
 
@@ -124,5 +129,7 @@ existan. La lista completa de frases vetadas está en `docs/MARKETING.md` §9 y 
 | ₡24 900 · ₡125 000 (implementación) | `PRICING.setupFee.carta.crc` / `.sistema.crc` |
 | ₡39 800 · ₡149 900 · ₡174 900 | `firstPaymentFor()` (mismas cifras en la FAQ "¿Cuánto pago en total el primer mes?") |
 | ₡149 000/año | `PRICING.annualCarta.crc` |
+| ₡203 700 (primer año mes a mes) | `firstYearMonthly("basico")` (misma cifra en la FAQ "¿Por qué cuesta más…?") |
+| 5 categorías · 8 mesas · 60 platillos | `PRICING.plans.basico.maxCategories/maxTables/maxProducts` |
 | ₡6 000 · ₡7 500 · ₡10 000 | `PRICING.hardware[*].priceCrc` |
 | 48 horas · 15 días · 3 a 5 días hábiles · 15 días de aviso | `PRICING.delivery`, `hardwareDelivery.leadTime`, `terms.noticeDays` |

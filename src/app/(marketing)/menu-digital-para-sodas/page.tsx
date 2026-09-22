@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { GuidePage, type GuideFaq, type GuideSection } from "@/components/marketing/v2/guide-page";
-import { PRICING } from "@/lib/constants";
+import { PRICING, firstPaymentFor, hardwareBy } from "@/lib/constants";
 import { formatCrc } from "@/lib/currency/format";
 
 const PATH = "/menu-digital-para-sodas";
@@ -9,12 +9,12 @@ const TITLE = "Menú digital para sodas: tu carta con QR, en colones y fácil de
 export const metadata: Metadata = {
   title: "Menú digital para sodas en Costa Rica",
   description:
-    "Carta digital con QR para sodas: precios en colones, cambios por WhatsApp cuando sube el precio del casado y stands impresos en 3D que aguantan el día a día. Desde ₡14 900 al mes.",
+    `Carta digital con QR para sodas: precios en colones, cambios por WhatsApp cuando sube el precio del casado y stands impresos en 3D que aguantan el día a día. Desde ${formatCrc(PRICING.plans.basico.priceCrc)} al mes.`,
   alternates: { canonical: PATH },
   openGraph: { title: "Menú digital para sodas · DataFud", url: PATH },
 };
 
-const { plans, terms, annualCarta, hardware, hardwareDelivery } = PRICING;
+const { plans, terms, annualCarta, hardwareDelivery } = PRICING;
 const carta = plans.basico;
 
 const sections: GuideSection[] = [
@@ -38,15 +38,15 @@ const sections: GuideSection[] = [
       "En una soda las mesas se limpian muchas veces al día. Un QR de papel plastificado se despega, se moja o se raya. Los stands de DataFud se imprimen en 3D, con el código en relieve y tu logo, y se limpian con un trapo como cualquier otra cosa de la mesa.",
     ],
     bullets: [
-      `Stand QR 3D desde ${formatCrc(hardware[0].priceCrc)} por unidad; ${hardwareDelivery.minimum.charAt(0).toLowerCase()}${hardwareDelivery.minimum.slice(1)}`,
-      `Tarjeta NFC a ${formatCrc(hardware[1].priceCrc)}, para quien prefiere acercar el teléfono.`,
+      `Stand QR 3D desde ${formatCrc(hardwareBy("stand-qr-3d").priceCrc)} por unidad; ${hardwareDelivery.minimum.charAt(0).toLowerCase()}${hardwareDelivery.minimum.slice(1)}`,
+      `Tarjeta NFC a ${formatCrc(hardwareBy("tarjeta-nfc").priceCrc)}, para quien prefiere acercar el teléfono.`,
       `${hardwareDelivery.gam} Fuera de la GAM, por Correos de Costa Rica.`,
     ],
   },
   {
     title: "El plan que le calza a una soda",
     paragraphs: [
-      `Para la mayoría de sodas alcanza con el plan Carta: ${formatCrc(carta.priceCrc)} al mes, con una implementación de ${formatCrc(PRICING.setupFee.carta.crc)}. Incluye hasta ${carta.maxProducts} platillos con foto, español e inglés, tus colores y tu logo. Si preferís pagar el año, son ${formatCrc(annualCarta.crc)}, con dos meses gratis y la implementación incluida.`,
+      `Para la mayoría de sodas alcanza con el plan Carta: ${formatCrc(carta.priceCrc)} al mes, con una implementación de ${formatCrc(PRICING.setupFee.carta.crc)}. Incluye hasta ${carta.maxProducts} platillos con foto en hasta ${carta.maxCategories} categorías, ${carta.maxTables} mesas con QR, español e inglés, tus colores y tu logo. Si preferís pagar el año, son ${formatCrc(annualCarta.crc)}, con dos meses gratis y la implementación incluida.`,
       "Si más adelante querés que los clientes pidan desde la mesa y que las comandas lleguen a la cocina, pasás a Estándar sin cambiar los stands que ya tenés.",
     ],
   },
@@ -69,7 +69,7 @@ const faqs: GuideFaq[] = [
   },
   {
     q: "¿Cuánto pago el primer mes?",
-    a: `Con el plan Carta, ${formatCrc(PRICING.setupFee.carta.crc)} de implementación más ${formatCrc(carta.priceCrc)} del primer mes. Después, solo la mensualidad.`,
+    a: `Con el plan Carta, ${formatCrc(PRICING.setupFee.carta.crc)} de implementación más ${formatCrc(carta.priceCrc)} del primer mes: ${formatCrc(firstPaymentFor("basico").crc)}. Después, solo la mensualidad.`,
   },
   {
     q: "¿Mis clientes van a saber usarlo?",

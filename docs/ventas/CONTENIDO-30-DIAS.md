@@ -29,7 +29,7 @@
 - **Guion:** plano del stand en una mesa → mano escanea con el celular → la carta de Verde Limón se abre → scroll por desayunos y casados → toque en un platillo.
 - **Texto en pantalla:** "Escaneás. Se abre. Sin apps." · "Precios en colones, con foto."
 - **Copy:** Así se ve una carta digital de soda: el cliente escanea el código de la mesa y la abre en su celular, sin descargar nada. Esta es Verde Limón, una soda de ejemplo que montamos para que la probés vos.
-- **CTA:** "Probala desde tu celular" → `https://datafud.com/preview/cliente?utm_source=instagram&utm_medium=social&utm_campaign=c01`
+- **CTA:** "Probala desde tu celular" → `https://datafud.com/?utm_source=instagram&utm_medium=social&utm_campaign=c01#demo`
 
 ### c02 · Carrusel · "¿Cuánto cuesta una carta digital? Te lo decimos claro"
 - **Láminas:** 1) El gancho. 2) Carta: ₡14 900/mes. 3) Implementación de la Carta: ₡24 900, pago único → primer pago ₡39 800. 4) O el año: ₡149 000 con 2 meses gratis e implementación incluida. 5) Sin contrato de permanencia.
@@ -51,7 +51,7 @@
 ### c05 · Carrusel · "Carta en PDF vs. carta digital"
 - **Láminas:** 1) Gancho. 2) PDF en el celular: hay que hacer zoom (captura de una carta ficticia en PDF, marcada "ejemplo"). 3) Carta digital: categorías y fotos. 4) Cambiar un precio en el PDF = rediseñar. 5) En la digital = un WhatsApp. 6) CTA.
 - **Copy:** Una carta en PDF funciona, pero en el celular se lee pequeña y cada cambio es volver a diseñarla. Mirá la diferencia (ambas cartas son de ejemplo).
-- **CTA:** "Probá la carta demo" → `https://datafud.com/preview/cliente?utm_source=instagram&utm_medium=social&utm_campaign=c05`
+- **CTA:** "Probá la carta demo" → `https://datafud.com/?utm_source=instagram&utm_medium=social&utm_campaign=c05#demo`
 
 ### c06 · Historia + publicación · "¿Y si mis clientes no escanean?"
 - **Guion (historia):** encuesta "¿Tus clientes escanean QR?" Sí / No mucho → siguiente historia con la tarjeta NFC: se acerca el teléfono y se abre la carta.

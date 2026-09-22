@@ -28,6 +28,9 @@ export type Plan = {
   /** Idiomas incluidos, en texto corto para la landing. */
   languagesLabel: string;
   maxProducts: number | null;
+  /** Topes que hace cumplir la BD (triggers de schema.sql); null = sin límite. */
+  maxCategories: number | null;
+  maxTables: number | null;
   /** Plazo prometido que muestra la landing. */
   deliveryLabel: string;
   /** Si el plan incluye pedidos desde la mesa (el plan Carta no). */
@@ -78,6 +81,8 @@ export const PRICING = {
       maxLanguages: 2,
       languagesLabel: "Español e inglés",
       maxProducts: 60,
+      maxCategories: 5,
+      maxTables: 8,
       deliveryLabel: "Carta lista en 48 horas",
       tableOrdering: false,
       setup: "carta",
@@ -90,6 +95,8 @@ export const PRICING = {
       maxLanguages: 2,
       languagesLabel: "Español e inglés",
       maxProducts: 150,
+      maxCategories: 20,
+      maxTables: 30,
       deliveryLabel: "Sistema completo en 15 días",
       tableOrdering: true,
       setup: "sistema",
@@ -102,6 +109,8 @@ export const PRICING = {
       maxLanguages: 3,
       languagesLabel: "Español, inglés y portugués",
       maxProducts: null,
+      maxCategories: null,
+      maxTables: null,
       deliveryLabel: "Sistema completo en 15 días",
       tableOrdering: true,
       setup: "sistema",
@@ -120,6 +129,8 @@ export const PRICING = {
   terms: {
     guarantee48h:
       "Si tu carta no está publicada en 48 horas hábiles desde que recibimos menú, fotos y logo, no pagás la implementación.",
+    /** Cómo se aplica la garantía si la implementación ya se pagó (se paga al aprobar la propuesta). */
+    guaranteeRefund: "Si ya la pagaste, te la devolvemos completa.",
     support: "Soporte por WhatsApp incluido mientras tengás el plan activo",
     menuChanges: "Cambios de precios y platillos por WhatsApp incluidos en todos los planes",
     permanence: "Sin contrato de permanencia: cancelás con 15 días de aviso por WhatsApp o correo.",
@@ -198,6 +209,34 @@ export type Testimonial = {
 export const TESTIMONIALS: readonly Testimonial[] = [];
 
 export const PLAN_CODES = Object.keys(PRICING.plans) as PlanCode[];
+
+/** Hardware por código (no por posición en el arreglo). */
+export function hardwareBy(code: HardwareItem["code"]): HardwareItem {
+  const item = PRICING.hardware.find((h) => h.code === code);
+  if (!item) throw new Error(`Hardware desconocido: ${code}`);
+  return item;
+}
+
+/** "Hasta 5 categorías y 8 mesas con QR" o "Categorías y mesas sin límite". */
+export function tablesLabel(code: PlanCode): string {
+  const p = PRICING.plans[code];
+  if (p.maxCategories === null && p.maxTables === null) return "Categorías y mesas sin límite";
+  return `Hasta ${p.maxCategories} categorías y ${p.maxTables} mesas con QR`;
+}
+
+/** Límites del plan en una línea: "60 platillos · 5 categorías · 8 mesas con QR". */
+export function limitsLabel(code: PlanCode): string {
+  const p = PRICING.plans[code];
+  if (p.maxProducts === null) return "Platillos, categorías y mesas sin límite";
+  return `${p.maxProducts} platillos · ${p.maxCategories} categorías · ${p.maxTables} mesas con QR`;
+}
+
+/** Total del primer año pagando mes a mes: implementación + 12 mensualidades. */
+export function firstYearMonthly(code: PlanCode): Money {
+  const setup = setupFeeFor(code);
+  const p = PRICING.plans[code];
+  return { usd: setup.usd + 12 * p.priceUsd, crc: setup.crc + 12 * p.priceCrc };
+}
 
 /** Implementación que le toca a un plan. */
 export function setupFeeFor(code: PlanCode): Money {

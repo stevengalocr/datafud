@@ -1,7 +1,7 @@
 import { cn } from "@/lib/utils/cn";
 import { Icon, type IconName } from "@/components/ui/icon";
 import { RevealOnView } from "@/components/marketing/v2/reveal";
-import { PRICING, firstPaymentFor, setupFeeFor, type PlanCode } from "@/lib/constants";
+import { PRICING, firstPaymentFor, limitsLabel, setupFeeFor, type PlanCode } from "@/lib/constants";
 import { formatCrc, formatUsd } from "@/lib/currency/format";
 import { waProps } from "@/lib/site";
 
@@ -16,14 +16,13 @@ type PlanCard = {
 };
 
 const { plans: P, terms, founderOffer, annualCarta } = PRICING;
-const productsLabel = (n: number | null) => (n ? `Hasta ${n} platillos con foto` : "Platillos y categorías ilimitados");
 
 const plans: PlanCard[] = [
   {
     code: "basico",
     highlight: false,
     tagline: "Tu carta digital por QR y NFC, sin pedidos en mesa",
-    features: [P.basico.languagesLabel, productsLabel(P.basico.maxProducts), "Carta a tu marca: colores, logo y fotos"],
+    features: [P.basico.languagesLabel, limitsLabel("basico"), "Carta a tu marca: colores, logo y fotos"],
   },
   {
     code: "estandar",
@@ -31,7 +30,7 @@ const plans: PlanCard[] = [
     tagline: "Carta + pedidos desde la mesa + panel",
     features: [
       P.estandar.languagesLabel,
-      productsLabel(P.estandar.maxProducts),
+      limitsLabel("estandar"),
       "Pedidos desde la mesa directo a cocina",
       "Panel de comandas y reportes de venta",
     ],
@@ -42,7 +41,6 @@ const plans: PlanCard[] = [
     tagline: "Sin límites de platillos, categorías ni mesas",
     features: [
       P.empresarial.languagesLabel,
-      productsLabel(P.empresarial.maxProducts),
       "Pedidos desde la mesa directo a cocina",
       "Ventas por día, ticket promedio y platillos más vendidos",
     ],
@@ -83,7 +81,7 @@ export function PricingV2() {
             </div>
           </div>
           <a
-            {...waProps("plan-basico", "Hola, quiero uno de los cupos de fundadores de DataFud para mi local.")}
+            {...waProps("fundadores")}
             className="inline-flex h-11 flex-shrink-0 items-center justify-center gap-2 whitespace-nowrap rounded-lg border border-stone-300 bg-white px-5 text-xs font-bold uppercase tracking-[0.14em] text-brand-800 transition-colors duration-300 ease-out-expo hover:border-stone-400 hover:bg-cream-50"
           >
             <Icon name="whatsapp" size={16} />
@@ -159,7 +157,7 @@ export function PricingV2() {
               {card.code === "basico" && (
                 <p className="mt-6 flex items-start gap-2.5 rounded-xl border border-brand-100 bg-brand-50 px-4 py-3 text-[13px] font-medium leading-relaxed text-brand-800">
                   <Icon name="shield" size={16} className="mt-0.5 flex-shrink-0 text-brand-600" />
-                  <span><span className="font-bold">Garantía de entrega.</span> {terms.guarantee48h}</span>
+                  <span><span className="font-bold">Garantía de entrega.</span> {terms.guarantee48h} {terms.guaranteeRefund}</span>
                 </p>
               )}
 

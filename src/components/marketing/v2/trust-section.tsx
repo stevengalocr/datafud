@@ -35,7 +35,7 @@ const points: Point[] = [
   },
 ];
 
-const promises = ["Sin contrato de permanencia", "Tu menú, tus fotos y tu marca son tuyos", "Te atiende una persona, no un bot"];
+const promises = ["Tu menú, tus fotos y tu marca son tuyos", "Te atiende una persona, no un bot"];
 
 // Se evalúa en el build (la landing es estática): subir la foto y redesplegar la activa.
 const founderPhoto = existsSync(path.join(process.cwd(), "public", SITE.founder.photo)) ? SITE.founder.photo : null;

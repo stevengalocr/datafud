@@ -4,12 +4,11 @@ import { PRICING } from "@/lib/constants";
 
 // Sección #como-funciona: una sola línea de tiempo (de la llamada al sistema completo) y las dos
 // columnas "Lo que hacemos nosotros" / "Lo que ponés vos". Fusiona el antiguo "Paso a paso" con
-// "Implementación". Los plazos salen de PRICING; se dicen en días para no repetir el titular.
+// "Implementación". Los plazos salen de PRICING; el de la carta no se repite acá (está en hero y planes).
 
 type Milestone = { when: string; title: string; desc: string; icon: IconName; accent?: boolean };
 
-const menuDay = Math.ceil(PRICING.delivery.menuHours / 24);
-// Los stands se cuentan desde que aprobás el diseño (PRICING.hardwareDelivery.leadTime).
+const lead = PRICING.hardwareDelivery.leadTime.replace(/^de /, "");
 
 const milestones: Milestone[] = [
   {
@@ -19,14 +18,14 @@ const milestones: Milestone[] = [
     icon: "phone",
   },
   {
-    when: `${menuDay} días hábiles`,
+    when: "Plazo de la Carta",
     title: "Tu carta, en línea",
     desc: "Publicada con tu marca, en español e inglés, y con un QR provisional para usarla ese mismo día.",
     icon: "qr",
     accent: true,
   },
   {
-    when: "3 a 5 días hábiles",
+    when: lead.charAt(0).toUpperCase() + lead.slice(1),
     title: "Tus stands, impresos",
     desc: "Desde que aprobás el diseño: imprimimos los stands QR en 3D y grabamos las tarjetas NFC con tu logo.",
     icon: "printer",
@@ -62,7 +61,7 @@ export function ImplementationSection() {
           <div className="reveal-up">
             <p className="text-xs font-bold uppercase tracking-[0.2em] text-accent-700">Cómo funciona</p>
             <h2 className="mt-3 font-display text-[clamp(2rem,5vw,3.5rem)] leading-[1.05] tracking-tight text-brand-900">
-              De la llamada a tu carta publicada, con fechas
+              De la llamada a tu carta publicada, paso a paso
             </h2>
             <p className="mt-5 text-base font-medium leading-relaxed text-brand-800/80">
               Vos seguís atendiendo tu local; nosotros hacemos el resto. El reloj corre desde que

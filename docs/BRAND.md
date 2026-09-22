@@ -12,7 +12,7 @@
 - **Tagline:** *"QR Menus. Orders. Analytics."*
 - **Personalidad (3 palabras):** cálida · artesanal · premium con confianza.
 - **Sensación:** una marca gastronómica editorial, no un template SaaS genérico.
-- **Cierre de marca:** "© DATAFUD · UN PRODUCTO DE GALODEV · HECHO EN LATINOAMÉRICA".
+- **Cierre de marca:** "© DATAFUD · UN PRODUCTO DE GALODEV · HECHO EN COSTA RICA".
 
 ### Logo y símbolo
 - Logo principal: `public/logo-main.png` (sobre fondo claro; en fondos oscuros va dentro de una placa blanca con esquinas redondeadas).

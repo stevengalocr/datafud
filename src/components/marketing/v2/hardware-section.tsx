@@ -17,7 +17,7 @@ const ALT: Record<HardwareItem["code"], string> = {
   "stand-qr-3d": "Render ilustrativo de un stand de mesa impreso en 3D con el código QR en relieve y espacio para el logo del local",
   "tarjeta-nfc": "Render ilustrativo de un celular acercándose a una tarjeta NFC de DataFud sobre la mesa",
   "stand-qr-3d-nfc": "Render ilustrativo de un stand de mesa impreso en 3D con código QR en relieve y chip NFC integrado",
-  "stand-resenas": "Render ilustrativo de un stand de mesa con QR y NFC que llevan a dejar una reseña en Google, con cinco estrellas",
+  "stand-resenas": "Render ilustrativo de un stand de mesa con QR y NFC que llevan a dejar una reseña en Google",
 };
 
 function PriceTag({ item, wa, dark = false }: { item: HardwareItem; wa: boolean; dark?: boolean }) {

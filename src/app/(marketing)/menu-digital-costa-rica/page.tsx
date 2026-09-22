@@ -9,7 +9,7 @@ const TITLE = "Menú digital en Costa Rica: qué es, cuánto cuesta y cómo tene
 export const metadata: Metadata = {
   title: "Menú digital con QR en Costa Rica: precios y cómo tenerlo",
   description:
-    "Guía para restaurantes, sodas y cafeterías de Costa Rica: qué es un menú digital con QR, cuánto cuesta según el tipo de servicio y qué incluye DataFud, desde ₡14 900 al mes.",
+    `Guía para restaurantes, sodas y cafeterías de Costa Rica: qué es un menú digital con QR, cuánto cuesta según el tipo de servicio y qué incluye DataFud, desde ${formatCrc(PRICING.plans.basico.priceCrc)} al mes.`,
   alternates: { canonical: PATH },
   openGraph: { title: "Menú digital con QR en Costa Rica · DataFud", url: PATH },
 };

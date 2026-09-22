@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { GuidePage, type GuideFaq, type GuideSection } from "@/components/marketing/v2/guide-page";
-import { PRICING } from "@/lib/constants";
+import { PRICING, hardwareBy } from "@/lib/constants";
 import { formatCrc } from "@/lib/currency/format";
 
 const PATH = "/menu-qr-restaurantes-turisticos";
@@ -14,7 +14,7 @@ export const metadata: Metadata = {
   openGraph: { title: "Menú QR bilingüe para restaurantes turísticos · DataFud", url: PATH },
 };
 
-const { plans, delivery, hardware } = PRICING;
+const { plans, delivery } = PRICING;
 
 const sections: GuideSection[] = [
   {
@@ -45,7 +45,7 @@ const sections: GuideSection[] = [
   {
     title: "NFC para quien no quiere escanear",
     paragraphs: [
-      `No todos los clientes se llevan bien con la cámara y los códigos. Con una tarjeta NFC (${formatCrc(hardware[1].priceCrc)} por unidad) o un stand QR 3D con NFC incorporado (desde ${formatCrc(hardware[2].priceCrc)}), basta con acercar el teléfono para que la carta se abra. Los stands se hacen con tu logo y tus colores, así que combinan con la decoración del lugar.`,
+      `No todos los clientes se llevan bien con la cámara y los códigos. Con una tarjeta NFC (${formatCrc(hardwareBy("tarjeta-nfc").priceCrc)} por unidad) o un stand QR 3D con NFC incorporado (desde ${formatCrc(hardwareBy("stand-qr-3d-nfc").priceCrc)}), basta con acercar el teléfono para que la carta se abra. Los stands se hacen con tu logo y tus colores, así que combinan con la decoración del lugar.`,
     ],
   },
   {
@@ -55,6 +55,16 @@ const sections: GuideSection[] = [
     ],
   },
 ];
+
+// Resumen en inglés para dueños o gerentes que no leen español (la conversación sigue por WhatsApp).
+sections.push({
+  lang: "en",
+  title: "In English: what DataFud does for your restaurant",
+  paragraphs: [
+    `DataFud builds your digital menu for you: we design it with your brand, upload your dishes with photos, and translate it into English. Guests open it by scanning a QR code or tapping an NFC card at the table, with no app. Every plan includes Spanish and English; the Empresarial plan adds Portuguese.`,
+    `Prices are in Costa Rican colones: the Carta plan is ${formatCrc(plans.basico.priceCrc)} per month (about US$${plans.basico.priceUsd}) plus a one-time setup fee of ${formatCrc(PRICING.setupFee.carta.crc)}. Menu and price changes by WhatsApp are included. No long-term contract: cancel with ${PRICING.terms.noticeDays} days' notice. Write to us on WhatsApp to get started.`,
+  ],
+});
 
 const faqs: GuideFaq[] = [
   {

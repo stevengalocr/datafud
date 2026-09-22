@@ -47,7 +47,7 @@ servicio, datos del negocio, atención a clientes extranjeros.
 
 1. **Pide desde la mesa, sin fricción.** QR o NFC → carta al instante, sin apps ni cuentas.
 2. **Control total desde un panel.** Platos, comandas y reportes en un solo lugar.
-3. **Listo para Latam.** 3 idiomas (ES·EN·PT) y monedas de toda la región.
+3. **Bilingüe.** Español e inglés en todos los planes; portugués en Empresarial.
 4. **Carta lista en 48 horas; sistema completo en 15 días.** Implementación llave en mano, sin curva técnica.
 5. **A tu marca.** Colores, logo y fotos de tus platillos.
 
@@ -79,6 +79,7 @@ visible de `/` (hero, planes y FAQ); la línea de tiempo habla en días ("2 día
 | Mensualidad | **₡14 900** (≈ US$29) | **₡24 900** (≈ US$49) | **₡49 900** (≈ US$99) |
 | Implementación (pago único) | ₡24 900 (≈ US$49) | ₡125 000 (≈ US$249) | ₡125 000 (≈ US$249) |
 | Primer pago | ₡39 800 | ₡149 900 | ₡174 900 |
+| Categorías / mesas con QR | 5 / 8 | 20 / 30 | Sin límite |
 | Qué es | Carta digital por QR/NFC, sin pedidos en mesa | Carta + pedidos desde la mesa + panel | Todo, sin límites de platillos, categorías ni mesas |
 | Entrega | **48 horas** | **15 días** | **15 días** |
 | Idiomas | Español e inglés | Español e inglés | Español, inglés y portugués |
@@ -150,8 +151,8 @@ por resultados.
 | "Es complicado / no soy técnico" | Te la montamos nosotros: carta en 48 h y sistema en 15 días |
 | "¿Y si no me sirve?" | Demo en vivo gratis y sin contratos atados: si un mes no le sirve, lo deja |
 | "Mis clientes no sabrán usarlo" | Solo escanear o tocar — sin apps ni cuentas |
-| "Ya tengo carta" | La digital se actualiza sola, te da datos y no se reimprime |
-| "Tengo clientes extranjeros" | Carta en ES/EN/PT automáticamente |
+| "Ya tengo carta" | La digital se lee mejor en el celular y los cambios no requieren reimprimir; con el sistema completo, además, reportes de venta |
+| "Tengo clientes extranjeros" | Carta en español e inglés en todos los planes (la traducción la hacemos nosotros); portugués en Empresarial |
 
 ## 9. Tono y voz
 
@@ -169,7 +170,7 @@ por resultados.
 
 - **CTA primario:** "Hablemos por WhatsApp" → `wa.me` con mensaje prellenado según el origen
   (`src/lib/site.ts`, `waProps`). Botón flotante en móvil.
-- **CTA secundario:** "Ver demo en vivo" → `/preview` (demo navegable sin backend).
+- **CTA secundario:** "Ver la demo" → `/preview/cliente` (carta demo navegable sin backend).
 - **Alternativa:** formulario en `#contacto` (Resend; solo se muestra con `RESEND_API_KEY`).
 - **Microcopy de confianza:** "Desde ₡14 900/mes · Te la montamos nosotros · Cambios por WhatsApp".
 - **Embudo:** Landing → WhatsApp o formulario → llamada y plan elegido → implementación
@@ -180,7 +181,7 @@ por resultados.
 
 - **Producto:** DataFud · **dominio:** datafud.com · **fabricante:** GaloDev.
 - **Tagline:** "QR Menus. Orders. Analytics."
-- **Cierre de marca:** "© DATAFUD · UN PRODUCTO DE GALODEV · HECHO EN LATINOAMÉRICA".
+- **Cierre de marca:** "© DATAFUD · UN PRODUCTO DE GALODEV · HECHO EN COSTA RICA".
 
 > Si cambias un precio o límite aquí, actualízalo también en la landing
 > (`pricing-v2.tsx`), en `src/lib/constants.ts` (`PRICING`) y en `supabase/schema.sql`.

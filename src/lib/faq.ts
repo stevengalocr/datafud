@@ -1,4 +1,4 @@
-import { PLAN_CODES, PRICING, firstPaymentFor, setupFeeFor } from "@/lib/constants";
+import { PLAN_CODES, PRICING, firstPaymentFor, firstYearMonthly, hardwareBy, setupFeeFor } from "@/lib/constants";
 import { formatCrc } from "@/lib/currency/format";
 
 // Preguntas frecuentes de la landing. Un solo arreglo: lo usa el acordeón (#preguntas) y el
@@ -22,6 +22,11 @@ export const FAQ_ITEMS: FaqItem[] = [
     a: `${firstMonth} Después pagás solo la mensualidad.${founderOffer.enabled ? ` Si entrás entre los primeros ${founderOffer.spots} locales, la implementación de la Carta no se cobra y te damos 1 stand QR 3D, a cambio de dejarnos mostrar tu local como caso.` : ""}`,
   },
   {
+    id: "por-que-cuesta-mas",
+    q: "¿Por qué cuesta más que una carta QR que armo yo?",
+    a: `Porque no la armás vos: nosotros diseñamos la carta con tu marca, cargamos los platillos con fotos, la traducimos al inglés y te hacemos los cambios por WhatsApp. Si tenés tiempo para hacerlo, una herramienta de autoservicio te puede servir. Con DataFud, el primer año de la Carta sale ${formatCrc(firstYearMonthly("basico").crc)} pagando mes a mes, o ${formatCrc(PRICING.annualCarta.crc)} si pagás el año (con la implementación incluida).`,
+  },
+  {
     id: "que-incluye",
     q: "¿Qué incluye la implementación?",
     a: `El diseño de tu carta con tu marca, la carga de platillos con fotos y precios, y la traducción al inglés (y al portugués en Empresarial). La del sistema completo suma pedidos desde la mesa, panel, reportes y la capacitación de tu equipo. En todos los planes, ${terms.menuChanges.charAt(0).toLowerCase()}${terms.menuChanges.slice(1)}, y ${terms.support.charAt(0).toLowerCase()}${terms.support.slice(1)}. El hardware de mesa se cobra aparte.`,
@@ -34,7 +39,7 @@ export const FAQ_ITEMS: FaqItem[] = [
   {
     id: "factura",
     q: "¿Me dan factura?",
-    a: "Recibís comprobante de cada pago. Si tu negocio necesita factura electrónica, avisanos antes de contratar y lo coordinamos.",
+    a: "Recibís comprobante de cada pago. Si tu negocio necesita factura electrónica, avisanos antes de contratar y lo coordinamos. Ojo: DataFud no emite las facturas de tu restaurante; convive con el sistema de facturación que ya usás.",
   },
   {
     id: "contrato",
@@ -49,7 +54,7 @@ export const FAQ_ITEMS: FaqItem[] = [
   {
     id: "garantia-48",
     q: "¿Qué pasa si no cumplen el plazo?",
-    a: `${terms.guarantee48h} El plazo corre desde que tenemos todo; si falta algo, te avisamos qué.`,
+    a: `${terms.guarantee48h} ${terms.guaranteeRefund} El plazo corre desde que tenemos todo; si falta algo, te avisamos qué.`,
   },
   {
     id: "cambios-de-precio",
@@ -64,7 +69,7 @@ export const FAQ_ITEMS: FaqItem[] = [
   {
     id: "pedido-minimo",
     q: "¿Hay pedido mínimo de stands?",
-    a: `No. ${hardwareDelivery.minimum.replace("Sin pedido mínimo: d", "D")} Stand QR 3D desde ${formatCrc(PRICING.hardware[0].priceCrc)} y tarjeta NFC a ${formatCrc(PRICING.hardware[1].priceCrc)}. ${hardwareDelivery.custom} Están listos ${hardwareDelivery.leadTime} desde que aprobás el diseño.`,
+    a: `No, se hacen desde 1 unidad. Stand QR 3D desde ${formatCrc(hardwareBy("stand-qr-3d").priceCrc)} y tarjeta NFC a ${formatCrc(hardwareBy("tarjeta-nfc").priceCrc)}. ${hardwareDelivery.custom} Están listos ${hardwareDelivery.leadTime} desde que aprobás el diseño.`,
   },
   {
     id: "envios",
@@ -75,11 +80,6 @@ export const FAQ_ITEMS: FaqItem[] = [
     id: "mis-clientes",
     q: "¿Mis clientes van a saber usarlo? ¿Y los turistas?",
     a: "Solo apuntan la cámara al QR o acercan el teléfono a la tarjeta NFC, sin descargar apps ni crear cuentas. La carta está en español e inglés en todos los planes y el comensal cambia de idioma con un toque.",
-  },
-  {
-    id: "facturacion",
-    q: "¿Reemplaza mi sistema de facturación?",
-    a: "No. DataFud no emite las facturas de tu restaurante: convive con el sistema de facturación que ya usás.",
   },
   {
     id: "uber-pedidosya",

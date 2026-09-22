@@ -3,7 +3,7 @@ import Image from "next/image";
 import { RevealOnView } from "@/components/marketing/v2/reveal";
 import { MagneticCta } from "@/components/marketing/v2/magnetic-cta";
 import { Icon } from "@/components/ui/icon";
-import { SITE, hasWhatsApp, mailLink, socialLinks, waProps, whatsappDisplay } from "@/lib/site";
+import { SITE, hasEmail, hasWhatsApp, mailLink, socialLinks, waProps, whatsappDisplay } from "@/lib/site";
 
 // Cierre oscuro (CTA final) + footer de la landing.
 const explore = [
@@ -40,7 +40,7 @@ export function SiteFooter() {
               Empezá hoy
             </span>
             <h2 className="mt-7 font-display text-[clamp(2rem,5vw,3.5rem)] leading-[1.08] text-accent-100">
-              Llevá la carta de tu local al siguiente nivel
+              Tu carta, montada por nosotros
             </h2>
             <p className="mx-auto mt-4 max-w-lg text-sm font-medium leading-relaxed text-cream-100/80">
               Contanos cómo es tu local y te proponemos la carta, el hardware de mesa
@@ -97,9 +97,11 @@ export function SiteFooter() {
                       <Icon name="whatsapp" size={14} className="text-accent-400" /> {whatsappDisplay()}
                     </a>
                   )}
+                  {hasEmail() && (
                   <a href={mailLink()} className="inline-flex min-h-11 items-center gap-2 transition-colors duration-200 hover:text-white">
-                    <Icon name="mail" size={14} className="text-accent-400" /> {SITE.email}
-                  </a>
+                      <Icon name="mail" size={14} className="text-accent-400" /> {SITE.email}
+                    </a>
+                  )}
                   <p className="flex min-h-11 items-center gap-2"><Icon name="pin" size={14} className="text-accent-400" /> {SITE.region}</p>
                   {/* Redes: solo las que tienen URL en SITE.social (hoy ninguna). */}
                   {socialLinks().map((l) => (
