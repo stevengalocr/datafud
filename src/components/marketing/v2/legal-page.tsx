@@ -4,26 +4,13 @@ import { LandingNavV2 } from "@/components/marketing/v2/landing-nav-v2";
 import { Icon } from "@/components/ui/icon";
 import { SITE, mailLink } from "@/lib/site";
 
-// Plantilla de las páginas legales (/terminos, /privacidad): layout de marca, aviso visible
-// de borrador y secciones numeradas. Los datos legales que faltan van como [REVISAR].
+// Plantilla de las páginas legales (/terminos, /privacidad): layout de marca, versión vigente
+// y secciones numeradas.
 
 export type LegalSection = { title: string; paragraphs: string[]; bullets?: string[] };
 
-export const LEGAL_UPDATED = "19 de setiembre de 2026";
-
-function renderInline(text: string) {
-  // Resalta los marcadores [REVISAR] para que no pasen desapercibidos.
-  const parts = text.split(/(\[REVISAR[^\]]*\])/g);
-  return parts.map((part, i) =>
-    part.startsWith("[REVISAR") ? (
-      <mark key={i} className="rounded bg-accent-100 px-1 py-0.5 font-semibold text-accent-800">
-        {part}
-      </mark>
-    ) : (
-      <span key={i}>{part}</span>
-    )
-  );
-}
+export const LEGAL_VERSION = "1.0";
+export const LEGAL_UPDATED = "22 de setiembre de 2026";
 
 export function LegalPage({
   eyebrow,
@@ -45,24 +32,11 @@ export function LegalPage({
       <main className="mx-auto max-w-3xl px-5 pb-24 pt-14 sm:px-6 sm:pt-20">
         <p className="text-xs font-bold uppercase tracking-[0.2em] text-accent-700">{eyebrow}</p>
         <h1 className="mt-3 font-display text-[clamp(2rem,5vw,3.2rem)] leading-[1.08] tracking-tight text-brand-900">{title}</h1>
-        <p className="mt-4 text-sm font-semibold uppercase tracking-[0.14em] text-brand-700/75">Última actualización: {LEGAL_UPDATED}</p>
+        <p className="mt-4 text-sm font-semibold text-brand-700/80">
+          Versión {LEGAL_VERSION} · vigente desde el {LEGAL_UPDATED}
+        </p>
 
-        <div
-          role="note"
-          className="mt-8 flex gap-4 rounded-2xl border border-accent-300/60 bg-accent-50 p-5 text-sm font-medium leading-relaxed text-accent-900"
-        >
-          <span className="mt-0.5 flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg bg-accent-500 text-white">
-            <Icon name="shield" size={16} />
-          </span>
-          <p>
-            <strong className="font-bold">Borrador en revisión.</strong> Este texto es una versión preliminar redactada
-            por {SITE.maker} para orientar a nuestros clientes; no constituye asesoría legal y puede cambiar
-            cuando termine la revisión con un profesional en derecho. Los datos marcados con{" "}
-            <mark className="rounded bg-accent-100 px-1 font-semibold">[REVISAR]</mark> están pendientes de confirmar.
-          </p>
-        </div>
-
-        <p className="mt-10 text-base font-medium leading-relaxed text-brand-800/85">{renderInline(intro)}</p>
+        <p className="mt-10 text-base font-medium leading-relaxed text-brand-800/85">{intro}</p>
 
         <div className="mt-12 space-y-10">
           {sections.map((s, i) => (
@@ -73,14 +47,14 @@ export function LegalPage({
               </h2>
               <div className="mt-4 space-y-4 text-[15px] font-medium leading-relaxed text-brand-800/85">
                 {s.paragraphs.map((p) => (
-                  <p key={p}>{renderInline(p)}</p>
+                  <p key={p}>{p}</p>
                 ))}
                 {s.bullets && (
                   <ul className="space-y-2 pl-1">
                     {s.bullets.map((b) => (
                       <li key={b} className="flex items-start gap-3">
                         <span className="mt-2 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-accent-500" />
-                        <span>{renderInline(b)}</span>
+                        <span>{b}</span>
                       </li>
                     ))}
                   </ul>
@@ -110,7 +84,7 @@ export function LegalPage({
           <Link href="/" aria-label="DataFud — inicio" className="inline-flex min-h-11 items-center self-start rounded-xl bg-white px-3 py-2 shadow-sm">
             <Image src="/logo-main.png" alt="DataFud" width={120} height={50} className="h-6 w-auto" />
           </Link>
-          <nav aria-label="Legal" className="flex flex-wrap items-center gap-x-6 text-[11px] font-bold uppercase tracking-[0.16em] text-brand-700/80">
+          <nav aria-label="Legal" className="flex flex-wrap items-center gap-x-6 text-xs font-bold uppercase tracking-[0.14em] text-brand-700/80">
             <Link href="/" className="inline-flex min-h-11 items-center hover:text-brand-900">Inicio</Link>
             <Link href="/#contacto" className="inline-flex min-h-11 items-center hover:text-brand-900">Contacto</Link>
             <Link href="/terminos" className="inline-flex min-h-11 items-center hover:text-brand-900">Términos</Link>

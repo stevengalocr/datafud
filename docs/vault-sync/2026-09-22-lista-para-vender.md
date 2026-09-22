@@ -44,3 +44,14 @@ existentes). Se aplica con "sincronizá el vault" desde Cowork.
 - Línea de precio en colones y pastilla de fundadores.
 - Title, description y OG con "menú digital", "QR" y "Costa Rica".
 - Verificado con captura a 375×812: todo lo clave sin scroll.
+
+### V04 · Legales publicables · commit (ver V05) · despliegue (ver V05)
+**Pendientes.md** — cerrar: "Legales con 'Borrador' y 9 marcadores [REVISAR] visibles" y "Confirmar razón social, domicilio y jurisdicción de los legales". Mantener: "Revisión legal por un abogado cuando haya ingresos" (el límite de responsabilidad de 3 meses y la retención sin plazo fijo quedan para esa revisión).
+**Decisiones.md** — D-027 pasa de propuesta a aceptada: responsable "Steven Galo, que opera bajo el nombre comercial GaloDev", domicilio "Costa Rica", sin cédula ni dirección exacta; ley y tribunales de Costa Rica; reembolso del 100 % de la implementación si se cancela antes de empezar (10 días hábiles); implementación no reembolsable una vez publicada salvo garantía de 48 h; mensualidades no se prorratean; garantía de hardware de 3 meses por defectos de fabricación; versión 1.0 vigente desde el 2026-09-22.
+**Seguridad.md** — sin cambios (el repo público no expone cédula ni dirección).
+**Otras páginas** — Paneles-Y-Vistas: `/terminos` y `/privacidad` pasan de "borrador con [REVISAR]" a "versión 1.0 vigente". Cuentas-y-Accesos: la privacidad menciona el píxel de Meta solo si `NEXT_PUBLIC_META_PIXEL_ID` existe en el build.
+**log.md** — `## [2026-09-22] ingest | Legales 1.0`
+- Términos y privacidad reescritos en voseo, sin aviso de borrador ni marcadores.
+- Cifras de los términos generadas desde `PRICING`.
+- Privacidad con Ley 8968, Vercel Web Analytics, Resend y píxel de Meta condicionado.
+- Verificado: grep = 0, ambas rutas 200, captura 375 legible.

@@ -8,7 +8,7 @@ export const SITE_TITLE = "Menú digital con QR para restaurantes en Costa Rica 
 export const SITE_DESCRIPTION =
   "Menú digital con QR y NFC para sodas, cafeterías y restaurantes de Costa Rica. Te lo montamos nosotros en 48 horas, en español e inglés, desde ₡14 900 al mes. Stands QR impresos en 3D y cambios por WhatsApp."
 
-export const LEGAL_UPDATED_ISO = "2026-09-19";
+export const LEGAL_UPDATED_ISO = "2026-09-22";
 
 export function organizationJsonLd() {
   return {

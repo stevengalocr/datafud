@@ -7,8 +7,8 @@
 
 ## Contador
 
-- Iteración actual: 3
-- Iteraciones consumidas: 3 / 30
+- Iteración actual: 4
+- Iteraciones consumidas: 4 / 30
 
 ## Capacidades del entorno
 
@@ -28,8 +28,8 @@
 |---|---|---|---|---|---|---|
 | V01 | Estado, línea base y puente | hecho | 1 | 875c017 | READY (`dpl_EhfVfzZ1CAa3cNzqvjrUKmMuNc1z`) | Línea base abajo; push directo a main aceptado |
 | V02 | Oferta y precios en colones | hecho | 1 | c3ad02c | READY (`dpl_EqvNfLhFP2UGTfQ7CJQn9LVfohtQ`) | typecheck/lint/build ok; qa:landing OK · 3 avisos (fotos remotas); grep `$249\|$29/mes\|1 año de soporte` en landing = 0; capturas planes 375 y 1440 miradas: CRC grande, ≈ US$ chico, implementación por plan, primer pago ₡39 800 / ₡149 900 / ₡174 900, anual y garantía bajo la Carta, fundadores arriba; JSON-LD Product con offers CRC y USD; schema.sql diff = 2 líneas de semillas |$29/mes\|1 año de soporte` en landing = 0; captura planes 375 y 1440 mirada: CRC grande, ≈ US$ chico, implementación por plan, primer pago ₡39 800 / ₡149 900 / ₡174 900, anual y garantía bajo la Carta, fundadores arriba; JSON-LD Product con offers CRC y USD; schema.sql diff = 2 líneas de semillas |
-| V03 | Hero y mensaje | hecho | 1 | (este commit) | ver V04 | Captura 375×812 mirada: sin scroll se leen etiqueta 'Menú digital QR · Costa Rica', H1 'Tu carta digital con QR, lista en 48 horas', para quién (sodas, cafeterías y restaurantes de Costa Rica), 'Quiero mi carta' (WhatsApp), 'Ver la demo', 'Desde ₡14 900/mes · Te la montamos nosotros · Cambios por WhatsApp' y la pastilla de fundadores. Chip 'Orden #18 · Recibida en cocina' reemplazado por 'Carta publicada · Español · English' (el hero no promete pedidos). Title/description con menú digital, QR y Costa Rica; OG renderizado y mirado (sin ₡: la fuente dinámica no baja en el build). grep 'cierra ventas' = 0 en src y docs vivos |
-| V04 | Legales publicables | pendiente | 0 | | | |
+| V03 | Hero y mensaje | hecho | 1 | 274abf7 | READY (producción, ver lista de Vercel) | Captura 375×812 mirada: sin scroll se leen etiqueta 'Menú digital QR · Costa Rica', H1 'Tu carta digital con QR, lista en 48 horas', para quién (sodas, cafeterías y restaurantes de Costa Rica), 'Quiero mi carta' (WhatsApp), 'Ver la demo', 'Desde ₡14 900/mes · Te la montamos nosotros · Cambios por WhatsApp' y la pastilla de fundadores. Chip 'Orden #18 · Recibida en cocina' reemplazado por 'Carta publicada · Español · English' (el hero no promete pedidos). Title/description con menú digital, QR y Costa Rica; OG renderizado y mirado (sin ₡: la fuente dinámica no baja en el build). grep 'cierra ventas' = 0 en src y docs vivos |
+| V04 | Legales publicables | hecho | 1 | (este commit) | ver V05 | grep -rn 'REVISAR\|Borrador' src/app/(legal) src/components/marketing = 0; curl /terminos y /privacidad → 200, 0 'REVISAR/Borrador' en el HTML; captura /terminos 375 completa mirada (15 secciones legibles, versión 1.0 vigente desde el 22 de setiembre de 2026); montos de términos generados desde PRICING (₡14 900, ₡24 900, ₡49 900, ₡24 900, ₡125 000, ₡149 000); privacidad: Ley 8968 sin afirmar inscripción, Vercel Web Analytics, Resend, píxel de Meta según variable ('hoy no lo usamos' sin ella); qa:landing OK |
 | V05 | Confianza real | pendiente | 0 | | | |
 | V06 | Preguntas de Costa Rica | pendiente | 0 | | | |
 | V07 | Demo sin errores y QR | pendiente | 0 | | | |
@@ -65,3 +65,4 @@
 - **It. 1 · V01.** Plan: crear estado y puente, medir línea base, commit y publicar en main para probar la ruta de publicación. Riesgo: push directo a main rechazado → PR por MCP de GitHub.
 - **It. 2 · V02.** Plan: extender `PRICING` (CRC por plan, `setupFee` carta/sistema, anual, `founderOffer`, `terms`, hardware CRC y entrega), `formatCrc`/`formatUsd` con separador propio (el ICU "es" no agrupa 4 cifras: "6000"), reescribir `pricing-v2.tsx`, hardware en CRC, JSON-LD con dos ofertas, semillas y docs. Se mantiene `PRICING.setupFeeUsd` (alias del sistema) porque `admin/charges` lo usa y está fuera de alcance. Hecho; FAQ y términos solo retocados para compilar (los reescriben V04 y V06).
 - **It. 3 · V03.** Plan: H1 y etiqueta en español, subtítulo con Costa Rica y lo que da la Carta, CTA "Quiero mi carta" con mensaje de Carta, "Ver la demo" directo a /preview/cliente, línea de precio en CRC, pastilla de fundadores, barra de highlights sin repetir plazos, title/description/OG. Padding superior del hero en móvil de 64 a 32 px para que todo entre en 812. Hecho.
+- **It. 4 · V04.** Plan: quitar el aviso de borrador y el resaltado `[REVISAR]` de `legal-page.tsx`; reescribir términos (responsable, planes desde PRICING, plazos y reloj, garantía 48 h, pagos SINPE/transferencia, cancelación 15 días, reembolsos, hardware 3 meses, entrega, contenido del cliente, disponibilidad sin porcentaje, límite de responsabilidad, ley y tribunales de Costa Rica) y privacidad (Ley 8968, Vercel Web Analytics, Resend, píxel condicionado a la variable, UTMs, derechos). Datos sin decisión (días de atraso, meses de retención, plazo de respuesta) redactados sin cifra. `metaPixelId()` vive en `site.ts` (no se crean archivos nuevos en `src/lib`). Hecho.

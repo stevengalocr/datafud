@@ -13,6 +13,11 @@ Todas las versiones notables del proyecto. Formato basado en
   por plan, pago anual de la Carta (₡149 000), oferta de fundadores y garantía de 48 h.
   Carta con 2 idiomas y 60 platillos; Estándar con 150. Hardware en colones (desde ₡6 000).
   Nuevo `formatCrc()`; JSON-LD con ofertas en CRC y USD.
+- Hero: "Tu carta digital con QR, lista en 48 horas", etiqueta en español, CTA "Quiero mi carta",
+  línea "Desde ₡14 900/mes" y pastilla de fundadores. Title, description y OG locales. Sale
+  "cierra ventas" de todo el sitio.
+- `/terminos` y `/privacidad` versión 1.0: sin borrador ni `[REVISAR]`; responsable, jurisdicción,
+  reembolsos, garantía del hardware, permanencia y Ley 8968.
 
 Fachada de venta ("landing primero", decisiones D-010 a D-013). Sin backend en producción;
 cada unidad se publica en `main` desde el loop autónomo (`docs/plans/landing-loop-state.md`).

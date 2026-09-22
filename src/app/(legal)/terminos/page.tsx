@@ -1,103 +1,129 @@
 import type { Metadata } from "next";
 import { LegalPage, type LegalSection } from "@/components/marketing/v2/legal-page";
-import { PRICING } from "@/lib/constants";
-import { SITE } from "@/lib/site";
+import { PLAN_CODES, PRICING, setupFeeFor } from "@/lib/constants";
 import { formatCrc } from "@/lib/currency/format";
+import { SITE } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "Términos del servicio",
   alternates: { canonical: "/terminos" },
   openGraph: { title: "Términos del servicio · DataFud", url: "/terminos" },
   description:
-    "Condiciones bajo las que GaloDev ofrece DataFud: carta digital por QR y NFC, hardware de mesa e implementación llave en mano para restaurantes de Costa Rica y Latinoamérica.",
+    "Condiciones de DataFud: planes, plazos, garantía de 48 horas, pagos, cancelación, reembolsos, hardware de mesa y entrega, para restaurantes de Costa Rica.",
 };
+
+const { plans, terms, delivery, hardwareDelivery } = PRICING;
+
+// Todo monto y plazo sale de PRICING: si cambia la oferta, estos términos cambian con ella.
+const planBullets = PLAN_CODES.map((code) => {
+  const p = plans[code];
+  const setup = setupFeeFor(code);
+  return `${p.marketingName}: ${formatCrc(p.priceCrc)} al mes y ${formatCrc(setup.crc)} de implementación. ${p.languagesLabel}; ${p.maxProducts ? `hasta ${p.maxProducts} platillos` : "platillos ilimitados"}; ${p.tableOrdering ? "carta digital, pedidos desde la mesa, panel de comandas y reportes de venta" : "carta digital por QR y NFC, sin pedidos desde la mesa"}. Plazo: ${p.deliveryLabel.toLowerCase()}.`;
+});
 
 const sections: LegalSection[] = [
   {
     title: "Quién ofrece el servicio",
     paragraphs: [
-      `DataFud es un producto de ${SITE.legalName} [REVISAR: razón social completa], [REVISAR: cédula jurídica o física], con domicilio en [REVISAR: domicilio], ${SITE.country}. En este documento nos referimos a esa persona como "GaloDev", "nosotros" o "el proveedor", y a quien contrata como "el cliente" o "vos".`,
-      `Podés contactarnos por WhatsApp o al correo ${SITE.email}. Al contratar DataFud aceptás estos términos.`,
+      `DataFud lo ofrece ${SITE.legalResponsible}, con domicilio en ${SITE.country}. En este documento nos referimos a esa persona como "GaloDev" o "nosotros", y a quien contrata como "el cliente" o "vos".`,
+      `Nos contactás por WhatsApp o al correo ${SITE.email}. Al contratar DataFud aceptás estos términos.`,
     ],
   },
   {
     title: "Qué es DataFud",
     paragraphs: [
-      "DataFud es un servicio de carta digital para negocios gastronómicos: el comensal abre la carta en su teléfono escaneando un código QR o acercándolo a una tarjeta NFC. Según el plan contratado, el servicio incluye además pedidos desde la mesa, un panel de comandas y reportes de venta.",
-      "También ofrecemos hardware de mesa (stands impresos en 3D, tarjetas NFC y stands de reseñas) y un servicio de implementación llave en mano: diseñamos y cargamos la carta, configuramos el sistema y capacitamos a tu equipo.",
+      "DataFud es un servicio de carta digital para negocios gastronómicos: el comensal abre la carta en su teléfono escaneando un código QR o acercándolo a una tarjeta NFC. Según el plan, el servicio incluye además pedidos desde la mesa, un panel de comandas y reportes de venta.",
+      "También vendemos hardware de mesa (stands impresos en 3D, tarjetas NFC y stands de reseñas) y hacemos la implementación: diseñamos y cargamos tu carta, configuramos el sistema y, en los planes con pedidos, capacitamos a tu equipo.",
     ],
   },
   {
-    title: "Contratación, precios y pagos",
-    paragraphs: [
-      `El servicio se contrata con un pago único de implementación (${formatCrc(PRICING.setupFee.carta.crc)} la Carta; ${formatCrc(PRICING.setupFee.sistema.crc)} el sistema completo) y una mensualidad según el plan elegido (Carta ${formatCrc(PRICING.plans.basico.priceCrc)}, Estándar ${formatCrc(PRICING.plans.estandar.priceCrc)}, Empresarial ${formatCrc(PRICING.plans.empresarial.priceCrc)}). El hardware de mesa se cobra por unidad, aparte.`,
-      "Los precios se expresan en dólares estadounidenses. El medio de pago y, si aplica, el tipo de cambio a moneda local se acuerdan por WhatsApp antes de cada cobro. No realizamos cobros automáticos ni almacenamos datos de tarjetas.",
-      "La mensualidad se paga por adelantado. Si un pago se atrasa más de [REVISAR: 10] días, podemos suspender el servicio hasta que se regularice; la carta vuelve a estar disponible cuando se recibe el pago.",
+    title: "Qué incluye cada plan",
+    paragraphs: ["Los precios están en colones costarricenses; el equivalente en dólares de la página es solo una referencia."],
+    bullets: [
+      ...planBullets,
+      `Todos los planes: ${terms.menuChanges.charAt(0).toLowerCase()}${terms.menuChanges.slice(1)}, y ${terms.support.charAt(0).toLowerCase()}${terms.support.slice(1)}.`,
+      `Pago anual de la Carta: ${formatCrc(PRICING.annualCarta.crc)} por año, con la implementación de la Carta incluida.`,
     ],
   },
   {
-    title: "Sin permanencia: cómo cancelar",
+    title: "Plazos y garantía de 48 horas",
     paragraphs: [
-      "No hay contratos de permanencia. Podés cancelar en cualquier momento avisándonos por WhatsApp o correo; el servicio se mantiene hasta el final del período mensual ya pagado y no se cobra nada más.",
-      "El pago de implementación y el hardware ya producido no son reembolsables, porque corresponden a trabajo y materiales ya entregados [REVISAR: confirmar política de reembolsos].",
+      `Publicamos tu carta digital en ${delivery.menuHours} horas hábiles y dejamos el sistema completo (pedidos, panel y reportes) en ${delivery.fullSystemDays} días. El reloj empieza a correr cuando recibimos el pago de la implementación y los materiales: el menú con precios, las fotos y el logo.`,
+      `Garantía: ${terms.guarantee48h} Si recibimos materiales incompletos, te avisamos qué falta y el plazo empieza cuando lleguen.`,
     ],
   },
   {
-    title: "Plazos de entrega",
+    title: "Pagos",
     paragraphs: [
-      `Publicamos tu carta digital en un plazo de ${PRICING.delivery.menuHours} horas y el sistema completo (pedidos, panel y reportes) en ${PRICING.delivery.fullSystemDays} días. Ambos plazos se cuentan a partir de que recibimos el pago de implementación y los materiales necesarios (menú con precios, fotos y logo).`,
-      "Los plazos del hardware de mesa se indican en cada cotización. Si un plazo no se puede cumplir por causas ajenas a nosotros (por ejemplo, materiales incompletos), te avisamos y acordamos una nueva fecha.",
+      "Pagás por SINPE Móvil o transferencia bancaria. La implementación se paga al aprobar la propuesta y la mensualidad, por adelantado cada mes. No hacemos cobros automáticos ni guardamos datos de tarjetas.",
+      "Recibís comprobante de cada pago. Si tu negocio necesita factura electrónica, avisanos antes de contratar y lo coordinamos.",
+      "Si una mensualidad queda sin pagar, podemos pausar la carta hasta que se regularice, siempre avisándote antes por WhatsApp. Cuando se recibe el pago, la carta vuelve a estar disponible.",
     ],
   },
   {
-    title: "Contenido y materiales del cliente",
+    title: "Cancelación, sin permanencia",
     paragraphs: [
-      "Vos sos responsable del contenido que nos entregás para tu carta: nombres, descripciones, precios, fotos y logo. Declarás que tenés derecho a usarlos y nos autorizás a reproducirlos únicamente para prestar el servicio.",
-      "Los cambios de menú en el plan Carta se solicitan por WhatsApp y los aplicamos nosotros. En los planes con panel, los cambios que hagas vos se publican de inmediato bajo tu responsabilidad.",
+      `No hay contrato de permanencia. Cancelás cuando quieras avisándonos por WhatsApp o correo con ${terms.noticeDays} días de anticipación; el servicio sigue activo hasta el final del período ya pagado y no se cobra nada más.`,
     ],
   },
   {
-    title: "Hardware de mesa",
+    title: "Reembolsos",
     paragraphs: [
-      "Los stands y tarjetas se fabrican a medida con tu logo y colores, por lo que se producen solo después de aprobar el diseño y la cotización. Al ser productos personalizados, no admiten devolución salvo defecto de fabricación, en cuyo caso los reponemos sin costo [REVISAR: plazo de garantía del hardware].",
+      "Si cancelás antes de que empecemos la implementación, te devolvemos el 100 % de lo que pagaste por ella dentro de 10 días hábiles.",
+      "Una vez publicada la carta, la implementación no es reembolsable, salvo que aplique la garantía de 48 horas. Las mensualidades pagadas no se prorratean.",
+    ],
+  },
+  {
+    title: "Hardware de mesa y entrega",
+    paragraphs: [
+      `Los stands y tarjetas se hacen a medida con tu logo y colores, así que se producen después de que aprobás el diseño y el precio. ${hardwareDelivery.minimum} Están listos ${hardwareDelivery.leadTime} desde la aprobación del diseño.`,
+      `${hardwareDelivery.gam} ${hardwareDelivery.outside}`,
+      "Garantía del hardware: 3 meses por defectos de fabricación, con reposición de la pieza. No cubre golpes, exposición a calor directo ni mal uso. Al ser productos personalizados, no admiten devolución por cambio de opinión.",
+    ],
+  },
+  {
+    title: "Tu contenido es tuyo",
+    paragraphs: [
+      "El menú, las fotos, el logo y la marca de tu local son tuyos. Nos autorizás a usarlos solo para prestarte el servicio y sos responsable de tener derecho a usarlos. Si dejás DataFud, te entregamos tu carta en un archivo.",
+      "Los precios y descripciones que publicamos son los que nos pasás; revisalos cuando te mostremos la carta. En los planes con panel, los cambios que hagas vos se publican de inmediato bajo tu responsabilidad.",
     ],
   },
   {
     title: "Disponibilidad y soporte",
     paragraphs: [
-      "Hacemos un esfuerzo razonable para que tu carta esté disponible de forma continua. Puede haber interrupciones breves por mantenimiento o por causas de los proveedores de infraestructura; en ese caso trabajamos para restablecer el servicio lo antes posible.",
-      `El soporte se brinda por WhatsApp en horario de oficina de ${SITE.country}. El soporte por WhatsApp está incluido mientras tengás el plan activo.`,
+      "Tu carta vive en la nube y trabajamos para que esté disponible de forma continua, pero no prometemos un porcentaje de disponibilidad: puede haber interrupciones por mantenimiento o por fallas de proveedores de infraestructura.",
+      "Si algo no carga, escribinos por WhatsApp y lo revisamos. Si hace falta, te mandamos un PDF de tu carta para imprimir mientras tanto.",
     ],
   },
   {
-    title: "Propiedad intelectual",
+    title: "Propiedad intelectual de DataFud",
     paragraphs: [
-      "El software, el diseño y la marca DataFud son propiedad de GaloDev. Te concedemos una licencia de uso no exclusiva mientras el servicio esté activo. Tu marca, tu menú y tus fotos siguen siendo tuyos.",
+      "El software, el diseño y la marca DataFud son de GaloDev. Mientras el servicio esté activo te damos una licencia de uso no exclusiva e intransferible.",
     ],
   },
   {
     title: "Datos personales",
     paragraphs: [
-      "El tratamiento de los datos de contacto que nos das y de la información que se genera al usar el servicio se describe en nuestra Política de privacidad, que forma parte de estos términos.",
+      "El tratamiento de los datos que nos das y de la información que se genera al usar el servicio se explica en la Política de privacidad, que forma parte de estos términos.",
     ],
   },
   {
-    title: "Responsabilidad",
+    title: "Límite de responsabilidad",
     paragraphs: [
-      "DataFud es una herramienta para mostrar tu carta y, según el plan, gestionar pedidos. No somos responsables por errores en los precios o descripciones que nos entregaste, por decisiones comerciales tomadas con base en los reportes, ni por daños indirectos o lucro cesante.",
-      "En cualquier caso, nuestra responsabilidad total frente a vos se limita al monto que nos hayas pagado en los [REVISAR: tres] meses anteriores al hecho que la origine.",
+      "DataFud es una herramienta para mostrar tu carta y, según el plan, gestionar pedidos. No respondemos por errores en precios o descripciones que nos entregaste, por decisiones comerciales tomadas con base en los reportes, ni por daños indirectos o lucro cesante.",
+      "En cualquier caso, nuestra responsabilidad total frente a vos se limita a lo que nos hayas pagado por el servicio en los tres meses anteriores al hecho que la origine.",
     ],
   },
   {
     title: "Cambios a estos términos",
     paragraphs: [
-      "Podemos actualizar estos términos. Si el cambio es relevante, te avisamos por WhatsApp o correo con al menos [REVISAR: 15] días de anticipación. Si no estás de acuerdo, podés cancelar sin costo antes de que entre en vigor.",
+      `Si cambiamos estos términos de forma relevante, te avisamos por WhatsApp o correo con al menos ${terms.noticeDays} días de anticipación. Si no estás de acuerdo, podés cancelar sin costo antes de que entren en vigor.`,
     ],
   },
   {
     title: "Ley aplicable",
     paragraphs: [
-      `Estos términos se rigen por las leyes de la República de ${SITE.country}. Cualquier diferencia se intentará resolver primero de forma directa; de no lograrlo, se someterá a los tribunales de [REVISAR: jurisdicción, por ejemplo San José, Costa Rica].`,
+      `Estos términos se rigen por las leyes de la República de ${SITE.country}. Cualquier diferencia se intenta resolver primero de forma directa; si no se logra, la resuelven los tribunales de la República de ${SITE.country}.`,
     ],
   },
 ];

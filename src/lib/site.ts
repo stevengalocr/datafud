@@ -9,9 +9,10 @@ export const SITE = {
   name: "DataFud",
   url: "https://datafud.com",
   maker: "GaloDev",
-  // Nombre comercial. Razón social, cédula jurídica y domicilio quedan [REVISAR] en
-  // /terminos y /privacidad hasta que Steven los confirme.
+  // Responsable legal (D-027). No se publica cédula ni dirección exacta: el repo es público.
   legalName: "GaloDev",
+  owner: "Steven Galo",
+  legalResponsible: "Steven Galo, que opera bajo el nombre comercial GaloDev",
   country: "Costa Rica",
   region: "Costa Rica y Latinoamérica",
   // Formato internacional sin "+", como lo exige wa.me.
@@ -107,4 +108,17 @@ export function waProps(origin: WaOrigin, message = WA_MESSAGES[origin]) {
 export function mailLink(subject = "Consulta desde datafud.com"): string {
   if (!hasEmail()) return CONTACT_ANCHOR;
   return `mailto:${SITE.email}?subject=${encodeURIComponent(subject)}`;
+}
+
+/**
+ * Meta Pixel opcional (V09). Solo se carga si NEXT_PUBLIC_META_PIXEL_ID tiene un ID numérico.
+ * Sin la variable no se descarga nada de facebook.net ni se crea window.fbq.
+ */
+export function metaPixelId(): string | null {
+  const id = process.env.NEXT_PUBLIC_META_PIXEL_ID?.trim();
+  return id && /^\d{6,20}$/.test(id) ? id : null;
+}
+
+export function isPixelEnabled(): boolean {
+  return metaPixelId() !== null;
 }
