@@ -66,3 +66,13 @@ existentes). Se aplica con "sincronizá el vault" desde Cowork.
 - Testimonios: componente listo, lista vacía, no se renderiza.
 - Renders etiquetados; stock con alt honesto; redes solo con URL.
 - Verificado: HTML sin testimonios, capturas mirada, qa:landing OK.
+
+### V06 · Preguntas de Costa Rica · commit (ver V07) · despliegue (ver V07)
+**Pendientes.md** — cerrar: "Faltan preguntas de Costa Rica: SINPE, factura, apps de delivery, envíos, mínimo".
+**Decisiones.md** — ninguna nueva (aplica las respuestas de D-025 y D-027).
+**Seguridad.md** — sin cambios.
+**Otras páginas** — Marca-Y-Marketing / Producto-Y-Modelo-De-Negocio: la FAQ pública tiene 15 preguntas: primer mes, implementación, cómo pago (SINPE Móvil o transferencia), factura (comprobante; electrónica se coordina), contrato, plazos, garantía 48 h, cambios, empezar con la carta, pedido mínimo, envíos fuera de la GAM, clientes y turistas, facturación del restaurante, Uber Eats/PedidosYa (sin integración), si algo falla.
+**log.md** — `## [2026-09-22] ingest | FAQ de Costa Rica`
+- 15 preguntas ordenadas por lo que pregunta primero un dueño de soda.
+- Respuestas desde `PRICING` y las decisiones cerradas; sin "1 año de soporte".
+- Verificado: JSON-LD FAQPage idéntico a lo visible (Playwright).

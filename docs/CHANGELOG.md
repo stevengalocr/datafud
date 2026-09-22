@@ -21,6 +21,8 @@ Todas las versiones notables del proyecto. Formato basado en
 - "Por qué DataFud" reemplaza a "Confianza": cuatro puntos verificables y firma de Steven Galo
   (avatar "SG" hasta que haya foto). Testimonios solo si hay reales; renders con "Render
   ilustrativo"; redes en el footer solo con URL.
+- Preguntas frecuentes: 15, con las de Costa Rica (SINPE, factura, contrato, garantía de 48 h,
+  pedido mínimo, envíos fuera de la GAM, Uber Eats/PedidosYa, qué pasa si algo falla).
 
 Fachada de venta ("landing primero", decisiones D-010 a D-013). Sin backend en producción;
 cada unidad se publica en `main` desde el loop autónomo (`docs/plans/landing-loop-state.md`).
