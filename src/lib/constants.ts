@@ -138,6 +138,10 @@ export const PRICING = {
     menuChanges: "Cambios de precios y platillos por WhatsApp incluidos en todos los planes",
     permanence: "Sin contrato de permanencia: cancelás con 15 días de aviso por WhatsApp o correo.",
     noticeDays: 15,
+    /** Reembolso de la implementación si se cancela antes de empezar (D-027). */
+    refundDays: 10,
+    /** Garantía del hardware por defectos de fabricación (D-027). */
+    hardwareWarrantyMonths: 3,
   },
   /** Hardware de mesa (decisión D-013). CRC primero desde 2026-09-22 (D-023); USD de referencia. */
   hardware: [

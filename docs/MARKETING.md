@@ -45,7 +45,7 @@ servicio, datos del negocio, atención a clientes extranjeros.
 
 ## 4. Mensajes clave (pilares de la landing)
 
-1. **Pedí desde la mesa, sin fricción.** QR o NFC → carta al instante, sin apps ni cuentas.
+1. **La carta en el celular, sin fricción.** QR o NFC → carta al instante, sin apps ni cuentas (pedidos en mesa con el sistema completo).
 2. **Control total desde un panel.** Platos, comandas y reportes en un solo lugar.
 3. **Bilingüe.** Español e inglés en todos los planes; portugués en Empresarial.
 4. **Carta lista en 48 horas; sistema completo en 15 días.** Implementación llave en mano, sin curva técnica.
@@ -85,7 +85,7 @@ visible de `/` (hero, planes y FAQ); la línea de tiempo no repite el plazo de l
 | Idiomas | Español e inglés | Español e inglés | Español, inglés y portugués |
 | Platillos | Hasta 60 | Hasta 150 | Ilimitados |
 | Pedidos desde la mesa | — | ✓ | ✓ |
-| Reportes | — | Panel de comandas + reportes de venta | Ventas por día, ticket promedio y platillos más vendidos |
+| Reportes | — | Panel de comandas + ventas por día, ticket promedio y más vendidos | Todo lo de Estándar |
 
 ⭐ **Estándar** es el plan destacado ("Recomendado").
 
@@ -139,7 +139,7 @@ por resultados.
 
 ## 7. Diferenciadores frente a alternativas
 
-- **vs. carta impresa / PDF:** editable al instante, multi-idioma, con datos de venta.
+- **vs. carta impresa / PDF:** se lee bien en el celular, bilingüe y se actualiza sin reimprimir (reportes de venta con el sistema completo).
 - **vs. apps de delivery:** el comensal pide en mesa, el negocio no paga comisión por orden.
 - **vs. SaaS genérico de menús:** diseño editorial premium a la marca, hecho para Latam
   (monedas locales, español nativo, soporte por WhatsApp), implementación llave en mano.

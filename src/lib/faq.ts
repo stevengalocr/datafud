@@ -44,7 +44,7 @@ export const FAQ_ITEMS: FaqItem[] = [
   {
     id: "contrato",
     q: "¿Hay contrato?",
-    a: `No hay contrato de permanencia: cancelás con ${terms.noticeDays} días de aviso por WhatsApp o correo, y el servicio sigue hasta el final del mes ya pagado. ${terms.lateNotice} Antes de decidir podés probar la demo, sin hablar con nadie.`,
+    a: `No hay contrato de permanencia: cancelás con ${terms.noticeDays} días de aviso por WhatsApp o correo, y el servicio sigue hasta el final del período ya pagado. ${terms.lateNotice} Antes de decidir podés probar la demo, sin hablar con nadie.`,
   },
   {
     id: "no-soy-tecnico",
@@ -64,7 +64,7 @@ export const FAQ_ITEMS: FaqItem[] = [
   {
     id: "empezar-con-carta",
     q: "¿Puedo empezar solo con la carta y sumar pedidos después?",
-    a: `Sí, es lo más común. Arrancás con la Carta y, cuando quieras recibir pedidos desde la mesa, pasás a Estándar o Empresarial: el cambio lleva la implementación del sistema completo (${formatCrc(PRICING.setupFee.sistema.crc)}) y desde ahí la mensualidad del plan nuevo. Los stands y las tarjetas que ya tenés siguen funcionando.`,
+    a: `Sí. Arrancás con la Carta y, cuando quieras recibir pedidos desde la mesa, pasás a Estándar o Empresarial: el cambio lleva la implementación del sistema completo (${formatCrc(PRICING.setupFee.sistema.crc)}) y desde ahí la mensualidad del plan nuevo. Los stands y las tarjetas que ya tenés siguen funcionando.`,
   },
   {
     id: "pedido-minimo",

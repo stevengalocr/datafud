@@ -18,7 +18,7 @@ const milestones: Milestone[] = [
     icon: "phone",
   },
   {
-    when: "Plazo de la Carta",
+    when: "Carta publicada",
     title: "Tu carta, en línea",
     desc: "Publicada con tu marca, en español e inglés, y con un QR provisional para usarla ese mismo día.",
     icon: "qr",

@@ -66,14 +66,14 @@ const sections: LegalSection[] = [
   {
     title: "Cancelación, sin permanencia",
     paragraphs: [
-      `No hay contrato de permanencia. Cancelás cuando quieras avisándonos por WhatsApp o correo con ${terms.noticeDays} días de anticipación; el servicio sigue activo hasta el final del período ya pagado y no se cobra nada más. Si avisás al menos ${terms.noticeDays} días antes de tu próxima fecha de pago, ese período ya no se cobra. ${terms.lateNotice}`,
+      `No hay contrato de permanencia. Cancelás cuando quieras avisándonos por WhatsApp o correo con ${terms.noticeDays} días de anticipación; el servicio sigue activo hasta el final del período ya pagado. Si avisás al menos ${terms.noticeDays} días antes de tu próxima fecha de pago, ese período ya no se cobra. ${terms.lateNotice}`,
       "Si pagaste el año de la Carta, el período pagado son esos 12 meses: al cancelar, el servicio sigue activo hasta que terminen.",
     ],
   },
   {
     title: "Reembolsos",
     paragraphs: [
-      "Si cancelás antes de que empecemos la implementación, te devolvemos el 100 % de lo que pagaste por ella dentro de 10 días hábiles.",
+      `Si cancelás antes de que empecemos la implementación, te devolvemos el 100 % de lo que pagaste por ella dentro de ${terms.refundDays} días hábiles.`,
       "Una vez publicada la carta, la implementación no es reembolsable, salvo que aplique la garantía de 48 horas. Las mensualidades y el pago anual ya pagados no se prorratean.",
     ],
   },
@@ -82,7 +82,7 @@ const sections: LegalSection[] = [
     paragraphs: [
       `Los stands y tarjetas se hacen a medida con tu logo y colores, así que se producen después de que aprobás el diseño y el precio. ${hardwareDelivery.minimum} Están listos ${hardwareDelivery.leadTime} desde la aprobación del diseño.`,
       `${hardwareDelivery.gam} ${hardwareDelivery.outside}`,
-      "Garantía del hardware: 3 meses por defectos de fabricación, con reposición de la pieza. No cubre golpes, exposición a calor directo ni mal uso. Al ser productos personalizados, no admiten devolución por cambio de opinión.",
+      `Garantía del hardware: ${terms.hardwareWarrantyMonths} meses por defectos de fabricación, con reposición de la pieza. No cubre golpes, exposición a calor directo ni mal uso. Al ser productos personalizados, no admiten devolución por cambio de opinión.`,
     ],
   },
   {

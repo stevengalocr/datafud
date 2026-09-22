@@ -129,3 +129,14 @@ existentes). Se aplica con "sincronizá el vault" desde Cowork.
 - Kit con UTMs, 3 mensajes de primer contacto, seguimientos, cierre, guion de 60 s y objeciones.
 - Plan de 12 publicaciones sin clientes ni cifras inventados.
 - Verificado: grep cruzado de cifras contra PRICING y de frases vetadas = 0.
+
+### V12 · Verificación final (5 pasadas) · commit (ver V13) · despliegue (ver V13)
+**Pendientes.md** — nuevos en "Datos que esperan a Steven": "Decidir si los precios incluyen IVA", "Decidir el tope de categorías y mesas de la Carta (hoy 5 y 8) y alinear `full_branding` de la semilla Básico", "Confirmar alcance de la garantía de 48 h (hoy: solo implementación de la Carta)", "Aclarar '48 horas hábiles' y si los '15 días' son hábiles o naturales", "Condiciones de la oferta de fundadores, momento de pago del hardware y si se descuenta la implementación de la Carta al pasar a Estándar", "Confirmar que el plan de Vercel registra eventos propios de Web Analytics".
+**Decisiones.md** — D-032 (nueva): lectura conservadora de lo no decidido. Contexto: la revisión encontró huecos (IVA, alcance de la garantía, aviso tardío). Decisión: lo que no está en D-023…D-027 no se inventa; se publica la lectura más estricta para DataFud (garantía solo sobre la implementación de la Carta; aviso tardío = se cobra un período más) y el resto queda como pendiente de Steven. Consecuencia: cualquier cambio de criterio se hace en `PRICING.terms` y se refleja solo en planes, FAQ y términos.
+**Seguridad.md** — sin cambios.
+**Otras páginas** — Analisis-Venta-Y-Competencia: rúbrica final (claridad 5, precio 5, resto 4) y medidas antes → después (alto −30 %, Lighthouse móvil 61 → 95). Paneles-Y-Vistas: la landing se ve completa sin JavaScript.
+**log.md** — `## [2026-09-22] ingest | Verificación final de la landing`
+- 5 pasadas: 1 propia y 4 de revisores independientes con contexto fresco.
+- Altos 3 → 0; el último medio (redacción de la cancelación) se corrigió y verificó.
+- Topes de la Carta publicados, contenido visible sin JS, garantía y cancelación sin ambigüedad.
+- Lighthouse móvil 95/100/96/100; qa:landing en verde en 10 rutas × 3 viewports.

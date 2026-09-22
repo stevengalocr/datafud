@@ -3,6 +3,7 @@ import { pageSocial } from "@/lib/seo";
 import { LegalPage, type LegalSection } from "@/components/marketing/v2/legal-page";
 import { SITE, isPixelEnabled } from "@/lib/site";
 import { isTurnstileEnabled } from "@/lib/turnstile";
+import { isContactFormEnabled } from "@/lib/contact";
 
 const DESCRIPTION =
   "Qué datos recoge DataFud por el formulario, WhatsApp y el uso del servicio, para qué los usamos, con quién los compartimos y cómo ejercer tus derechos según la Ley 8968 de Costa Rica.";
@@ -17,6 +18,7 @@ export const metadata: Metadata = {
 // El píxel de Meta solo se menciona como activo si la variable existe en el build.
 const pixel = isPixelEnabled();
 const turnstile = isTurnstileEnabled();
+const contactForm = isContactFormEnabled();
 
 const sections: LegalSection[] = [
   {
@@ -61,7 +63,7 @@ const sections: LegalSection[] = [
     paragraphs: ["No vendemos ni alquilamos tus datos. Solo los procesan, para prestar el servicio, estos proveedores:"],
     bullets: [
       "Vercel Inc. (Estados Unidos): aloja datafud.com y procesa las métricas agregadas.",
-      "Resend, Inc. (Estados Unidos): envía por correo los mensajes del formulario de contacto.",
+      ...(contactForm ? ["Resend, Inc. (Estados Unidos): envía por correo los mensajes del formulario de contacto."] : []),
       ...(turnstile ? ["Cloudflare, Inc. (Estados Unidos): verifica con Turnstile que el formulario lo envía una persona y no un programa automático."] : []),
       pixel
         ? "Meta Platforms: WhatsApp, el canal que elegís para escribirnos, y el píxel de medición de campañas."

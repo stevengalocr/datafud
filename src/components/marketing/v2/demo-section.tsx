@@ -118,7 +118,7 @@ export async function DemoSection() {
                 Probalo vos mismo, sin hablar con nadie
               </h2>
               <p className="mt-5 max-w-lg text-base font-medium leading-relaxed text-brand-800/80">
-                Montamos un restaurante de ejemplo, <span className="font-semibold text-brand-900">{RESTAURANT.name}</span>,
+                Montamos una soda de ejemplo, <span className="font-semibold text-brand-900">{RESTAURANT.name}</span>,
                 con su carta completa. Abrilo en tu teléfono como si estuvieras sentado en la mesa.
               </p>
             </div>
@@ -150,7 +150,7 @@ export async function DemoSection() {
               </Link>
             </div>
             <p className="reveal-up mt-4 text-xs font-semibold uppercase tracking-wider text-brand-700/80">
-              Restaurante ficticio · datos de ejemplo · nada se guarda
+              Soda ficticia · datos de ejemplo · nada se guarda
             </p>
 
             {/* Desde la compu: QR real a la carta demo. En móvil sobra (el botón abre directo). */}
