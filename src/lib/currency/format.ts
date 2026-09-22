@@ -24,6 +24,24 @@ const SYMBOLS: Record<string, string> = {
 
 const ZERO_DECIMAL = new Set(["CLP", "PYG"]);
 
+/** Separador de miles de Costa Rica: espacio que no se corta al final de línea. */
+const CR_GROUP = " ";
+
+/** Entero con separador de miles es-CR ("14 900", "6 000"), sin depender del ICU del entorno. */
+function groupCr(n: number): string {
+  return String(Math.round(Math.abs(n))).replace(/\B(?=(\d{3})+(?!\d))/g, CR_GROUP);
+}
+
+/** Colones con formato es-CR y sin decimales: "₡14 900". Lo usa la landing para toda cifra en CRC. */
+export function formatCrc(amount: number): string {
+  return `${amount < 0 ? "-" : ""}₡${groupCr(amount)}`;
+}
+
+/** Dólares de referencia: "US$29". */
+export function formatUsd(amount: number): string {
+  return `US$${groupCr(amount).replace(/ /g, ",")}`;
+}
+
 export function formatMoney(
   amount: number,
   currencyCode: string = "USD",

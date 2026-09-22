@@ -10,18 +10,30 @@ export type PublishedPrice = number | "PENDIENTE";
 
 export type PlanCode = "basico" | "estandar" | "empresarial";
 
+/** Tipo de implementación: la Carta es un montaje corto; el sistema incluye pedidos y panel. */
+export type SetupKind = "carta" | "sistema";
+
+/** Monto doble: USD es la moneda interna y de la BD; CRC es lo que ve primero un cliente tico. */
+export type Money = { usd: number; crc: number };
+
 export type Plan = {
   /** Nombre interno (coincide con la BD). */
   name: string;
   /** Nombre con el que se vende en la landing (Básico se vende como "Carta"). */
   marketingName: string;
   priceUsd: number;
+  /** Mensualidad en colones que se muestra primero (decisión D-023). */
+  priceCrc: number;
   maxLanguages: number;
+  /** Idiomas incluidos, en texto corto para la landing. */
+  languagesLabel: string;
   maxProducts: number | null;
   /** Plazo prometido que muestra la landing. */
   deliveryLabel: string;
   /** Si el plan incluye pedidos desde la mesa (el plan Carta no). */
   tableOrdering: boolean;
+  /** Qué implementación le corresponde. */
+  setup: SetupKind;
 };
 
 export type HardwareItem = {
@@ -31,14 +43,26 @@ export type HardwareItem = {
   benefit: string;
   /** "desde": precio base del modelo básico; "fijo": precio cerrado. */
   pricing: "desde" | "fijo";
+  /** Referencia secundaria en dólares. */
   priceUsd: PublishedPrice;
+  /** Precio en colones que se muestra primero. */
+  priceCrc: number;
   unit: "unidad";
-  /** Foto real pendiente (TODO-FOTO): mientras tanto se usa una composición de marca. */
+  /** Render o foto del producto. `photoIsRender` = true muestra la etiqueta "Render ilustrativo". */
   photo: string | null;
+  photoIsRender: boolean;
 };
 
+const SETUP_FEE = {
+  carta: { usd: 49, crc: 24900 },
+  sistema: { usd: 249, crc: 125000 },
+} as const satisfies Record<SetupKind, Money>;
+
 export const PRICING = {
-  setupFeeUsd: 249, // Implementación única llave en mano (pago único)
+  /** Implementación por tipo, pago único (D-023). La Carta ya no paga la del sistema. */
+  setupFee: SETUP_FEE,
+  /** Alias que usa el panel de cargos del super admin: implementación del sistema completo. */
+  setupFeeUsd: SETUP_FEE.sistema.usd,
   nfcUnitUsd: 15, // Tarjeta NFC física por unidad (también en hardware)
   /** Plazos prometidos (decisión D-012): 48 h solo la carta; sistema completo en 15 días. */
   delivery: {
@@ -50,31 +74,58 @@ export const PRICING = {
       name: "Básico",
       marketingName: "Carta",
       priceUsd: 29,
-      maxLanguages: 1,
-      maxProducts: 20,
+      priceCrc: 14900,
+      maxLanguages: 2,
+      languagesLabel: "Español e inglés",
+      maxProducts: 60,
       deliveryLabel: "Carta lista en 48 horas",
       tableOrdering: false,
+      setup: "carta",
     },
     estandar: {
       name: "Estándar",
       marketingName: "Estándar",
       priceUsd: 49,
+      priceCrc: 24900,
       maxLanguages: 2,
-      maxProducts: 70,
+      languagesLabel: "Español e inglés",
+      maxProducts: 150,
       deliveryLabel: "Sistema completo en 15 días",
       tableOrdering: true,
+      setup: "sistema",
     },
     empresarial: {
       name: "Empresarial",
       marketingName: "Empresarial",
       priceUsd: 99,
+      priceCrc: 49900,
       maxLanguages: 3,
+      languagesLabel: "Español, inglés y portugués",
       maxProducts: null,
       deliveryLabel: "Sistema completo en 15 días",
       tableOrdering: true,
+      setup: "sistema",
     },
   } satisfies Record<PlanCode, Plan>,
-  /** Hardware de mesa (decisión D-013). Precios base confirmados por Steven el 2026-09-19. */
+  /** Pago anual de la Carta: 2 meses gratis y la implementación de la Carta incluida. */
+  annualCarta: { usd: 290, crc: 149000 },
+  /** Oferta de fundadores (D-024). Steven la apaga con `enabled: false` al llenarse. */
+  founderOffer: {
+    enabled: true,
+    spots: 10,
+    text: "Primeros 10 locales: implementación de la Carta sin costo y 1 stand QR 3D incluido, a cambio de dejarnos mostrar tu local como caso.",
+    short: "Primeros 10 locales: implementación de la Carta sin costo",
+  },
+  /** Textos de la oferta que se repiten en planes, FAQ y legales (D-025). */
+  terms: {
+    guarantee48h:
+      "Si tu carta no está publicada en 48 horas hábiles desde que recibimos menú, fotos y logo, no pagás la implementación.",
+    support: "Soporte por WhatsApp incluido mientras tengás el plan activo",
+    menuChanges: "Cambios de precios y platillos por WhatsApp incluidos en todos los planes",
+    permanence: "Sin contrato de permanencia: cancelás con 15 días de aviso por WhatsApp o correo.",
+    noticeDays: 15,
+  },
+  /** Hardware de mesa (decisión D-013). CRC primero desde 2026-09-22 (D-023); USD de referencia. */
   hardware: [
     {
       code: "stand-qr-3d",
@@ -82,8 +133,10 @@ export const PRICING = {
       benefit: "Tu QR en relieve, en el color de tu marca y con tu logo. Se queda en la mesa sin arrugarse ni mancharse.",
       pricing: "desde",
       priceUsd: 12,
+      priceCrc: 6000,
       unit: "unidad",
-      photo: "/stand-qr-3d.webp", // Render temporal hasta tener foto real
+      photo: "/stand-qr-3d.webp",
+      photoIsRender: true,
     },
     {
       code: "tarjeta-nfc",
@@ -91,8 +144,10 @@ export const PRICING = {
       benefit: "El comensal acerca el teléfono y la carta se abre sola. Sin cámara, sin apps.",
       pricing: "fijo",
       priceUsd: 15,
+      priceCrc: 7500,
       unit: "unidad",
       photo: "/nfc.png",
+      photoIsRender: true,
     },
     {
       code: "stand-qr-3d-nfc",
@@ -100,8 +155,10 @@ export const PRICING = {
       benefit: "El mismo stand con chip NFC adentro: escaneás o tocás, como prefiera cada cliente.",
       pricing: "desde",
       priceUsd: 20,
+      priceCrc: 10000,
       unit: "unidad",
-      photo: "/stand-qr-3d-nfc.webp", // Render temporal hasta tener foto real
+      photo: "/stand-qr-3d-nfc.webp",
+      photoIsRender: true,
     },
     {
       code: "stand-resenas",
@@ -109,18 +166,40 @@ export const PRICING = {
       benefit: "QR y NFC que llevan al comensal directo a tu ficha de Google para dejar la reseña, sin buscar nada.",
       pricing: "desde",
       priceUsd: 20,
+      priceCrc: 10000,
       unit: "unidad",
-      photo: "/stand-resenas.webp", // Render temporal hasta tener foto real
+      photo: "/stand-resenas.webp",
+      photoIsRender: true,
     },
   ] satisfies readonly HardwareItem[],
+  /** Entrega del hardware (D-023): sin mínimo, gratis en la GAM, Correos fuera. */
+  hardwareDelivery: {
+    minimum: "Sin pedido mínimo: desde 1 unidad.",
+    custom: "Diseño 100 % personalizado (forma, colores, logo) se cotiza por WhatsApp.",
+    gam: "Entrega gratis en la GAM, en persona.",
+    outside: "Fuera de la GAM, envío por Correos de Costa Rica con el costo de la tarifa, que se cotiza por WhatsApp.",
+    leadTime: "de 3 a 5 días hábiles",
+  },
 } as const;
 
 export const PLAN_CODES = Object.keys(PRICING.plans) as PlanCode[];
 
-/** Texto de precio para la landing: "$12" o "Cotizá por WhatsApp" si está pendiente. */
+/** Implementación que le toca a un plan. */
+export function setupFeeFor(code: PlanCode): Money {
+  return PRICING.setupFee[PRICING.plans[code].setup];
+}
+
+/** Primer pago de un plan: implementación + primer mes (para que no haya sorpresas). */
+export function firstPaymentFor(code: PlanCode): Money {
+  const setup = setupFeeFor(code);
+  const plan = PRICING.plans[code];
+  return { usd: setup.usd + plan.priceUsd, crc: setup.crc + plan.priceCrc };
+}
+
+/** Texto de precio en USD de referencia: "US$12" o "Cotizá por WhatsApp" si está pendiente. */
 export function formatPublishedPrice(price: PublishedPrice, hasWhatsApp = true): string {
   if (price === "PENDIENTE") return hasWhatsApp ? "Cotizá por WhatsApp" : "Cotizá tu diseño";
-  return `$${price}`;
+  return `US$${price}`;
 }
 
 export const CHARGE_KIND_LABEL: Record<ChargeKind, string> = {

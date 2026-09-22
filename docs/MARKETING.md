@@ -64,49 +64,53 @@ servicio, datos del negocio, atención a clientes extranjeros.
 
 ## 6. Oferta y precios (línea de venta canónica)
 
-### Implementación única — **$249 (pago único)**
-Servicio inicial llave en mano. Incluye:
-- Carta publicada en **48 horas**; sistema completo (pedidos, panel, reportes) en **15 días**.
-- Carta a tu marca: colores, logo y fotos de tus platillos.
-- **1 año de soporte técnico** incluido.
-
-Después, el cliente elige su plan mensual (desde $29/mes).
+> Fuente única: `PRICING` en `src/lib/constants.ts` (D-023 a D-025, 2026-09-22). **Colones
+> primero** con formato es-CR ("₡14 900", sin decimales); USD como referencia ("≈ US$29").
 
 ### Planes mensuales
 
-| | Carta (Básico) — **$29/mes** | Estándar — **$49/mes** ⭐ | Empresarial — **$99/mes** |
+| | Carta (Básico) | Estándar ⭐ | Empresarial |
 |---|---|---|---|
+| Mensualidad | **₡14 900** (≈ US$29) | **₡24 900** (≈ US$49) | **₡49 900** (≈ US$99) |
+| Implementación (pago único) | ₡24 900 (≈ US$49) | ₡125 000 (≈ US$249) | ₡125 000 (≈ US$249) |
+| Primer pago | ₡39 800 | ₡149 900 | ₡174 900 |
 | Qué es | Carta digital por QR/NFC, sin pedidos en mesa | Carta + pedidos desde la mesa + panel | Todo, sin límites de platillos, categorías ni mesas |
 | Entrega | **48 horas** | **15 días** | **15 días** |
-| Tagline | "Tu carta digital por QR y NFC, sin pedidos en mesa" | "Carta + pedidos desde la mesa + panel" | "Sin límites de platillos, categorías ni mesas" |
-| Idiomas | 1 | 2 simultáneos | 3 (ES·EN·PT) |
-| Platillos | Hasta 20 | Hasta 70 | Ilimitados |
+| Idiomas | Español e inglés | Español e inglés | Español, inglés y portugués |
+| Platillos | Hasta 60 | Hasta 150 | Ilimitados |
 | Pedidos desde la mesa | — | ✓ | ✓ |
-| Reportes | — (cambios de menú a pedido) | Panel de comandas + reportes de venta | Ventas por día, ticket promedio y platillos más vendidos |
-| Soporte | WhatsApp | WhatsApp en horario de oficina | WhatsApp con contacto directo |
+| Reportes | — | Panel de comandas + reportes de venta | Ventas por día, ticket promedio y platillos más vendidos |
 
 ⭐ **Estándar** es el plan destacado ("Recomendado").
 
-### Add-on físico — Tarjetas NFC **$15/unidad**
-Sin suscripción extra. El comensal acerca el teléfono a la tarjeta de la mesa y la carta
-aparece al instante. Se compran las unidades que el negocio necesite.
+- **Todos los planes:** te la montamos nosotros; cambios de precios y platillos por WhatsApp
+  incluidos; soporte por WhatsApp incluido mientras tengás el plan activo.
+- **Pago anual de la Carta:** ₡149 000/año (≈ US$290), 2 meses gratis, implementación incluida.
+- **Oferta de fundadores** (`founderOffer.enabled`): "Primeros 10 locales: implementación de la
+  Carta sin costo y 1 stand QR 3D incluido, a cambio de dejarnos mostrar tu local como caso."
+- **Garantía de 48 h** (único uso permitido de la idea de garantía): "Si tu carta no está
+  publicada en 48 horas hábiles desde que recibimos menú, fotos y logo, no pagás la implementación."
+- **Permanencia:** sin contrato; se cancela con aviso de 15 días por WhatsApp o correo.
+- **Pagos:** SINPE Móvil o transferencia. Implementación al aprobar la propuesta; mensualidad por
+  adelantado. Comprobante de cada pago; factura electrónica se coordina si se avisa antes.
 
 ### Hardware de mesa (add-ons, D-013) — fuente: `PRICING.hardware`
 
-| Producto | Precio publicado |
-|---|---|
-| Stand QR impreso en 3D | desde $12 / unidad |
-| Tarjeta NFC | $15 / unidad |
-| Stand QR 3D + NFC | desde $20 / unidad |
-| Stand de reseñas de Google (QR + NFC) | desde $20 / unidad |
+| Producto | Precio publicado | Referencia |
+|---|---|---|
+| Stand QR impreso en 3D | desde ₡6 000 / unidad | US$12 |
+| Tarjeta NFC | ₡7 500 / unidad | US$15 |
+| Stand QR 3D + NFC | desde ₡10 000 / unidad | US$20 |
+| Stand de reseñas de Google (QR + NFC) | desde ₡10 000 / unidad | US$20 |
 
-Mensaje fijo: **"Todo es 100 % personalizable: forma, colores, tamaño y tu logo en relieve.
-Cotizá tu diseño por WhatsApp."** El stand de reseñas se describe por lo que hace (lleva al
-comensal directo a la ficha de Google para dejar la reseña), nunca por resultados ("más
-estrellas", "más mesas llenas").
+Sin pedido mínimo (desde 1 unidad). Entrega gratis en la GAM, en persona; fuera de la GAM,
+Correos de Costa Rica con el costo de la tarifa. Plazo: de 3 a 5 días hábiles desde que se aprueba
+el diseño. Mensaje fijo: **"Todo es 100 % personalizable: forma, colores, tamaño y tu logo en
+relieve. Cotizá tu diseño por WhatsApp."** El stand de reseñas se describe por lo que hace, nunca
+por resultados.
 
-> En esta etapa **no hay trial de autoservicio**: la prueba es la demo en vivo (`/preview`) y
-> una demo guiada por WhatsApp. Sin contratos atados: si un mes no le sirve, lo deja.
+> En esta etapa **no hay prueba de autoservicio**: la prueba es la demo (`/preview`) y una demo
+> guiada por WhatsApp.
 
 ## 7. Diferenciadores frente a alternativas
 
@@ -119,7 +123,7 @@ estrellas", "más mesas llenas").
 
 | Objeción | Respuesta comercial |
 |---|---|
-| "Es complicado / no soy técnico" | Implementación llave en mano: nosotros montamos la carta en 48 h y el sistema en 15 días |
+| "Es complicado / no soy técnico" | Te la montamos nosotros: carta en 48 h y sistema en 15 días |
 | "¿Y si no me sirve?" | Demo en vivo gratis y sin contratos atados: si un mes no le sirve, lo deja |
 | "Mis clientes no sabrán usarlo" | Solo escanear o tocar — sin apps ni cuentas |
 | "Ya tengo carta" | La digital se actualiza sola, te da datos y no se reimprime |
@@ -143,7 +147,7 @@ estrellas", "más mesas llenas").
   (`src/lib/site.ts`, `waProps`). Botón flotante en móvil.
 - **CTA secundario:** "Ver demo en vivo" → `/preview` (demo navegable sin backend).
 - **Alternativa:** formulario en `#contacto` (Resend; solo se muestra con `RESEND_API_KEY`).
-- **Microcopy de confianza:** "Carta lista en 48 horas · desde $29/mes".
+- **Microcopy de confianza:** "Desde ₡14 900/mes · Te la montamos nosotros · Cambios por WhatsApp".
 - **Embudo:** Landing → WhatsApp o formulario → llamada y plan elegido → implementación
   (carta en 48 h; sistema completo en 15 días) → cliente activo (mensualidad). `/register`
   redirige a `/#contacto`.

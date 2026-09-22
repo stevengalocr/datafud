@@ -610,10 +610,10 @@ begin;
 
 insert into public.plans (code, name, price_usd, sort_order, features) values
   ('basico','Básico',29.00,1, jsonb_build_object(
-     'max_languages',1,'max_products',20,'max_categories',5,'max_tables',8,
+     'max_languages',2,'max_products',60,'max_categories',5,'max_tables',8,
      'advanced_reports',false,'full_branding',false)),
   ('estandar','Estándar',49.00,2, jsonb_build_object(
-     'max_languages',2,'max_products',70,'max_categories',20,'max_tables',30,
+     'max_languages',2,'max_products',150,'max_categories',20,'max_tables',30,
      'advanced_reports',true,'full_branding',true)),
   ('empresarial','Empresarial',99.00,3, jsonb_build_object(
      'max_languages',3,'max_products',null,'max_categories',null,'max_tables',null,

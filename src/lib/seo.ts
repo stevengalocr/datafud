@@ -1,4 +1,4 @@
-import { PRICING, PLAN_CODES } from "@/lib/constants";
+import { PRICING, PLAN_CODES, setupFeeFor } from "@/lib/constants";
 import { FAQ_ITEMS } from "@/lib/faq";
 import { SITE } from "@/lib/site";
 
@@ -37,26 +37,31 @@ export function organizationJsonLd() {
 export function productsJsonLd() {
   return PLAN_CODES.map((code) => {
     const plan = PRICING.plans[code];
+    const setup = setupFeeFor(code);
+    const offer = (price: number, priceCurrency: "CRC" | "USD") => ({
+      "@type": "Offer",
+      price,
+      priceCurrency,
+      availability: "https://schema.org/InStock",
+      url: `${SITE.url}/#planes`,
+      priceSpecification: [
+        { "@type": "UnitPriceSpecification", price, priceCurrency, unitText: "mes" },
+        {
+          "@type": "UnitPriceSpecification",
+          price: priceCurrency === "CRC" ? setup.crc : setup.usd,
+          priceCurrency,
+          name: "Implementación (pago único)",
+        },
+      ],
+    });
     return {
       "@context": "https://schema.org",
       "@type": "Product",
       name: `DataFud ${plan.marketingName}`,
-      description: `${plan.deliveryLabel}. ${plan.tableOrdering ? "Carta digital, pedidos desde la mesa, panel de comandas y reportes" : "Carta digital por QR y NFC con tu marca, sin pedidos en mesa"}. ${plan.maxLanguages} ${plan.maxLanguages === 1 ? "idioma" : "idiomas"}, ${plan.maxProducts ? `hasta ${plan.maxProducts} platillos` : "platillos ilimitados"}.`,
+      description: `${plan.deliveryLabel}. ${plan.tableOrdering ? "Carta digital, pedidos desde la mesa, panel de comandas y reportes" : "Carta digital por QR y NFC con tu marca, sin pedidos en mesa"}. ${plan.languagesLabel}, ${plan.maxProducts ? `hasta ${plan.maxProducts} platillos` : "platillos ilimitados"}.`,
       brand: { "@type": "Brand", name: SITE.name },
       category: "Software de menú digital para restaurantes",
-      offers: {
-        "@type": "Offer",
-        price: plan.priceUsd,
-        priceCurrency: "USD",
-        availability: "https://schema.org/InStock",
-        url: `${SITE.url}/#planes`,
-        priceSpecification: {
-          "@type": "UnitPriceSpecification",
-          price: plan.priceUsd,
-          priceCurrency: "USD",
-          unitText: "mes",
-        },
-      },
+      offers: [offer(plan.priceCrc, "CRC"), offer(plan.priceUsd, "USD")],
     };
   });
 }

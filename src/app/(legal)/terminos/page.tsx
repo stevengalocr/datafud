@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { LegalPage, type LegalSection } from "@/components/marketing/v2/legal-page";
 import { PRICING } from "@/lib/constants";
 import { SITE } from "@/lib/site";
+import { formatCrc } from "@/lib/currency/format";
 
 export const metadata: Metadata = {
   title: "Términos del servicio",
@@ -29,7 +30,7 @@ const sections: LegalSection[] = [
   {
     title: "Contratación, precios y pagos",
     paragraphs: [
-      `El servicio se contrata con un pago único de implementación (USD ${PRICING.setupFeeUsd}) y una mensualidad según el plan elegido (Carta USD ${PRICING.plans.basico.priceUsd}, Estándar USD ${PRICING.plans.estandar.priceUsd}, Empresarial USD ${PRICING.plans.empresarial.priceUsd}). El hardware de mesa se cotiza y cobra por unidad, aparte.`,
+      `El servicio se contrata con un pago único de implementación (${formatCrc(PRICING.setupFee.carta.crc)} la Carta; ${formatCrc(PRICING.setupFee.sistema.crc)} el sistema completo) y una mensualidad según el plan elegido (Carta ${formatCrc(PRICING.plans.basico.priceCrc)}, Estándar ${formatCrc(PRICING.plans.estandar.priceCrc)}, Empresarial ${formatCrc(PRICING.plans.empresarial.priceCrc)}). El hardware de mesa se cobra por unidad, aparte.`,
       "Los precios se expresan en dólares estadounidenses. El medio de pago y, si aplica, el tipo de cambio a moneda local se acuerdan por WhatsApp antes de cada cobro. No realizamos cobros automáticos ni almacenamos datos de tarjetas.",
       "La mensualidad se paga por adelantado. Si un pago se atrasa más de [REVISAR: 10] días, podemos suspender el servicio hasta que se regularice; la carta vuelve a estar disponible cuando se recibe el pago.",
     ],
@@ -65,7 +66,7 @@ const sections: LegalSection[] = [
     title: "Disponibilidad y soporte",
     paragraphs: [
       "Hacemos un esfuerzo razonable para que tu carta esté disponible de forma continua. Puede haber interrupciones breves por mantenimiento o por causas de los proveedores de infraestructura; en ese caso trabajamos para restablecer el servicio lo antes posible.",
-      `El soporte se brinda por WhatsApp en horario de oficina de ${SITE.country}. La implementación incluye un año de soporte técnico; después, el soporte continúa incluido mientras la mensualidad esté al día.`,
+      `El soporte se brinda por WhatsApp en horario de oficina de ${SITE.country}. El soporte por WhatsApp está incluido mientras tengás el plan activo.`,
     ],
   },
   {

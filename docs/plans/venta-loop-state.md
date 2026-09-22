@@ -7,8 +7,8 @@
 
 ## Contador
 
-- Iteración actual: 1
-- Iteraciones consumidas: 1 / 30
+- Iteración actual: 2
+- Iteraciones consumidas: 2 / 30
 
 ## Capacidades del entorno
 
@@ -26,8 +26,8 @@
 
 | ID | Título | Estado | Intentos | Commit | Despliegue | Evidencia |
 |---|---|---|---|---|---|---|
-| V01 | Estado, línea base y puente | hecho | 1 | (este commit) | ver bitácora | Línea base abajo |
-| V02 | Oferta y precios en colones | pendiente | 0 | | | |
+| V01 | Estado, línea base y puente | hecho | 1 | 875c017 | READY (`dpl_EhfVfzZ1CAa3cNzqvjrUKmMuNc1z`) | Línea base abajo; push directo a main aceptado |
+| V02 | Oferta y precios en colones | hecho | 1 | (este commit) | ver V03 | typecheck/lint/build ok; qa:landing OK · 3 avisos (fotos remotas); grep `$249\|$29/mes\|1 año de soporte` en landing = 0; captura planes 375 y 1440 mirada: CRC grande, ≈ US$ chico, implementación por plan, primer pago ₡39 800 / ₡149 900 / ₡174 900, anual y garantía bajo la Carta, fundadores arriba; JSON-LD Product con offers CRC y USD; schema.sql diff = 2 líneas de semillas |
 | V03 | Hero y mensaje | pendiente | 0 | | | |
 | V04 | Legales publicables | pendiente | 0 | | | |
 | V05 | Confianza real | pendiente | 0 | | | |
@@ -63,3 +63,4 @@
 ## Bitácora
 
 - **It. 1 · V01.** Plan: crear estado y puente, medir línea base, commit y publicar en main para probar la ruta de publicación. Riesgo: push directo a main rechazado → PR por MCP de GitHub.
+- **It. 2 · V02.** Plan: extender `PRICING` (CRC por plan, `setupFee` carta/sistema, anual, `founderOffer`, `terms`, hardware CRC y entrega), `formatCrc`/`formatUsd` con separador propio (el ICU "es" no agrupa 4 cifras: "6000"), reescribir `pricing-v2.tsx`, hardware en CRC, JSON-LD con dos ofertas, semillas y docs. Se mantiene `PRICING.setupFeeUsd` (alias del sistema) porque `admin/charges` lo usa y está fuera de alcance. Hecho; FAQ y términos solo retocados para compilar (los reescriben V04 y V06).

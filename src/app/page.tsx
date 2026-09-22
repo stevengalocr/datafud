@@ -19,6 +19,7 @@ import { WhatsAppFloat } from "@/components/marketing/v2/whatsapp-float";
 import { AnalyticsEvents } from "@/components/marketing/v2/analytics-events";
 import { SiteFooter } from "@/components/marketing/v2/site-footer";
 import { waProps } from "@/lib/site";
+import { formatCrc } from "@/lib/currency/format";
 import type { Metadata } from "next";
 import { faqJsonLd, organizationJsonLd, productsJsonLd } from "@/lib/seo";
 
@@ -186,7 +187,7 @@ export default function HomePage() {
               </div>
 
               <p className="mt-4 text-[11px] font-semibold uppercase tracking-wider text-brand-700/75">
-                Carta lista en {PRICING.delivery.menuHours} horas · desde ${PRICING.plans.basico.priceUsd}/mes
+                Carta lista en {PRICING.delivery.menuHours} horas · desde {formatCrc(PRICING.plans.basico.priceCrc)}/mes
               </p>
             </div>
 

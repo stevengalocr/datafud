@@ -1,4 +1,5 @@
 import { PRICING } from "@/lib/constants";
+import { formatCrc } from "@/lib/currency/format";
 
 // Preguntas frecuentes de la landing. Un solo arreglo: lo usa el acordeón (#preguntas) y el
 // JSON-LD FAQPage. Las cinco primeras son las objeciones de docs/MARKETING.md §8.
@@ -29,7 +30,7 @@ export const FAQ_ITEMS: FaqItem[] = [
   {
     id: "clientes-extranjeros",
     q: "Tengo clientes extranjeros. ¿La carta se traduce?",
-    a: "Sí. La carta puede estar en español, inglés y portugués; la cantidad de idiomas depende del plan (uno en Carta, dos en Estándar, tres en Empresarial). El comensal cambia de idioma con un toque.",
+    a: "Sí. La carta puede estar en español, inglés y portugués; Carta y Estándar incluyen español e inglés; Empresarial suma portugués. El comensal cambia de idioma con un toque.",
   },
   {
     id: "internet-en-el-local",
@@ -44,7 +45,7 @@ export const FAQ_ITEMS: FaqItem[] = [
   {
     id: "como-pago",
     q: "¿Cómo se paga?",
-    a: `La implementación (${PRICING.setupFeeUsd} USD) se paga al arrancar y la mensualidad del plan, cada mes. El medio de pago lo coordinamos por WhatsApp según tu país; no hay cobros automáticos ni tarjeta guardada. Los precios están en dólares y te indicamos el equivalente en tu moneda.`,
+    a: `La implementación (${formatCrc(PRICING.setupFee.carta.crc)} la Carta, ${formatCrc(PRICING.setupFee.sistema.crc)} el sistema completo) se paga al arrancar y la mensualidad del plan, cada mes, por adelantado. No hay cobros automáticos ni tarjeta guardada.`,
   },
   {
     id: "tipos-de-negocio",
@@ -58,7 +59,7 @@ export const FAQ_ITEMS: FaqItem[] = [
   },
   {
     id: "que-incluye",
-    q: `¿Qué incluye la implementación de ${PRICING.setupFeeUsd} USD?`,
-    a: "El diseño y la carga de tu carta con tus fotos y colores, la traducción a los idiomas de tu plan, la configuración de tu moneda, la capacitación de tu equipo y un año de soporte técnico. El hardware de mesa (stands QR 3D y tarjetas NFC) se cotiza aparte por unidad.",
+    q: "¿Qué incluye la implementación?",
+    a: `El diseño y la carga de tu carta con tus fotos y colores y la traducción a los idiomas de tu plan. La del sistema completo suma pedidos, panel y la capacitación de tu equipo. ${PRICING.terms.support}. El hardware de mesa (stands QR 3D y tarjetas NFC) se cobra aparte por unidad.`,
   },
 ];

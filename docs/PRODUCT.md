@@ -107,23 +107,33 @@ docs/          PRODUCT.md · MARKETING.md · specs/ · plans/
 
 ## 8. Planes y precios (fuente de verdad: la landing)
 
+Colones primero (lo que ve el cliente tico); USD es la moneda interna y de la BD (D-023, 2026-09-22).
+
 | | Carta (Básico) | Estándar ⭐ | Empresarial |
 |---|---|---|---|
-| **Mensualidad** | **$29** | **$49** | **$99** |
+| **Mensualidad** | **₡14 900** (≈ US$29) | **₡24 900** (≈ US$49) | **₡49 900** (≈ US$99) |
+| **Implementación (pago único)** | ₡24 900 (≈ US$49) | ₡125 000 (≈ US$249) | ₡125 000 (≈ US$249) |
+| **Primer pago** (implementación + primer mes) | ₡39 800 | ₡149 900 | ₡174 900 |
 | Entrega prometida | 48 horas (solo carta) | 15 días (sistema completo) | 15 días (sistema completo) |
 | Pedidos desde la mesa | — | ✓ | ✓ |
-| Idiomas | 1 | 2 | 3 (ES·EN·PT) |
-| Platillos | 20 | 70 | Ilimitados |
+| Idiomas | 2 (ES·EN) | 2 (ES·EN) | 3 (ES·EN·PT) |
+| Platillos | 60 | 150 | Ilimitados |
 | Categorías | 5 | 20 | Ilimitadas |
 | Mesas/QR | 8 | 30 | Ilimitadas |
 | Reportes de venta (ventas por día, ticket promedio, platillos más vendidos) | — | ✓ | ✓ |
-| Soporte | WhatsApp | WhatsApp en horario de oficina | WhatsApp con contacto directo |
+| Soporte | WhatsApp, mientras el plan esté activo | igual | igual |
 
-- **Implementación única: $249** (pago único) — llave en mano: carta a tu marca en 48 h,
-  sistema completo en 15 días, 1 año de soporte.
-- **Hardware de mesa** (`PRICING.hardware`): stand QR impreso en 3D desde $12, tarjeta NFC
-  $15, stand QR 3D + NFC desde $20, stand de reseñas de Google desde $20 (por unidad; todo
-  personalizable con cotización por WhatsApp).
+- **Pago anual de la Carta:** ₡149 000/año (≈ US$290): 2 meses gratis e implementación de la Carta incluida.
+- **Oferta de fundadores** (`PRICING.founderOffer`, activa): primeros 10 locales, implementación de la
+  Carta sin costo y 1 stand QR 3D incluido, a cambio de mostrar el local como caso.
+- **Garantía de 48 h:** si la carta no está publicada en 48 horas hábiles desde que recibimos menú,
+  fotos y logo, no se paga la implementación.
+- **Cambios de precios y platillos por WhatsApp** incluidos en todos los planes. **Sin permanencia**:
+  se cancela con 15 días de aviso.
+- **Hardware de mesa** (`PRICING.hardware`): stand QR impreso en 3D desde ₡6 000, tarjeta NFC
+  ₡7 500, stand QR 3D + NFC desde ₡10 000, stand de reseñas de Google desde ₡10 000 (por unidad;
+  sin mínimo; entrega gratis en la GAM, Correos fuera; de 3 a 5 días hábiles; diseño a medida por
+  WhatsApp). USD de referencia: 12 / 15 / 20 / 20.
 - El trial automático de 30 días sigue en la BD (`trial_ends_at`), pero el autoservicio
   está cerrado en la landing (D-011).
 
@@ -146,7 +156,7 @@ docs/          PRODUCT.md · MARKETING.md · specs/ · plans/
   del comensal inmersiva e **interactiva** (flujo de pedido funcional sin backend), panel y admin.
 - ✅ `schema.sql` idempotente: tablas, RLS, funciones, vistas, semillas. Incluye `tenant_charges`.
 - ✅ Modelo de cargos (`tenant_charges`) + panel `/admin/charges` para implementación y NFC.
-- ✅ Precios y límites alineados a la landing (20/70) en BD, app y spec; `PRICING` como fuente única.
+- ✅ Precios y límites alineados a la landing (60/150 desde 2026-09-22) en BD, app y spec; `PRICING` como fuente única.
 - ✅ **Verificado:** `typecheck`, `lint` y `build` (21 rutas) en verde; flujos de la demo
   probados funcionalmente; sin errores de consola ni requests fallidos.
 - 🔜 Pendientes priorizados: ver §11.

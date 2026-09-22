@@ -4,6 +4,7 @@ import { RevealOnView } from "@/components/marketing/v2/reveal";
 import { MagneticCta } from "@/components/marketing/v2/magnetic-cta";
 import { Icon } from "@/components/ui/icon";
 import { PRICING } from "@/lib/constants";
+import { formatCrc } from "@/lib/currency/format";
 import { SITE, hasWhatsApp, mailLink, waProps, whatsappDisplay } from "@/lib/site";
 
 // Cierre oscuro (CTA final) + footer de la landing.
@@ -50,7 +51,7 @@ export function SiteFooter() {
               Hablemos por WhatsApp
             </MagneticCta>
             <p className="mt-5 text-[11px] font-semibold uppercase tracking-wider text-cream-100/50">
-              Carta lista en {PRICING.delivery.menuHours} horas · desde ${PRICING.plans.basico.priceUsd}/mes
+              Carta lista en {PRICING.delivery.menuHours} horas · desde {formatCrc(PRICING.plans.basico.priceCrc)}/mes
             </p>
           </div>
 

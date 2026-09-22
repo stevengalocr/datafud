@@ -7,6 +7,13 @@ Todas las versiones notables del proyecto. Formato basado en
 
 ## [Unreleased]
 
+### Changed — Loop "lista para vender" (2026-09-22)
+- Oferta en colones primero (D-023): Carta ₡14 900/mes, Estándar ₡24 900, Empresarial ₡49 900, con
+  US$ de referencia. Implementación por tipo (Carta ₡24 900; sistema ₡125 000), primer pago visible
+  por plan, pago anual de la Carta (₡149 000), oferta de fundadores y garantía de 48 h.
+  Carta con 2 idiomas y 60 platillos; Estándar con 150. Hardware en colones (desde ₡6 000).
+  Nuevo `formatCrc()`; JSON-LD con ofertas en CRC y USD.
+
 Fachada de venta ("landing primero", decisiones D-010 a D-013). Sin backend en producción;
 cada unidad se publica en `main` desde el loop autónomo (`docs/plans/landing-loop-state.md`).
 

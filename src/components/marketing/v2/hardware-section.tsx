@@ -4,6 +4,7 @@ import { Icon } from "@/components/ui/icon";
 import { RevealOnView } from "@/components/marketing/v2/reveal";
 import { HardwareArt } from "@/components/marketing/v2/hardware-art";
 import { PRICING, formatPublishedPrice, type HardwareItem } from "@/lib/constants";
+import { formatCrc } from "@/lib/currency/format";
 import { hasWhatsApp, waProps } from "@/lib/site";
 
 // Sección #hardware: los cuatro productos de PRICING.hardware en una composición editorial
@@ -18,16 +19,16 @@ const ALT: Record<HardwareItem["code"], string> = {
 };
 
 function PriceTag({ item, wa, dark = false }: { item: HardwareItem; wa: boolean; dark?: boolean }) {
-  const price = formatPublishedPrice(item.priceUsd, wa);
   const pending = item.priceUsd === "PENDIENTE";
   return (
     <p className={cn("flex flex-wrap items-baseline gap-x-2", dark ? "text-cream-100" : "text-brand-900")}>
-      {!pending && item.pricing === "desde" && (
-        <span className={cn("text-[10px] font-bold uppercase tracking-[0.18em]", dark ? "text-accent-300" : "text-accent-700")}>desde</span>
+      {item.pricing === "desde" && (
+        <span className={cn("text-xs font-bold uppercase tracking-[0.16em]", dark ? "text-accent-300" : "text-accent-700")}>desde</span>
       )}
-      <span className={cn("font-display leading-none", pending ? "text-xl" : "text-3xl")}>{price}</span>
+      <span className="font-display text-3xl leading-none">{formatCrc(item.priceCrc)}</span>
+      <span className={cn("text-xs font-bold uppercase tracking-[0.14em]", dark ? "text-cream-100/70" : "text-brand-700/75")}>/ {item.unit}</span>
       {!pending && (
-        <span className={cn("text-[10px] font-bold uppercase tracking-[0.16em]", dark ? "text-cream-100/60" : "text-brand-700/75")}>/ {item.unit}</span>
+        <span className={cn("text-xs font-semibold", dark ? "text-cream-100/70" : "text-brand-700/75")}>≈ {formatPublishedPrice(item.priceUsd, wa)}</span>
       )}
     </p>
   );
@@ -73,8 +74,8 @@ export function HardwareSection() {
           </div>
           <p className="reveal-up max-w-md text-base font-medium leading-relaxed text-brand-800/80 lg:justify-self-end">
             Nada de QR pegados con cinta. Stands impresos en 3D y tarjetas NFC hechos para
-            tu local: firmes, limpios y con tu logo. Los básicos tienen precio publicado; todo
-            lo demás se cotiza.
+            tu local: firmes, limpios y con tu logo. {PRICING.hardwareDelivery.minimum} Listos{" "}
+            {PRICING.hardwareDelivery.leadTime} desde que aprobás el diseño.
           </p>
         </RevealOnView>
 
@@ -145,6 +146,10 @@ export function HardwareSection() {
               Lo diseñamos e imprimimos en Costa Rica. Contanos qué querés y te pasamos precio
               y tiempo de entrega.
             </p>
+            <ul className="mt-5 space-y-2 text-sm font-medium leading-relaxed text-cream-100/80">
+              <li className="flex items-start gap-2.5"><Icon name="pin" size={15} className="mt-0.5 flex-shrink-0 text-accent-300" />{PRICING.hardwareDelivery.gam}</li>
+              <li className="flex items-start gap-2.5"><Icon name="printer" size={15} className="mt-0.5 flex-shrink-0 text-accent-300" />{PRICING.hardwareDelivery.outside}</li>
+            </ul>
             <a
               {...quote}
               className="mt-7 inline-flex min-h-12 w-full items-center justify-center gap-2.5 rounded-lg border border-accent-300 bg-accent-500 px-6 py-3 text-center text-xs leading-snug sm:w-auto sm:px-7 font-bold uppercase tracking-[0.18em] text-brand-950 shadow-md transition-colors duration-300 ease-out-expo hover:bg-accent-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-300 focus-visible:ring-offset-2 focus-visible:ring-offset-brand-950"

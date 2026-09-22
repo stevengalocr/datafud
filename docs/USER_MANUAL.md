@@ -84,27 +84,29 @@ Al entrar ves el **resumen del día**: órdenes de hoy, vendido hoy y órdenes a
 
 ### Cargos (`/admin/charges`)
 - Registra los **cargos puntuales** que no son mensualidad:
-  - **Implementación única** ($249, llave en mano).
+  - **Implementación única** (US$249 el sistema completo; US$49 la Carta).
   - **Tarjetas NFC** ($15 por unidad).
   - Otros cargos.
 - El total se calcula solo (precio × cantidad) y puedes marcarlo Pagado o Pendiente.
 
 ### Planes
-- Consulta los planes (Básico $29 / Estándar $49 / Empresarial $99) y sus límites.
+- Consulta los planes (Básico US$29 / Estándar US$49 / Empresarial US$99; en la landing se muestran en colones) y sus límites.
 
 ---
 
 ## 5. 💳 Planes y cómo empezar
 
-| | Básico | Estándar ⭐ | Empresarial |
+| | Básico (Carta) | Estándar ⭐ | Empresarial |
 |---|---|---|---|
-| Mensualidad | $29 | $49 | $99 |
-| Idiomas | 1 | 2 | 3 |
-| Platillos | 20 | 70 | Ilimitados |
+| Mensualidad | ₡14 900 (≈ US$29) | ₡24 900 (≈ US$49) | ₡49 900 (≈ US$99) |
+| Implementación (pago único) | ₡24 900 | ₡125 000 | ₡125 000 |
+| Idiomas | 2 | 2 | 3 |
+| Platillos | 60 | 150 | Ilimitados |
 
-- **Implementación única: $249** (llave en mano, dominio propio, 1 año de soporte).
-- **Tarjetas NFC: $15/unidad.**
-- **Prueba gratis de 30 días** al registrarte en **`/register`**.
+- **Hardware de mesa:** stand QR 3D desde ₡6 000, tarjeta NFC ₡7 500, stand QR 3D + NFC y stand
+  de reseñas desde ₡10 000.
+- Precios vigentes y oferta completa: `docs/MARKETING.md` §6 (fuente: `PRICING`).
+- En la etapa "landing primero" no hay registro de autoservicio: `/register` redirige a `/#contacto`.
 
 **Para registrar tu restaurante:** entra a `/register`, elige tu plan, completa los datos del
 negocio y crea tu cuenta. Entras directo a tu panel con un periodo de prueba activo.
