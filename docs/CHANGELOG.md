@@ -7,6 +7,10 @@ Todas las versiones notables del proyecto. Formato basado en
 
 ## [Unreleased]
 
+## [1.1.0] — 2026-09-22 · Landing lista para vender
+
+Informe: `docs/plans/venta-loop-report.md`.
+
 ### Changed — Loop "lista para vender" (2026-09-22)
 - Oferta en colones primero (D-023): Carta ₡14 900/mes, Estándar ₡24 900, Empresarial ₡49 900, con
   US$ de referencia. Implementación por tipo (Carta ₡24 900; sistema ₡125 000), primer pago visible
@@ -39,6 +43,12 @@ Todas las versiones notables del proyecto. Formato basado en
 - JSON-LD `LocalBusiness` (sin dirección postal) junto a `Organization`.
 - `docs/ventas/`: kit de prospección (enlaces con UTM, mensajes, guion, objeciones) y plan de
   contenido de 30 días.
+
+### Fixed — Verificación final (V12)
+- Topes de la Carta visibles (60 platillos · 5 categorías · 8 mesas con QR) y hardware "aparte" en
+  planes; la landing se ve completa sin JavaScript; garantía con alcance y devolución claros;
+  cancelación y aviso tardío sin contradicciones; FAQ "¿Por qué cuesta más que una carta QR que armo
+  yo?"; Open Graph y Twitter completos por página; bloque en inglés en la guía de turísticos.
 
 Fachada de venta ("landing primero", decisiones D-010 a D-013). Sin backend en producción;
 cada unidad se publica en `main` desde el loop autónomo (`docs/plans/landing-loop-state.md`).
