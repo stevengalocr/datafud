@@ -121,6 +121,9 @@ try {
         consoleErrors.push(m.text());
       });
       page.on("pageerror", (e) => consoleErrors.push("pageerror: " + e.message));
+      // Sin NEXT_PUBLIC_META_PIXEL_ID en el build: cero requests a Meta.
+      const metaReqs = [];
+      page.on("request", (r) => { if (/facebook\.net|facebook\.com\/tr/.test(r.url())) metaReqs.push(r.url()); });
       page.on("response", (r) => {
         const url = r.url();
         if (r.status() < 400 || IGNORED_URL.test(url)) return;
@@ -179,6 +182,7 @@ try {
         };
       });
       const tag = `${p} @ ${vp.name}`;
+      if (!process.env.NEXT_PUBLIC_META_PIXEL_ID && metaReqs.length) fail(`${p} @ ${vp.name}: ${metaReqs.length} requests a Meta sin la variable del píxel`);
       if (consoleErrors.length) fail(`${tag}: errores de consola: ${consoleErrors.slice(0, 3).join(" | ")}`);
       if (failed.length) fail(`${tag}: requests fallidos: ${failed.slice(0, 3).join(" | ")}`);
       if (m.hscroll) fail(`${tag}: scroll horizontal`);

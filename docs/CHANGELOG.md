@@ -30,6 +30,8 @@ Todas las versiones notables del proyecto. Formato basado en
   planes → hardware → por qué DataFud → preguntas → contacto. Fuera la tira de monedas, las cifras,
   "El sistema", el bloque de ambiente y el paso a paso con fotos. Textos mínimos de 12 px.
   "Hecho en Costa Rica" en el footer.
+- Medición: UTMs en los eventos de Vercel y Meta Pixel opcional (`NEXT_PUBLIC_META_PIXEL_ID`) con
+  PageView, Lead (WhatsApp y formulario) y ViewContent (demo). Sin la variable no se carga nada.
 
 Fachada de venta ("landing primero", decisiones D-010 a D-013). Sin backend en producción;
 cada unidad se publica en `main` desde el loop autónomo (`docs/plans/landing-loop-state.md`).

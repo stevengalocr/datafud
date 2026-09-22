@@ -14,6 +14,7 @@ import { TrustSection } from "@/components/marketing/v2/trust-section";
 import { FaqSection } from "@/components/marketing/v2/faq-section";
 import { WhatsAppFloat } from "@/components/marketing/v2/whatsapp-float";
 import { AnalyticsEvents } from "@/components/marketing/v2/analytics-events";
+import { MetaPixel } from "@/components/marketing/v2/meta-pixel";
 import { SiteFooter } from "@/components/marketing/v2/site-footer";
 import { waProps } from "@/lib/site";
 import { formatCrc } from "@/lib/currency/format";
@@ -192,6 +193,7 @@ export default function HomePage() {
 
       <WhatsAppFloat />
       <AnalyticsEvents />
+      <MetaPixel />
     </div>
   );
 }

@@ -3,7 +3,7 @@
 import { useActionState, useEffect, useId, useRef } from "react";
 import { cn } from "@/lib/utils/cn";
 import { Icon } from "@/components/ui/icon";
-import { track } from "@vercel/analytics";
+import { trackEvent } from "@/components/marketing/v2/tracking";
 import { sendContactAction } from "@/app/actions";
 import { BUSINESS_TYPES, type ContactState } from "@/lib/contact";
 import { TurnstileWidget } from "@/components/marketing/v2/turnstile-widget";
@@ -31,7 +31,7 @@ export function ContactForm({ whatsappHref, turnstileSiteKey }: { whatsappHref: 
     }
     if (state.status !== "idle") {
       statusRef.current?.focus();
-      track("contact_submit", { resultado: state.status });
+      trackEvent("contact_submit", { resultado: state.status });
     }
   }, [state]);
 

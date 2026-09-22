@@ -98,3 +98,13 @@ existentes). Se aplica con "sincronizá el vault" desde Cowork.
 - Plazos en una línea de tiempo; "48" y "15 días" ×3 cada uno.
 - Textos mínimos de 12 px; "Hecho en Costa Rica".
 - Lighthouse móvil local 96 / 100 / 96 / 100.
+
+### V09 · Medición y contacto · commit (ver V10) · despliegue (ver V10)
+**Pendientes.md** — cerrar: "Sin Meta Pixel ni UTMs para campañas" y "Formulario oculto" (queda condicionado a la variable, documentado). Nuevos en "Datos que esperan a Steven": "Verificar el dominio datafud.com en Resend y cargar `RESEND_API_KEY` + `RESEND_FROM_EMAIL` en Vercel, luego redesplegar", "Si se va a pautar: crear el píxel y cargar `NEXT_PUBLIC_META_PIXEL_ID`, luego redesplegar".
+**Decisiones.md** — D-030 (nueva): el píxel de Meta solo en páginas de marketing y solo con variable. Contexto: se quieren medir campañas sin poner rastreo publicitario en la carta de los comensales ni en los paneles. Decisión: `MetaPixel` se monta en `/` y en las páginas de nicho; sin `NEXT_PUBLIC_META_PIXEL_ID` no se carga nada y la privacidad dice que hoy no se usa. Consecuencia: activarlo exige variable + redeploy, y la privacidad cambia sola.
+**Seguridad.md** — sin cambios (sin secretos nuevos; la variable del píxel es pública por diseño).
+**Otras páginas** — Cuentas-y-Accesos: agregar `NEXT_PUBLIC_META_PIXEL_ID` (opcional, pública) a la tabla de variables; nota en `RESEND_FROM_EMAIL`: "debe ser de un dominio verificado; con onboarding@resend.dev solo llega al dueño de la cuenta". Marca-Y-Marketing: eventos `whatsapp_click`, `demo_open`, `contact_submit` llevan `utm_source/medium/campaign`.
+**log.md** — `## [2026-09-22] ingest | Medición con UTMs y píxel opcional`
+- UTMs guardados en la sesión y sumados a los eventos de Vercel y Meta.
+- Meta Pixel con snippet oficial solo con variable; Lead y ViewContent.
+- Verificado con Playwright: 0 requests a facebook.net sin variable; con ID falso, Lead en la cola.

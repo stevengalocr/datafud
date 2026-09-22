@@ -73,6 +73,25 @@ SUPABASE_SERVICE_ROLE_KEY=...
 NEXT_PUBLIC_SITE_URL=http://localhost:3000
 ```
 
+Opcionales de la landing (todas vacías = la página funciona igual, sin errores):
+
+| Variable | Qué activa | Nota |
+|---|---|---|
+| `RESEND_API_KEY` | Formulario de contacto en `#contacto` | Sin ella se muestran solo WhatsApp y correo. |
+| `RESEND_FROM_EMAIL` | Remitente del formulario | Debe ser de un **dominio verificado en Resend** (ej. `DataFud <hola@datafud.com>`). Con el valor por defecto `onboarding@resend.dev` los correos **solo le llegan al dueño de la cuenta de Resend**. |
+| `NEXT_PUBLIC_META_PIXEL_ID` | Meta Pixel (PageView, `Lead` en WhatsApp y formulario, `ViewContent` en la demo) | Solo el ID numérico. Sin ella no se carga nada de facebook.net. |
+| `NEXT_PUBLIC_TURNSTILE_SITE_KEY` + `TURNSTILE_SECRET_KEY` | Cloudflare Turnstile en el formulario | Las dos o ninguna. |
+
+La landing es estática: cualquier cambio de estas variables en Vercel exige **redesplegar**.
+
+**Correo de ventas:** vive en una sola línea, `SITE.email` en `src/lib/site.ts` (hoy
+`galodevcr@gmail.com`). Cuando exista el buzón `hola@datafud.com`, se cambia ahí y se
+redespliega; landing, legales, JSON-LD y formulario lo toman de ese valor.
+
+**Enlaces de campaña:** si la visita llega con `utm_source`, `utm_medium` y `utm_campaign`, se
+guardan en `sessionStorage` y se suman a los eventos de Vercel y del píxel. Enlaces listos en
+`docs/ventas/KIT-PROSPECCION.md`.
+
 ### 3. Correr en local
 
 ```bash
@@ -96,7 +115,7 @@ npm run build
 npm run qa:landing        # levanta next start si hace falta y lo apaga al terminar
 ```
 
-`scripts/qa-landing.mjs` recorre `/`, `/login`, `/terminos` y `/privacidad` en 375, 768 y
+`scripts/qa-landing.mjs` recorre `/`, `/login`, `/terminos`, `/privacidad`, `/preview`, `/preview/cliente`, `/preview/dashboard` y las páginas de nicho en 375, 768 y
 1440 px con Chromium (Playwright): errores de consola, requests fallidos, scroll horizontal,
 anclas, CTAs de WhatsApp, un solo `h1`, `alt`, áreas táctiles, acordeón y menú móvil por
 teclado, `/register` → `/#contacto`, `robots.txt` y `sitemap.xml`. Deja capturas por sección
