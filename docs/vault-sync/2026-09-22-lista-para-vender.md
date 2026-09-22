@@ -55,3 +55,14 @@ existentes). Se aplica con "sincronizá el vault" desde Cowork.
 - Cifras de los términos generadas desde `PRICING`.
 - Privacidad con Ley 8968, Vercel Web Analytics, Resend y píxel de Meta condicionado.
 - Verificado: grep = 0, ambas rutas 200, captura 375 legible.
+
+### V05 · Confianza real · commit (ver V06) · despliegue (ver V06)
+**Pendientes.md** — cerrar: "Cero prueba real: fotos de stock, renders, sin fundador ni clientes" (parcial: queda lo que depende de Steven). Nuevos en "Datos que esperan a Steven": "Subir foto propia a `public/equipo/steven.webp`", "Subir fotos reales de los stands a `public/hardware/<código>.webp`", "Cargar el primer testimonio real con permiso por escrito (`TESTIMONIALS`)", "Crear redes y cargar sus URL en `SITE.social`".
+**Decisiones.md** — ninguna nueva (aplica D-027 para el nombre del fundador).
+**Seguridad.md** — sin cambios.
+**Otras páginas** — Marca-Y-Marketing: la sección de confianza ahora es "Por qué DataFud" (te la montamos nosotros · bilingüe · stands 3D y NFC hechos acá · cambios por WhatsApp) con firma "Steven Galo, ingeniero en sistemas, en Costa Rica"; los renders llevan "Render ilustrativo"; redes: ninguna publicada todavía.
+**log.md** — `## [2026-09-22] ingest | Confianza real`
+- Firma del fundador con avatar "SG" (foto automática si se sube el archivo).
+- Testimonios: componente listo, lista vacía, no se renderiza.
+- Renders etiquetados; stock con alt honesto; redes solo con URL.
+- Verificado: HTML sin testimonios, capturas mirada, qa:landing OK.

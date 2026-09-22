@@ -18,6 +18,9 @@ Todas las versiones notables del proyecto. Formato basado en
   "cierra ventas" de todo el sitio.
 - `/terminos` y `/privacidad` versión 1.0: sin borrador ni `[REVISAR]`; responsable, jurisdicción,
   reembolsos, garantía del hardware, permanencia y Ley 8968.
+- "Por qué DataFud" reemplaza a "Confianza": cuatro puntos verificables y firma de Steven Galo
+  (avatar "SG" hasta que haya foto). Testimonios solo si hay reales; renders con "Render
+  ilustrativo"; redes en el footer solo con URL.
 
 Fachada de venta ("landing primero", decisiones D-010 a D-013). Sin backend en producción;
 cada unidad se publica en `main` desde el loop autónomo (`docs/plans/landing-loop-state.md`).

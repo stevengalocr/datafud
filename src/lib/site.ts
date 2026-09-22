@@ -3,8 +3,6 @@
 // Regla: nunca inventar un dato. Lo que no se sabe va como "PENDIENTE" con TODO-STEVEN
 // y la interfaz degrada sin enlaces rotos.
 
-const PENDING = "PENDIENTE" as const;
-
 export const SITE = {
   name: "DataFud",
   url: "https://datafud.com",
@@ -19,12 +17,33 @@ export const SITE = {
   whatsapp: "50672874779",
   // Correo donde llegan los leads (formulario y enlaces mailto).
   email: "galodevcr@gmail.com",
-  // TODO-STEVEN: redes sociales de la marca cuando existan (quedan fuera de la UI mientras tanto).
+  // Redes de la marca: vacías hasta que existan. El footer muestra solo las que tengan URL.
   social: {
-    instagram: PENDING,
-    facebook: PENDING,
+    instagram: "",
+    facebook: "",
+    tiktok: "",
+  } as Record<"instagram" | "facebook" | "tiktok", string>,
+  // Fundador. La foto se usa solo si el archivo existe en public/; si no, avatar con iniciales.
+  founder: {
+    name: "Steven Galo",
+    initials: "SG",
+    role: "Ingeniero en sistemas, en Costa Rica",
+    photo: "/equipo/steven.webp",
   },
 } as const;
+
+export const SOCIAL_LABEL: Record<keyof typeof SITE.social, string> = {
+  instagram: "Instagram",
+  facebook: "Facebook",
+  tiktok: "TikTok",
+};
+
+/** Redes con URL cargada, en orden. */
+export function socialLinks(): { key: keyof typeof SITE.social; label: string; href: string }[] {
+  return (Object.keys(SITE.social) as (keyof typeof SITE.social)[])
+    .filter((k) => /^https:\/\//.test(SITE.social[k]))
+    .map((k) => ({ key: k, label: SOCIAL_LABEL[k], href: SITE.social[k] }));
+}
 
 /** Lugares de la landing desde donde se abre WhatsApp. Sirve para el mensaje y la analítica. */
 export type WaOrigin =

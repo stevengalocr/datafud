@@ -5,7 +5,7 @@ import { MagneticCta } from "@/components/marketing/v2/magnetic-cta";
 import { Icon } from "@/components/ui/icon";
 import { PRICING } from "@/lib/constants";
 import { formatCrc } from "@/lib/currency/format";
-import { SITE, hasWhatsApp, mailLink, waProps, whatsappDisplay } from "@/lib/site";
+import { SITE, hasWhatsApp, mailLink, socialLinks, waProps, whatsappDisplay } from "@/lib/site";
 
 // Cierre oscuro (CTA final) + footer de la landing.
 const explore = [
@@ -94,6 +94,12 @@ export function SiteFooter() {
                     <Icon name="mail" size={14} className="text-accent-400" /> {SITE.email}
                   </a>
                   <p className="flex min-h-11 items-center gap-2"><Icon name="pin" size={14} className="text-accent-400" /> {SITE.region}</p>
+                  {/* Redes: solo las que tienen URL en SITE.social (hoy ninguna). */}
+                  {socialLinks().map((l) => (
+                    <a key={l.key} href={l.href} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-11 items-center gap-2 transition-colors duration-200 hover:text-white">
+                      <Icon name="globe" size={14} className="text-accent-400" /> {l.label}
+                    </a>
+                  ))}
                 </div>
               </div>
             </div>

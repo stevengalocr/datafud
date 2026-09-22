@@ -23,7 +23,8 @@ import { formatCrc } from "@/lib/currency/format";
 import type { Metadata } from "next";
 import { faqJsonLd, organizationJsonLd, productsJsonLd } from "@/lib/seo";
 
-// Fotografía de stock (Unsplash, licencia libre), tratada con overlay de marca.
+// Fotografía de stock (Unsplash, licencia libre), tratada con overlay de marca. Son fotos
+// ilustrativas: los alt las describen como tales y nunca se presentan como clientes.
 const u = (id: string) => `https://images.unsplash.com/${id}?auto=format&fit=crop&w=1500&q=80`;
 const IMG = {
   food: u("photo-1504674900247-0877df9cc836"),
@@ -41,7 +42,7 @@ const steps: Step[] = [
     title: "Nosotros montamos tu carta",
     desc: "Nos pasás el menú, las fotos y el logo. Armamos tu carta digital con tu marca, en hasta 3 idiomas, y la dejamos publicada en 48 horas.",
     image: IMG.food,
-    alt: "Platillos servidos sobre una mesa de madera, listos para fotografiar el menú",
+    alt: "Foto ilustrativa de platillos servidos sobre una mesa de madera",
     icon: "utensils",
   },
   {
@@ -49,7 +50,7 @@ const steps: Step[] = [
     title: "Ponemos los QR y NFC en tus mesas",
     desc: "Stands QR impresos en 3D y tarjetas NFC con tu logo, listos para cada mesa. El comensal escanea o toca y la carta se abre al instante.",
     image: IMG.tables,
-    alt: "Mesas de un restaurante con vista al agua, preparadas para el servicio",
+    alt: "Foto ilustrativa de mesas de un restaurante preparadas para el servicio",
     icon: "qr",
   },
   {
@@ -57,7 +58,7 @@ const steps: Step[] = [
     title: "Recibís los pedidos",
     desc: "Con el sistema completo, las comandas llegan directo a tu pantalla de cocina. Gestionás cada estado, de preparación a entrega, sin papel.",
     image: IMG.communal,
-    alt: "Mesa comunal llena de comensales disfrutando y ordenando",
+    alt: "Foto ilustrativa de una mesa comunal con comensales",
     icon: "receipt",
   },
   {
@@ -65,7 +66,7 @@ const steps: Step[] = [
     title: "Medís tu negocio",
     desc: "Ticket promedio, platillos más vendidos e ingresos del día en reportes claros, para decidir con datos y no a ojo.",
     image: IMG.interior,
-    alt: "Interior cálido de un restaurante en plena operación",
+    alt: "Foto ilustrativa del interior de un restaurante",
     icon: "chart",
   },
 ];
@@ -92,7 +93,7 @@ const views: { icon: IconName; tag: string; title: string; image: string; alt: s
     tag: "Servicio al comensal",
     title: "Menú interactivo y veloz",
     image: IMG.tablePhone,
-    alt: "Comensales compartiendo una comida con el teléfono sobre la mesa",
+    alt: "Foto ilustrativa de comensales compartiendo una comida con el teléfono sobre la mesa",
     points: [
       "Escaneo rápido o toque NFC en la mesa, sin apps ni cuentas.",
       "Se adapta a cualquier teléfono.",
@@ -105,7 +106,7 @@ const views: { icon: IconName; tag: string; title: string; image: string; alt: s
     tag: "Operación del negocio",
     title: "Tu restaurante, bajo control",
     image: IMG.counter,
-    alt: "Personal de un local atendiendo a una clienta en el mostrador",
+    alt: "Foto ilustrativa de personal atendiendo en el mostrador de un local",
     points: [
       "Actualizás platos y precios al instante.",
       "Comandas mesa por mesa, con su estado.",

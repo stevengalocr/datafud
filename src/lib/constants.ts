@@ -182,6 +182,21 @@ export const PRICING = {
   },
 } as const;
 
+/**
+ * Testimonios reales. Lista vacía = la sección no se renderiza. Nunca se inventa uno: cada
+ * entrada necesita permiso por escrito del local (ver docs/MARKETING.md, "Cómo cargar un testimonio").
+ */
+export type Testimonial = {
+  business: string;
+  person: string;
+  city: string;
+  quote: string;
+  /** Foto propia del local en public/clientes/, o null. */
+  photo: string | null;
+};
+
+export const TESTIMONIALS: readonly Testimonial[] = [];
+
 export const PLAN_CODES = Object.keys(PRICING.plans) as PlanCode[];
 
 /** Implementación que le toca a un plan. */

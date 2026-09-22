@@ -113,6 +113,25 @@ por resultados.
 > En esta etapa **no hay prueba de autoservicio**: la prueba es la demo (`/preview`) y una demo
 > guiada por WhatsApp.
 
+### Prueba social real (V05)
+
+- **Fundador:** `SITE.founder` en `src/lib/site.ts`. Si existe `public/equipo/steven.webp`, la
+  sección "Por qué DataFud" usa esa foto; si no, un avatar con "SG". Se decide en el build: subir la
+  foto y redesplegar.
+- **Fotos del hardware:** `public/hardware/<código>.webp` con los códigos de `PRICING.hardware`
+  (`stand-qr-3d`, `tarjeta-nfc`, `stand-qr-3d-nfc`, `stand-resenas`). Mientras no existan, se muestran
+  los renders con la etiqueta visible **"Render ilustrativo"**.
+- **Redes:** `SITE.social` (instagram, facebook, tiktok) vacías; el footer muestra solo las que tengan
+  una URL `https://`.
+- **Cómo cargar un testimonio** (`TESTIMONIALS` en `src/lib/constants.ts`, hoy vacío = la sección no
+  aparece): solo de un local que ya usa DataFud, con **permiso por escrito** (un WhatsApp o correo que
+  diga que acepta que se publique). Campos: nombre del local, persona (nombre y rol), ciudad, la cita
+  textual tal como la dijo (sin retocar el sentido) y, opcional, una **foto propia** del local o del
+  stand en su mesa en `public/clientes/`. Nunca stock, nunca inventado, nunca cifras que no se
+  puedan mostrar. Guardar el permiso fuera del repo.
+- **Fotos de stock** (Unsplash): solo ambientación; sus `alt` dicen "Foto ilustrativa" y nunca se
+  presentan como clientes.
+
 ## 7. Diferenciadores frente a alternativas
 
 - **vs. carta impresa / PDF:** editable al instante, multi-idioma, con datos de venta.

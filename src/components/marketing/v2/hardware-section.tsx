@@ -1,3 +1,5 @@
+import { existsSync } from "node:fs";
+import path from "node:path";
 import Image from "next/image";
 import { cn } from "@/lib/utils/cn";
 import { Icon } from "@/components/ui/icon";
@@ -9,13 +11,13 @@ import { hasWhatsApp, waProps } from "@/lib/site";
 
 // Sección #hardware: los cuatro productos de PRICING.hardware en una composición editorial
 // asimétrica (una pieza grande, dos apiladas, una ancha) + bloque "100 % personalizable".
-// Fotos reales pendientes (TODO-FOTO): mientras tanto, ilustraciones SVG de marca y nfc.png.
+// Sin fotos reales en public/hardware/, se muestran los renders con la etiqueta "Render ilustrativo".
 
 const ALT: Record<HardwareItem["code"], string> = {
-  "stand-qr-3d": "Ilustración de un stand de mesa impreso en 3D con el código QR en relieve y espacio para el logo del local",
-  "tarjeta-nfc": "Cliente acercando su celular a una tarjeta NFC de DataFud sobre la mesa",
-  "stand-qr-3d-nfc": "Ilustración de un stand de mesa impreso en 3D con código QR en relieve y chip NFC integrado",
-  "stand-resenas": "Ilustración de un stand de mesa con QR y NFC que llevan a dejar una reseña en Google, con cinco estrellas",
+  "stand-qr-3d": "Render ilustrativo de un stand de mesa impreso en 3D con el código QR en relieve y espacio para el logo del local",
+  "tarjeta-nfc": "Render ilustrativo de un celular acercándose a una tarjeta NFC de DataFud sobre la mesa",
+  "stand-qr-3d-nfc": "Render ilustrativo de un stand de mesa impreso en 3D con código QR en relieve y chip NFC integrado",
+  "stand-resenas": "Render ilustrativo de un stand de mesa con QR y NFC que llevan a dejar una reseña en Google, con cinco estrellas",
 };
 
 function PriceTag({ item, wa, dark = false }: { item: HardwareItem; wa: boolean; dark?: boolean }) {
@@ -34,20 +36,35 @@ function PriceTag({ item, wa, dark = false }: { item: HardwareItem; wa: boolean;
   );
 }
 
+// Fotos reales: public/hardware/<código>.webp. Si existe se usa; si no, el render con su etiqueta.
+// Se evalúa en el build (la landing es estática).
+function realPhoto(code: HardwareItem["code"]): string | null {
+  const rel = `/hardware/${code}.webp`;
+  return existsSync(path.join(process.cwd(), "public", rel)) ? rel : null;
+}
+
 function Visual({ item, className, sizes }: { item: HardwareItem; className?: string; sizes: string }) {
+  const real = realPhoto(item.code);
+  const src = real ?? item.photo;
+  const isRender = !real && item.photoIsRender;
   return (
     <div
       className={cn("img-grade relative overflow-hidden rounded-2xl border border-stone-200/70 bg-cream-100", className)}
       role="img"
-      aria-label={ALT[item.code]}
+      aria-label={real ? `Foto de ${item.name}` : ALT[item.code]}
     >
       <div className="qr-grid absolute inset-0 opacity-60" />
-      {item.photo ? (
-        <Image src={item.photo} alt="" fill sizes={sizes} className="object-cover" />
+      {src ? (
+        <Image src={src} alt="" fill sizes={sizes} className="object-cover" />
       ) : (
         <div className="absolute inset-0 p-4 sm:p-6">
           <HardwareArt code={item.code} />
         </div>
+      )}
+      {isRender && (
+        <span className="absolute bottom-3 left-3 z-10 rounded-full bg-white/90 px-2.5 py-1 text-xs font-semibold text-brand-800 shadow-sm">
+          Render ilustrativo
+        </span>
       )}
     </div>
   );
