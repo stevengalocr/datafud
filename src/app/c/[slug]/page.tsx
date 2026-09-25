@@ -37,5 +37,5 @@ export default async function CartaPage({
   const carta = cartaBySlug(slug);
   if (!carta) notFound();
 
-  return <MenuClient data={carta.menu} slug={carta.slug} token="" ordering={false} />;
+  return <MenuClient data={carta.menu} slug={carta.slug} token="" ordering={false} tagline={carta.tagline} />;
 }

@@ -16,7 +16,7 @@ const cards: { href: string; title: string; desc: string; icon: IconName; tag: s
   {
     href: "/preview/carta",
     title: "Carta digital (plan Carta)",
-    desc: "Lo que ve el comensal al escanear el QR: la carta con fotos, precios en colones y cambio entre español e inglés. Se ordena con el salonero, como siempre.",
+    desc: "Lo que ve el comensal al escanear el QR: la carta con fotos, precios en colones y cambio entre español e inglés. Se ordena como siempre en tu local, en la mesa o en caja.",
     icon: "smartphone",
     tag: "Plan Carta",
   },

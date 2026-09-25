@@ -39,6 +39,7 @@ export function MenuClient({
   token,
   demo = false,
   ordering = true,
+  tagline,
 }: {
   data: MenuPayload;
   slug: string;
@@ -47,6 +48,9 @@ export function MenuClient({
   // Modo Carta (D-040): `false` deja la carta de solo lectura — sin botones de agregar,
   // sin barra de orden y sin hoja del carrito. Lo usan /c/<slug> y /preview/carta.
   ordering?: boolean;
+  // Subtítulo propio del local (D-045). Sin él se usa el del diccionario, que no supone cómo
+  // se ordena. Solo lo pasan las cartas estáticas: no viaja en el payload de `get_menu`.
+  tagline?: Partial<Record<Lang, string>>;
 }) {
   const langs = data.settings.enabled_languages?.length
     ? data.settings.enabled_languages
@@ -217,7 +221,7 @@ export function MenuClient({
             {data.settings.restaurant_name}
           </h1>
           <p className="mt-2 max-w-md text-sm font-medium leading-relaxed text-white/75">
-            {ordering ? d.orderingTagline : d.cartaTagline}
+            {ordering ? d.orderingTagline : t(tagline, lang) || d.cartaTagline}
           </p>
         </div>
       </header>

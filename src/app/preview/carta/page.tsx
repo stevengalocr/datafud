@@ -11,12 +11,12 @@ export const metadata: Metadata = {
 };
 
 // Demo del plan Carta: lo primero que se le enseña a un prospecto. Misma carta que /c/ejemplo,
-// con el banner de modo demo encima. Sin carrito: en el plan Carta se ordena con el salonero.
+// con el banner de modo demo encima. Sin carrito: en el plan Carta se ordena como siempre.
 export default function PreviewCarta() {
   return (
     <div>
       <PreviewBanner active="/preview/carta" />
-      <MenuClient data={ejemplo.menu} slug={ejemplo.slug} token="" demo ordering={false} />
+      <MenuClient data={ejemplo.menu} slug={ejemplo.slug} token="" demo ordering={false} tagline={ejemplo.tagline} />
     </div>
   );
 }

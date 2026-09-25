@@ -23,7 +23,7 @@ const sections: GuideSection[] = [
   {
     title: "El turista no debería necesitar traductor para pedir",
     paragraphs: [
-      "En un restaurante de playa, de montaña o de hotel, buena parte de las mesas pide en inglés. Con una carta solo en español, el salonero termina explicando plato por plato qué es un casado, un chifrijo o un patacón, y el servicio se atrasa justo en las horas pico.",
+      "En un restaurante de playa, de montaña o de hotel, buena parte de las mesas pide en inglés. Con una carta solo en español, alguien del equipo termina explicando plato por plato qué es un casado, un chifrijo o un patacón, y el servicio se atrasa justo en las horas pico.",
       "Con un menú QR bilingüe, el comensal abre la carta en su teléfono y la cambia a inglés con un toque. Ve el nombre del platillo, una descripción clara y la foto, y llega a la hora de ordenar sabiendo qué quiere.",
     ],
   },

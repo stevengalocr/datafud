@@ -19,7 +19,9 @@ export const dict = {
     sending: "Enviando...",
     poweredBy: "Menú digital por",
     orderingTagline: "Armá tu pedido desde la mesa y envialo a la cocina.",
-    cartaTagline: "Nuestra carta. Consultá a tu salonero para ordenar.",
+    // Sin suponer cómo se ordena: hay sodas que cobran en caja y no tienen saloneros. El
+    // local que quiera decirlo pone su propio `tagline` en su CartaEstatica (D-045).
+    cartaTagline: "Nuestra carta.",
   },
   en: {
     menu: "Menu",
@@ -37,7 +39,7 @@ export const dict = {
     sending: "Sending...",
     poweredBy: "Digital menu by",
     orderingTagline: "Build your order at the table and send it to the kitchen.",
-    cartaTagline: "Our menu. Ask your server to order.",
+    cartaTagline: "Our menu.",
   },
   pt: {
     menu: "Cardápio",
@@ -55,7 +57,7 @@ export const dict = {
     sending: "Enviando...",
     poweredBy: "Cardápio digital por",
     orderingTagline: "Monte seu pedido na mesa e envie para a cozinha.",
-    cartaTagline: "Nosso cardápio. Peça ao garçom para fazer seu pedido.",
+    cartaTagline: "Nosso cardápio.",
   },
 } satisfies Record<Lang, Record<string, string>>;
 
