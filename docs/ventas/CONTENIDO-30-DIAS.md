@@ -81,10 +81,10 @@
 - **Copy:** De la pizarra a la carta digital, sin que tengás que aprender nada. Ejemplo armado con la soda de muestra Verde Limón.
 - **CTA:** "Quiero mi carta" → `https://datafud.com/?utm_source=instagram&utm_medium=social&utm_campaign=c10`
 
-### c11 · Reel · "Quién está detrás de DataFud"
-- **Guion:** Steven a cámara (15 s): quién es, qué hace DataFud, por qué lo hace. Planos del taller e impresora.
-- **Texto en pantalla:** "Steven Galo · ingeniero en sistemas · Costa Rica".
-- **Copy:** DataFud es un proyecto chico, hecho en Costa Rica: te atiende una persona, no un bot.
+### c11 · Reel · "Cómo hacemos tu carta"
+- **Guion:** alguien del equipo a cámara (15 s), presentándose por su nombre y su papel ("soy <nombre>, de DataFud"): qué hace la empresa y cómo se monta una carta. Planos del taller y de la impresora 3D.
+- **Texto en pantalla:** "DataFud · cartas digitales · Costa Rica".
+- **Copy:** DataFud es una empresa costarricense: nosotros te montamos la carta y te atiende una persona de nuestro equipo, no un bot.
 - **CTA:** "Escribinos por WhatsApp" → `https://datafud.com/?utm_source=instagram&utm_medium=social&utm_campaign=c11#contacto`
 
 ### c12 · Publicación fija · "Cupos de fundadores"

@@ -11,7 +11,9 @@ un formulario; el nav no ofrece "Ingresar". El backend se enciende con el primer
 plan con pedidos. No prometas en la landing nada que no exista: ver `docs/MARKETING.md` §9.
 Desde el loop "lista para vender" (2026-09-22, D-023 a D-031) la oferta se muestra en colones
 primero, la landing tiene 8 secciones, hay tres guías de SEO local y el material de venta vive en
-`docs/ventas/`.
+`docs/ventas/`. Desde el loop "oferta sólida" (2026-09-25, D-014 y D-039 a D-041) **una Carta se
+entrega sin backend**: se publica desde `src/content/cartas/` en `/c/<slug>`, los QR impresos
+entran por `/q/<código>`, el único canal público es WhatsApp y la web habla como empresa.
 
 ## Comandos
 
@@ -32,8 +34,14 @@ primero, la landing tiene 8 secciones, hay tres guías de SEO local y el materia
   (único uso de `service_role`), ruta privada del super admin (no enlazada, noindex).
 - `src/app/(legal)/` términos y privacidad, versión 1.0 (cifras desde `PRICING`).
 - `src/app/dashboard/` panel del restaurante · `src/app/admin/` super admin · `src/app/m/[tenant]/[table]/`
-  menú del comensal (RPC `get_menu` / `place_order`) · `src/app/preview/` demo sin backend.
-- `src/lib/site.ts` contacto, `waProps`, fundador, redes y `metaPixelId()` · `constants.ts` `PRICING`
+  menú del comensal (RPC `get_menu` / `place_order`, `MenuClient` con `ordering`) ·
+  `src/app/preview/` demo sin backend (`/preview/carta` es la que se enseña primero).
+- `src/app/c/[slug]/` **Carta publicada sin backend** (D-040), estática desde `src/content/cartas/`
+  (`CARTAS`, `cartaBySlug`, los 4 pasos de alta en `index.ts`); usa `MenuClient` con
+  `ordering={false}`. `src/app/q/[code]/` **redirección de los QR y NFC impresos** (D-014), con los
+  destinos en `src/content/qr.ts`: el código impreso es permanente y nunca se reutiliza.
+- `src/lib/site.ts` contacto, `waProps`, redes, `leadsEmail` (destino interno del formulario, que
+  nunca se renderiza) y `metaPixelId()` · `constants.ts` `PRICING`
   (CRC y USD, implementación por tipo, fundadores, textos de garantía) y `TESTIMONIALS` ·
   `currency/format.ts` `formatCrc()` · `faq.ts` · `seo.ts` · `contact.ts` +
   `src/app/actions.ts` formulario · `turnstile.ts` · `env.ts` · `supabase/` clientes · `auth/` guardas.
@@ -66,7 +74,11 @@ primero, la landing tiene 8 secciones, hay tres guías de SEO local y el materia
    emojis en UI, sin texto con degradado, sin `backdrop-blur`, voseo tico natural.
 10. Honestidad comercial: en la landing no van "tiempo real", "24/7", "exportación", "trial",
     "crea tu cuenta", promesas de resultado ("más ventas", "más estrellas", "llená tus mesas") ni
-    testimonios, logos o cifras inventados.
+    testimonios, logos o cifras inventados. **Canal único (D-039):** el único contacto público es
+    WhatsApp; ningún correo se muestra en la web, en los legales ni en JSON-LD, y no se agregan
+    enlaces `mailto:`. **Voz de empresa (D-041):** se habla como DataFud y en plural, sin "proyecto
+    chico", sin firma personal y sin "un producto de GaloDev"; eso no autoriza a inventar sociedad,
+    cédula jurídica, equipo ni dirección, y los legales siguen nombrando a `SITE.legalResponsible`.
 11. Cero secretos en código, docs o commits. Variables nuevas solo en `.env.example`, vacías. Toda
     función que dependa de una variable ausente degrada sin romper la página.
 
@@ -90,8 +102,8 @@ primero, la landing tiene 8 secciones, hay tres guías de SEO local y el materia
 - `/preview` no toca la BD: que se vea bien ahí no prueba el flujo real.
 - La landing es estática: lo que dependa de variables de entorno (formulario con `RESEND_API_KEY`,
   aviso de `/login`, Turnstile) se decide en el build. Cambiar una variable en Vercel exige redeploy.
-- Foto del fundador (`public/equipo/steven.webp`) y fotos reales del hardware
-  (`public/hardware/<código>.webp`) se detectan en el build: subirlas exige redeploy.
+- Las fotos reales del hardware (`public/hardware/<código>.webp`) se detectan en el build:
+  subirlas exige redeploy.
 - La imagen OG no puede dibujar "₡" (la fuente dinámica no baja en el build): escribir "colones".
 - Quedan restos del nombre viejo "Datfud" en `package.json`, `src/lib/supabase/types.ts` y los `.sql`.
 - Los triggers de límite de plan lanzan excepción: la UI tiene que mostrarla.

@@ -1,9 +1,17 @@
 # Kit de prospección · DataFud (Costa Rica)
 
 > Material para salir a vender la carta digital. Todo precio y plazo sale de `PRICING`
-> (`src/lib/constants.ts`) y coincide con la landing, la FAQ y los términos al 2026-09-22.
+> (`src/lib/constants.ts`) y coincide con la landing, la FAQ y los términos al 2026-09-25.
 > Si cambia la oferta, actualizá este archivo en el mismo commit. Voseo, sin prometer
 > resultados, sin inventar clientes ni cifras.
+>
+> **Canal único: WhatsApp (D-039).** No se reparte ningún correo, ni en mensajes, ni en visita,
+> ni en tarjeta. Si alguien pide correo: "manejamos todo por WhatsApp, así te respondemos más
+> rápido y queda el historial".
+>
+> **Voz de empresa (D-041).** Se habla en plural y en nombre de DataFud: "le escribimos de
+> DataFud", "necesitamos", "te mandamos". En visita presencial la persona se presenta por su
+> nombre y su papel — "soy <nombre>, asesor de DataFud" — no como el dueño del proyecto.
 
 ## Datos de la oferta (para tener a mano)
 
@@ -34,20 +42,25 @@ Reemplazá `<zona>` por la zona o campaña, en minúsculas y sin tildes (ej. `he
 | WhatsApp, sección de la demo | `https://datafud.com/?utm_source=whatsapp&utm_medium=prospeccion&utm_campaign=<zona>#demo` |
 | Instagram (bio o historia) | `https://datafud.com/?utm_source=instagram&utm_medium=social&utm_campaign=<zona>` |
 | Facebook (publicación o grupo) | `https://datafud.com/?utm_source=facebook&utm_medium=social&utm_campaign=<zona>` |
-| Visita presencial (QR impreso en el stand de muestra) | `https://datafud.com/?utm_source=visita&utm_medium=stand-muestra&utm_campaign=<zona>#demo` |
+| Visita presencial (QR impreso en el stand de muestra) | `https://datafud.com/q/demo26` (redirige a `/c/ejemplo`) |
 | Guía para sodas | `https://datafud.com/menu-digital-para-sodas?utm_source=whatsapp&utm_medium=prospeccion&utm_campaign=<zona>` |
 | Guía para turísticos | `https://datafud.com/menu-qr-restaurantes-turisticos?utm_source=whatsapp&utm_medium=prospeccion&utm_campaign=<zona>` |
 
 > Nota: la analítica guarda los UTM de la visita de entrada en la landing y en las guías. La demo
-> (`/preview/…`) no mide: por eso los enlaces medidos llevan a `/#demo`, desde donde se abre la carta
-> demo con un toque. Si querés que el cliente caiga directo en la carta demo, usá
-> `https://datafud.com/preview/cliente` sin UTM (esa visita no queda medida).
+> (`/preview/…`) y la carta (`/c/…`) no miden: por eso los enlaces medidos llevan a `/#demo`, desde
+> donde se abre la carta demo con un toque. Si querés que el cliente caiga directo en la carta demo,
+> usá `https://datafud.com/preview/carta` (esa visita no queda medida).
+>
+> **El stand de muestra nunca lleva un enlace con UTM.** Lleva `https://datafud.com/q/demo26`, un
+> código permanente (D-014): si algún día la carta de ejemplo se mueve, se cambia una línea en
+> `src/content/qr.ts` y el stand impreso sigue sirviendo. Un enlace con UTM impreso queda congelado
+> para siempre y mide una campaña que ya no existe.
 
 ## Primer contacto por WhatsApp (máximo 5 líneas)
 
 **1 · Soda o cafetería**
 
-> Hola, ¿qué tal? Soy Steven, de DataFud, acá en Costa Rica.
+> Hola, ¿qué tal? Le escribimos de DataFud, empresa costarricense de cartas digitales para restaurantes.
 > Montamos cartas digitales con QR para sodas: la carta en el celular del cliente, en colones y con fotos.
 > Cuando cambia un precio, nos escribís y lo actualizamos, sin reimprimir.
 > Mirá cómo se ve una soda de ejemplo: https://datafud.com/?utm_source=whatsapp&utm_medium=prospeccion&utm_campaign=<zona>#demo
@@ -55,7 +68,8 @@ Reemplazá `<zona>` por la zona o campaña, en minúsculas y sin tildes (ej. `he
 
 **2 · Restaurante turístico**
 
-> Hola, soy Steven, de DataFud. Hacemos cartas digitales con QR en español e inglés para restaurantes con turistas.
+> Hola, le escribimos de DataFud, empresa costarricense de cartas digitales para restaurantes.
+> Hacemos cartas con QR en español e inglés para locales con turistas.
 > El cliente la abre en su teléfono y cambia de idioma con un toque; también podemos anotar alérgenos en cada platillo.
 > Te la montamos nosotros y queda lista en 48 horas.
 > Ejemplo: https://datafud.com/menu-qr-restaurantes-turisticos?utm_source=whatsapp&utm_medium=prospeccion&utm_campaign=<zona>
@@ -63,7 +77,8 @@ Reemplazá `<zona>` por la zona o campaña, en minúsculas y sin tildes (ej. `he
 
 **3 · Local con carta vieja o en PDF**
 
-> Hola, soy Steven, de DataFud. Vi que la carta de ustedes está en PDF (o impresa) y quería mostrarles otra opción.
+> Hola, le escribimos de DataFud, empresa costarricense de cartas digitales para restaurantes.
+> Vimos que la carta de ustedes está en PDF (o impresa) y queríamos mostrarles otra opción.
 > Una carta digital que se lee bien en el celular, con fotos y categorías, y que se actualiza sin reimprimir.
 > La montamos nosotros con su marca, y los cambios por WhatsApp están incluidos.
 > Así se ve: https://datafud.com/?utm_source=whatsapp&utm_medium=prospeccion&utm_campaign=<zona>#demo
@@ -73,8 +88,8 @@ Reemplazá `<zona>` por la zona o campaña, en minúsculas y sin tildes (ej. `he
 
 **Día 3**
 
-> Hola, ¿pudiste ver la carta de ejemplo? Si querés, te armo una muestra con 3 o 4 platillos de tu
-> menú para que veás cómo quedaría la tuya. Solo mandame una foto de la carta actual.
+> Hola, ¿pudiste ver la carta de ejemplo? Si querés, te armamos una muestra con 3 o 4 platillos
+> de tu menú para que veás cómo quedaría la tuya. Solo necesitamos una foto de la carta actual.
 
 **Día 7**
 
@@ -83,31 +98,32 @@ Reemplazá `<zona>` por la zona o campaña, en minúsculas y sin tildes (ej. `he
 > el local como caso. Si te sirve, te aparto uno.
 
 (Usar el día 7 solo mientras la oferta de fundadores esté activa. Si no, reemplazar por: "Si en
-algún momento querés actualizar la carta, acá estoy. Te dejo mi contacto guardado".)
+algún momento querés actualizar la carta, acá estamos. Te dejamos nuestro WhatsApp guardado".)
 
 **Cierre**
 
-> Perfecto. Para arrancar necesito: el menú con precios (foto o PDF), fotos de los platillos que
-> tengás y el logo. La implementación se paga por SINPE Móvil o transferencia al aprobar la
-> propuesta, y en 48 horas hábiles desde que tengo todo, tu carta está publicada. Si no, no pagás
-> la implementación. ¿Te mando la propuesta?
+> Perfecto. Para arrancar necesitamos: el menú con precios (foto o PDF), fotos de los platillos
+> que tengás y el logo. La implementación se paga por SINPE Móvil o transferencia al aprobar la
+> propuesta, y en 48 horas hábiles desde que tenemos todo, tu carta está publicada. Si no, no
+> pagás la implementación. ¿Te mandamos la propuesta?
 
 ## Guion de 60 segundos (visita presencial, con el stand en la mano)
 
-1. **(10 s) Presentación.** "Hola, soy Steven, de DataFud. Hacemos cartas digitales para locales de acá. ¿Tiene un minuto?"
-2. **(15 s) Mostrar.** Poner el stand en la mesa: "Escanee este código con su celular." Dejar que lo abra: cae en la sección demo de datafud.com y toca "Abrir la carta demo" (Verde Limón).
-3. **(15 s) Explicar.** "Así se vería su carta: con fotos, en colones, en español e inglés. Nosotros la montamos; usted solo nos pasa el menú y el logo. Si cambia un precio, me escribe y lo actualizo."
+1. **(10 s) Presentación.** "Buenas, soy <nombre>, asesor de DataFud. Somos una empresa costarricense que hace cartas digitales para locales de acá. ¿Tiene un minuto?"
+2. **(15 s) Mostrar.** Poner el stand de muestra en la mesa: "Escanee este código con su celular." El stand lleva `https://datafud.com/q/demo26`, que abre directo la carta de ejemplo (Verde Limón).
+3. **(15 s) Explicar.** "Así se vería su carta: con fotos, en colones, en español e inglés. Nosotros se la montamos; usted solo nos pasa el menú y el logo. Si cambia un precio, nos escribe y lo actualizamos."
 4. **(10 s) Precio.** "Desde ₡14 900 al mes, con ₡24 900 de implementación. Sin contrato de permanencia."
-5. **(10 s) Siguiente paso.** "¿Le dejo mi WhatsApp y le mando una muestra con su propio menú?" Dejar tarjeta o escanear el QR de contacto.
+5. **(10 s) Siguiente paso.** "¿Le dejo nuestro WhatsApp y le mandamos una muestra con su propio menú?" Dejar tarjeta con el QR del stand de muestra.
 
-(En visita, el trato es de "usted" hasta que la persona pase a "vos". En WhatsApp, voseo.)
+(En visita, el trato es de "usted" hasta que la persona pase a "vos". En WhatsApp, voseo. En los
+dos casos se habla en plural: es la empresa la que atiende, no una persona suelta.)
 
 ## Respuestas a objeciones
 
 - **"Hay gratis."** "Sí, hay opciones donde vos mismo armás la carta. Si tenés el tiempo, te sirven. Lo nuestro es que te la montamos nosotros, en español e inglés, con tus fotos y tu marca, y los cambios por WhatsApp están incluidos: no tenés que aprender nada."
 - **"Ya tengo menú en PDF."** "El PDF se ve pequeño en el celular y cada cambio es volver a diseñarlo. La carta digital se lee cómoda, tiene categorías, fotos y cambio de idioma, y los precios se actualizan sin tocar el QR."
-- **"¿Y la factura?"** "Recibís comprobante de cada pago. Si tu negocio necesita factura electrónica, avisame antes de contratar y lo coordinamos. Ojo: DataFud no reemplaza tu sistema de facturación, convive con el que ya usás."
-- **"Está caro."** "El plan Carta es ₡14 900 al mes; el primer año sale ₡203 700 pagando mes a mes, o ₡149 000 si pagás el año, con dos meses gratis y la implementación incluida. Incluye el montaje, la traducción y los cambios. Si la carta no está publicada en 48 horas hábiles desde que tengo tu material, no pagás la implementación."
+- **"¿Y la factura?"** "Recibís comprobante de cada pago. Si tu negocio necesita factura electrónica, avisanos antes de contratar y lo coordinamos. Ojo: DataFud no reemplaza tu sistema de facturación, convive con el que ya usás."
+- **"Está caro."** "El plan Carta es ₡14 900 al mes; el primer año sale ₡203 700 pagando mes a mes, o ₡149 000 si pagás el año, con dos meses gratis y la implementación incluida. Incluye el montaje, la traducción y los cambios. Si la carta no está publicada en 48 horas hábiles desde que tenemos tu material, no pagás la implementación."
 - **"¿Cuántas mesas y categorías incluye?"** "La Carta llega hasta 5 categorías y 8 mesas con QR (y 60 platillos). Si tenés más, Estándar llega a 20 categorías y 30 mesas."
 - **"¿El precio lleva IVA?"** Pendiente de decisión (ver PENDIENTES-STEVEN en `docs/plans/venta-loop-state.md`): no responder de memoria; decir "te lo confirmo en la propuesta".
 - **"Mis clientes no escanean."** "Para eso está la tarjeta NFC (₡7 500): el cliente acerca el teléfono y la carta se abre sola, sin cámara. También hay stand con QR y NFC juntos, desde ₡10 000."
@@ -121,7 +137,7 @@ marcas concretas o decir que somos más económicos (los rangos genéricos del m
 existan. La lista completa de frases vetadas está en `docs/MARKETING.md` §9 y en la regla 10 de
 `CLAUDE.md`. Si preguntan cuántos clientes tenemos, se responde con la verdad.
 
-## Grep cruzado (verificación del 2026-09-22)
+## Grep cruzado (verificación del 2026-09-25)
 
 | Cifra en este kit | Fuente |
 |---|---|

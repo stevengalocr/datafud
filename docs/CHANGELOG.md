@@ -7,6 +7,34 @@ Todas las versiones notables del proyecto. Formato basado en
 
 ## [Unreleased]
 
+### Added — Loop "oferta sólida" (2026-09-25)
+- **Carta entregable sin backend (D-040).** `/c/<slug>` publica la carta de un local desde
+  `src/content/cartas/`, con el mismo formato que devuelve `get_menu`. `MenuClient` acepta
+  `ordering`: en `false` no hay botones de agregar, barra de orden ni carrito, y la cabecera
+  muestra solo "Menú". Nuevos `orderingTagline` y `cartaTagline` en los tres idiomas.
+- **QR y NFC impresos permanentes (D-014).** `/q/<código>` redirige (307) al destino declarado en
+  `src/content/qr.ts`; un código desconocido cae en `/?qr=desconocido`. Si la carta se mueve, se
+  cambia una línea y el material impreso sigue sirviendo.
+- **Demo del plan Carta** en `/preview/carta`: lo primero que ve un prospecto.
+- `docs/ventas/OFERTA.md`: qué se vende, qué no incluye, cómo se entrega una Carta en 48 h, el
+  plan de 15 días hábiles para encender el backend y las decisiones propuestas D-032 a D-038.
+
+### Changed — Loop "oferta sólida" (2026-09-25)
+- **Canal único: WhatsApp (D-039).** El correo desaparece de la web: sin tarjeta en `#contacto`,
+  sin línea en el footer, sin `mailto:`, sin `email` en el JSON-LD y sin menciones en términos,
+  privacidad ni FAQ. `SITE.email` pasa a `SITE.leadsEmail`, destino interno del formulario que no
+  se renderiza nunca; fuera `hasEmail()` y `mailLink()`.
+- **Voz de empresa (D-041).** "DataFud es una empresa costarricense dedicada a sodas, cafeterías y
+  restaurantes" reemplaza a "somos un proyecto chico"; la firma del fundador pasa a la tarjeta
+  "Atención DataFud"; el footer dice "DATAFUD · COSTA RICA"; los términos nombran al titular como
+  "DataFud"; `authors`/`creator` y el JSON-LD dejan de decir GaloDev. Los legales siguen nombrando
+  al responsable legal real.
+- El hero, las tres guías, el QR de escritorio y el `sitemap` apuntan a `/preview/carta`; la
+  maqueta del teléfono de `#demo` pierde el carrito y la mesa.
+- Los platillos de la demo suman descripción en inglés: la carta vende el cambio ES/EN y en inglés
+  mostraba las descripciones en español.
+- `qa:landing` recorre además `/preview/carta` y `/c/ejemplo`.
+
 ## [1.1.0] — 2026-09-22 · Landing lista para vender
 
 Informe: `docs/plans/venta-loop-report.md`.

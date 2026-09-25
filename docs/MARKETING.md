@@ -19,6 +19,15 @@
 > producción; la landing vende la carta digital, el hardware de mesa (QR impreso en 3D, NFC,
 > stand de reseñas) y la implementación llave en mano. Conversión por **WhatsApp** y
 > formulario de contacto. No se promete nada que no se pueda entregar en el plazo.
+>
+> **Canal único (D-039):** el único contacto público es WhatsApp, +506 7287 4779. Ningún correo
+> se muestra en ninguna página, ni en JSON-LD, ni en enlaces `mailto:`. El correo existe solo
+> como destino interno del formulario (`SITE.leadsEmail`).
+>
+> **Voz de empresa (D-041):** DataFud habla como empresa costarricense, en plural. Fuera
+> "proyecto chico", la firma del fundador y "un producto de GaloDev". Eso no autoriza a inventar
+> sociedad, cédula jurídica, equipo ni dirección: los legales siguen nombrando al responsable
+> legal real.
 
 ## 2. Posicionamiento
 
@@ -60,9 +69,9 @@ servicio, datos del negocio, atención a clientes extranjeros.
 | **Demo** (`#demo`) | Probar sin hablar con nadie | "Probalo vos mismo" · QR real desde tablet |
 | **Planes y precios** (`#planes`) | Convertir | CRC primero, implementación y primer pago por plan, garantía, fundadores |
 | **Hardware** (`#hardware`) | Vender lo que va en la mesa | Precios en colones, sin mínimo, entrega GAM/Correos |
-| **Por qué DataFud** (`#confianza`) | Confianza verificable | 4 puntos + firma de Steven Galo |
+| **Por qué DataFud** (`#confianza`) | Confianza verificable | 4 puntos + tarjeta "Atención DataFud" con el WhatsApp |
 | **Preguntas** (`#preguntas`) | Resolver objeciones | 15 preguntas de Costa Rica |
-| **Contacto + cierre** | Capturar | WhatsApp + correo + formulario (solo con `RESEND_API_KEY`) |
+| **Contacto + cierre** | Capturar | WhatsApp (canal único) + formulario (solo con `RESEND_API_KEY`) |
 
 Regla de repetición (V08): "48" y "15 días" aparecen como máximo 3 veces cada uno en el texto
 visible de `/` (hero, planes y FAQ); la línea de tiempo no repite el plazo de la carta ("Plazo de la Carta").
@@ -96,7 +105,7 @@ visible de `/` (hero, planes y FAQ); la línea de tiempo no repite el plazo de l
   Carta sin costo y 1 stand QR 3D incluido, a cambio de dejarnos mostrar tu local como caso."
 - **Garantía de 48 h** (único uso permitido de la idea de garantía): "Si tu carta no está
   publicada en 48 horas hábiles desde que recibimos menú, fotos y logo, no pagás la implementación."
-- **Permanencia:** sin contrato; se cancela con aviso de 15 días por WhatsApp o correo.
+- **Permanencia:** sin contrato; se cancela con aviso de 15 días por WhatsApp.
 - **Pagos:** SINPE Móvil o transferencia. Implementación al aprobar la propuesta; mensualidad por
   adelantado. Comprobante de cada pago; factura electrónica se coordina si se avisa antes.
 
@@ -129,7 +138,7 @@ por resultados.
 - **Redes:** `SITE.social` (instagram, facebook, tiktok) vacías; el footer muestra solo las que tengan
   una URL `https://`.
 - **Cómo cargar un testimonio** (`TESTIMONIALS` en `src/lib/constants.ts`, hoy vacío = la sección no
-  aparece): solo de un local que ya usa DataFud, con **permiso por escrito** (un WhatsApp o correo que
+  aparece): solo de un local que ya usa DataFud, con **permiso por escrito** (un WhatsApp que
   diga que acepta que se publique). Campos: nombre del local, persona (nombre y rol), ciudad, la cita
   textual tal como la dijo (sin retocar el sentido) y, opcional, una **foto propia** del local o del
   stand en su mesa en `public/clientes/`. Nunca stock, nunca inventado, nunca cifras que no se
@@ -170,7 +179,8 @@ por resultados.
 
 - **CTA primario:** "Hablemos por WhatsApp" → `wa.me` con mensaje prellenado según el origen
   (`src/lib/site.ts`, `waProps`). Botón flotante en móvil.
-- **CTA secundario:** "Ver la demo" → `/preview/cliente` (carta demo navegable sin backend).
+- **CTA secundario:** "Ver la demo" → `/preview/carta` (demo del plan Carta, sin backend y sin
+  carrito). La versión con pedidos en mesa queda de segunda, en `/preview/cliente`.
 - **Alternativa:** formulario en `#contacto` (Resend; solo se muestra con `RESEND_API_KEY`).
 - **Microcopy de confianza:** "Desde ₡14 900/mes · Te la montamos nosotros · Cambios por WhatsApp".
 - **Embudo:** Landing → WhatsApp o formulario → llamada y plan elegido → implementación
@@ -179,7 +189,8 @@ por resultados.
 
 ## 11. Identidad
 
-- **Producto:** DataFud · **dominio:** datafud.com · **fabricante:** GaloDev.
+- **Producto:** DataFud · **dominio:** datafud.com · **titular legal:** ver `SITE.legalResponsible`
+  (solo aparece en términos y privacidad; la cara pública habla como DataFud).
 - **Tagline:** "QR Menus. Orders. Analytics."
 - **Cierre de marca:** "© DATAFUD · UN PRODUCTO DE GALODEV · HECHO EN COSTA RICA".
 
