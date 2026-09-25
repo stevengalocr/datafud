@@ -315,7 +315,7 @@ export function MenuClient({
                         <p className="font-bold leading-tight text-brand-900">{t(p.name_i18n, lang)}</p>
                         {desc && <p className="mt-1 line-clamp-2 text-xs leading-relaxed text-brand-700/65">{desc}</p>}
                         <div className="mt-auto flex items-center justify-between pt-2">
-                          <span className="font-display text-lg" style={{ color: primary }}>{formatMoney(Number(p.price), currency)}</span>
+                          <span className="font-display text-lg" style={{ color: primary }}>{formatMoney(Number(p.price), currency, undefined, lang)}</span>
                           {!ordering ? null : qty === 0 ? (
                             <button
                               onClick={() => add(p.id)}
@@ -359,7 +359,7 @@ export function MenuClient({
               <span className="flex h-7 min-w-7 items-center justify-center rounded-full px-2 text-sm tabular-nums" style={{ backgroundColor: accent }}>{count}</span>
               <span className="text-sm uppercase tracking-widest">{d.yourOrder}</span>
             </span>
-            <span className="font-display text-lg">{formatMoney(total, currency)}</span>
+            <span className="font-display text-lg">{formatMoney(total, currency, undefined, lang)}</span>
           </button>
         </div>
       )}
@@ -394,7 +394,7 @@ export function MenuClient({
                         </div>
                         <div className="min-w-0 flex-1">
                           <p className="truncate text-sm font-bold text-brand-900">{t(p.name_i18n, lang)}</p>
-                          <p className="text-xs text-brand-700/60">{formatMoney(Number(p.price), currency)}</p>
+                          <p className="text-xs text-brand-700/60">{formatMoney(Number(p.price), currency, undefined, lang)}</p>
                         </div>
                         <div className="flex items-center gap-2.5 rounded-lg border border-stone-200 bg-white p-1">
                           <button onClick={() => remove(l.product_id)} aria-label="−" className="flex h-7 w-7 items-center justify-center rounded-md text-brand-800 hover:bg-stone-100">−</button>
@@ -422,7 +422,7 @@ export function MenuClient({
                 style={{ backgroundColor: primary }}
               >
                 <span className="text-sm uppercase tracking-widest">{sending ? d.sending : d.sendOrder}</span>
-                <span className="font-display text-lg">{formatMoney(total, currency)}</span>
+                <span className="font-display text-lg">{formatMoney(total, currency, undefined, lang)}</span>
               </button>
             </div>
           </div>

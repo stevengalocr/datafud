@@ -42,17 +42,28 @@ export function formatUsd(amount: number): string {
   return `US$${groupCr(amount).replace(/ /g, ",")}`;
 }
 
+/**
+ * `lang` es el idioma en el que el comensal está **leyendo** la carta, no el del local.
+ *
+ * Importa por los decimales: en español "$8,50" son ocho con cincuenta, pero un turista que leyó
+ * el resto de la carta en inglés lee esa coma como separador de miles. El precio es lo único de
+ * la carta que no se puede prestar a una segunda lectura.
+ *
+ * Los colones no dependen del idioma: `formatCrc()` no usa decimales y agrupa con espacio, que
+ * no se confunde en ningún idioma (regla 6 de `CLAUDE.md`).
+ */
 export function formatMoney(
   amount: number,
   currencyCode: string = "USD",
-  currency?: Currency
+  currency?: Currency,
+  lang: string = "es"
 ): string {
   // Colones: siempre es-CR y sin decimales ("₡2 800"), aunque la BD diga 2 decimales.
   if ((currency?.code ?? currencyCode) === "CRC") return formatCrc(amount);
   const symbol = currency?.symbol ?? SYMBOLS[currencyCode] ?? "$";
   const digits =
     currency?.decimal_digits ?? (ZERO_DECIMAL.has(currencyCode) ? 0 : 2);
-  const formatted = amount.toLocaleString("es", {
+  const formatted = amount.toLocaleString(lang, {
     minimumFractionDigits: digits,
     maximumFractionDigits: digits,
   });

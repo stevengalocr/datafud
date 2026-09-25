@@ -143,8 +143,28 @@ hoja de cálculo (D-046). Los pasos:
 6. **Prueba en un teléfono de verdad**, no solo en el navegador de la compu: abrir `/c/<slug>`,
    revisar fotos, precios, el cambio a inglés y que el QR impreso caiga donde debe.
 
-Recién ahí se le manda el enlace al cliente. Si un local se va:
-`node scripts/carta-borrar.mjs <slug>` — el código impreso queda reservado y no se reutiliza.
+Recién ahí se le manda el enlace al cliente.
+
+**Antes de la primera vez, ensayalo.** Hay un local de prueba armado en
+`scripts/fixtures/carta-prueba/` (14 platillos, bilingüe, con y sin foto). Las fotos y el logo no
+se versionan porque pesan; se generan con `node scripts/fixtures/carta-prueba/generar.mjs`.
+Después: copiá esa carpeta a `entregas/ensayo/`, cambiale el `codigo_qr` por uno libre y seguí los
+pasos de arriba. Al terminar, `node scripts/carta-borrar.mjs ensayo --fixture` deja el repo como
+estaba.
+
+Tres cosas que hacen perder tiempo la primera vez:
+
+- **`next start` no recoge una carta nueva si quedó levantado desde antes del `build`.** El
+  síntoma es un 404 en `/c/<slug>` con el build recién hecho, y parece un error del alta cuando es
+  del servidor. Matá ese proceso y volvé a levantarlo.
+- **Para armar el kit sin haber desplegado**, usá `--servidor`, no `--base`:
+  `node scripts/carta-kit.mjs <slug> --servidor http://localhost:3177`. `--base` es lo que se
+  **graba dentro del QR** y siempre tiene que ser `https://datafud.com`; el script rechaza
+  cualquier otra cosa, porque un código impreso que apunta a una máquina de desarrollo no lo abre
+  nadie.
+- **La baja de un local deja un cambio en `src/content/qr.ts` y ese cambio se commitea.** No es
+  suciedad: es el código del local comentado, reservado para que no se le dé a otro (D-014). Solo
+  en un ensayo se usa `--fixture`, que lo borra del todo porque nunca se imprimió.
 
 ### El sistema completo, cuando cierre el primer cliente con pedidos
 

@@ -100,6 +100,12 @@ entran por `/q/<código>`, el único canal público es WhatsApp y la web habla c
 - `NEXT_PUBLIC_SITE_URL` define la URL grabada en los QR (`dashboard/tables`); en producción debe
   ser `https://datafud.com`.
 - `/preview` no toca la BD: que se vea bien ahí no prueba el flujo real.
+- `next start` sirve el build que había cuando arrancó: una carta nueva en `/c/<slug>` da **404**
+  hasta que se reinicia el proceso, aunque el `build` ya la haya generado. El síntoma parece un
+  error del alta y no lo es.
+- El alta y la baja de cartas se hacen con los scripts (`carta-nueva`, `carta-borrar`), no
+  editando `src/content/cartas/index.ts` a mano. La baja deja el código de QR comentado en
+  `src/content/qr.ts` **a propósito** y ese cambio se commitea (D-014).
 - La landing es estática: lo que dependa de variables de entorno (formulario con `RESEND_API_KEY`,
   aviso de `/login`, Turnstile) se decide en el build. Cambiar una variable en Vercel exige redeploy.
 - Las fotos reales del hardware (`public/hardware/<código>.webp`) se detectan en el build:

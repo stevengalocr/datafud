@@ -28,10 +28,33 @@ const TEXTO_QR = "Escanee para ver la carta · Scan for the menu";
 await correr(async () => {
   const args = parseArgs(process.argv.slice(2));
   const slug = args._[0];
-  if (!slug) fallar("Falta el slug.\n       node scripts/carta-kit.mjs <slug> [--base https://datafud.com]");
+  if (!slug) {
+    fallar(
+      "Falta el slug.\n" +
+        "       node scripts/carta-kit.mjs <slug> [--servidor http://localhost:3177]\n\n" +
+        "       Para un ensayo local (la carta todavía no está desplegada):\n" +
+        "         npm run build && node node_modules/next/dist/bin/next start -p 3177\n" +
+        "         node scripts/carta-kit.mjs <slug> --servidor http://localhost:3177\n" +
+        "       El QR se graba igual con la URL de producción: lo impreso nunca apunta a una\n" +
+        "       máquina de desarrollo."
+    );
+  }
 
+  // Lo que se graba en el QR es SIEMPRE producción. `--servidor` solo dice de dónde leer las
+  // páginas para armar los PDF. Son dos cosas distintas a propósito: un kit armado contra un
+  // servidor local tiene que servir igual para mandar a imprimir.
   const base = (args.base || "https://datafud.com").replace(/\/$/, "");
   const servidor = (args.servidor || base).replace(/\/$/, "");
+
+  if (!/^https:\/\//.test(base) || /localhost|127\.0\.0\.1|\.local(?::|$)/.test(base)) {
+    fallar(
+      `--base es ${base}, que no es una dirección pública.\n` +
+        "       Lo que se grabe en el QR queda impreso en el stand para siempre: un código que\n" +
+        "       apunta a una máquina de desarrollo no lo abre nadie.\n" +
+        "       Si lo que querés es armar el kit sin haber desplegado todavía, no toqués --base:\n" +
+        `       usá --servidor ${base}, que solo cambia de dónde se leen las páginas del PDF.`
+    );
+  }
 
   // ── El código impreso y el nombre del local salen del repo, no de argumentos ─
   const qrSrc = readFileSync("src/content/qr.ts", "utf8");
@@ -121,7 +144,16 @@ await correr(async () => {
       const page = await browser.newPage({ viewport: { width: 820, height: 1100 } });
       const respuesta = await page.goto(`${servidor}/c/${slug}`, { waitUntil: "networkidle" });
       if (!respuesta || respuesta.status() !== 200) {
-        fallar(`${servidor}/c/${slug} respondió ${respuesta?.status() ?? "nada"}. ¿Está desplegada la carta?`);
+        fallar(
+          [
+            `${servidor}/c/${slug} respondió ${respuesta?.status() ?? "nada"}.`,
+            "       Si la carta todavía no está desplegada, armá el kit contra un servidor local:",
+            "         npm run build && node node_modules/next/dist/bin/next start -p 3177",
+            `         node scripts/carta-kit.mjs ${slug} --servidor http://localhost:3177`,
+            "       Ojo: next start no recoge una carta nueva si quedó levantado desde antes del",
+            "       build. Si da 404 con el build recién hecho, reiniciá ese proceso.",
+          ].join("\n")
+        );
       }
       // El idioma es estado del cliente: se toca el botón, como lo haría el comensal.
       const boton = page.getByRole("button", { name: idioma.boton });

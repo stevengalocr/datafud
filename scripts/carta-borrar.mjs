@@ -16,7 +16,7 @@
  * entera: `--fixture`.
  */
 
-import { existsSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { existsSync, readFileSync, readdirSync, rmSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { correr, fallar, parseArgs } from "./carta-lib.mjs";
 
@@ -70,6 +70,13 @@ await correr(async () => {
   if (qrSrc !== readFileSync(qrPath, "utf8")) writeFileSync(qrPath, qrSrc, "utf8");
   rmSync(cartaPath, { force: true });
   rmSync(fotosDir, { recursive: true, force: true });
+  // Si era la última carta, `public/cartas` queda vacío. Git no ve los directorios vacíos, así
+  // que `git status` diría que todo está limpio mientras el árbol de trabajo no lo está.
+  try {
+    if (readdirSync(path.dirname(fotosDir)).length === 0) rmSync(path.dirname(fotosDir), { recursive: true });
+  } catch {
+    // No existía: no hay nada que limpiar.
+  }
 
   console.log(`\nCarta "${slug}" dada de baja.`);
   console.log(`  ${cartaPath}  borrado`);
