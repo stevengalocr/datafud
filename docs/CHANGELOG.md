@@ -7,6 +7,10 @@ Todas las versiones notables del proyecto. Formato basado en
 
 ## [Unreleased]
 
+## [1.3.1] — 2026-09-25 · Imágenes de la web sin texto ni marcas inventadas; QR reales
+
+Informe: `docs/plans/imagenes-loop-report.md`.
+
 ### Changed — Loop "imágenes" (2026-09-25)
 - **El hero muestra un render del producto con su etiqueta (D-049, D-050).** `banner.png` (precios
   en euros, un carrito que la Carta no tiene, "ESCANEA" en tuteo y comida generada) se reemplaza

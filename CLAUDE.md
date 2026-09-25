@@ -14,6 +14,9 @@ primero, la landing tiene 8 secciones, hay tres guías de SEO local y el materia
 `docs/ventas/`. Desde el loop "oferta sólida" (2026-09-25, D-014 y D-039 a D-041) **una Carta se
 entrega sin backend**: se publica desde `src/content/cartas/` en `/c/<slug>`, los QR impresos
 entran por `/q/<código>`, el único canal público es WhatsApp y la web habla como empresa.
+Desde el loop "imágenes" (1.3.1, D-049 a D-051) ninguna imagen muestra texto, precios, marcas
+inventadas, personas ni comida generada; los renders de IA van en `public/renders/` con la
+etiqueta "Render ilustrativo" y todo QR dibujado decodifica a `https://datafud.com/q/demo26`.
 
 ## Comandos
 
@@ -110,6 +113,10 @@ entran por `/q/<código>`, el único canal público es WhatsApp y la web habla c
   aviso de `/login`, Turnstile) se decide en el build. Cambiar una variable en Vercel exige redeploy.
 - Las fotos reales del hardware (`public/hardware/<código>.webp`) se detectan en el build:
   subirlas exige redeploy.
+- El caché local de `next/image` (`.next/cache/images`) se indexa por URL, no por contenido, y
+  `next build` no lo limpia: al reemplazar una imagen con el **mismo nombre**, local sigue
+  sirviendo la vieja. Borrar esa carpeta antes de verificar. Producción (Vercel) no tiene el
+  problema.
 - La imagen OG no puede dibujar "₡" (la fuente dinámica no baja en el build): escribir "colones".
 - Quedan restos del nombre viejo "Datfud" en `package.json`, `src/lib/supabase/types.ts` y los `.sql`.
 - Los triggers de límite de plan lanzan excepción: la UI tiene que mostrarla.

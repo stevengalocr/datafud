@@ -8,8 +8,9 @@
 
 ## Contador
 
-- Iteración actual: 6
-- Iteraciones consumidas: 6 / 12
+- Iteración actual: 7
+- Iteraciones consumidas: 7 / 12
+- **LOOP COMPLETO** (R01–R07 hechas, ninguna bloqueada)
 
 ## Capacidades del entorno
 
@@ -49,8 +50,8 @@
 | R03 | Tarjeta NFC en `#hardware` | hecho | 1 | `be38789` | READY `dpl_BFrhfgus…` | Abajo |
 | R04 | Fondo del cierre (footer) | hecho | 1 | `e9c5744` | READY `dpl_Dqv9PoVm…` | Abajo |
 | R05 | QR real en los renders de estudio | hecho | 1 | `933d8a2` | READY `dpl_3hC2DbkM…` | Abajo |
-| R06 | Auditoría de imágenes públicas | hecho | 1 | ver puente | ver puente | Abajo |
-| R07 | Verificación final, release 1.3.1 y puente | pendiente | 0 | | | |
+| R06 | Auditoría de imágenes públicas | hecho | 1 | `d84a8f8` | READY | Abajo |
+| R07 | Verificación final, release 1.3.1 y puente | hecho | 1 | release 1.3.1 | ver puente | Abajo e informe |
 
 ## Herramientas de verificación del loop
 
@@ -127,6 +128,9 @@ los tres, no solo a `stand-qr-3d.webp`.
 - Decidir si `icono-main.png` (782 KB, favicon sin optimizar) se reexporta a 512 px.
 - Confirmar que el logo del local ficticio de la demo ("Verde Limón") puede seguir: la regla
   §1.3 prohíbe marcas inventadas en imágenes; la demo lo presenta como ejemplo.
+- De la revisión fresca: fotos de Unsplash de la demo que no corresponden a su platillo; cinco
+  estrellas del stand de reseñas; "₡" a 13 px que se lee como "€" en el teléfono de la demo;
+  QR reconocible en el fondo del cierre a 1440.
 
 ## Informes por unidad
 
@@ -274,3 +278,27 @@ Hallazgo sin tocar (no es de este loop): `icono-main.png` pesa 782 KB y es el fa
 visita lo baja. Queda en PENDIENTES para decidir si se reexporta a 512 px.
 
 Puertas A en verde (`qa:landing → OK · 21 avisos`).
+
+### R07 · Verificación final, release 1.3.1 y puente
+
+- Puertas B, C, D y G (literal en `.qa/r07/puertas-bcdg.txt`):
+  ```
+  $ grep -rn "banner.png\|cta-bg.png\|nfc.png" src      → 0 coincidencias
+  $ ls public/banner.png public/cta-bg.png public/nfc.png → No such file or directory (×3)
+  ambiente-mesa.webp   | 'https://datafud.com/q/demo26'
+  ambiente-piedra.webp | 'https://datafud.com/q/demo26'
+  tarjeta-nfc.webp     | 'https://datafud.com/q/demo26'
+  stand-qr-3d-nfc.webp | 'https://datafud.com/q/demo26'
+  stand-qr-3d.webp     | 'https://datafud.com/q/demo26'
+  stand-resenas.webp   | 'https://datafud.com/q/demo26'
+  $ ls public/hardware                                    → No such file or directory
+  $ git diff a7e9798 -- supabase/ | wc -l                 → 0
+  $ git diff a7e9798 -- src/lib/constants.ts              → solo photo: "/nfc.png" → "/renders/tarjeta-nfc.webp"
+  ```
+- Puerta E (intercalada contra la línea base, 3 rondas × 3 corridas): recorrida entera
+  399,3 → 385,5 KB, al abrir 244,4 → 243,6 KB, LCP mediana de 9: 1068 → 1052 ms.
+- Revisor con contexto fresco sobre producción (`?rev=d84a8f8`) a 375 y 1440: ninguna imagen
+  promete pedidos, carrito, panel ni estadísticas; no hay euros; todos los renders de producto
+  llevan la etiqueta. Roces y hallazgos fuera de alcance en el informe y en PENDIENTES.
+- `package.json` → 1.3.1; CHANGELOG `[1.3.1]`; informe `docs/plans/imagenes-loop-report.md`;
+  `CLAUDE.md` suma la regla de imágenes y la trampa del caché de `next/image`.
