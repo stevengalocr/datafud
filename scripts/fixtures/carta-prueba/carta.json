@@ -1,0 +1,11 @@
+{
+  "nombre": "Rancho La Parcela",
+  "moneda": "USD",
+  "color_primario": "#1f4b3f",
+  "color_acento": "#c98b2e",
+  "idiomas": ["es", "en"],
+  "tagline_es": "Ordená en caja y te llamamos por tu nombre.",
+  "tagline_en": "Order at the counter and we will call your name.",
+  "codigo_qr": "prub26",
+  "logo": "logo.png"
+}

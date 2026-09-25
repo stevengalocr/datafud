@@ -35,3 +35,11 @@ yarn-error.log*
 
 # capturas de QA de la landing (npm run qa:landing)
 .qa/
+
+# kits de entrega por carta (QR y PDF que se le mandan al local)
+/entregas/
+
+# material pesado del fixture de prueba: se reconstruye con
+# `node scripts/fixtures/carta-prueba/generar.mjs`
+/scripts/fixtures/carta-prueba/fotos/
+/scripts/fixtures/carta-prueba/logo.png
