@@ -6,7 +6,11 @@
 > nombren y el `log.md` del nodo (`## [AAAA-MM-DD] ingest | Título`). El resumen
 > "qué cambiar en cada página" se agrega arriba de todo al cerrar el loop (E08).
 
-Aplicado en vault: **no** (se decide en E08, según el conector de Google Drive de la sesión).
+Aplicado en vault: **parcial**. El conector de Google Drive de esta sesión crea archivos pero no
+edita el contenido de los `.md` que ya existen, así que este puente se subió al nodo Datafud del
+vault: `02-Proyectos/Datafud/Claude-Code/vault-sync-2026-09-25-entrega-carta.md` (id de Drive
+`1v0TrwOTPjo3iWbf-YTLJz3UpGeGI2_zy`). Las páginas del vault se actualizan con "sincronizá el
+vault" usando el resumen que encabeza el archivo subido.
 
 ---
 

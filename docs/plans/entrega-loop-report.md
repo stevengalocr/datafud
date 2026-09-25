@@ -109,3 +109,12 @@ Siguen los del loop anterior (ver `docs/plans/oferta-loop-report.md`), más:
 6. **Actualizar `founderOffer.remaining`** con cada fundador que cierre; con 0 se apaga sola.
 7. Decidir el IVA y la factura electrónica 4.4; confirmar D-033 a D-038 de `OFERTA.md` §5;
    WhatsApp Business; fotos reales de los 4 stands; redes y Google Business Profile.
+
+## Vault
+
+El puente `docs/vault-sync/2026-09-25-entrega-carta.md` está completo, con los hashes reales de
+las ocho unidades, y se subió al vault de Obsidian como archivo nuevo en
+`02-Proyectos/Datafud/Claude-Code/vault-sync-2026-09-25-entrega-carta.md`. El conector de Drive de
+esta sesión crea archivos pero no edita el contenido de los `.md` que ya existen, así que las
+páginas del vault se actualizan con "sincronizá el vault", aplicando el resumen que encabeza el
+archivo subido.
