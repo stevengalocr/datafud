@@ -10,8 +10,8 @@
 
 ## Contador
 
-- Iteración actual: 5
-- Iteraciones consumidas: 5 / 14
+- Iteración actual: 6
+- Iteraciones consumidas: 6 / 14
 
 ## Capacidades del entorno
 
@@ -62,8 +62,8 @@
 | P02 | Fotos de la demo (D-053, D-054) | hecho | 1 | `17e13cd` | READY `dpl_6GGEDs9i…` | Abajo |
 | P03 | El colón se ve como colón (D-052) | hecho | 1 | `bcef43e` + `f8e7c6d` | READY `dpl_26hqvz7L…` | Abajo |
 | P04 | Íconos y logo livianos | hecho | 1 | `84458e1` | READY `dpl_DnUoYnBR…` | Abajo |
-| P05 | Decisiones comerciales en la web y los documentos | hecho | 1 | (este) | ver bloque | Abajo |
-| P06 | Cierre sin QR que compita (D-056) y stand de reseñas (D-055) | pendiente | 0 | | | |
+| P05 | Decisiones comerciales en la web y los documentos | hecho | 1 | `fd1049b` | ver P06 | Abajo |
+| P06 | Cierre sin QR que compita (D-056) y stand de reseñas (D-055) | hecho | 1 | (este) | ver bloque | Abajo |
 | P07 | Tareas sueltas | pendiente | 0 | | | |
 | P08 | Verificación final, release 1.4.0 y puente | pendiente | 0 | | | |
 
@@ -364,3 +364,45 @@ Licencia OFL al lado (`public/fonts/OFL-Inter.txt`). `@font-face` en `globals.cs
 - Puertas A (typecheck, lint, build, `qa:landing → OK · 23 avisos`), B (`git diff 6b3c231 -- supabase/`
   vacío) y G en verde. La única mención de "factura electrónica" que queda en la web está en la guía
   `/menu-digital-costa-rica`, que describe los POS de otros; no promete nada de DataFud.
+
+### P06 · Cierre sin QR que compita (D-056) y stand de reseñas (D-055)
+
+- **Antes.** A 1440 el panel del stand, con su QR, se ve a la derecha del botón de WhatsApp
+  (captura `.qa/pulido/p06-cierre-antes-1440.png`, mirada). OpenCV **no** lo decodifica en las
+  capturas del cierre a 375, 768 ni 1440 (ni a DPR 2), tampoco con el decodificador agresivo
+  nuevo (`.qa/bin/qr-duro.py`: contraste estirado, CLAHE, Otsu, umbral adaptativo, invertido, 1-3×
+  y ventanas deslizantes): la capa oscura del 80-90 % y el degradé cortan la parte de abajo del
+  código. Pero el patrón se reconoce a simple vista y un teléfono normaliza mejor que OpenCV, así
+  que se aplica D-056 igual: que el QR no esté en el cuadro, no solo que hoy no decodifique.
+- **Reencuadre por recorte** (no hizo falta el desenfoque): el QR del render ocupa x 800-1000,
+  y 345-520 (esquinas que devuelve OpenCV sobre el original). `ambiente-piedra-cierre.webp` es la
+  franja y ≥ 600 del render (1536×424, 76 KB, `sharp`, `.qa/bin/recorte-cierre.mjs`): piedra,
+  tarjeta NFC y la base del stand, sin el panel. La capa ya no se estira a la derecha (ya no hay
+  stand que esquivar): `inset-x-0`, `object-cover object-center`.
+- **Decodificador, después** (`qr.py` y `qr-duro.py`), cierre a 375, 768, 1024, 1440 y 1920, DPR 1 y 2:
+  **0 QR**. El recorte solo: `ambiente-piedra-cierre.webp | 1536x424 | None`.
+- **Renders (§D-051), siguen decodificando 6 de 6:**
+  ```
+  ambiente-mesa.webp   | 'https://datafud.com/q/demo26'
+  ambiente-piedra.webp | 'https://datafud.com/q/demo26'   (original; ya no se muestra, es la fuente del recorte)
+  tarjeta-nfc.webp     | 'https://datafud.com/q/demo26'
+  stand-qr-3d.webp     | 'https://datafud.com/q/demo26'
+  stand-qr-3d-nfc.webp | 'https://datafud.com/q/demo26'
+  stand-resenas.webp   | 'https://datafud.com/q/demo26'
+  ```
+- **Contraste** (`.qa/bin/contraste.mjs`, texto oculto al fotografiar, píxel de fondo más claro de
+  cada caja):
+
+| Elemento | 375 | 768 | 1024 | 1440 | Mínimo |
+|---|---|---|---|---|---|
+| Etiqueta "Empezá hoy" (12 px) | 5,70:1 | 5,06:1 | 4,99:1 | 4,93:1 | 4,5:1 |
+| Titular | 10,75:1 | 10,73:1 | 10,72:1 | 10,72:1 | 3:1 |
+| Texto (14 px) | 8,50:1 | 8,60:1 | 9,10:1 | 9,21:1 | 4,5:1 |
+| Botón WhatsApp (12 px) | 6,17:1 | 6,17:1 | 6,17:1 | 6,17:1 | 4,5:1 |
+
+- Capturas miradas: `.qa/pulido/p06-cierre-despues-mosaico.png` (1440, 375 y 768) y las de 1024 y
+  1920: se ve la piedra, la tarjeta y la base del stand con sus ondas NFC, oscurecidas; ningún QR.
+- **Stand de reseñas (D-055):** las cinco estrellas del render se quedan. El copy es "Para pedir
+  reseñas" y "QR y NFC que llevan al comensal directo a tu ficha de Google para dejar la reseña,
+  sin buscar nada": invita a reseñar, no promete "más estrellas" ni reseñas positivas y no filtra.
+  Sin cambios.

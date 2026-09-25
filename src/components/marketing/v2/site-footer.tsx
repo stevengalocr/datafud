@@ -25,11 +25,11 @@ const guides = [
 export function SiteFooter() {
   return (
       <footer className="relative isolate overflow-hidden bg-brand-950 text-cream-100">
-        {/* Render decorativo: la capa se estira a la derecha para que el stand caiga abajo a la
-            derecha del texto (en 375 queda fuera y se ve la piedra con la tarjeta). Va bajo una capa
-            oscura del 80-90 %: `sizes="100vw"` alcanza aunque la capa sea más ancha. */}
-        <div className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-[680px] sm:-right-[80%] lg:-right-[45%]">
-          <Image src="/renders/ambiente-piedra.webp" alt="" fill sizes="100vw" className="object-cover object-left-top" />
+        {/* Render decorativo bajo una capa oscura del 80-90 %. Es un recorte de ambiente-piedra.webp
+            sin el panel del stand (D-056): con el QR en el cuadro, alguien lo escaneaba desde la
+            compu y terminaba en la demo en lugar de WhatsApp, la única llamada a la acción acá. */}
+        <div className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-[680px]">
+          <Image src="/renders/ambiente-piedra-cierre.webp" alt="" fill sizes="100vw" className="object-cover object-center" />
           <div className="absolute inset-0 bg-brand-950/80 mix-blend-multiply" />
           <div className="absolute inset-0 bg-gradient-to-b from-brand-900/55 via-brand-950/90 to-brand-950" />
           <div className="qr-grid absolute inset-0 opacity-[0.05]" />

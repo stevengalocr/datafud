@@ -35,6 +35,10 @@ Todas las versiones notables del proyecto. Formato basado en
   setiembre de 2026): IVA incluido, plazos hábiles, inicio de la mensualidad, pago del hardware,
   paso de la Carta a un plan con pedidos, oferta de fundadores y garantía de plazo solo para la
   Carta. La web ya no promete factura electrónica. Ningún monto cambió.
+- **El cierre ya no tiene un QR detrás del botón de WhatsApp (D-056).** El fondo usa
+  `public/renders/ambiente-piedra-cierre.webp`, un recorte del render de piedra sin el panel del
+  stand (la piedra, la tarjeta NFC y la base del stand). El QR del hero se queda. Contraste AA a
+  375, 768, 1024 y 1440 px.
 - **Las fotos de la demo muestran el platillo que nombran y se sirven desde el sitio (D-053).**
   El "gallo pinto" era un guiso de pollo, el "casado" una ensalada y la "limonada" tres cócteles;
   los panqueques llevaban una mano. Las 14 fotos (el café chorreado ya tiene la suya) son reales,
