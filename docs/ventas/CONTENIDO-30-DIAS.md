@@ -89,7 +89,7 @@
 
 ### c12 · Publicación fija · "Cupos de fundadores"
 - **Imagen:** stand QR 3D sobre una mesa con el texto "Primeros 10 locales".
-- **Copy:** Primeros 10 locales: implementación de la Carta sin costo y 1 stand QR 3D incluido, a cambio de dejarnos mostrar tu local como caso. Publicar solo mientras `founderOffer.enabled` esté activo; al llenarse, se archiva.
+- **Copy:** Primeros 10 locales, en cualquier plan: en la Carta, implementación sin costo; en Estándar o Empresarial, ₡24 900 menos en la implementación. En los dos casos, 1 stand QR 3D incluido, a cambio de dejarnos mostrar tu local como caso. Publicar solo mientras `founderOffer.enabled` esté activo; al llenarse, se archiva.
 - **CTA:** "Pedí un cupo" → `https://datafud.com/?utm_source=instagram&utm_medium=social&utm_campaign=c12#planes`
 
 ---

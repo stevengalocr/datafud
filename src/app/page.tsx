@@ -96,7 +96,7 @@ export default function HomePage() {
               </div>
 
               <p className="mt-4 text-sm font-semibold text-brand-800">
-                Desde {formatCrc(PRICING.plans.basico.priceCrc)}/mes · Te la montamos nosotros · Cambios por WhatsApp
+                Desde {formatCrc(PRICING.plans.basico.priceCrc)}/mes · Garantía: carta en {PRICING.delivery.menuHours} horas hábiles · Cambios por WhatsApp
               </p>
               {founderOfferActive() && (
                 <a

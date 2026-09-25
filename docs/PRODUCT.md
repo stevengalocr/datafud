@@ -19,7 +19,7 @@ su menú, sus comandas en vivo y sus reportes desde un panel. El dueño del SaaS
 todos los negocios, sus planes y sus pagos.
 
 Tagline de marca: **"QR Menus. Orders. Analytics."**
-Promesa comercial: **carta digital lista en 48 horas y sistema completo en 15 días**,
+Promesa comercial: **carta digital lista en 48 horas hábiles y sistema completo en 15 días hábiles**,
 multi-idioma (ES · EN · PT) y multi-moneda (toda Latam + USD).
 
 > **Etapa actual (2026-09-19, decisión D-010): landing primero.** Producción no tiene backend
@@ -114,7 +114,7 @@ Colones primero (lo que ve el cliente tico); USD es la moneda interna y de la BD
 | **Mensualidad** | **₡14 900** (≈ US$29) | **₡24 900** (≈ US$49) | **₡49 900** (≈ US$99) |
 | **Implementación (pago único)** | ₡24 900 (≈ US$49) | ₡125 000 (≈ US$249) | ₡125 000 (≈ US$249) |
 | **Primer pago** (implementación + primer mes) | ₡39 800 | ₡149 900 | ₡174 900 |
-| Entrega prometida | 48 horas (solo carta) | 15 días (sistema completo) | 15 días (sistema completo) |
+| Entrega prometida | 48 horas hábiles (solo carta) | 15 días hábiles (sistema completo) | 15 días hábiles (sistema completo) |
 | Pedidos desde la mesa | — | ✓ | ✓ |
 | Idiomas | 2 (ES·EN) | 2 (ES·EN) | 3 (ES·EN·PT) |
 | Platillos | 60 | 150 | Ilimitados |
@@ -124,15 +124,20 @@ Colones primero (lo que ve el cliente tico); USD es la moneda interna y de la BD
 | Soporte | WhatsApp, mientras el plan esté activo | igual | igual |
 
 - **Pago anual de la Carta:** ₡149 000/año (≈ US$290): 2 meses gratis e implementación de la Carta incluida.
-- **Oferta de fundadores** (`PRICING.founderOffer`, activa): primeros 10 locales, implementación de la
-  Carta sin costo y 1 stand QR 3D incluido, a cambio de mostrar el local como caso.
+- **Oferta de fundadores** (`PRICING.founderOffer`, activa): primeros 10 locales, en cualquier plan
+  (D-057): en la Carta, implementación sin costo; en Estándar o Empresarial, ₡24 900 menos en la
+  implementación del sistema; en los dos casos 1 stand QR 3D incluido, a cambio de mostrar el local
+  como caso.
 - **Garantía de 48 h:** si la carta no está publicada en 48 horas hábiles desde que recibimos menú,
   fotos y logo, no se paga la implementación. Solo la Carta tiene garantía de plazo (D-038).
 - **Condiciones comerciales (2026-09-25, términos 1.1):** precios finales en colones, IVA incluido
   (D-047); "hábiles" = lunes a viernes sin feriados, desde que llega todo el material (D-048); la
   mensualidad arranca el día que la carta queda publicada (D-035); el hardware se paga por
-  adelantado con la implementación, salvo el stand de fundadores (D-036); al pasar de la Carta a
-  un plan con pedidos en los primeros 6 meses se descuenta la implementación de la Carta (D-034);
+  adelantado con la implementación o, si se pide después, al aprobar el diseño, salvo el stand de
+  fundadores (D-036, D-059); al pasar de la Carta a un plan con pedidos dentro de los 6 meses desde
+  la publicación se descuenta lo que se pagó por la implementación de la Carta: ₡24 900 con pago
+  mensual o anual, nada si entró como fundador (D-034, D-058); los plazos corren desde que están el
+  material y el pago de la implementación (D-060);
   el permiso de fundadores se da por WhatsApp y se puede retirar sin perder el beneficio (D-037).
 - **Peso de la carta (D-043):** la carta pesa menos de 2 MB al abrirla.
 - **Cambios de precios y platillos por WhatsApp** incluidos en todos los planes. **Sin permanencia**:

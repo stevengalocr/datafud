@@ -1,4 +1,5 @@
 import type { ChargeKind, OrderStatus, TenantStatus } from "@/lib/supabase/types";
+import { formatCrc } from "@/lib/currency/format";
 
 // Fuente de verdad de la línea de venta. Debe coincidir con la landing
 // (src/components/marketing/v2/pricing-v2.tsx) y con las semillas de
@@ -63,6 +64,9 @@ const SETUP_FEE = {
 
 /** Meses en que la implementación de la Carta se descuenta al pasar a un plan con pedidos (D-034). */
 const UPGRADE_CREDIT_MONTHS = 6;
+
+/** Valor de la implementación de la Carta, como se muestra ("₡24 900"). */
+const CARTA_SETUP_CRC = formatCrc(SETUP_FEE.carta.crc);
 
 export const PRICING = {
   /** Implementación por tipo, pago único (D-023). La Carta ya no paga la del sistema. */
@@ -133,13 +137,16 @@ export const PRICING = {
     enabled: true,
     spots: 10,
     remaining: null as number | null,
-    text: "Primeros 10 locales: implementación de la Carta sin costo y 1 stand QR 3D incluido, a cambio de dejarnos mostrar tu local como caso (nombre, logo y capturas de tu carta).",
-    short: "Primeros 10 locales: implementación de la Carta sin costo",
+    // D-057: vale para cualquier plan. En la Carta la implementación va sin costo; en Estándar o
+    // Empresarial se descuenta el valor de la implementación de la Carta de la del sistema.
+    text: `Primeros 10 locales, en cualquier plan: en la Carta, la implementación sin costo; en Estándar o Empresarial, ${CARTA_SETUP_CRC} menos en la implementación del sistema. En los dos casos, 1 stand QR 3D incluido, a cambio de dejarnos mostrar tu local como caso (nombre, logo y capturas de tu carta).`,
+    short: `Primeros 10 locales, en cualquier plan: ${CARTA_SETUP_CRC} menos en la implementación y 1 stand QR 3D`,
   },
   /** Textos de la oferta que se repiten en planes, FAQ y legales (D-025). */
   terms: {
+    // D-060: el plazo corre desde que están el material y el pago de la implementación.
     guarantee48h:
-      "Si tu carta no está publicada en 48 horas hábiles desde que recibimos menú, fotos y logo, no pagás la implementación.",
+      "Si tu carta no está publicada en 48 horas hábiles desde que tenemos el menú, las fotos, el logo y el pago de la implementación, no pagás la implementación.",
     /** Cómo se aplica la garantía si la implementación ya se pagó (se paga al aprobar la propuesta). */
     guaranteeRefund: "Si ya la pagaste, te la devolvemos completa.",
     /** Alcance de la garantía de plazo (D-038, 2026-09-25): solo la Carta, no el sistema completo. */
@@ -157,14 +164,18 @@ export const PRICING = {
     ivaIncluded: "Precios finales en colones, IVA incluido.",
     /** D-048: qué cuenta como "hábil" y desde cuándo corre el plazo. */
     businessDays:
-      "“Hábiles” quiere decir de lunes a viernes, sin contar feriados. El plazo empieza a correr cuando recibimos todo el material: el menú con precios, las fotos y el logo.",
+      "“Hábiles” quiere decir de lunes a viernes, sin contar feriados. El plazo empieza a correr cuando tenemos todo el material (el menú con precios, las fotos y el logo) y el pago de la implementación, lo que llegue último.",
     /** D-035: la mensualidad no corre mientras se monta la carta. */
     billingStart: "La mensualidad arranca el día que tu carta queda publicada.",
-    /** D-036: el hardware se paga por adelantado (hay costo de material antes de entregar). */
-    hardwarePayment: "El hardware se paga completo por adelantado, junto con la implementación.",
+    /** D-036 y D-059: el hardware se paga por adelantado (hay costo de material antes de entregar). */
+    hardwarePayment:
+      "El hardware se paga completo por adelantado: con la implementación o, si lo pedís después, al aprobar el diseño.",
     /** D-034: pasar de la Carta a un plan con pedidos no castiga al que empezó con la Carta. */
     upgradeCreditMonths: UPGRADE_CREDIT_MONTHS,
-    upgradeCredit: `Si pasás a Estándar o Empresarial dentro de los primeros ${UPGRADE_CREDIT_MONTHS} meses, te descontamos de la implementación del sistema lo que pagaste por la implementación de la Carta.`,
+    // D-058: se descuenta lo que se pagó; los meses cuentan desde la publicación de la carta.
+    upgradeCredit: `Si pasás a Estándar o Empresarial dentro de los ${UPGRADE_CREDIT_MONTHS} meses desde que tu carta quedó publicada, te descontamos de la implementación del sistema lo que pagaste por la de la Carta: ${CARTA_SETUP_CRC}, también si pagaste el año (es el valor de la implementación incluida).`,
+    /** D-058: el fundador no pagó implementación, así que no hay descuento. */
+    upgradeCreditFounder: "Si entraste como fundador, la implementación de la Carta no se cobró, así que no hay descuento: ya recibiste el beneficio de fundador.",
     /** D-037: condiciones de la oferta de fundadores. */
     founderConsent:
       "Nos das el permiso por WhatsApp para mostrar el nombre, el logo y capturas de la carta de tu local. Podés retirarlo cuando quieras y el beneficio no se te quita.",

@@ -33,7 +33,7 @@ Si preguntan cuántos clientes tenemos, se responde con la verdad.
 
 ### Plan Carta — ₡14 900 al mes + ₡24 900 de implementación (primer pago ₡39 800)
 
-Es lo que se entrega **en 48 horas** y lo que se vende primero. Incluye:
+Es lo que se entrega **en 48 horas hábiles** y lo que se vende primero. Incluye:
 
 - Carta digital en su propia dirección web, con el nombre, el logo y los colores del local.
 - Hasta **60 platillos**, **5 categorías** y **8 mesas** con QR.
@@ -90,9 +90,10 @@ sigue sirviendo. Un código no se reutiliza nunca para otro local.
 
 ### Cupos de fundadores
 
-Mientras la oferta esté activa (`PRICING.founderOffer.enabled`): a los **primeros 10 locales**, la
-implementación de la Carta sin costo y **1 stand QR 3D incluido**, a cambio de dejarnos mostrar el
-local como caso. El local da ese permiso por WhatsApp (nombre, logo y capturas de su carta) y
+Mientras la oferta esté activa (`PRICING.founderOffer.enabled`): a los **primeros 10 locales, en
+el plan que elijan** (D-057). En la Carta, la implementación sin costo; en Estándar o Empresarial,
+**₡24 900 menos** en la implementación del sistema. En los dos casos, **1 stand QR 3D incluido**, a
+cambio de dejarnos mostrar el local como caso. El local da ese permiso por WhatsApp (nombre, logo y capturas de su carta) y
 puede retirarlo cuando quiera sin perder el beneficio (D-037). Cuando se llenen, se apaga en el
 código y desaparece de la web. La web no dice cuántos cupos quedan (`remaining: null`) hasta que
 cierre el primero.
@@ -101,8 +102,9 @@ cierre el primero.
 
 **Precios finales en colones, IVA incluido** (D-047). SINPE Móvil o transferencia. La
 implementación se paga al aprobar la propuesta; **la mensualidad arranca el día que la carta queda
-publicada** (D-035). El hardware se paga completo por adelantado, junto con la implementación,
-salvo el stand de fundadores (D-036). **Sin contrato de
+publicada** (D-035). El hardware se paga completo por adelantado: con la implementación o, si se
+pide después, al aprobar el diseño; salvo el stand de fundadores (D-036, D-059). Los plazos corren
+desde que están el material y el pago de la implementación, lo que llegue último (D-060). **Sin contrato de
 permanencia:** se cancela con 15 días de aviso por WhatsApp y el servicio sigue hasta el final del
 período ya pagado. Con menos de 15 días de aviso se cobra un período más y el servicio sigue
 activo hasta que termine. Si se cancela antes de empezar la implementación, se devuelve dentro de
@@ -126,7 +128,7 @@ Se dice antes de cobrar, no después:
 
 ## 4. Cómo se entrega
 
-### Una Carta, en 48 horas (hoy, sin backend)
+### Una Carta, en 48 horas hábiles (hoy, sin backend)
 
 Producción todavía no tiene base de datos: la Carta se publica desde el repo (D-040). El alta no
 se escribe a mano — con 60 platillos es lento y se cuelan erratas en los precios — sino desde una
@@ -243,6 +245,24 @@ hábiles, léase D-047/D-048.
 - **D-043 · Redacción final.** "La carta pesa menos de 2 MB al abrirla" (no "recorrida entera":
   una carta de 60 platillos recorrida completa pasa de 3 MB, y lo que importa en la mesa es lo que
   baja al abrir).
+
+**Cerradas después, el mismo 2026-09-25 (loop "ajustes", términos 1.2):**
+
+- **D-057 · Fundadores en cualquier plan.** En la Carta, implementación sin costo y 1 stand QR 3D;
+  en Estándar o Empresarial, ₡24 900 menos en la implementación del sistema y 1 stand QR 3D. Va en
+  la pastilla del hero, la tarjeta de fundadores, el FAQ y los términos.
+- **D-058 · Detalle de D-034.** Se descuenta lo que el local **pagó** por la implementación de la
+  Carta: ₡24 900 con pago mensual y también con pago anual (es el valor de la implementación
+  incluida); un fundador pagó ₡0, así que no hay descuento (ya recibió el beneficio). Los 6 meses
+  cuentan desde el día en que la carta quedó publicada.
+- **D-059 · Hardware posterior.** El que se pide después de la implementación también se paga por
+  adelantado, al aprobar el diseño.
+- **D-060 · El plazo corre con material + pago.** El de 48 horas hábiles (y el de 15 días hábiles)
+  corre desde que tenemos todo el material y el pago de la implementación, lo que llegue último.
+  Va en los términos, en el FAQ de "hábiles" y en la garantía.
+- **D-061 · "Hábiles" en los títulos.** El H1 se queda ("lista en 48 horas": es el gancho) y la
+  línea de precio de abajo dice "Garantía: carta en 48 horas hábiles". En `<title>`, meta
+  description, OG, JSON-LD y guías se dice "48 horas hábiles".
 
 ---
 

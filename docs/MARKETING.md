@@ -57,14 +57,14 @@ servicio, datos del negocio, atención a clientes extranjeros.
 1. **La carta en el celular, sin fricción.** QR o NFC → carta al instante, sin apps ni cuentas (pedidos en mesa con el sistema completo).
 2. **Control total desde un panel.** Platos, comandas y reportes en un solo lugar.
 3. **Bilingüe.** Español e inglés en todos los planes; portugués en Empresarial.
-4. **Carta lista en 48 horas; sistema completo en 15 días.** Implementación llave en mano, sin curva técnica.
+4. **Carta lista en 48 horas hábiles; sistema completo en 15 días hábiles.** Implementación llave en mano, sin curva técnica.
 5. **A tu marca.** Colores, logo y fotos de tus platillos.
 
 ## 5. Estructura de la landing (embudo AIDA)
 
 | Sección | Objetivo | Copy ancla |
 |---|---|---|
-| **Hero** | Enganchar + CTA | "Tu carta digital con QR, *lista en 48 horas*" · "Quiero mi carta" / "Ver la demo" · "Desde ₡14 900/mes" |
+| **Hero** | Enganchar + CTA | "Tu carta digital con QR, *lista en 48 horas*" (el gancho se queda, D-061) · "Quiero mi carta" / "Ver la demo" · "Desde ₡14 900/mes · Garantía: carta en 48 horas hábiles" |
 | **Cómo funciona** (`#como-funciona`) | Educar con plazos | Línea de tiempo Día 0 → Plazo de la Carta → de 3 a 5 días hábiles (stands) → Día 15 + "Lo que hacemos nosotros" / "Lo que ponés vos" |
 | **Demo** (`#demo`) | Probar sin hablar con nadie | "Probalo vos mismo" · QR real desde tablet |
 | **Planes y precios** (`#planes`) | Convertir | CRC primero, implementación y primer pago por plan, garantía, fundadores |
@@ -90,7 +90,7 @@ visible de `/` (hero, planes y FAQ); la línea de tiempo no repite el plazo de l
 | Primer pago | ₡39 800 | ₡149 900 | ₡174 900 |
 | Categorías / mesas con QR | 5 / 8 | 20 / 30 | Sin límite |
 | Qué es | Carta digital por QR/NFC, sin pedidos en mesa | Carta + pedidos desde la mesa + panel | Todo, sin límites de platillos, categorías ni mesas |
-| Entrega | **48 horas** | **15 días** | **15 días** |
+| Entrega | **48 horas hábiles** | **15 días hábiles** | **15 días hábiles** |
 | Idiomas | Español e inglés | Español e inglés | Español, inglés y portugués |
 | Platillos | Hasta 60 | Hasta 150 | Ilimitados |
 | Pedidos desde la mesa | — | ✓ | ✓ |
@@ -101,8 +101,9 @@ visible de `/` (hero, planes y FAQ); la línea de tiempo no repite el plazo de l
 - **Todos los planes:** te la montamos nosotros; cambios de precios y platillos por WhatsApp
   incluidos; soporte por WhatsApp incluido mientras tengás el plan activo.
 - **Pago anual de la Carta:** ₡149 000/año (≈ US$290), 2 meses gratis, implementación incluida.
-- **Oferta de fundadores** (`founderOffer.enabled`): "Primeros 10 locales: implementación de la
-  Carta sin costo y 1 stand QR 3D incluido, a cambio de dejarnos mostrar tu local como caso."
+- **Oferta de fundadores** (`founderOffer.enabled`), en cualquier plan (D-057): en la Carta,
+  implementación sin costo; en Estándar o Empresarial, ₡24 900 menos en la implementación del
+  sistema; en los dos casos 1 stand QR 3D, a cambio de dejarnos mostrar el local como caso.
 - **Garantía de 48 h** (único uso permitido de la idea de garantía): "Si tu carta no está
   publicada en 48 horas hábiles desde que recibimos menú, fotos y logo, no pagás la implementación."
 - **Permanencia:** sin contrato; se cancela con aviso de 15 días por WhatsApp.

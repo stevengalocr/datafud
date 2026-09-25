@@ -7,6 +7,19 @@ Todas las versiones notables del proyecto. Formato basado en
 
 ## [Unreleased]
 
+### Changed — Loop "ajustes finales" (2026-09-25)
+- **Fundadores en cualquier plan (D-057).** En la Carta, implementación sin costo; en Estándar o
+  Empresarial, ₡24 900 menos en la implementación del sistema; en los dos casos 1 stand QR 3D. En
+  la pastilla del hero, la tarjeta de fundadores, el FAQ y los términos.
+- **Detalle del descuento de Carta a sistema (D-058):** ₡24 900 también con el pago anual; un
+  fundador no tiene descuento; los 6 meses cuentan desde que la carta quedó publicada.
+- **Hardware pedido después (D-059):** también por adelantado, al aprobar el diseño.
+- **El plazo corre desde el material y el pago de la implementación, lo que llegue último
+  (D-060):** en la garantía, el FAQ de "hábiles" y los términos.
+- **"48 horas hábiles" en `<title>`/meta, OG, JSON-LD y guías (D-061).** El H1 se queda ("lista
+  en 48 horas") y la línea de precio del hero dice "Garantía: carta en 48 horas hábiles".
+- **Términos 1.2** (25 de setiembre de 2026). Ningún monto cambió.
+
 ## [1.4.0] — 2026-09-25 · Lista para prospectar: demo con fotos reales, colón legible, condiciones comerciales cerradas
 
 Informe: `docs/plans/pulido-loop-report.md`.

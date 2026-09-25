@@ -54,7 +54,7 @@ const sections: GuideSection[] = [
   {
     title: "Pedidos desde la mesa, si los necesitás",
     paragraphs: [
-      `Si tu operación lo pide, el sistema completo (planes Estándar y Empresarial) deja que el comensal arme su pedido en su idioma y lo mande directo a la cocina. Queda funcionando en ${delivery.fullSystemDays} días y capacitamos a tu equipo. Si solo necesitás la carta, en ${delivery.menuHours} horas está publicada.`,
+      `Si tu operación lo pide, el sistema completo (planes Estándar y Empresarial) deja que el comensal arme su pedido en su idioma y lo mande directo a la cocina. Queda funcionando en ${delivery.fullSystemDays} días hábiles y capacitamos a tu equipo. Si solo necesitás la carta, en ${delivery.menuHours} horas hábiles está publicada.`,
     ],
   },
 ];

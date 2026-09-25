@@ -3,7 +3,7 @@ import { formatCrc } from "@/lib/currency/format";
 
 // Preguntas frecuentes de la landing. Un solo arreglo: lo usa el acordeón (#preguntas) y el
 // JSON-LD FAQPage, así que lo visible y lo estructurado coinciden 1:1. Respuestas tomadas de
-// PRICING y de las decisiones D-023 a D-027, D-034 a D-038, D-047 y D-048. Orden: precio → qué
+// PRICING y de las decisiones D-023 a D-027, D-034 a D-038, D-047, D-048 y D-057 a D-060. Orden: precio → qué
 // incluye → cómo pago → plazos → hardware → lo demás. Máximo 18. La factura electrónica no se
 // promete hasta que Steven la confirme (D-047).
 
@@ -22,7 +22,7 @@ export const FAQ_ITEMS: FaqItem[] = [
   {
     id: "primer-mes",
     q: "¿Cuánto pago en total el primer mes?",
-    a: `${firstMonth} ${whenPaid} Después pagás solo la mensualidad.${founderOfferActive() ? ` Si entrás entre los primeros ${founderOffer.spots} locales, la implementación de la Carta no se cobra y te damos 1 stand QR 3D, a cambio de dejarnos mostrar tu local como caso (nombre, logo y capturas de tu carta). ${terms.founderConsent}` : ""}`,
+    a: `${firstMonth} ${whenPaid} Después pagás solo la mensualidad.${founderOfferActive() ? ` Si entrás entre los primeros ${founderOffer.spots} locales, vale en cualquier plan: en la Carta la implementación no se cobra y en Estándar o Empresarial se descuentan ${formatCrc(PRICING.setupFee.carta.crc)} de la del sistema; en los dos casos te damos 1 stand QR 3D, a cambio de dejarnos mostrar tu local como caso (nombre, logo y capturas de tu carta). ${terms.founderConsent}` : ""}`,
   },
   {
     id: "por-que-cuesta-mas",
@@ -67,7 +67,7 @@ export const FAQ_ITEMS: FaqItem[] = [
   {
     id: "garantia-48",
     q: "¿Qué pasa si no cumplen el plazo?",
-    a: `${terms.guarantee48h} ${terms.guaranteeRefund} ${terms.guaranteeScope} El plazo corre desde que tenemos todo; si falta algo, te avisamos qué.`,
+    a: `${terms.guarantee48h} ${terms.guaranteeRefund} ${terms.guaranteeScope} El plazo corre desde que tenemos todo el material y el pago de la implementación, lo que llegue último; si falta algo, te avisamos qué.`,
   },
   {
     id: "habiles",
@@ -82,7 +82,7 @@ export const FAQ_ITEMS: FaqItem[] = [
   {
     id: "empezar-con-carta",
     q: "¿Puedo empezar solo con la carta y sumar pedidos después?",
-    a: `Sí. Arrancás con la Carta y, cuando quieras recibir pedidos desde la mesa, pasás a Estándar o Empresarial: el cambio lleva la implementación del sistema completo (${formatCrc(PRICING.setupFee.sistema.crc)}) y desde ahí la mensualidad del plan nuevo. ${terms.upgradeCredit} Los stands y las tarjetas que ya tenés siguen funcionando.`,
+    a: `Sí. Arrancás con la Carta y, cuando quieras recibir pedidos desde la mesa, pasás a Estándar o Empresarial: el cambio lleva la implementación del sistema completo (${formatCrc(PRICING.setupFee.sistema.crc)}) y desde ahí la mensualidad del plan nuevo. ${terms.upgradeCredit}${founderOfferActive() ? ` ${terms.upgradeCreditFounder}` : ""} Los stands y las tarjetas que ya tenés siguen funcionando.`,
   },
   {
     id: "pago-hardware",

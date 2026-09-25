@@ -7,8 +7,8 @@
 
 ## Contador
 
-- Iteración actual: 1
-- Iteraciones consumidas: 1
+- Iteración actual: 2
+- Iteraciones consumidas: 2
 
 ## Capacidades del entorno
 
@@ -31,8 +31,8 @@ B–G), `faq-ld.mjs`, `glifos.mjs`, `salto.mjs`, `contraste.mjs` y `contraste-te
 
 | ID | Título | Estado | Intentos | Commit | Despliegue | Evidencia |
 |---|---|---|---|---|---|---|
-| A01 | Estado y línea base | en curso | 1 | | | Abajo |
-| A02 | Condiciones (D-057 a D-061) | pendiente | 0 | | | |
+| A01 | Estado y línea base | hecho | 1 | `ae568e2` | READY | Abajo |
+| A02 | Condiciones (D-057 a D-061) | hecho | 1 | (este) | ver bloque | Abajo |
 | A03 | Pulido visual | pendiente | 0 | | | |
 | A04 | Nombre comercial (D-062) | pendiente | 0 | | | |
 | A05 | Verificación, release 1.4.1 y puente | pendiente | 0 | | | |
@@ -63,3 +63,37 @@ Capturas (miradas) en `.qa/ajustes/`: `a01-hero-{375,1440}.png` y
 ### A01 · Estado y línea base
 
 - Build y `qa:landing` en verde sobre `44f24d6`; capturas de línea base tomadas y miradas.
+
+### A02 · Condiciones (D-057 a D-061)
+
+- **`PRICING`:** `founderOffer.text` y `.short` (D-057, el monto sale de `formatCrc(SETUP_FEE.carta.crc)`);
+  `terms.guarantee48h` y `terms.businessDays` (D-060); `terms.hardwarePayment` (D-059);
+  `terms.upgradeCredit` y nuevo `terms.upgradeCreditFounder` (D-058). **Montos: 0 líneas
+  cambiadas** en `constants.ts` contra `44f24d6`.
+- **FAQ (18, sin preguntas nuevas):** primer mes (fundadores en cualquier plan), garantía (material
+  + pago, lo que llegue último), "hábiles" (vía `businessDays`), empezar con la Carta (D-058, con
+  la línea del fundador mientras la oferta esté activa), hardware (vía `hardwarePayment`).
+  `FAQ: 18 visibles · 18 en JSON-LD · 0 diferencias`.
+- **Términos 1.2:** descripción y título de la sección con "48 horas hábiles"; plazo desde material
+  + pago; "Pasar de la Carta…" con D-058 y la línea del fundador; "Oferta de fundadores" con D-057.
+  `/terminos → Versión 1.2`.
+- **D-061:** meta description, alt y título de la imagen OG, pie de la imagen OG ("CARTA EN 48
+  HORAS HÁBILES · SISTEMA EN 15 DÍAS HÁBILES") y las dos guías que decían "48 horas" / "15 días".
+  JSON-LD de los planes ya usaba `deliveryLabel` ("hábiles") desde 1.4.0.
+  **Ajuste:** D-061 da por hecho una "línea de garantía debajo" del H1 que no existía; la línea de
+  precio del hero pasa de "Te la montamos nosotros" a "Garantía: carta en 48 horas hábiles" (queda
+  bajo los botones, no pegada al H1).
+- **grep en el HTML servido** (`/`, `/terminos`, `/privacidad`, las 3 guías, `/preview`,
+  `/c/ejemplo`; quitando los `<!-- -->` de React): "48 horas" sin "hábiles" solo en
+  `/: …lista en 48 horas</span></h1>`. El H1 no tiene `aria-label`. En el código, fuera del H1,
+  solo quedan identificadores (`guarantee48h`) y comentarios.
+- **Documentos:** `OFERTA.md` (fundadores, pagos, D-057 a D-061 en §5), `PRODUCT.md`,
+  `MARKETING.md`, `KIT-PROSPECCION.md` (fundadores, garantía, plazos, mensaje del día 7, objeción
+  de pedidos) y `CONTENIDO-30-DIAS.md` (c12).
+- **Revisor fresco** (subagente sin contexto, frase por frase contra §2). Corregido: en los términos
+  "el plazo empieza cuando lleguen [los materiales]" no mencionaba el pago (ahora "material y pago,
+  lo que llegue último"); el FAQ de garantía no decía "lo que llegue último"; la pastilla del hero
+  no decía "en cualquier plan". Confirmó 0 "48 horas" sin "hábiles" fuera del H1.
+- Capturas miradas: `.qa/ajustes/a02-vista.png` (línea del hero, tarjeta de fundadores e imagen OG).
+- Puertas: typecheck 0 errores, lint ✔, build 0, `qa:landing → OK · 23 avisos`,
+  `git diff 6b3c231 -- supabase/` vacío.

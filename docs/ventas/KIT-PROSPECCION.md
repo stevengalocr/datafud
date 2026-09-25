@@ -25,9 +25,9 @@
 | Tarjeta NFC | ₡7 500 c/u |
 | Stand QR 3D + NFC / stand de reseñas | desde ₡10 000 c/u |
 
-- Plazos: carta en 48 horas; sistema completo en 15 días; stands de 3 a 5 días hábiles desde que se aprueba el diseño.
-- Garantía: si la carta no está publicada en 48 horas hábiles desde que recibimos menú, fotos y logo, no se paga la implementación.
-- Fundadores (mientras `founderOffer.enabled`): primeros 10 locales, implementación de la Carta sin costo y 1 stand QR 3D incluido, a cambio de mostrar el local como caso.
+- Plazos: carta en 48 horas hábiles; sistema completo en 15 días hábiles; stands de 3 a 5 días hábiles desde que se aprueba el diseño. Los plazos corren desde que tenemos el material y el pago de la implementación (D-060).
+- Garantía: si la carta no está publicada en 48 horas hábiles desde que tenemos menú, fotos, logo y el pago de la implementación, no se paga la implementación.
+- Fundadores (mientras `founderOffer.enabled`): primeros 10 locales, en cualquier plan (D-057). En la Carta, implementación sin costo; en Estándar o Empresarial, ₡24 900 menos en la implementación del sistema. En los dos casos, 1 stand QR 3D incluido, a cambio de mostrar el local como caso.
 - Pagos: SINPE Móvil o transferencia. Sin contrato de permanencia (15 días de aviso).
 - Hardware: sin pedido mínimo; entrega gratis en la GAM; fuera, Correos de Costa Rica con el costo de la tarifa.
 
@@ -71,7 +71,7 @@ Reemplazá `<zona>` por la zona o campaña, en minúsculas y sin tildes (ej. `he
 > Hola, le escribimos de DataFud, empresa costarricense de cartas digitales para restaurantes.
 > Hacemos cartas con QR en español e inglés para locales con turistas.
 > El cliente la abre en su teléfono y cambia de idioma con un toque; también podemos anotar alérgenos en cada platillo.
-> Te la montamos nosotros y queda lista en 48 horas.
+> Te la montamos nosotros y queda lista en 48 horas hábiles.
 > Ejemplo: https://datafud.com/menu-qr-restaurantes-turisticos?utm_source=whatsapp&utm_medium=prospeccion&utm_campaign=<zona>
 > ¿Te paso los precios?
 
@@ -93,9 +93,10 @@ Reemplazá `<zona>` por la zona o campaña, en minúsculas y sin tildes (ej. `he
 
 **Día 7**
 
-> Hola de nuevo. Te cuento que tenemos cupos de fundadores: a los primeros 10 locales la
-> implementación de la Carta les sale sin costo y les damos un stand QR 3D, a cambio de mostrar
-> el local como caso. Si te sirve, te aparto uno.
+> Hola de nuevo. Te cuento que tenemos cupos de fundadores para los primeros 10 locales, en el
+> plan que elijan: en la Carta la implementación sale sin costo y en los planes con pedidos se
+> descuentan ₡24 900 de la implementación. En los dos casos va un stand QR 3D, a cambio de
+> mostrar el local como caso. Si te sirve, te aparto uno.
 
 (Usar el día 7 solo mientras la oferta de fundadores esté activa. Si no, reemplazar por: "Si en
 algún momento querés actualizar la carta, acá estamos. Te dejamos nuestro WhatsApp guardado".)
@@ -127,7 +128,7 @@ dos casos se habla en plural: es la empresa la que atiende, no una persona suelt
 - **"¿Cuántas mesas y categorías incluye?"** "La Carta llega hasta 5 categorías y 8 mesas con QR (y 60 platillos). Si tenés más, Estándar llega a 20 categorías y 30 mesas."
 - **"¿Eso lleva IVA?"** "No, ya está incluido: los precios son finales, en colones y con IVA. Lo que ves en la web es lo que pagás." (D-047)
 - **"¿Desde cuándo pago la mensualidad?"** "Desde el día que tu carta queda publicada. Mientras la montamos, no corre; la implementación sí se paga al aprobar la propuesta." (D-035)
-- **"¿Y si después quiero pedidos?"** "Pasás a Estándar o Empresarial cuando quieras. Si es dentro de los primeros 6 meses, lo que pagaste por la implementación de la Carta se te descuenta de la del sistema." (D-034)
+- **"¿Y si después quiero pedidos?"** "Pasás a Estándar o Empresarial cuando quieras. Si es dentro de los 6 meses desde que tu carta quedó publicada, lo que pagaste por la implementación de la Carta (₡24 900, también con el pago anual) se te descuenta de la del sistema." Si entró como fundador no hay descuento: no pagó implementación. (D-034, D-058)
 - **"Mis clientes no escanean."** "Para eso está la tarjeta NFC (₡7 500): el cliente acerca el teléfono y la carta se abre sola, sin cámara. También hay stand con QR y NFC juntos, desde ₡10 000."
 - **"¿Y si no me gusta?"** "No hay contrato de permanencia: cancelás con 15 días de aviso. Y antes de decidir podés ver la carta demo desde tu celular."
 

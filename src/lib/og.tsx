@@ -74,9 +74,9 @@ export function ogImage({ title, subtitle, kicker = "datafud.com" }: { title: st
           </div>
         </div>
         <div style={{ display: "flex", gap: 36, fontSize: 18, letterSpacing: 3, color: "#dcb65a", fontFamily: "Arial, Helvetica, sans-serif" }}>
-          <span>{`CARTA LISTA EN ${PRICING.delivery.menuHours} HORAS`}</span>
+          <span>{`CARTA EN ${PRICING.delivery.menuHours} HORAS HÁBILES`}</span>
           <span>·</span>
-          <span>{`SISTEMA COMPLETO EN ${PRICING.delivery.fullSystemDays} DÍAS`}</span>
+          <span>{`SISTEMA EN ${PRICING.delivery.fullSystemDays} DÍAS HÁBILES`}</span>
           <span>·</span>
           <span>HECHO EN COSTA RICA</span>
         </div>

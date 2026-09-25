@@ -43,7 +43,7 @@ const sections: GuideSection[] = [
     title: "Autoservicio o que te lo monten",
     paragraphs: [
       "La pregunta real no es solo cuánto cuesta, sino quién hace el trabajo. Montar una carta con fotos, ordenar categorías, escribir descripciones que abran apetito, traducirla y dejar los QR bien impresos en cada mesa lleva horas. Si tenés ese tiempo, el autoservicio te sirve. Si preferís seguir atendiendo tu local, lo lógico es un servicio donde alguien lo hace por vos.",
-      `Ese es el caso de DataFud: nos pasás el menú como lo tengás (foto, PDF o escrito a mano), las fotos y el logo, y en ${delivery.menuHours} horas tu carta está publicada con tu marca, en español e inglés. Si después querés recibir pedidos desde la mesa, el sistema completo queda listo en ${delivery.fullSystemDays} días.`,
+      `Ese es el caso de DataFud: nos pasás el menú como lo tengás (foto, PDF o escrito a mano), las fotos y el logo, y en ${delivery.menuHours} horas hábiles tu carta está publicada con tu marca, en español e inglés. Si después querés recibir pedidos desde la mesa, el sistema completo queda listo en ${delivery.fullSystemDays} días hábiles.`,
     ],
   },
   {

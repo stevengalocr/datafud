@@ -6,7 +6,7 @@ import { formatCrc } from "@/lib/currency/format";
 import { SITE, whatsappDisplay } from "@/lib/site";
 
 const DESCRIPTION =
-  "Condiciones de DataFud: planes, plazos, garantía de 48 horas, pagos, cancelación, reembolsos, hardware de mesa y entrega, para restaurantes de Costa Rica.";
+  "Condiciones de DataFud: planes, plazos, garantía de 48 horas hábiles, pagos, cancelación, reembolsos, hardware de mesa y entrega, para restaurantes de Costa Rica.";
 
 export const metadata: Metadata = {
   title: "Términos del servicio",
@@ -20,7 +20,9 @@ const { plans, terms, delivery, hardwareDelivery, founderOffer } = PRICING;
 // 1.1 (2026-09-25): IVA incluido (D-047), plazos hábiles (D-048), inicio de la mensualidad (D-035),
 // pago del hardware (D-036), paso de la Carta al sistema (D-034), fundadores (D-037) y garantía
 // de plazo solo para la Carta (D-038).
-const TERMS_VERSION = "1.1";
+// 1.2 (2026-09-25): fundadores en cualquier plan (D-057), detalle del descuento de Carta a sistema
+// (D-058), hardware pedido después (D-059) y plazo desde material + pago (D-060).
+const TERMS_VERSION = "1.2";
 const TERMS_UPDATED = "25 de setiembre de 2026";
 
 // Todo monto y plazo sale de PRICING: si cambia la oferta, estos términos cambian con ella.
@@ -55,10 +57,10 @@ const sections: LegalSection[] = [
     ],
   },
   {
-    title: "Plazos y garantía de 48 horas",
+    title: "Plazos y garantía de 48 horas hábiles",
     paragraphs: [
       `Publicamos tu carta digital en ${delivery.menuHours} horas hábiles y dejamos el sistema completo (pedidos, panel y reportes) en ${delivery.fullSystemDays} días hábiles. ${terms.businessDays} La implementación se paga antes, al aprobar la propuesta.`,
-      `Garantía: ${terms.guarantee48h} ${terms.guaranteeRefund} ${terms.guaranteeScope} El plazo de ${delivery.fullSystemDays} días hábiles del sistema completo es un compromiso de trabajo, sin garantía de devolución. Si recibimos materiales incompletos, te avisamos qué falta y el plazo empieza cuando lleguen.`,
+      `Garantía: ${terms.guarantee48h} ${terms.guaranteeRefund} ${terms.guaranteeScope} El plazo de ${delivery.fullSystemDays} días hábiles del sistema completo es un compromiso de trabajo, sin garantía de devolución. Si recibimos materiales incompletos, te avisamos qué falta; el plazo empieza cuando tenemos todo el material y el pago de la implementación, lo que llegue último.`,
     ],
   },
   {
@@ -73,7 +75,7 @@ const sections: LegalSection[] = [
   {
     title: "Pasar de la Carta a un plan con pedidos",
     paragraphs: [
-      `Podés empezar con la Carta y pasar a Estándar o Empresarial cuando quieras. El cambio lleva la implementación del sistema completo (${formatCrc(PRICING.setupFee.sistema.crc)}) y desde ahí la mensualidad del plan nuevo. ${terms.upgradeCredit}`,
+      `Podés empezar con la Carta y pasar a Estándar o Empresarial cuando quieras. El cambio lleva la implementación del sistema completo (${formatCrc(PRICING.setupFee.sistema.crc)}) y desde ahí la mensualidad del plan nuevo. ${terms.upgradeCredit} ${terms.upgradeCreditFounder}`,
     ],
   },
   ...(founderOfferActive()
@@ -81,7 +83,7 @@ const sections: LegalSection[] = [
         {
           title: "Oferta de fundadores",
           paragraphs: [
-            `A los primeros ${founderOffer.spots} locales les damos la implementación de la Carta sin costo y 1 stand QR 3D, a cambio de dejarnos mostrar su local como caso: su nombre, su logo y capturas de su carta.`,
+            `Vale para los primeros ${founderOffer.spots} locales, en el plan que elijan. En la Carta, la implementación va sin costo; en Estándar o Empresarial, se descuentan ${formatCrc(PRICING.setupFee.carta.crc)} de la implementación del sistema. En los dos casos va 1 stand QR 3D incluido. A cambio, nos dejan mostrar su local como caso: su nombre, su logo y capturas de su carta.`,
             terms.founderConsent,
           ],
         },
@@ -98,7 +100,7 @@ const sections: LegalSection[] = [
     title: "Reembolsos",
     paragraphs: [
       `Si cancelás antes de que empecemos la implementación, te devolvemos el 100 % de lo que pagaste por ella dentro de ${terms.refundDays} días hábiles.`,
-      "Una vez publicada la carta, la implementación no es reembolsable, salvo que aplique la garantía de 48 horas. Las mensualidades y el pago anual ya pagados no se prorratean.",
+      "Una vez publicada la carta, la implementación no es reembolsable, salvo que aplique la garantía de 48 horas hábiles. Las mensualidades y el pago anual ya pagados no se prorratean.",
     ],
   },
   {

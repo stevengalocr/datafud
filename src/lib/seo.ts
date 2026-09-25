@@ -6,7 +6,7 @@ import { formatCrc } from "@/lib/currency/format";
 // Metadatos y datos estructurados de la landing. Fuente única para layout, páginas y JSON-LD.
 
 export const SITE_TITLE = "Menú digital con QR para restaurantes en Costa Rica · DataFud";
-export const SITE_DESCRIPTION = `Menú digital con QR y NFC para sodas, cafeterías y restaurantes de Costa Rica. Te lo montamos nosotros en ${PRICING.delivery.menuHours} horas, en español e inglés, desde ${formatCrc(PRICING.plans.basico.priceCrc)} al mes. Stands QR impresos en 3D y cambios por WhatsApp.`;
+export const SITE_DESCRIPTION = `Menú digital con QR y NFC para sodas, cafeterías y restaurantes de Costa Rica. Te lo montamos nosotros en ${PRICING.delivery.menuHours} horas hábiles, en español e inglés, desde ${formatCrc(PRICING.plans.basico.priceCrc)} al mes. Stands QR impresos en 3D y cambios por WhatsApp.`;
 
 /** Base de Open Graph y Twitter por página: Next reemplaza (no fusiona) `openGraph` del layout. */
 export function pageSocial(path: string, title: string, description: string) {
@@ -17,7 +17,7 @@ export function pageSocial(path: string, title: string, description: string) {
 }
 
 export const LEGAL_UPDATED_ISO = "2026-09-22";
-/** Términos 1.1 (D-034 a D-038, D-047, D-048). La privacidad sigue en 1.0. */
+/** Términos 1.2 (D-034 a D-038, D-047, D-048, D-057 a D-060). La privacidad sigue en 1.0. */
 export const TERMS_UPDATED_ISO = "2026-09-25";
 
 // Solo datos reales: sin dirección postal (no se publica), sin reseñas ni cifras de clientes.
