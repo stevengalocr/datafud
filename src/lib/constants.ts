@@ -172,7 +172,7 @@ export const PRICING = {
       priceUsd: 15,
       priceCrc: 7500,
       unit: "unidad",
-      photo: "/nfc.png",
+      photo: "/renders/tarjeta-nfc.webp",
       photoIsRender: true,
     },
     {

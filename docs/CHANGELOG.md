@@ -13,6 +13,11 @@ Todas las versiones notables del proyecto. Formato basado en
   por `public/renders/ambiente-mesa.webp`: un stand y una tarjeta NFC en una mesa, con el chip
   "Render ilustrativo". Su QR es real y abre `https://datafud.com/q/demo26` (D-051).
   `banner.png` se borró del repo.
+- **La tarjeta NFC de `#hardware` muestra la tarjeta que se vende (D-049).** `nfc.png` (personas,
+  una mano, comida generada y un disco metálico que no es el producto) se reemplaza por
+  `public/renders/tarjeta-nfc.webp`, encuadrado para que la tarjeta se vea entera en 5/2 y 16/9.
+  La etiqueta "Render ilustrativo" de esa pieza pasa arriba a la derecha para no tapar la tarjeta.
+  `nfc.png` se borró del repo.
 
 ## [1.3.0] — 2026-09-25 · Entrega de la Carta lista
 
