@@ -24,6 +24,9 @@ Todas las versiones notables del proyecto. Formato basado en
 - **"≈ US$" en su propia línea** en todas las tarjetas de planes y de hardware.
 - **El teléfono de `#demo` dice "Nuestra carta."** bajo "Verde Limón", igual que `/c/ejemplo`
   (decía "SODA TICA").
+- **A quién le pagás (D-062).** `#confianza` y los términos dicen "DataFud es el nombre comercial
+  con el que opera Steven Galo, responsable legal del servicio". En los términos reemplaza la
+  frase anterior, que nombraba otro nombre comercial y confundía.
 
 ## [1.4.0] — 2026-09-25 · Lista para prospectar: demo con fotos reales, colón legible, condiciones comerciales cerradas
 

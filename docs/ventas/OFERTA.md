@@ -263,6 +263,9 @@ hábiles, léase D-047/D-048.
 - **D-061 · "Hábiles" en los títulos.** El H1 se queda ("lista en 48 horas": es el gancho) y la
   línea de precio de abajo dice "Garantía: carta en 48 horas hábiles". En `<title>`, meta
   description, OG, JSON-LD y guías se dice "48 horas hábiles".
+- **D-062 · Voz de empresa y responsable legal.** D-041 no cambia. En `#confianza` y en los
+  términos va "DataFud es el nombre comercial con el que opera Steven Galo, responsable legal del
+  servicio", para que el prospecto sepa a quién le paga sin inventar una sociedad.
 
 ---
 

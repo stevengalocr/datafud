@@ -3,7 +3,7 @@ import { pageSocial } from "@/lib/seo";
 import { LegalPage, type LegalSection } from "@/components/marketing/v2/legal-page";
 import { PLAN_CODES, PRICING, founderOfferActive, setupFeeFor, tablesLabel } from "@/lib/constants";
 import { formatCrc } from "@/lib/currency/format";
-import { SITE, whatsappDisplay } from "@/lib/site";
+import { SITE, tradeNameNotice, whatsappDisplay } from "@/lib/site";
 
 const DESCRIPTION =
   "Condiciones de DataFud: planes, plazos, garantía de 48 horas hábiles, pagos, cancelación, reembolsos, hardware de mesa y entrega, para restaurantes de Costa Rica.";
@@ -21,7 +21,8 @@ const { plans, terms, delivery, hardwareDelivery, founderOffer } = PRICING;
 // pago del hardware (D-036), paso de la Carta al sistema (D-034), fundadores (D-037) y garantía
 // de plazo solo para la Carta (D-038).
 // 1.2 (2026-09-25): fundadores en cualquier plan (D-057), detalle del descuento de Carta a sistema
-// (D-058), hardware pedido después (D-059) y plazo desde material + pago (D-060).
+// (D-058), hardware pedido después (D-059), plazo desde material + pago (D-060) y a quién le pagás
+// (D-062).
 const TERMS_VERSION = "1.2";
 const TERMS_UPDATED = "25 de setiembre de 2026";
 
@@ -36,7 +37,10 @@ const sections: LegalSection[] = [
   {
     title: "Quién ofrece el servicio",
     paragraphs: [
-      `DataFud lo ofrece ${SITE.legalResponsible}, con domicilio en ${SITE.country}. En este documento nos referimos al titular como "DataFud" o "nosotros", y a quien contrata como "el cliente" o "vos".`,
+      // D-062: una sola frase dice a quién le paga el cliente. Antes seguía "DataFud lo ofrece
+      // Steven Galo, que opera bajo el nombre comercial GaloDev" y el revisor leyó dos nombres
+      // comerciales para lo mismo. `legalResponsible` sigue en privacidad y propiedad intelectual.
+      `${tradeNameNotice().replace(/\.$/, "")}, con domicilio en ${SITE.country}. En este documento nos referimos al titular como "DataFud" o "nosotros", y a quien contrata como "el cliente" o "vos".`,
       `Nos contactás por WhatsApp al ${whatsappDisplay()}. Al contratar DataFud aceptás estos términos.`,
     ],
   },

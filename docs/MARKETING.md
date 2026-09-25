@@ -28,6 +28,10 @@
 > "proyecto chico", la firma del fundador y "un producto de GaloDev". Eso no autoriza a inventar
 > sociedad, cédula jurídica, equipo ni dirección: los legales siguen nombrando al responsable
 > legal real.
+>
+> **A quién le paga el cliente (D-062):** `#confianza` y los términos dicen "DataFud es el nombre
+> comercial con el que opera Steven Galo, responsable legal del servicio" (`tradeNameNotice()` en
+> `src/lib/site.ts`). No cambia D-041: no se inventa sociedad, cédula jurídica ni equipo.
 
 ## 2. Posicionamiento
 

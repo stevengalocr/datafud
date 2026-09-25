@@ -26,6 +26,14 @@ export const SITE = {
   } as Record<"instagram" | "facebook" | "tiktok", string>,
 } as const;
 
+/**
+ * A quién le paga el cliente (D-062). La web habla como empresa (D-041) sin inventar una
+ * sociedad: esta línea dice que DataFud es un nombre comercial y quién responde por él.
+ */
+export function tradeNameNotice(): string {
+  return `${SITE.name} es el nombre comercial con el que opera ${SITE.owner}, responsable legal del servicio.`;
+}
+
 export const SOCIAL_LABEL: Record<keyof typeof SITE.social, string> = {
   instagram: "Instagram",
   facebook: "Facebook",

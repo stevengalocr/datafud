@@ -7,8 +7,8 @@
 
 ## Contador
 
-- Iteración actual: 3
-- Iteraciones consumidas: 3
+- Iteración actual: 4
+- Iteraciones consumidas: 4
 
 ## Capacidades del entorno
 
@@ -33,8 +33,8 @@ B–G), `faq-ld.mjs`, `glifos.mjs`, `salto.mjs`, `contraste.mjs` y `contraste-te
 |---|---|---|---|---|---|---|
 | A01 | Estado y línea base | hecho | 1 | `ae568e2` | READY | Abajo |
 | A02 | Condiciones (D-057 a D-061) | hecho | 1 | `96b3527` | ver A03 | Abajo |
-| A03 | Pulido visual | hecho | 1 | (este) | ver bloque | Abajo |
-| A04 | Nombre comercial (D-062) | pendiente | 0 | | | |
+| A03 | Pulido visual | hecho | 1 | `bef7c02` | ver A04 | Abajo |
+| A04 | Nombre comercial (D-062) | hecho | 1 | (este) | ver bloque | Abajo |
 | A05 | Verificación, release 1.4.1 y puente | pendiente | 0 | | | |
 
 ## Línea base (literal)
@@ -57,6 +57,11 @@ Capturas (miradas) en `.qa/ajustes/`: `a01-hero-{375,1440}.png` y
 - Fotos reales de los stands en `public/hardware/` (reemplazan los renders borrosos a 1440).
 - Redes en `SITE.social`.
 - `founderOffer.remaining`.
+- **Del revisor de A04 (dueño de soda), para decidir:** "DataFud es una empresa costarricense"
+  (D-041, `#confianza`) le hace esperar una S.A. al lado de "el nombre comercial con el que opera
+  Steven Galo"; propone "un servicio costarricense". No se cambió porque D-062 dice que D-041 no
+  cambia. También pidió una cédula para la factura: no se publica (el repo es público; ver
+  `src/lib/site.ts`).
 
 ## Informes por unidad
 
@@ -130,4 +135,22 @@ Capturas antes (build con A02, sin A03) y después, con `.qa/bin/a03-shots.mjs`,
 - **Teléfono de `#demo`.** Bajo "Verde Limón" dice `dict.es.cartaTagline` ("Nuestra carta."), el
   mismo texto que muestra `/c/ejemplo`, en lugar de "SODA TICA". Antes/después:
   `.qa/ajustes/a03-comp-demo-faq.png` (izquierda).
+- Puertas: typecheck 0 errores, lint ✔, build 0, `qa:landing → OK · 23 avisos`.
+
+### A04 · Nombre comercial (D-062)
+
+- `tradeNameNotice()` en `src/lib/site.ts`: "DataFud es el nombre comercial con el que opera
+  Steven Galo, responsable legal del servicio." (sale de `SITE.name` y `SITE.owner`).
+- **`#confianza`:** la línea va bajo el párrafo "DataFud es una empresa costarricense…", en
+  semibold (`.qa/ajustes/a04-confianza-{375,1440}.png`, miradas).
+- **Términos (siguen en 1.2, mismo día y sin release todavía):** "Quién ofrece el servicio" abre
+  con esa línea más el domicilio.
+- **Revisor fresco** (dueño de soda, capturas de `#confianza` y de los términos a 375 y 1440):
+  "entiendo que le pago a una persona, Steven Galo, que vende con la marca DataFud". Marcó que en
+  los términos, después de la línea nueva, seguía "DataFud lo ofrece Steven Galo, que opera bajo el
+  nombre comercial GaloDev": dos nombres comerciales para lo mismo. Se reemplazó por una sola
+  frase: "DataFud es el nombre comercial con el que opera Steven Galo, responsable legal del
+  servicio, con domicilio en Costa Rica." (`SITE.legalResponsible` sigue en privacidad y en
+  propiedad intelectual). Lo de "empresa" y la cédula, en PENDIENTES-STEVEN.
+- `MARKETING.md` (junto a D-041) y `OFERTA.md` §5 registran D-062.
 - Puertas: typecheck 0 errores, lint ✔, build 0, `qa:landing → OK · 23 avisos`.

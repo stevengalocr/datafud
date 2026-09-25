@@ -2,7 +2,7 @@ import Image from "next/image";
 import { Icon, type IconName } from "@/components/ui/icon";
 import { RevealOnView } from "@/components/marketing/v2/reveal";
 import { TESTIMONIALS } from "@/lib/constants";
-import { SITE, hasWhatsApp, waProps, whatsappDisplay } from "@/lib/site";
+import { SITE, hasWhatsApp, tradeNameNotice, waProps, whatsappDisplay } from "@/lib/site";
 
 // Sección #confianza: "Por qué DataFud" en cuatro puntos verificables + la tarjeta de atención.
 // Sin testimonios, logos ni cifras inventadas: los testimonios solo aparecen si TESTIMONIALS
@@ -59,6 +59,8 @@ export function TrustSection() {
                 DataFud es una empresa costarricense dedicada a sodas, cafeterías y restaurantes:
                 sabés qué pagás, qué recibís y qué pasa si un día querés irte.
               </p>
+              {/* D-062: a quién le paga el cliente, sin inventar una sociedad. */}
+              <p className="mt-3 max-w-md text-sm font-semibold leading-relaxed text-brand-800">{tradeNameNotice()}</p>
             </div>
 
             {/* Atención: quién responde del otro lado, como empresa. */}
