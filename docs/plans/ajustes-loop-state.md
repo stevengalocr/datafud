@@ -7,8 +7,9 @@
 
 ## Contador
 
-- Iteración actual: 4
-- Iteraciones consumidas: 4
+- Iteración actual: 5
+- Iteraciones consumidas: 5
+- **LOOP COMPLETO** (A01–A05 hechas, ninguna bloqueada)
 
 ## Capacidades del entorno
 
@@ -31,11 +32,11 @@ B–G), `faq-ld.mjs`, `glifos.mjs`, `salto.mjs`, `contraste.mjs` y `contraste-te
 
 | ID | Título | Estado | Intentos | Commit | Despliegue | Evidencia |
 |---|---|---|---|---|---|---|
-| A01 | Estado y línea base | hecho | 1 | `ae568e2` | READY | Abajo |
-| A02 | Condiciones (D-057 a D-061) | hecho | 1 | `96b3527` | ver A03 | Abajo |
-| A03 | Pulido visual | hecho | 1 | `bef7c02` | ver A04 | Abajo |
-| A04 | Nombre comercial (D-062) | hecho | 1 | (este) | ver bloque | Abajo |
-| A05 | Verificación, release 1.4.1 y puente | pendiente | 0 | | | |
+| A01 | Estado y línea base | hecho | 1 | `ae568e2` | READY `dpl_Ay1LH5qL…` | Abajo |
+| A02 | Condiciones (D-057 a D-061) | hecho | 1 | `96b3527` | READY `dpl_FnuznXxm…` | Abajo |
+| A03 | Pulido visual | hecho | 1 | `bef7c02` | READY `dpl_DyNvGYak…` | Abajo |
+| A04 | Nombre comercial (D-062) | hecho | 1 | `215a69b` | READY `dpl_2xFANABp…` | Abajo |
+| A05 | Verificación, release 1.4.1 y puente | hecho | 1 | (este) | ver bloque | Abajo e informe |
 
 ## Línea base (literal)
 
@@ -154,3 +155,10 @@ Capturas antes (build con A02, sin A03) y después, con `.qa/bin/a03-shots.mjs`,
   propiedad intelectual). Lo de "empresa" y la cédula, en PENDIENTES-STEVEN.
 - `MARKETING.md` (junto a D-041) y `OFERTA.md` §5 registran D-062.
 - Puertas: typecheck 0 errores, lint ✔, build 0, `qa:landing → OK · 23 avisos`.
+
+### A05 · Verificación, release 1.4.1 y puente
+
+- `package.json` y el lockfile → **1.4.1**; CHANGELOG "1.4.1 · Ajustes finales: fundadores en
+  cualquier plan, plazos con material + pago, a quién le pagás".
+- Informe: `docs/plans/ajustes-loop-report.md`.
+- Puertas B–G en producción: en el commit de verificación que sigue al release.

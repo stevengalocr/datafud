@@ -7,6 +7,10 @@ Todas las versiones notables del proyecto. Formato basado en
 
 ## [Unreleased]
 
+## [1.4.1] — 2026-09-25 · Ajustes finales: fundadores en cualquier plan, plazos con material + pago, a quién le pagás
+
+Informe: `docs/plans/ajustes-loop-report.md`.
+
 ### Changed — Loop "ajustes finales" (2026-09-25)
 - **Fundadores en cualquier plan (D-057).** En la Carta, implementación sin costo; en Estándar o
   Empresarial, ₡24 900 menos en la implementación del sistema; en los dos casos 1 stand QR 3D. En
