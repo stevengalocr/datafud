@@ -23,7 +23,7 @@ function Etiqueta({ corto, largo }: { corto: string; largo: string }) {
 
 export function PreviewBanner({ active }: { active?: string }) {
   return (
-    <div className="sticky top-0 z-50 border-b border-brand-800/40 bg-brand-950 text-cream-100">
+    <div data-preview-banner className="sticky top-0 z-50 border-b border-brand-800/40 bg-brand-950 text-cream-100">
       <div className="mx-auto flex h-[41px] max-w-6xl items-center gap-x-3 px-4 text-sm sm:gap-x-4">
         <span className="flex flex-shrink-0 items-center gap-2 rounded-full bg-accent-500 px-2.5 py-0.5 text-xs font-bold uppercase tracking-widest text-brand-950">
           <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-brand-950" />

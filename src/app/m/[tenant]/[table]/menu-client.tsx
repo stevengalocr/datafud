@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
 import { placeOrder, type CartLine } from "./actions";
 import { getDict, t } from "@/lib/i18n/dictionaries";
 import { formatMoney } from "@/lib/currency/format";
@@ -166,13 +166,19 @@ export function MenuClient({
 
   return (
     <div className="min-h-screen bg-cream-50 pb-28">
-      {/* ── Header inmersivo ──────────────────────────────── */}
-      <header className="relative isolate overflow-hidden">
+      {/* ── Header inmersivo ────────────────────────────────
+          El color del local viaja también como variable CSS: la hoja de impresión la necesita
+          para pintar la cabecera opaca, y desde CSS no se puede leer el color de un degradado. */}
+      <header
+        data-carta-cabecera
+        style={{ "--carta-primary": primary } as CSSProperties}
+        className="relative isolate overflow-hidden"
+      >
         {cover && (
           // eslint-disable-next-line @next/next/no-img-element
           <img src={cover} alt="" aria-hidden="true" className="absolute inset-0 h-full w-full scale-110 object-cover blur-[2px]" />
         )}
-        <div className="absolute inset-0" style={{ background: `linear-gradient(160deg, ${primary}f2, ${primary}cc 55%, ${primary}f7)` }} />
+        <div data-carta-fondo className="absolute inset-0" style={{ background: `linear-gradient(160deg, ${primary}f2, ${primary}cc 55%, ${primary}f7)` }} />
         <div
           className="absolute inset-0 opacity-[0.12]"
           style={{ backgroundImage: "linear-gradient(to right, #fff 1px, transparent 1px), linear-gradient(to bottom, #fff 1px, transparent 1px)", backgroundSize: "22px 22px" }}
@@ -199,7 +205,7 @@ export function MenuClient({
               </span>
             </div>
             {langs.length > 1 && (
-              <div className="flex gap-1 rounded-full bg-white/15 p-1 backdrop-blur-sm">
+              <div data-carta-idiomas className="flex gap-1 rounded-full bg-white/15 p-1 backdrop-blur-sm">
                 {langs.map((l) => (
                   <button
                     key={l}
@@ -228,6 +234,7 @@ export function MenuClient({
 
       {/* ── Chips de categoría (sticky scroll-spy) ────────── */}
       <nav
+        data-carta-nav
         className="sticky z-30 border-b border-stone-200/70 bg-cream-50/90 backdrop-blur-md"
         style={{ top: demo ? 41 : 0 }}
       >
@@ -264,6 +271,7 @@ export function MenuClient({
             <section
               key={cat.id}
               data-cat={cat.id}
+              data-carta-seccion={catIndex}
               ref={(el) => { sectionRefs.current[cat.id] = el; }}
               className="mb-10 scroll-mt-20"
             >

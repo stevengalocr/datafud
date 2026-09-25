@@ -229,3 +229,57 @@ body {
   .magnetic { transform: none !important; }
   .pin-frame { opacity: 1; transform: none; }
 }
+
+/* ── La carta en papel (D-044) ──────────────────────────────────────────────
+   El PDF de respaldo se genera abriendo la misma página `/c/<slug>` con un
+   navegador y pidiéndole que imprima, así que no hay una vista aparte que se
+   desincronice: lo que sobra en papel se apaga acá.
+
+   `print-color-adjust: exact` es necesario porque, por defecto, al imprimir se
+   descartan los fondos; sin esto la cabecera con el color del local sale en
+   blanco y la carta pierde justamente la marca que se le vendió. */
+@media print {
+  [data-carta-nav],
+  [data-carta-idiomas],
+  [data-preview-banner] {
+    display: none !important;
+  }
+
+  [data-carta-cabecera] {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+    /* La foto de fondo, ampliada y desenfocada, en papel es una mancha: el color
+       del local y el logo ya dicen de quién es la carta. */
+    break-after: avoid;
+  }
+  [data-carta-cabecera] > img {
+    display: none !important;
+  }
+  /* En papel la cabecera va con el color plano del local. El degradado de pantalla lleva
+     transparencia, y al pasar a PDF esa mezcla queda a merced del visor: en las pruebas, un
+     visor la pintaba rosada. Un color opaco se ve igual en todos. */
+  [data-carta-cabecera] [data-carta-fondo] {
+    background: var(--carta-primary, #22503a) !important;
+  }
+
+  /* Una categoría por página: en papel, un platillo partido entre dos hojas es
+     justo lo que hace que el comensal no lo pida. */
+  [data-carta-seccion] {
+    break-inside: avoid;
+    margin-bottom: 0;
+  }
+  [data-carta-seccion]:not([data-carta-seccion="0"]) {
+    break-before: page;
+  }
+  [data-carta-seccion] article {
+    break-inside: avoid;
+    box-shadow: none !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  body {
+    background: #fff !important;
+    padding-bottom: 0 !important;
+  }
+}
