@@ -12,10 +12,11 @@
 // scroll horizontal y elementos fuera del viewport, anclas que resuelven, CTAs de WhatsApp
 // (wa.me + target/rel + data-wa-origin), un solo h1, alt en imágenes, áreas táctiles ≥ 44 px,
 // sin "TODO"/"PENDIENTE" visible, acordeón y menú móvil por teclado, y las rutas
-// /, /login, /register (307 → /#contacto), /terminos, /privacidad, /preview, /preview/cliente,
+// /, /login, /register (307 → /#contacto), /terminos, /privacidad, /preview, /preview/carta,
+// /preview/cliente, /c/ejemplo,
 // /preview/dashboard, las páginas de nicho, /robots.txt, /sitemap.xml. También: montos en colones
 // sin ",00", ningún "MESA MESA", ningún "[REVISAR"/"Borrador", /preview/admin sin enlaces y con
-// noindex, y el QR de la demo igual al que genera qrcode para https://datafud.com/preview/cliente.
+// noindex, y el QR de la demo igual al que genera qrcode para https://datafud.com/preview/carta.
 // Las fotos remotas que fallen por falta de red (500 en /_next/image?url=https…) se reportan
 // como aviso, no como fallo, porque dependen del entorno.
 
@@ -37,7 +38,7 @@ const VIEWPORTS = [
   { name: "768x1024", width: 768, height: 1024, mobile: false },
   { name: "1440x900", width: 1440, height: 900, mobile: false },
 ];
-const PAGES = ["/", "/login", "/terminos", "/privacidad", "/preview", "/preview/cliente", "/preview/dashboard", ...MARKETING_PAGES];
+const PAGES = ["/", "/login", "/terminos", "/privacidad", "/preview", "/preview/carta", "/preview/cliente", "/preview/dashboard", "/c/ejemplo", ...MARKETING_PAGES];
 const IGNORED_URL = /_vercel\/insights/;
 const REMOTE_IMAGE = /\/_next\/image\?url=https?%3A|^https:\/\/images\.unsplash\.com\//;
 
@@ -83,7 +84,7 @@ try {
   for (const p of MARKETING_PAGES) if (!sitemap.includes(p)) fail(`sitemap.xml no lista ${p}`);
 
   // /preview/admin fuera del recorrido público: sin enlaces y con noindex.
-  for (const p of ["/", "/preview", "/preview/cliente", "/preview/dashboard"]) {
+  for (const p of ["/", "/preview", "/preview/carta", "/preview/cliente", "/preview/dashboard"]) {
     const html = await (await fetch(BASE + p)).text();
     if (html.includes('href="/preview/admin"')) fail(`${p} enlaza /preview/admin`);
   }
@@ -96,7 +97,7 @@ try {
   {
     const html = await (await fetch(BASE + "/")).text();
     const url = html.match(/data-demo-qr="([^"]+)"/)?.[1];
-    if (url !== "https://datafud.com/preview/cliente") fail(`QR de la demo apunta a ${url}`);
+    if (url !== "https://datafud.com/preview/carta") fail(`QR de la demo apunta a ${url}`);
     else {
       const expected = await QRCode.toString(url, { type: "svg", margin: 0, errorCorrectionLevel: "M", color: { dark: "#112a20", light: "#ffffff" } });
       const path = (svg) => svg.match(/<path[^>]*stroke="#112a20"[^>]*d="([^"]+)"/)?.[1];

@@ -87,7 +87,7 @@ export default function HomePage() {
                   Quiero mi carta
                 </MagneticCta>
                 <Link
-                  href="/preview/cliente"
+                  href="/preview/carta"
                   data-demo-open="hero"
                   className="inline-flex h-12 items-center justify-center whitespace-nowrap rounded-lg border border-stone-300 bg-white/60 px-8 text-xs font-bold uppercase tracking-[0.18em] text-brand-800 transition-all duration-300 ease-out-expo hover:border-stone-400 hover:bg-cream-100/70 active:scale-[0.98]"
                 >

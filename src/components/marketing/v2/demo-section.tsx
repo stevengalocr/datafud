@@ -8,18 +8,21 @@ import { formatCrc } from "@/lib/currency/format";
 import { SITE } from "@/lib/site";
 
 // Sección #demo: teaser de la demo "Verde Limón" (restaurante ficticio) dentro de un marco
-// de teléfono, con CTA a /preview/cliente. El marco es una composición estática con los
-// mismos datos de la demo; la demo real (interactiva) vive en /preview.
+// de teléfono, con CTA a /preview/carta. El marco es una composición estática con los mismos
+// datos de la demo; la demo real (interactiva) vive en /preview.
+//
+// Lo que se enseña primero es el plan Carta: sin carrito, sin barra de orden y sin mesa. Los
+// pedidos desde la mesa son de Estándar y Empresarial y tienen su propio botón, aparte.
 
 const SAMPLE_IDS = ["p-casado", "p-gallo", "p-limonada"] as const;
 
-// URL que codifica el QR de escritorio: la carta demo, en producción.
-export const DEMO_QR_URL = `${SITE.url}/preview/cliente`;
+// URL que codifica el QR de escritorio: la demo del plan Carta, en producción.
+export const DEMO_QR_URL = `${SITE.url}/preview/carta`;
 
 const highlights = [
   { icon: "smartphone", text: "La carta tal como la ve el comensal, con fotos y precios en colones." },
-  { icon: "receipt", text: "Armá un pedido de prueba y mandalo a cocina, sin registrarte (pedidos en mesa: Estándar y Empresarial)." },
-  { icon: "store", text: "Mirá también el panel que tendrías con el sistema completo." },
+  { icon: "globe", text: "Cambiá de español a inglés como lo haría un turista en tu mesa." },
+  { icon: "receipt", text: "¿Querés pedidos desde la mesa? Probá la versión con pedidos y el panel del sistema completo (Estándar y Empresarial)." },
 ] as const;
 
 export async function DemoSection() {
@@ -32,7 +35,6 @@ export async function DemoSection() {
   });
   const products = SAMPLE_IDS.map((id) => mockProducts.find((p) => p.id === id)).filter((p): p is NonNullable<typeof p> => Boolean(p));
   const categories = mockCategories.slice(0, 4);
-  const cartTotal = products.slice(0, 2).reduce((acc, p) => acc + p.price, 0);
 
   return (
     <section id="demo" className="scroll-mt-24 border-b border-stone-200/60 bg-white">
@@ -51,7 +53,7 @@ export async function DemoSection() {
                     <div className="absolute inset-0 bg-gradient-to-t from-brand-950/85 via-brand-950/30 to-transparent" />
                     <div className="absolute inset-x-4 bottom-3 text-cream-50">
                       <p className="font-display text-xl leading-tight">{RESTAURANT.name}</p>
-                      <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-cream-100/80">Mesa 1 · {RESTAURANT.tagline.split(" · ")[0]}</p>
+                      <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-cream-100/80">{RESTAURANT.tagline.split(" · ")[0]}</p>
                     </div>
                   </div>
                   {/* Chips de categorías */}
@@ -83,18 +85,14 @@ export async function DemoSection() {
                           </div>
                           <div className="flex items-center justify-between">
                             <span className="text-[12px] font-bold text-brand-900">{formatCrc(p.price)}</span>
-                            <span className={i < 2 ? "flex h-6 w-6 items-center justify-center rounded-full bg-brand-600 text-white" : "flex h-6 w-6 items-center justify-center rounded-full border border-stone-250 text-brand-700"}>
-                              <Icon name={i < 2 ? "check" : "plus"} size={12} />
-                            </span>
                           </div>
                         </div>
                       </li>
                     ))}
                   </ul>
-                  {/* Barra de orden */}
-                  <div className="absolute inset-x-4 bottom-4 flex items-center justify-between rounded-xl bg-brand-950 px-4 py-3 text-cream-50 shadow-lg">
-                    <span className="text-[11px] font-bold uppercase tracking-[0.14em]">Ver orden · 2</span>
-                    <span className="font-display text-base text-accent-300">{formatCrc(cartTotal)}</span>
+                  {/* Pie de la carta: en el plan Carta no hay barra de orden. */}
+                  <div className="absolute inset-x-4 bottom-4 flex items-center justify-center rounded-xl bg-brand-950 px-4 py-3 text-cream-50 shadow-lg">
+                    <span className="text-[11px] font-bold uppercase tracking-[0.14em]">Carta digital · ES · EN</span>
                   </div>
                 </div>
               </div>
@@ -134,19 +132,19 @@ export async function DemoSection() {
             </ul>
             <div className="reveal-up mt-9 flex flex-col gap-3 sm:flex-row sm:items-center">
               <Link
-                href="/preview/cliente"
-                data-demo-open="cliente"
+                href="/preview/carta"
+                data-demo-open="carta"
                 className="inline-flex min-h-12 items-center justify-center gap-2.5 rounded-lg border border-accent-400 bg-brand-600 px-6 py-3 text-center text-xs leading-snug sm:px-8 font-bold uppercase tracking-[0.18em] text-white shadow-sm transition-colors duration-300 ease-out-expo hover:bg-brand-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-400 focus-visible:ring-offset-2"
               >
                 <Icon name="smartphone" size={18} />
                 Abrir la carta demo
               </Link>
               <Link
-                href="/preview/dashboard"
-                data-demo-open="dashboard"
+                href="/preview/cliente"
+                data-demo-open="cliente"
                 className="inline-flex h-12 items-center justify-center whitespace-nowrap rounded-lg border border-stone-300 bg-white px-6 text-xs font-bold uppercase tracking-[0.18em] text-brand-800 transition-all duration-300 ease-out-expo hover:border-stone-400 hover:bg-cream-100/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-400 focus-visible:ring-offset-2"
               >
-                Ver el panel
+                Ver con pedidos
               </Link>
             </div>
             <p className="reveal-up mt-4 text-xs font-semibold uppercase tracking-wider text-brand-700/80">

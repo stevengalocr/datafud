@@ -10,20 +10,29 @@ export const metadata: Metadata = {
   alternates: { canonical: "/preview" },
 };
 
+// Orden de venta: primero el plan Carta (lo que se entrega en 48 h), después los pedidos en
+// mesa y el panel, que viven en Estándar y Empresarial.
 const cards: { href: string; title: string; desc: string; icon: IconName; tag: string }[] = [
   {
-    href: "/preview/cliente",
-    title: "Menú del comensal",
-    desc: "Lo que ve el comensal al escanear el QR: carta interactiva donde arma su pedido y lo manda a cocina. Probalo, funciona.",
+    href: "/preview/carta",
+    title: "Carta digital (plan Carta)",
+    desc: "Lo que ve el comensal al escanear el QR: la carta con fotos, precios en colones y cambio entre español e inglés. Se ordena con el salonero, como siempre.",
     icon: "smartphone",
-    tag: "Interactivo",
+    tag: "Plan Carta",
+  },
+  {
+    href: "/preview/cliente",
+    title: "Carta con pedidos",
+    desc: "La misma carta, pero el comensal arma su pedido y lo manda a cocina desde la mesa. Probalo, funciona.",
+    icon: "receipt",
+    tag: "Estándar y Empresarial",
   },
   {
     href: "/preview/dashboard",
     title: "Panel del restaurante",
     desc: "Lo que ves vos con el sistema completo: comandas, menú, ventas del día y platillos más vendidos.",
     icon: "store",
-    tag: "Operación",
+    tag: "Estándar y Empresarial",
   },
 ];
 
@@ -80,7 +89,7 @@ export default function PreviewIndex() {
         </div>
 
         <p className="mt-10 text-center text-xs font-semibold uppercase tracking-widest text-brand-700/75">
-          Un producto de GaloDev · DataFud
+          DataFud · Costa Rica
         </p>
       </main>
     </div>

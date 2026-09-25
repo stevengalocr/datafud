@@ -87,7 +87,7 @@ export function GuidePage({
                 Cotizar por WhatsApp
               </MagneticCta>
               <Link
-                href="/preview/cliente"
+                href="/preview/carta"
                 data-demo-open={`guia-${path.slice(1)}`}
                 className="inline-flex h-12 items-center justify-center rounded-lg border border-stone-300 bg-white/70 px-7 text-xs font-bold uppercase tracking-[0.16em] text-brand-800 transition-colors hover:border-stone-400 hover:bg-cream-100"
               >

@@ -1,7 +1,10 @@
 import Link from "next/link";
 
+// La demo abre por el plan Carta: es lo que se vende primero. "Con pedidos" queda de segundo
+// porque vive en Estándar y Empresarial.
 const links = [
-  { href: "/preview/cliente", label: "Menú cliente" },
+  { href: "/preview/carta", label: "Plan Carta" },
+  { href: "/preview/cliente", label: "Con pedidos" },
   { href: "/preview/dashboard", label: "Panel restaurante" },
 ];
 
