@@ -5,7 +5,7 @@ import { PricingV2 } from "@/components/marketing/v2/pricing-v2";
 import { Parallax } from "@/components/marketing/v2/parallax";
 import { MagneticCta } from "@/components/marketing/v2/magnetic-cta";
 import { Icon } from "@/components/ui/icon";
-import { PRICING } from "@/lib/constants";
+import { PRICING, founderOfferActive, founderSpotsLabel } from "@/lib/constants";
 import { ContactSection } from "@/components/marketing/v2/contact-section";
 import { HardwareSection } from "@/components/marketing/v2/hardware-section";
 import { DemoSection } from "@/components/marketing/v2/demo-section";
@@ -98,13 +98,14 @@ export default function HomePage() {
               <p className="mt-4 text-sm font-semibold text-brand-800">
                 Desde {formatCrc(PRICING.plans.basico.priceCrc)}/mes · Te la montamos nosotros · Cambios por WhatsApp
               </p>
-              {founderOffer.enabled && (
+              {founderOfferActive() && (
                 <a
                   href="#planes"
                   className="mt-3 inline-flex min-h-11 items-center gap-2 rounded-full border border-accent-300/70 bg-white/70 px-3.5 text-xs font-bold text-accent-800 transition-colors hover:border-accent-400 hover:bg-accent-50"
                 >
                   <Icon name="star" size={13} />
                   {founderOffer.short}
+                  {founderSpotsLabel() && <span className="text-accent-700">· {founderSpotsLabel()}</span>}
                   <Icon name="arrow-right" size={13} />
                 </a>
               )}

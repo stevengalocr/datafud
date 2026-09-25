@@ -1,4 +1,4 @@
-import { PLAN_CODES, PRICING, firstPaymentFor, firstYearMonthly, hardwareBy, setupFeeFor } from "@/lib/constants";
+import { PLAN_CODES, PRICING, firstPaymentFor, firstYearMonthly, founderOfferActive, hardwareBy, setupFeeFor } from "@/lib/constants";
 import { formatCrc } from "@/lib/currency/format";
 
 // Preguntas frecuentes de la landing. Un solo arreglo: lo usa el acordeón (#preguntas) y el
@@ -19,7 +19,7 @@ export const FAQ_ITEMS: FaqItem[] = [
   {
     id: "primer-mes",
     q: "¿Cuánto pago en total el primer mes?",
-    a: `${firstMonth} Después pagás solo la mensualidad.${founderOffer.enabled ? ` Si entrás entre los primeros ${founderOffer.spots} locales, la implementación de la Carta no se cobra y te damos 1 stand QR 3D, a cambio de dejarnos mostrar tu local como caso.` : ""}`,
+    a: `${firstMonth} Después pagás solo la mensualidad.${founderOfferActive() ? ` Si entrás entre los primeros ${founderOffer.spots} locales, la implementación de la Carta no se cobra y te damos 1 stand QR 3D, a cambio de dejarnos mostrar tu local como caso.` : ""}`,
   },
   {
     id: "por-que-cuesta-mas",

@@ -153,18 +153,24 @@ desde que se cobra:
 
 | Día | Qué se hace |
 |---|---|
-| 1–2 | Montar Supabase: correr `schema.sql`, `verify.sql` y cargar las variables en Vercel. |
-| 2–3 | Cerrar los hallazgos P0 de seguridad **antes** de que entre un dato real: S1 (las tres vistas de reportes sin `security_invoker`) y S3. |
-| 3 | Mover `middleware.ts` a `src/` y comprobar en el log del build que aparece "Middleware". |
-| 4 | Alta del local desde el super admin: negocio, plan, moneda, idiomas. |
-| 5–7 | Cargar el menú real y probar editar un platillo desde el panel del local. |
-| 7–8 | Storage de Supabase para las fotos de los platillos y el logo. |
-| 8–9 | Tablero de comandas que se refresca cada 15–20 segundos. |
-| 10 | Migrar la carta de `/c/<slug>` a `/m/<tenant>/<mesa>` y apuntar el `/q/<código>` al destino nuevo. El stand impreso no se toca. |
-| 11 | QR por mesa desde el panel, con `NEXT_PUBLIC_SITE_URL=https://datafud.com`. |
-| 12–13 | Pruebas de punta a punta: pedido real desde un teléfono, aislamiento entre negocios, límites de plan. |
+| 1 | Montar Supabase: correr `schema.sql`, `verify.sql` y cargar las variables en Vercel. |
+| 2 | Cerrar los hallazgos P0 de seguridad **antes** de que entre un dato real: S1 (las tres vistas de reportes sin `security_invoker`) y S3. Mover `middleware.ts` a `src/` y comprobar en el log del build que aparece "Middleware". |
+| 3–4 | **Desarrollo: alta de local desde el super admin.** Hoy no existe: `src/app/admin/actions.ts` solo tiene `setTenantStatus`, `registerPayment` y `registerCharge`. Hay que escribir la acción que crea el negocio con su plan, moneda e idiomas, y su formulario. Valida con Zod y devuelve estado (hallazgo S10). |
+| 5 | Alta del local real con esa pantalla, y su primer usuario. |
+| 6–7 | **Desarrollo: editar un platillo desde el panel.** Hoy `src/app/dashboard/actions.ts` crea, oculta y borra (`createProduct`, `toggleProductAvailability`, `deleteProduct`), pero **no edita**: para cambiarle el precio a un platillo hay que borrarlo y volverlo a crear. Falta `updateProduct` y su formulario. |
+| 8 | Cargar el menú real y probar editarlo: cambiarle el precio a un platillo y verlo en la carta. |
+| 9 | Storage de Supabase para las fotos de los platillos y el logo. |
+| 10 | Tablero de comandas que se refresca cada 15–20 segundos. |
+| 11 | Migrar la carta de `/c/<slug>` a `/m/<tenant>/<mesa>` y apuntar el `/q/<código>` al destino nuevo. El stand impreso no se toca. |
+| 12 | QR por mesa desde el panel, con `NEXT_PUBLIC_SITE_URL=https://datafud.com`. |
+| 13 | Pruebas de punta a punta: pedido real desde un teléfono, aislamiento entre negocios, límites de plan. |
 | 14 | Capacitación del local: una sesión con quien va a usar el panel, más el manual. |
 | 15 | Salida en vivo, acompañando el primer servicio. |
+
+Los dos bloques marcados como **desarrollo** son código que todavía no existe, no configuración.
+Están puestos con su nombre para que no se prometa una demostración de algo que no se puede
+demostrar: hasta que se escriban, el panel no permite ni dar de alta un local ni corregirle el
+precio a un platillo.
 
 Dos cosas que **no** se saltan: los hallazgos P0 antes del primer dato real, y la prueba desde un
 teléfono de verdad antes de decirle al cliente que está listo.

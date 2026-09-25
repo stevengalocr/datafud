@@ -118,10 +118,18 @@ export const PRICING = {
   } satisfies Record<PlanCode, Plan>,
   /** Pago anual de la Carta: 2 meses gratis y la implementación de la Carta incluida. */
   annualCarta: { usd: 290, crc: 149000 },
-  /** Oferta de fundadores (D-024). Steven la apaga con `enabled: false` al llenarse. */
+  /**
+   * Oferta de fundadores (D-024). Steven la apaga con `enabled: false` al llenarse.
+   *
+   * `remaining` es cuántos cupos quedan y lo actualiza Steven con cada fundador que cierra.
+   * Con `null` la web no dice cuántos quedan, que es lo honesto mientras nadie lleve la cuenta:
+   * una escasez que no se puede comprobar es una cifra inventada. Con 0, la oferta se apaga
+   * sola aunque `enabled` siga en true.
+   */
   founderOffer: {
     enabled: true,
     spots: 10,
+    remaining: null as number | null,
     text: "Primeros 10 locales: implementación de la Carta sin costo y 1 stand QR 3D incluido, a cambio de dejarnos mostrar tu local como caso.",
     short: "Primeros 10 locales: implementación de la Carta sin costo",
   },
@@ -251,6 +259,21 @@ export function setupFeeFor(code: PlanCode): Money {
 }
 
 /** Primer pago de un plan: implementación + primer mes (para que no haya sorpresas). */
+/**
+ * ¿Se muestra la oferta de fundadores? Con `remaining` en 0 se apaga sola: si no quedan cupos,
+ * seguir anunciándolos es prometer algo que ya no existe.
+ */
+export function founderOfferActive(): boolean {
+  const o = PRICING.founderOffer;
+  return o.enabled && o.remaining !== 0;
+}
+
+/** "Quedan 4 de 10" cuando alguien lleva la cuenta; cadena vacía cuando no. */
+export function founderSpotsLabel(): string {
+  const o = PRICING.founderOffer;
+  return o.remaining === null ? "" : `Quedan ${o.remaining} de ${o.spots}`;
+}
+
 export function firstPaymentFor(code: PlanCode): Money {
   const setup = setupFeeFor(code);
   const plan = PRICING.plans[code];
