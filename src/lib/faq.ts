@@ -42,7 +42,7 @@ export const FAQ_ITEMS: FaqItem[] = [
   {
     id: "como-pago",
     q: "¿Cómo pago?",
-    a: "Por SINPE Móvil o transferencia bancaria. La implementación se paga al aprobar la propuesta y la mensualidad, por adelantado cada mes. No hay cobros automáticos ni tarjeta guardada.",
+    a: "Por SINPE Móvil o transferencia bancaria. La implementación se paga al aprobar la propuesta. La mensualidad se paga por adelantado cada mes, desde el día que tu carta queda publicada. No hay cobros automáticos ni tarjeta guardada.",
   },
   {
     id: "cuando-empiezo",

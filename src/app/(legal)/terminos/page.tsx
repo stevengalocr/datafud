@@ -64,7 +64,7 @@ const sections: LegalSection[] = [
   {
     title: "Pagos",
     paragraphs: [
-      `Pagás por SINPE Móvil o transferencia bancaria. La implementación se paga al aprobar la propuesta y la mensualidad, por adelantado cada mes. ${terms.billingStart} No hacemos cobros automáticos ni guardamos datos de tarjetas.`,
+      `Pagás por SINPE Móvil o transferencia bancaria. La implementación se paga al aprobar la propuesta. La mensualidad se paga por adelantado cada mes: ${terms.billingStart.charAt(0).toLowerCase()}${terms.billingStart.slice(1)} No hacemos cobros automáticos ni guardamos datos de tarjetas.`,
       `${terms.hardwarePayment}${founderOfferActive() ? " La excepción es el stand incluido en la oferta de fundadores, que no se cobra." : ""}`,
       "Recibís un comprobante de cada pago.",
       "Si una mensualidad queda sin pagar, podemos pausar la carta hasta que se regularice, siempre avisándote antes por WhatsApp. Cuando se recibe el pago, la carta vuelve a estar disponible.",

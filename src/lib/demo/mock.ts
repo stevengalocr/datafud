@@ -190,16 +190,16 @@ const P = (
 
 export const mockProducts: Product[] = [
   // Desayunos
-  P("p-gallo", "c-desayunos", "Gallo Pinto con huevo", "Gallo Pinto & egg", "Arroz con frijoles típico, huevos fritos, patacones, banano y pan casero.", "Costa Rican rice and beans with fried eggs, patacones, banana and homemade bread.", 2800, "p-gallo", 1),
+  P("p-gallo", "c-desayunos", "Gallo Pinto con maduro", "Gallo Pinto & sweet plantain", "Con plátano maduro, aguacate, pico de gallo y tortilla.", "Costa Rican rice and beans with sweet plantain, avocado and a tortilla.", 2800, "p-gallo", 1),
   P("p-panqueques", "c-desayunos", "Panqueques con miel", "Honey pancakes", "Torre de panqueques con miel, banano y fresas.", "A stack of pancakes with honey, banana and strawberries.", 3200, "p-panqueques", 2),
   P("p-frutas", "c-desayunos", "Plato de Frutas", "Fruit plate", "Frutas frescas de temporada, picadas al momento.", "Fresh seasonal fruit, cut to order.", 2500, "p-frutas", 3),
   // Casados & Fuertes
   P("p-casado", "c-fuertes", "Casado con carne mechada", "Shredded beef casado", "Arroz, frijoles negros, carne mechada y plátano maduro.", "Rice, black beans, shredded beef and sweet plantain.", 4200, "p-casado", 1),
   P("p-lomito", "c-fuertes", "Lomito en salsa", "Tenderloin in sauce", "Lomito a la parrilla en salsa de la casa con vegetales.", "Grilled tenderloin in house sauce with vegetables.", 6500, "p-lomito", 2),
-  P("p-bowl", "c-fuertes", "Bowl Tropical", "Tropical bowl", "Bowl fresco de vegetales, maíz dulce, huevo y aderezo de la casa.", "Fresh bowl of vegetables, sweet corn, egg and house dressing.", 3900, "p-bowl", 3),
+  P("p-bowl", "c-fuertes", "Bowl Tropical", "Tropical bowl", "Pollo a la plancha, vegetales frescos, maíz dulce y huevo.", "Grilled chicken, fresh vegetables, sweet corn and egg.", 3900, "p-bowl", 3),
   // Bocas
-  P("p-hamburguesa", "c-bocas", "Hamburguesa Casera", "House burger", "Carne smash, queso, vegetales frescos y papas crocantes.", "Smash patty, cheese, fresh vegetables and crispy fries.", 4500, "p-hamburguesa", 1),
-  P("p-pizza", "c-bocas", "Pizza Artesanal", "Artisan pizza", "Masa madre, salsa de tomate fresco, mozzarella y cilantro.", "Sourdough base, fresh tomato sauce, mozzarella and cilantro.", 5200, "p-pizza", 2),
+  P("p-hamburguesa", "c-bocas", "Hamburguesa de pollo", "Crispy chicken burger", "Pollo empanizado, lechuga fresca y papas crocantes.", "Breaded chicken, fresh lettuce and crispy fries.", 4500, "p-hamburguesa", 1),
+  P("p-pizza", "c-bocas", "Pizza Artesanal", "Artisan pizza", "Pollo, piña, cebolla morada, mozzarella y culantro.", "Chicken, pineapple, red onion, mozzarella and cilantro.", 5200, "p-pizza", 2),
   // Frescos & Café
   P("p-fresco", "c-bebidas", "Fresco Natural de Naranja", "Fresh orange juice", "Jugo de naranja recién exprimido, sin azúcar añadida.", "Freshly squeezed orange juice, no added sugar.", 1400, "p-fresco", 1),
   P("p-limonada", "c-bebidas", "Limonada de la casa", "House lemonade", "Limonada con hierbabuena, la favorita de Verde Limón.", "Lemonade with spearmint, the Verde Limón favourite.", 1300, "p-limonada", 2),
@@ -228,7 +228,7 @@ const oi = (id: string, order_id: string, product_id: string, name: string, pric
 
 export const mockOrderItems: Record<string, OrderItem[]> = {
   "o-1": [oi("oi-1", "o-1", "p-casado", "Casado con carne mechada", 4200, 2, "Sin cebolla")],
-  "o-2": [oi("oi-3", "o-2", "p-hamburguesa", "Hamburguesa Casera", 4500, 1)],
+  "o-2": [oi("oi-3", "o-2", "p-hamburguesa", "Hamburguesa de pollo", 4500, 1)],
   "o-3": [oi("oi-4", "o-3", "p-lomito", "Lomito en salsa", 6500, 1), oi("oi-5", "o-3", "p-bowl", "Bowl Tropical", 3900, 1), oi("oi-6", "o-3", "p-limonada", "Limonada de la casa", 1300, 1)],
   "o-4": [oi("oi-7", "o-4", "p-panqueques", "Panqueques con miel", 3200, 1)],
   "o-5": [oi("oi-8", "o-5", "p-lomito", "Lomito en salsa", 6500, 1)],
@@ -250,8 +250,8 @@ export const mockDailySales = [
 // Ordenados por unidades vendidas, de mayor a menor.
 export const mockTopProducts = [
   { name: "Casado con carne mechada", units: 86, revenue: 361200 },
-  { name: "Hamburguesa Casera", units: 64, revenue: 288000 },
-  { name: "Gallo Pinto con huevo", units: 58, revenue: 162400 },
+  { name: "Hamburguesa de pollo", units: 64, revenue: 288000 },
+  { name: "Gallo Pinto con maduro", units: 58, revenue: 162400 },
   { name: "Fresco Natural de Naranja", units: 71, revenue: 99400 },
   { name: "Lomito en salsa", units: 29, revenue: 188500 },
 ].sort((a, b) => b.units - a.units);

@@ -20,7 +20,7 @@ const milestones: Milestone[] = [
   {
     when: "Carta publicada",
     title: "Tu carta, en línea",
-    desc: "Publicada con tu marca, en español e inglés, y con un QR provisional para usarla ese mismo día.",
+    desc: "Publicada con tu marca, en español e inglés, y con una hoja de QR para recortar y usarla desde ese día, mientras llegan los stands. Es el mismo código que llevan los stands.",
     icon: "qr",
     accent: true,
   },
@@ -31,7 +31,7 @@ const milestones: Milestone[] = [
     icon: "printer",
   },
   {
-    when: `Día ${PRICING.delivery.fullSystemDays}`,
+    when: `Día hábil ${PRICING.delivery.fullSystemDays}`,
     title: "Sistema completo",
     desc: "Solo en Estándar y Empresarial: pedidos desde la mesa, panel de comandas y reportes, con tu equipo capacitado.",
     icon: "receipt",
