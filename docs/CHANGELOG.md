@@ -7,6 +7,10 @@ Todas las versiones notables del proyecto. Formato basado en
 
 ## [Unreleased]
 
+## [1.4.0] — 2026-09-25 · Lista para prospectar: demo con fotos reales, colón legible, condiciones comerciales cerradas
+
+Informe: `docs/plans/pulido-loop-report.md`.
+
 ### Changed — Loop "pulido" (2026-09-25)
 - **Las fuentes de marca pintan por primera vez desde el rediseño editorial.** `globals.css`
   redeclaraba `--font-sans` y `--font-display` en `:root` con Georgia y la fuente del sistema, y
@@ -53,6 +57,11 @@ Todas las versiones notables del proyecto. Formato basado en
 - El paquete se llama `datafud` (quedaba el nombre viejo en `package.json`, el lockfile y
   `.env.example`). Los `.sql` de `supabase/` no se tocan: quedan para el loop del backend.
 - `qa:landing` no cuenta como área táctil chica un enlace `sr-only` mientras está oculto.
+- Revisión final de un dueño de soda sin contexto: el gallo pinto de la demo pasa a la foto tica
+  (los frijoles no se leían a 96 px) y la anterior queda de portada; la hamburguesa es "de pollo",
+  la pizza y el bowl dicen lo que muestran sus fotos. "Día 15" pasa a "Día hábil 15", "¿Cómo
+  pago?" separa implementación y mensualidad, y el "QR provisional" se explica como la hoja de QR
+  con el mismo código de los stands.
 - **Las fotos de la demo muestran el platillo que nombran y se sirven desde el sitio (D-053).**
   El "gallo pinto" era un guiso de pollo, el "casado" una ensalada y la "limonada" tres cócteles;
   los panqueques llevaban una mano. Las 14 fotos (el café chorreado ya tiene la suya) son reales,

@@ -10,8 +10,9 @@
 
 ## Contador
 
-- Iteración actual: 7
-- Iteraciones consumidas: 7 / 14
+- Iteración actual: 8
+- Iteraciones consumidas: 8 / 14
+- **LOOP COMPLETO** (P01–P08 hechas, ninguna bloqueada)
 
 ## Capacidades del entorno
 
@@ -64,8 +65,8 @@
 | P04 | Íconos y logo livianos | hecho | 1 | `84458e1` | READY `dpl_DnUoYnBR…` | Abajo |
 | P05 | Decisiones comerciales en la web y los documentos | hecho | 1 | `fd1049b` | READY `dpl_Hxwq5Yzr…` | Abajo |
 | P06 | Cierre sin QR que compita (D-056) y stand de reseñas (D-055) | hecho | 1 | `e78de53` | READY `dpl_GHrsBy6f…` | Abajo |
-| P07 | Tareas sueltas | hecho | 1 | (este) | ver bloque | Abajo |
-| P08 | Verificación final, release 1.4.0 y puente | pendiente | 0 | | | |
+| P07 | Tareas sueltas | hecho | 1 | `2e47417` | READY `dpl_Cd6gqUvd…` | Abajo |
+| P08 | Verificación final, release 1.4.0 y puente | hecho | 1 | (este) | ver bloque | Abajo e informe |
 
 ## Herramientas de verificación del loop
 
@@ -157,6 +158,14 @@ cabecera.
 - WhatsApp Business y Google Business Profile. Las redes van a `SITE.social`.
 - Fotos reales de los 4 productos en `public/hardware/<código>.webp`.
 - `founderOffer.remaining = 9` cuando cierre el primer fundador.
+- **Del revisor final de P08 (dueño de soda), para decidir:** la web habla como empresa ("una
+  persona de nuestro equipo") y los términos nombran a una persona con nombre comercial (D-041
+  lo permite, pero al prospecto le generó duda); la factura electrónica pesa para su contabilidad;
+  la oferta de fundadores no dice si aplica a Estándar; los renders de "Stand QR 3D + NFC" y
+  "Stand de reseñas" se ven borrosos a 1440; el botón flotante de WhatsApp tapa la esquina del
+  render del hero a 375; los "≈ US$" caen en otra línea en algunas tarjetas y la tarjeta NFC no
+  dice "Desde"; la columna izquierda de la FAQ queda vacía en escritorio; el teléfono de `#demo`
+  dice "SODA TICA" y la carta real "Nuestra carta.".
 - **Del revisor fresco de P05 (necesitan decisión):** D-034 con pago anual (la implementación va
   "incluida" en los ₡149 000: ¿cuánto se descuenta?) y con fundadores (pagaron ₡0); desde cuándo
   se cuentan los 6 meses; si el hardware comprado meses después también va por adelantado (hoy
@@ -458,3 +467,41 @@ Licencia OFL al lado (`public/fonts/OFL-Inter.txt`). `@font-face` en `globals.cs
 - **`qa:landing`** contaba el enlace de salto oculto (1×1 px) como área táctil chica (23 → 27
   avisos); ahora se salta lo `sr-only` y vuelve a 23 (los mismos de antes).
 - Puertas A en verde tras `npm ci`: typecheck, lint, build, `qa:landing → OK · 23 avisos`.
+
+### P08 · Verificación final, release 1.4.0 y puente
+
+- **Revisor final** (subagente sin contexto, "dueño de soda que recibe el enlace por WhatsApp";
+  29 capturas a 375 y 1440 de la home, `/c/ejemplo` y términos, en `.qa/pulido/revisor/`).
+  Se corrigió lo que tocaba a este loop:
+  - **Fotos (P02):** el gallo pinto elegido (desayuno con huevos) "parece arroz integral, no se
+    ven frijoles" a 96 px: cierto (mirado en `.qa/pulido/p08-fotos-dudosas.png`). Pasa a la foto
+    tica de Unsplash (`Ycuvvz_Px8c`, recorte cuadrado del plato) como "Gallo Pinto con maduro", y
+    la de Pexels queda de portada. La "Hamburguesa Casera" era de pollo empanizado → "Hamburguesa
+    de pollo"; la pizza lleva pollo, piña y cebolla morada; el bowl, pollo: descripciones
+    ajustadas. Captura final mirada: `.qa/pulido/p08-carta-375-full.png`, **14 de 14 corresponden**.
+  - **Texto:** "Día 15" → "Día hábil 15" (sección de implementación); "¿Cómo pago?" y los términos
+    separan cuándo se paga la implementación y cuándo la mensualidad; el "QR provisional" se
+    explica como la hoja de QR con el mismo código de los stands (D-014).
+  - Lo demás quedó en PENDIENTES-STEVEN (necesita decisión o es de un loop anterior).
+- **Tropiezo.** El script que escribía los documentos del release falló a mitad (el lockfile
+  tiene "1.3.1" también en una dependencia y la verificación esperaba dos apariciones) y, como el
+  commit iba después de un `;`, `d472083` salió solo con el código, las fotos, el informe y
+  `package.json` en 1.4.0, sin lockfile, CHANGELOG, estado ni puente. El código de ese commit ya
+  había pasado typecheck, lint, build y `qa:landing`; el commit siguiente completa el release.
+  Desde acá, el commit va encadenado con `&&` a todo lo anterior.
+- **Release:** `package.json` y el lockfile → **1.4.0**; CHANGELOG "1.4.0 · Lista para
+  prospectar: demo con fotos reales, colón legible, condiciones comerciales cerradas".
+- **Informe:** `docs/plans/pulido-loop-report.md`.
+- **Puertas antes del commit (local):** typecheck 0 errores, lint ✔, build 0,
+  `qa:landing → OK · 23 avisos`, `FAQ: 18 visibles · 18 en JSON-LD · 0 diferencias`,
+  `peso-carta → OK: 1.41 MB al abrir`.
+- **Puertas B–G en producción sobre `2e47417` (`dpl_Cd6gqUvd…`), `sh .qa/bin/puertas.sh`:**
+  ```
+  B  git diff 6b3c231 -- supabase/ : 0 líneas · montos de PRICING: 0 líneas cambiadas
+  C  6/6 renders → 'https://datafud.com/q/demo26' · cierre 375/768/1440 (y 1440@2x): None
+  D  /  mailto:=0 correos=0 €=0 · /c/ejemplo  mailto:=0 correos=0 €=0
+  E  peso-carta → OK: 1.42 MB al abrir (límite 2,00 MB) · /c/ejemplo: 0 hosts externos, 0 remotas
+  F  / → 200 · /c/ejemplo → 200 · /q/demo26 → 307 https://datafud.com/c/ejemplo · /terminos → Versión 1.1
+  G  FAQ: 18 visibles · 18 en JSON-LD · 0 diferencias
+  ```
+  La corrida sobre el commit de release va en el commit de verificación que sigue.
