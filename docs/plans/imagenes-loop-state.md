@@ -8,8 +8,8 @@
 
 ## Contador
 
-- Iteración actual: 3
-- Iteraciones consumidas: 3 / 12
+- Iteración actual: 4
+- Iteraciones consumidas: 4 / 12
 
 ## Capacidades del entorno
 
@@ -46,8 +46,8 @@
 |---|---|---|---|---|---|---|
 | R01 | Estado, línea base y archivos | hecho | 1 | `ebd5e77` | READY `dpl_GSgjRAdP…` | Abajo |
 | R02 | Hero | hecho | 1 | `d5013ba` + `03e47c1` | READY `dpl_3e79x2bj…` | Abajo |
-| R03 | Tarjeta NFC en `#hardware` | hecho | 1 | ver puente | ver puente | Abajo |
-| R04 | Fondo del cierre (footer) | pendiente | 0 | | | |
+| R03 | Tarjeta NFC en `#hardware` | hecho | 1 | `be38789` | ver puente | Abajo |
+| R04 | Fondo del cierre (footer) | hecho | 1 | ver puente | ver puente | Abajo |
 | R05 | QR real en los renders de estudio | pendiente | 0 | | | |
 | R06 | Auditoría de imágenes públicas | pendiente | 0 | | | |
 | R07 | Verificación final, release 1.3.1 y puente | pendiente | 0 | | | |
@@ -172,3 +172,32 @@ los tres, no solo a `stand-qr-3d.webp`.
 - Etiquetas: `375px: "Render ilustrativo" en #hardware = 4, con caja visible = 4` (ídem 1440).
 - `nfc.png` borrado; `grep -rn "nfc\.png" src scripts` → sin resultados.
 - Puertas A en verde (`qa:landing → OK · 21 avisos`).
+
+### R04 · Fondo del cierre (footer)
+
+- Antes: `cta-bg.png en / = 1`.
+- `site-footer.tsx`: `renders/ambiente-piedra.webp`, `alt=""`, mismas capas de oscurecido.
+- **Ajuste respecto del prompt.** Con `object-position` solo no alcanza: a 1440 la capa mide
+  1440×680 y el render se escala por el ancho, así que no hay holgura horizontal y el stand quedaba
+  justo detrás del párrafo y del botón (captura mirada y descartada). La capa se estira a la
+  derecha (`sm:-right-[80%] lg:-right-[45%]`) con `object-left-top`: el stand cae abajo a la
+  derecha del texto a 1024 y 1440, fuera de pantalla a 768, y a 375 se ve la piedra con la
+  tarjeta en su base, debajo del botón. `sizes="100vw"`: con `145vw` el escritorio bajaba la
+  variante de 3840 px para un fondo que va bajo una capa oscura del 80–90 %.
+- Capturas a 375, 768, 1024 y 1440 miradas.
+- Contraste (texto oculto al fotografiar; el fondo es el píxel **más claro** de la caja; el color
+  del texto se mezcla con su alfa). No hizo falta subir la opacidad de la capa:
+
+| Elemento | 375 | 768 | 1024 | 1440 | Mínimo |
+|---|---|---|---|---|---|
+| Etiqueta "Empezá hoy" (12 px) | 4,80:1 | 4,98:1 | 4,98:1 | 4,91:1 | 4,5:1 |
+| Titular (32–56 px) | 10,86:1 | 11,00:1 | 11,18:1 | 11,01:1 | 3:1 |
+| Texto (14 px, 80 % de alfa) | 8,41:1 | 8,52:1 | 9,10:1 | 9,31:1 | 4,5:1 |
+| Botón WhatsApp (12 px, fondo sólido) | 6,17:1 | 6,17:1 | 6,17:1 | 6,17:1 | 4,5:1 |
+
+  Línea base con `cta-bg.png` (misma herramienta): etiqueta 5,45 / 4,98, titular 11,17 / 11,29,
+  texto 8,42 / 9,66 (375 / 1440). La etiqueta queda más cerca del mínimo porque su peor píxel es
+  su propio borde translúcido (`border-white/15`), no la foto.
+- Peso de la home (375×812): recorrida entera **399,2 → 382,1 KB**; al abrir 244,2 → 243,6 KB.
+- `cta-bg.png` borrado; `grep -rn "cta-bg" src scripts` → sin resultados. Puertas A en verde
+  (`qa:landing → OK · 21 avisos`).

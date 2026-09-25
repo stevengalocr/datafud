@@ -25,8 +25,11 @@ const guides = [
 export function SiteFooter() {
   return (
       <footer className="relative isolate overflow-hidden bg-brand-950 text-cream-100">
-        <div className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-[680px]">
-          <Image src="/cta-bg.png" alt="" fill sizes="100vw" className="object-cover object-center" />
+        {/* Render decorativo: la capa se estira a la derecha para que el stand caiga abajo a la
+            derecha del texto (en 375 queda fuera y se ve la piedra con la tarjeta). Va bajo una capa
+            oscura del 80-90 %: `sizes="100vw"` alcanza aunque la capa sea más ancha. */}
+        <div className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-[680px] sm:-right-[80%] lg:-right-[45%]">
+          <Image src="/renders/ambiente-piedra.webp" alt="" fill sizes="100vw" className="object-cover object-left-top" />
           <div className="absolute inset-0 bg-brand-950/80 mix-blend-multiply" />
           <div className="absolute inset-0 bg-gradient-to-b from-brand-900/55 via-brand-950/90 to-brand-950" />
           <div className="qr-grid absolute inset-0 opacity-[0.05]" />

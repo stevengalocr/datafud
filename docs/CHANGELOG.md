@@ -18,6 +18,12 @@ Todas las versiones notables del proyecto. Formato basado en
   `public/renders/tarjeta-nfc.webp`, encuadrado para que la tarjeta se vea entera en 5/2 y 16/9.
   La etiqueta "Render ilustrativo" de esa pieza pasa arriba a la derecha para no tapar la tarjeta.
   `nfc.png` se borró del repo.
+- **El fondo del cierre ya no muestra un restaurante inventado (D-049).** `cta-bg.png` ("THE
+  WOODEN OAK", "SCAN FOR MENU", personas y comida) se reemplaza por
+  `public/renders/ambiente-piedra.webp`, decorativo y bajo las mismas capas oscuras. La capa se
+  estira a la derecha para que el stand caiga fuera de la columna de texto. Contraste medido
+  contra el píxel más claro detrás de cada texto: todo AA a 375, 768, 1024 y 1440 px.
+  `cta-bg.png` se borró del repo.
 
 ## [1.3.0] — 2026-09-25 · Entrega de la Carta lista
 
