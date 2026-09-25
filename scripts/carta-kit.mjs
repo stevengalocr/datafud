@@ -15,15 +15,61 @@
  * a `/q/<codigo>`, nunca a la carta directa, para poder mover la carta sin reimprimir (D-014).
  * `--servidor` es de dónde se leen las páginas para armar los PDF; por defecto el mismo `--base`,
  * pero se le puede pasar un `next start` local para generar el kit sin haber desplegado todavía.
+ *
+ * Chromium, en este orden: `KIT_CHROMIUM` (ruta a un binario), `/opt/pw-browsers/chromium` si
+ * existe (entornos en la nube) y el que instaló Playwright. Sin ninguno, pide
+ * `npx playwright install chromium`.
  */
 
 import QRCode from "qrcode";
 import { chromium } from "@playwright/test";
-import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, readFileSync, statSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { correr, fallar, parseArgs } from "./carta-lib.mjs";
 
 const TEXTO_QR = "Escanee para ver la carta · Scan for the menu";
+
+const INSTALAR = "npx playwright install chromium";
+const CHROMIUM_NUBE = "/opt/pw-browsers/chromium";
+
+const esArchivo = (ruta) => existsSync(ruta) && statSync(ruta).isFile();
+
+/** Qué Chromium usa el kit y de dónde salió. Falla con la instrucción si no hay ninguno. */
+function chromiumDelKit() {
+  const propio = process.env.KIT_CHROMIUM;
+  if (propio) {
+    if (!esArchivo(propio)) {
+      fallar(
+        `KIT_CHROMIUM apunta a ${propio}, que no es un archivo.\n` +
+          `       Corregí la ruta o borrá la variable y corré: ${INSTALAR}`
+      );
+    }
+    return { executablePath: propio, origen: "KIT_CHROMIUM" };
+  }
+  if (esArchivo(CHROMIUM_NUBE)) return { executablePath: CHROMIUM_NUBE, origen: CHROMIUM_NUBE };
+  const dePlaywright = chromium.executablePath();
+  if (dePlaywright && esArchivo(dePlaywright)) return { executablePath: dePlaywright, origen: "Playwright" };
+  fallar(
+    "No hay Chromium para armar los PDF del kit.\n" +
+      `       Corré: ${INSTALAR}\n` +
+      "       (o apuntá KIT_CHROMIUM a un Chromium que ya tengas)."
+  );
+}
+
+async function abrirChromium() {
+  const { executablePath, origen } = chromiumDelKit();
+  try {
+    const browser = await chromium.launch({ executablePath });
+    console.log(`  chromium: ${origen} (${executablePath})`);
+    return browser;
+  } catch (e) {
+    fallar(
+      `No se pudo abrir Chromium desde ${origen} (${executablePath}).\n` +
+        `       ${String(e.message).split("\n")[0]}\n` +
+        `       Si no es un Chromium válido, corregí KIT_CHROMIUM o corré: ${INSTALAR}`
+    );
+  }
+}
 
 await correr(async () => {
   const args = parseArgs(process.argv.slice(2));
@@ -55,6 +101,9 @@ await correr(async () => {
         `       usá --servidor ${base}, que solo cambia de dónde se leen las páginas del PDF.`
     );
   }
+
+  // Antes de escribir nada: sin Chromium no hay PDF, y un kit a medias confunde.
+  chromiumDelKit();
 
   // ── El código impreso y el nombre del local salen del repo, no de argumentos ─
   const qrSrc = readFileSync("src/content/qr.ts", "utf8");
@@ -98,7 +147,7 @@ await correr(async () => {
     color: { dark: "#112a20", light: "#ffffff" },
   });
 
-  const browser = await chromium.launch();
+  const browser = await abrirChromium();
   try {
     // ── 2. Hoja de 4 QR para recortar ────────────────────────────────────────
     const hoja = `<!doctype html><html lang="es"><head><meta charset="utf-8">

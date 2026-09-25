@@ -10,8 +10,8 @@
 
 ## Contador
 
-- Iteración actual: 6
-- Iteraciones consumidas: 6 / 14
+- Iteración actual: 7
+- Iteraciones consumidas: 7 / 14
 
 ## Capacidades del entorno
 
@@ -62,9 +62,9 @@
 | P02 | Fotos de la demo (D-053, D-054) | hecho | 1 | `17e13cd` | READY `dpl_6GGEDs9i…` | Abajo |
 | P03 | El colón se ve como colón (D-052) | hecho | 1 | `bcef43e` + `f8e7c6d` | READY `dpl_26hqvz7L…` | Abajo |
 | P04 | Íconos y logo livianos | hecho | 1 | `84458e1` | READY `dpl_DnUoYnBR…` | Abajo |
-| P05 | Decisiones comerciales en la web y los documentos | hecho | 1 | `fd1049b` | ver P06 | Abajo |
-| P06 | Cierre sin QR que compita (D-056) y stand de reseñas (D-055) | hecho | 1 | (este) | ver bloque | Abajo |
-| P07 | Tareas sueltas | pendiente | 0 | | | |
+| P05 | Decisiones comerciales en la web y los documentos | hecho | 1 | `fd1049b` | READY `dpl_Hxwq5Yzr…` | Abajo |
+| P06 | Cierre sin QR que compita (D-056) y stand de reseñas (D-055) | hecho | 1 | `e78de53` | READY `dpl_GHrsBy6f…` | Abajo |
+| P07 | Tareas sueltas | hecho | 1 | (este) | ver bloque | Abajo |
 | P08 | Verificación final, release 1.4.0 y puente | pendiente | 0 | | | |
 
 ## Herramientas de verificación del loop
@@ -406,3 +406,55 @@ Licencia OFL al lado (`public/fonts/OFL-Inter.txt`). `@font-face` en `globals.cs
   reseñas" y "QR y NFC que llevan al comensal directo a tu ficha de Google para dejar la reseña,
   sin buscar nada": invita a reseñar, no promete "más estrellas" ni reseñas positivas y no filtra.
   Sin cambios.
+- **Producción de P05 (`dpl_Hxwq5Yzr…`) y P06 (`dpl_GHrsBy6f…`, `e78de53`):** `FAQ: 18 visibles ·
+  18 en JSON-LD · 0 diferencias`; `/terminos` muestra "Versión 1.1"; la home dice "IVA incluido"
+  (2 veces: la línea bajo los planes y la FAQ); el cierre pide `ambiente-piedra-cierre.webp` y
+  sus capturas a 375 y 1440 (DPR 1 y 2) no decodifican ningún QR.
+
+### P07 · Tareas sueltas
+
+- **`sharp`** en `dependencies` como `^0.35.4` (lo que resolvía el lockfile). `npm install
+  --package-lock-only` actualizó el lockfile (nombre, versión, `sharp` directa; npm podó el peer
+  opcional `@opentelemetry/api`); `npm ci → ci=0`.
+- **`carta-kit.mjs`** — `chromiumDelKit()` y `abrirChromium()`; se valida antes de escribir el kit:
+  ```
+  KIT_CHROMIUM=<chrome.exe de Playwright> node scripts/carta-kit.mjs ejemplo --servidor http://localhost:3177
+    ✓ entregas/ejemplo/qr-demo26.png · qr-demo26.pdf · carta-ejemplo.pdf · carta-ejemplo-en.pdf   (exit 0)
+  KIT_CHROMIUM=C:/no/existe/chrome.exe …
+    ERROR  KIT_CHROMIUM apunta a C:/no/existe/chrome.exe, que no es un archivo.
+           Corregí la ruta o borrá la variable y corré: npx playwright install chromium   (exit 1)
+  KIT_CHROMIUM=C:/Windows/System32/whoami.exe …
+    ERROR  No se pudo abrir Chromium desde KIT_CHROMIUM (C:/Windows/System32/whoami.exe).
+           browserType.launch: Target page, context or browser has been closed
+           Si no es un Chromium válido, corregí KIT_CHROMIUM o corré: npx playwright install chromium   (exit 1)
+  sin variable → chromium: Playwright (…\ms-playwright\chromium-1243\chrome-win64\chrome.exe)
+  ```
+  `/opt/pw-browsers/chromium` se usa solo si es un archivo (en Windows no existe; no se pudo probar
+  ese camino acá).
+- **Nombre:** `package.json` y el lockfile se llaman `datafud`; `.env.example` dice "DataFud".
+  `src/lib/supabase/types.ts` ya no tenía restos. `CLAUDE.md`: la nota de restos dice que solo
+  quedan en los `.sql` de `supabase/`, para el loop del backend.
+  `grep -rni "<nombre viejo>" . --exclude-dir={node_modules,.next,.git,supabase,plans,specs,.qa,entregas}` → **0**.
+  (Con `--exclude-dir=docs/plans` literal, grep no excluye nada: compara contra el nombre de la
+  carpeta, no la ruta. Se usó `plans` y `specs`; también `.qa` y `entregas`, que están en `.gitignore`.)
+- **Enlace de salto** en `LandingNavV2` (landing, guías y legales) → `<main id="contenido" tabIndex={-1}>`.
+  Con teclado (`.qa/bin/salto.mjs`):
+  ```
+  /                        primer Tab: "Saltar al contenido" visible 152×44 en (16,16) · tras Enter: MAIN#contenido
+  /menu-digital-para-sodas primer Tab: ídem · tras Enter: MAIN#contenido
+  /terminos                primer Tab: ídem · tras Enter: MAIN#contenido
+  ```
+  Captura mirada: `.qa/pulido/p07-salto-home.png`.
+- **`/preview/dashboard`:** el contenido va en `<main>`. Contraste (`.qa/bin/contraste-texto.mjs`):
+
+| Texto | Antes | Después |
+|---|---|---|
+| Rótulo "Panel del restaurante" (12 px, `accent-600` → `accent-700`) | 4,18:1 | 6,25:1 |
+| "5 activas" (12 px, ídem) | 4,36:1 | 6,52:1 |
+| "38 órdenes" (14 px, `brand-700/60` → `/80`) | 3,57:1 | 6,30:1 |
+| "86 uds." (14 px, `brand-700/55` → `/80`) | 3,14:1 | 6,30:1 |
+| Encabezado de la tabla (12 px, `brand-700/60` → `/85`) | 3,43:1 | 6,78:1 |
+
+- **`qa:landing`** contaba el enlace de salto oculto (1×1 px) como área táctil chica (23 → 27
+  avisos); ahora se salta lo `sr-only` y vuelve a 23 (los mismos de antes).
+- Puertas A en verde tras `npm ci`: typecheck, lint, build, `qa:landing → OK · 23 avisos`.

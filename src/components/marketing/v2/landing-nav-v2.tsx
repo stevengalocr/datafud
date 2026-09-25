@@ -18,6 +18,15 @@ const links = [
 export function LandingNavV2() {
   const wa = waProps("nav");
   return (
+    <>
+    {/* Primer foco de la página: con teclado o lector de pantalla se salta el nav y cae en
+        <main id="contenido"> (landing, guías y legales). Invisible hasta que recibe foco. */}
+    <a
+      href="#contenido"
+      className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[60] focus:rounded-lg focus:bg-brand-900 focus:px-4 focus:py-3 focus:text-sm focus:font-bold focus:text-cream-50 focus:shadow-lg"
+    >
+      Saltar al contenido
+    </a>
     <header className="sticky top-0 z-40 border-b border-stone-200/40 bg-cream-50/95">
       <div className="relative mx-auto flex h-[68px] max-w-6xl items-center justify-between px-5 sm:px-6">
         <Link
@@ -61,5 +70,6 @@ export function LandingNavV2() {
       </div>
       <ScrollProgress />
     </header>
+    </>
   );
 }

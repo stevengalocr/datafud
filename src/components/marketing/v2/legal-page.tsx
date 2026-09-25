@@ -36,7 +36,7 @@ export function LegalPage({
     <div className="min-h-screen bg-cream-50 font-sans text-brand-900 antialiased">
       <LandingNavV2 />
 
-      <main className="mx-auto max-w-3xl px-5 pb-24 pt-14 sm:px-6 sm:pt-20">
+      <main id="contenido" tabIndex={-1} className="mx-auto max-w-3xl px-5 pb-24 pt-14 outline-none sm:px-6 sm:pt-20">
         <p className="text-xs font-bold uppercase tracking-[0.2em] text-accent-700">{eyebrow}</p>
         <h1 className="mt-3 font-display text-[clamp(2rem,5vw,3.2rem)] leading-[1.08] tracking-tight text-brand-900">{title}</h1>
         <p className="mt-4 text-sm font-semibold text-brand-700/80">

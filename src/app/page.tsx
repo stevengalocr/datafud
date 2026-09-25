@@ -50,7 +50,7 @@ export default function HomePage() {
       />
       <LandingNavV2 />
 
-      <main>
+      <main id="contenido" tabIndex={-1} className="outline-none">
       {/* ── Hero ───────────────────────────────────────────────── */}
       <section className="relative overflow-hidden border-b border-stone-200/60">
         <div className="qr-grid pointer-events-none absolute inset-0 opacity-70" />

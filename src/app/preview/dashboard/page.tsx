@@ -33,10 +33,10 @@ export default function PreviewDashboard() {
   return (
     <div className="min-h-screen bg-cream-50 text-brand-900">
       <PreviewBanner active="/preview/dashboard" />
-      <div className="mx-auto max-w-6xl px-5 py-8">
+      <main className="mx-auto max-w-6xl px-5 py-8">
         <div className="flex items-center justify-between">
           <div>
-            <p className="text-xs font-bold uppercase tracking-[0.18em] text-accent-600">Panel del restaurante</p>
+            <p className="text-xs font-bold uppercase tracking-[0.18em] text-accent-700">Panel del restaurante</p>
             <h1 className="mt-1 font-display text-3xl text-brand-900">Hola, {mockSettings.restaurant_name}</h1>
             <p className="mt-1 text-sm text-brand-700/70">Esto es lo que pasa en tu local hoy.</p>
           </div>
@@ -55,7 +55,7 @@ export default function PreviewDashboard() {
             <CardHeader>
               <div className="flex items-center justify-between">
                 <p className="font-semibold text-brand-900">Comandas en vivo</p>
-                <span className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-accent-600">
+                <span className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-accent-700">
                   <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-accent-500" /> {liveOrders.length} activas
                 </span>
               </div>
@@ -97,7 +97,7 @@ export default function PreviewDashboard() {
                     {mockDailySales.map((r) => (
                       <tr key={r.day}>
                         <td className="py-2 text-brand-700/80">{new Date(r.day).toLocaleDateString("es", { weekday: "short", day: "numeric" })}</td>
-                        <td className="py-2 text-brand-700/60">{r.orders_count} órdenes</td>
+                        <td className="py-2 text-brand-700/80">{r.orders_count} órdenes</td>
                         <td className="py-2 text-right font-semibold text-brand-900">{formatMoney(r.revenue, currency)}</td>
                       </tr>
                     ))}
@@ -116,7 +116,7 @@ export default function PreviewDashboard() {
                     <li key={r.name}>
                       <div className="mb-1 flex justify-between text-sm">
                         <span className="font-medium text-brand-800">{r.name}</span>
-                        <span className="text-brand-700/55">{r.units} uds.</span>
+                        <span className="text-brand-700/80">{r.units} uds.</span>
                       </div>
                       <div className="h-2 w-full overflow-hidden rounded-full bg-stone-200/70">
                         <div className="h-full rounded-full bg-brand-500" style={{ width: `${(r.units / maxUnits) * 100}%` }} />
@@ -134,7 +134,7 @@ export default function PreviewDashboard() {
         <Card className="overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full min-w-[560px] text-sm">
-              <thead className="bg-cream-100 text-left text-xs uppercase tracking-wide text-brand-700/60">
+              <thead className="bg-cream-100 text-left text-xs uppercase tracking-wide text-brand-700/85">
                 <tr>
                   <th className="px-5 py-3 font-semibold">Platillo</th>
                   <th className="px-5 py-3 font-semibold">Precio</th>
@@ -167,7 +167,7 @@ export default function PreviewDashboard() {
             </table>
           </div>
         </Card>
-      </div>
+      </main>
     </div>
   );
 }

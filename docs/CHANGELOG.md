@@ -39,6 +39,20 @@ Todas las versiones notables del proyecto. Formato basado en
   `public/renders/ambiente-piedra-cierre.webp`, un recorte del render de piedra sin el panel del
   stand (la piedra, la tarjeta NFC y la base del stand). El QR del hero se queda. Contraste AA a
   375, 768, 1024 y 1440 px.
+- **Enlace "Saltar al contenido"** en la landing, las guías y los legales: invisible hasta que
+  recibe foco con el teclado y lleva a `<main id="contenido">`.
+- **`/preview/dashboard`** tiene `<main>` y sus textos chicos pasan AA (el rótulo "Panel del
+  restaurante" estaba en 4,18:1).
+
+### Fixed — Loop "pulido"
+- `sharp` declarado en `dependencies` (0.35.4, la versión que ya resolvía el lockfile): los
+  scripts de cartas lo usan directo y antes llegaba solo como dependencia de `next`.
+- `scripts/carta-kit.mjs` elige Chromium en este orden: `KIT_CHROMIUM`, `/opt/pw-browsers/chromium`
+  y el de Playwright; sin ninguno (o con uno inválido) falla con un mensaje que dice
+  `npx playwright install chromium`, antes de escribir nada.
+- El paquete se llama `datafud` (quedaba el nombre viejo en `package.json`, el lockfile y
+  `.env.example`). Los `.sql` de `supabase/` no se tocan: quedan para el loop del backend.
+- `qa:landing` no cuenta como área táctil chica un enlace `sr-only` mientras está oculto.
 - **Las fotos de la demo muestran el platillo que nombran y se sirven desde el sitio (D-053).**
   El "gallo pinto" era un guiso de pollo, el "casado" una ensalada y la "limonada" tres cócteles;
   los panqueques llevaban una mano. Las 14 fotos (el café chorreado ya tiene la suya) son reales,

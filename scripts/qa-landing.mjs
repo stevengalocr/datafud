@@ -169,6 +169,9 @@ try {
         }).length;
         const small = [...document.querySelectorAll("a, button")].filter((el) => {
           const r = el.getBoundingClientRect();
+          // Un enlace "sr-only" (1×1 px hasta recibir foco, como "Saltar al contenido") no es un
+          // área táctil: con foco se mide aparte.
+          if (r.width <= 1 && r.height <= 1) return false;
           return r.width > 0 && r.height > 0 && (r.height < 44 || r.width < 44) && getComputedStyle(el).display !== "none";
         }).map((el) => (el.textContent || el.getAttribute("aria-label") || el.tagName).trim().slice(0, 30));
         return {

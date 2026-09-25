@@ -122,7 +122,8 @@ etiqueta "Render ilustrativo" y todo QR dibujado decodifica a `https://datafud.c
   `fonts` a `ImageResponse` reemplaza la fuente por defecto: `src/lib/og.tsx` la vuelve a pasar.
 - "₡" sale de `public/fonts/datafud-colon-*.woff2` (D-052), primera en los stacks de Tailwind.
   No redeclarar `--font-sans` ni `--font-display` en `globals.css`: pisa a `next/font`.
-- Quedan restos del nombre viejo "Datfud" en `package.json`, `src/lib/supabase/types.ts` y los `.sql`.
+- El nombre viejo del proyecto solo queda en los `.sql` de `supabase/`, que este loop no toca:
+  se corrige en el loop del backend.
 - Los triggers de límite de plan lanzan excepción: la UI tiene que mostrarla.
 
 ## Vault de Obsidian (memoria del proyecto) — protocolo de alineación

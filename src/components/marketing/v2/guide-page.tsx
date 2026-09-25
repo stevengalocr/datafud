@@ -65,7 +65,7 @@ export function GuidePage({
       />
       <LandingNavV2 />
 
-      <main>
+      <main id="contenido" tabIndex={-1} className="outline-none">
         <header className="relative overflow-hidden border-b border-stone-200/60">
           <div className="qr-grid pointer-events-none absolute inset-0 opacity-60" />
           <div className="relative mx-auto max-w-3xl px-5 py-14 sm:px-6 sm:py-20">
