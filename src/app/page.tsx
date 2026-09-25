@@ -140,15 +140,19 @@ export default function HomePage() {
 
               <div className="group relative w-full max-w-[460px] overflow-hidden rounded-2xl border border-stone-200/80 bg-white p-2 shadow-[0_28px_60px_-20px_rgba(34,80,58,0.28)] transition-transform duration-500 ease-out-expo hover:-translate-y-1">
                 <div className="pointer-events-none absolute inset-0 z-10 bg-gradient-to-tr from-brand-50/20 to-transparent" />
+                {/* Render de IA (D-050): siempre con su etiqueta, nunca como foto real. */}
                 <Image
-                  src="/banner.png"
-                  alt="Menú digital DataFud abierto en un teléfono sobre la mesa"
-                  width={920}
-                  height={570}
+                  src="/renders/ambiente-mesa.webp"
+                  alt="Render ilustrativo de un stand de mesa DataFud con código QR y una tarjeta NFC sobre una mesa de un café"
+                  width={1536}
+                  height={1024}
                   priority
-                  sizes="(min-width: 1024px) 460px, (min-width: 640px) 60vw, 92vw"
+                  sizes="(min-width: 520px) 444px, calc(100vw - 56px)"
                   className="h-auto w-full rounded-xl object-cover transition-transform duration-700 ease-out-expo group-hover:scale-[1.02]"
                 />
+                <span className="absolute bottom-4 left-4 z-10 rounded-full bg-white/90 px-2.5 py-1 text-xs font-semibold text-brand-800 shadow-sm">
+                  Render ilustrativo
+                </span>
               </div>
 
               {/* Chip flotante: carta publicada */}

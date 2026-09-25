@@ -135,6 +135,11 @@ por resultados.
 - **Fotos del hardware:** `public/hardware/<código>.webp` con los códigos de `PRICING.hardware`
   (`stand-qr-3d`, `tarjeta-nfc`, `stand-qr-3d-nfc`, `stand-resenas`). Mientras no existan, se muestran
   los renders con la etiqueta visible **"Render ilustrativo"**.
+- **Imágenes de la web (D-049 a D-051):** ninguna muestra texto, precios, monedas, marcas
+  inventadas, personas ni comida generada. Todo render de IA lleva la etiqueta "Render
+  ilustrativo" (también el del hero, `public/renders/ambiente-mesa.webp`) y todo QR dibujado en
+  una imagen decodifica a `https://datafud.com/q/demo26`: un QR inventado por la IA se reemplaza o
+  no se publica. Los renders viven en `public/renders/`, nunca en `public/hardware/`.
 - **Redes:** `SITE.social` (instagram, facebook, tiktok) vacías; el footer muestra solo las que tengan
   una URL `https://`.
 - **Cómo cargar un testimonio** (`TESTIMONIALS` en `src/lib/constants.ts`, hoy vacío = la sección no

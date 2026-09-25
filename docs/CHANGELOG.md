@@ -7,6 +7,13 @@ Todas las versiones notables del proyecto. Formato basado en
 
 ## [Unreleased]
 
+### Changed — Loop "imágenes" (2026-09-25)
+- **El hero muestra un render del producto con su etiqueta (D-049, D-050).** `banner.png` (precios
+  en euros, un carrito que la Carta no tiene, "ESCANEA" en tuteo y comida generada) se reemplaza
+  por `public/renders/ambiente-mesa.webp`: un stand y una tarjeta NFC en una mesa, con el chip
+  "Render ilustrativo". Su QR es real y abre `https://datafud.com/q/demo26` (D-051).
+  `banner.png` se borró del repo.
+
 ## [1.3.0] — 2026-09-25 · Entrega de la Carta lista
 
 Informe: `docs/plans/entrega-loop-report.md`.
