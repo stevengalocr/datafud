@@ -7,6 +7,49 @@ Todas las versiones notables del proyecto. Formato basado en
 
 ## [Unreleased]
 
+## [1.3.0] — 2026-09-25 · Entrega de la Carta lista
+
+Informe: `docs/plans/entrega-loop-report.md`.
+
+### Added — Loop "cierre de la entrega" (2026-09-25)
+- **Alta de una carta desde CSV (D-046).** `scripts/carta-nueva.mjs <slug>` lee
+  `entregas/<slug>/menu.csv` y `carta.json`, valida (precios, categorías, fotos que falten, límites
+  del plan leídos de `PRICING`), optimiza las fotos y escribe el `.ts`, su entrada en `CARTAS` y la
+  línea del código en `qr.ts`. `scripts/carta-borrar.mjs` da de baja un local dejando su código
+  impreso **reservado**, nunca reutilizable.
+- **Kit de entrega por carta (D-044).** `scripts/carta-kit.mjs <slug>` genera el QR en PNG a
+  2000 px, una hoja tamaño carta con 4 QR para recortar y el PDF de la carta en español y en
+  inglés. Sin código impreso el script se niega, y `--base` solo acepta una dirección pública:
+  lo que se graba en un QR queda impreso para siempre.
+- **El logo del local se pinta en la carta (D-042)**, a 52 px sobre fondo blanco. Ya viajaba en el
+  payload y nadie lo mostraba, mientras la web prometía "carta a tu marca: colores, logo y fotos".
+- **Subtítulo propio por local (D-045)**, con `CartaEstatica.tagline`.
+- `npm run check:cartas`, que corre antes de cada `next build`.
+
+### Changed — Loop "cierre de la entrega" (2026-09-25)
+- **Las fotos se optimizan (D-043).** Una carta de 6 fotos de teléfono pasaba de 15,07 MB a
+  **1,20 MB**; una de 60 platillos, de 3,65 MB a **1,69 MB al abrir**. El presupuesto por foto se
+  reparte según cuántas tenga la carta: 150 KB es el techo de D-043, no el objetivo.
+- El subtítulo por defecto deja de suponer cómo se ordena: "Nuestra carta." en vez de "Consultá a
+  tu salonero para ordenar", que no sirve para una soda que cobra en caja.
+- **El plan de 15 días de `OFERTA.md` nombra los dos desarrollos que faltan** — alta de local
+  desde el super admin y editar un platillo — en vez de darlos por hechos.
+- `founderOffer.remaining`: con `null` no se dice cuántos cupos quedan, con un número se dice
+  "Quedan N de 10", y con 0 la oferta se apaga sola.
+- `/menu-digital-costa-rica` dice de dónde salen los rangos de precio de la competencia.
+- La demo estrena logo: era la única carta que no enseñaba la promesa que vende.
+
+### Fixed — Loop "cierre de la entrega" (2026-09-25)
+- **Los precios en inglés salían con coma decimal** (`$8,50`): un turista lee esa coma como
+  separador de miles. El precio se escribe según el idioma en que se está leyendo la carta.
+- El chequeo de códigos de QR repetidos **no veía los reservados**, así que se podía reutilizar el
+  código de un local que se fue, justo lo que D-014 prohíbe.
+- La regla de los códigos prohibía la letra `o` cuando el propio `demo26` la usa: sin el dígito `0`
+  en el alfabeto, la `o` no se confunde con nada.
+- El banner de la demo desbordaba su barra de 41 px a 375 px y se montaba sobre la carta.
+- En el PDF, la cabecera podía salir de otro color (transparencia mezclada por el visor) y pesaba
+  5,88 MB por las fotos reencodificadas sin pérdida: ahora color plano y **212 KB**.
+
 ## [1.2.0] — 2026-09-25 · Oferta sólida y Carta entregable
 
 Informe: `docs/plans/oferta-loop-report.md`.
