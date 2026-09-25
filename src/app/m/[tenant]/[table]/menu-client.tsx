@@ -235,7 +235,7 @@ export function MenuClient({
         {orderedCats.length === 0 && (
           <p className="py-16 text-center text-sm text-brand-700/50">{d.emptyOrder}</p>
         )}
-        {orderedCats.map((cat) => {
+        {orderedCats.map((cat, catIndex) => {
           const prods = data.products
             .filter((p) => p.category_id === cat.id)
             .sort((a, b) => a.sort_order - b.sort_order);
@@ -263,8 +263,20 @@ export function MenuClient({
                     >
                       <div className="relative h-24 w-24 flex-shrink-0 overflow-hidden rounded-xl bg-cream-100">
                         {p.image_url ? (
+                          // Solo la primera categoría carga de una: es lo que se ve al abrir.
+                          // El resto espera a que el comensal baje, que es como se lee una carta.
+                          // width/height son los del contenedor (h-24 w-24): reservan el hueco y
+                          // la tarjeta no salta cuando entra la foto.
                           // eslint-disable-next-line @next/next/no-img-element
-                          <img src={p.image_url} alt={t(p.name_i18n, lang)} className="h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-105" />
+                          <img
+                            src={p.image_url}
+                            alt={t(p.name_i18n, lang)}
+                            width={96}
+                            height={96}
+                            loading={catIndex === 0 ? "eager" : "lazy"}
+                            decoding="async"
+                            className="h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-105"
+                          />
                         ) : (
                           <div className="flex h-full w-full items-center justify-center" style={{ color: primary }}>
                             <Icon name="utensils" size={26} />
@@ -349,7 +361,7 @@ export function MenuClient({
                         <div className="h-14 w-14 flex-shrink-0 overflow-hidden rounded-lg bg-cream-100">
                           {p.image_url && (
                             // eslint-disable-next-line @next/next/no-img-element
-                            <img src={p.image_url} alt="" className="h-full w-full object-cover" />
+                            <img src={p.image_url} alt="" width={56} height={56} loading="lazy" decoding="async" className="h-full w-full object-cover" />
                           )}
                         </div>
                         <div className="min-w-0 flex-1">

@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "node scripts/check-cartas.mjs && next build",
+    "check:cartas": "node scripts/check-cartas.mjs",
     "start": "next start",
     "lint": "next lint",
     "typecheck": "tsc --noEmit",
