@@ -2,9 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
+/* --font-sans y --font-display los define next/font (Hanken Grotesk y Young Serif) en la clase
+   de <html> (layout.tsx). No se redeclaran acá: un :root con otras fuentes quedaba después en el
+   CSS compilado, con la misma especificidad, y pisaba a las de marca (pasó desde el rediseño
+   editorial hasta 1.4.0: la web pintaba Georgia y la fuente del sistema). Los respaldos del
+   sistema van en los stacks de tailwind.config.ts. */
 :root {
-  --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  --font-display: Georgia, "Times New Roman", serif;
   --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
 }
 
@@ -26,7 +29,7 @@ body {
 }
 
 .font-display {
-  font-family: var(--font-display);
+  font-family: var(--font-display), Georgia, serif;
   letter-spacing: -0.01em;
 }
 

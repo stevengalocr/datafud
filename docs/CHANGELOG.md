@@ -8,6 +8,12 @@ Todas las versiones notables del proyecto. Formato basado en
 ## [Unreleased]
 
 ### Changed — Loop "pulido" (2026-09-25)
+- **Las fuentes de marca pintan por primera vez desde el rediseño editorial.** `globals.css`
+  redeclaraba `--font-sans` y `--font-display` en `:root` con Georgia y la fuente del sistema, y
+  en el CSS compilado esa regla quedaba después de la de `next/font`: la web se veía en Georgia y
+  Segoe UI/SF/Roboto mientras bajaba los `woff2` de Hanken Grotesk y Young Serif sin usarlos.
+  Ahora pintan las de `docs/BRAND.md` (medido con CDP: Young Serif ×40 en el h1, Hanken Grotesk
+  ×212 en el texto). El título del hero pasa a tres líneas a 375 px.
 - **Las fotos de la demo muestran el platillo que nombran y se sirven desde el sitio (D-053).**
   El "gallo pinto" era un guiso de pollo, el "casado" una ensalada y la "limonada" tres cócteles;
   los panqueques llevaban una mano. Las 14 fotos (el café chorreado ya tiene la suya) son reales,
