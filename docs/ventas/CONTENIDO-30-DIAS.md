@@ -66,7 +66,7 @@
 - **Ojo:** describir lo que hace, nunca prometer cantidad de reseñas ni estrellas.
 
 ### c08 · Carrusel · "Cómo pago: SINPE Móvil o transferencia"
-- **Láminas:** 1) Gancho. 2) SINPE Móvil o transferencia. 3) Implementación al aprobar la propuesta; mensualidad por adelantado. 4) Comprobante de cada pago; si necesitás factura electrónica, avisanos antes de contratar.
+- **Láminas:** 1) Gancho. 2) SINPE Móvil o transferencia. 3) Implementación al aprobar la propuesta; mensualidad por adelantado. 4) Precios finales, IVA incluido; comprobante de cada pago. (No prometer factura electrónica hasta que Steven la confirme.)
 - **Copy:** Preguntas que nos hacen seguido, respondidas en corto.
 - **CTA:** "Más preguntas" → `https://datafud.com/?utm_source=instagram&utm_medium=social&utm_campaign=c08#preguntas`
 

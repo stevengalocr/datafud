@@ -122,10 +122,12 @@ dos casos se habla en plural: es la empresa la que atiende, no una persona suelt
 
 - **"Hay gratis."** "Sí, hay opciones donde vos mismo armás la carta. Si tenés el tiempo, te sirven. Lo nuestro es que te la montamos nosotros, en español e inglés, con tus fotos y tu marca, y los cambios por WhatsApp están incluidos: no tenés que aprender nada."
 - **"Ya tengo menú en PDF."** "El PDF se ve pequeño en el celular y cada cambio es volver a diseñarlo. La carta digital se lee cómoda, tiene categorías, fotos y cambio de idioma, y los precios se actualizan sin tocar el QR."
-- **"¿Y la factura?"** "Recibís comprobante de cada pago. Si tu negocio necesita factura electrónica, avisanos antes de contratar y lo coordinamos. Ojo: DataFud no reemplaza tu sistema de facturación, convive con el que ya usás."
+- **"¿Y la factura?"** "Recibís un comprobante de cada pago. Si tu negocio necesita factura electrónica, contanos y te lo confirmamos en la propuesta. Ojo: DataFud no reemplaza tu sistema de facturación, convive con el que ya usás." (La factura electrónica 4.4 no se promete hasta que Steven la confirme: PENDIENTES-STEVEN en `docs/plans/pulido-loop-state.md`.)
 - **"Está caro."** "El plan Carta es ₡14 900 al mes; el primer año sale ₡203 700 pagando mes a mes, o ₡149 000 si pagás el año, con dos meses gratis y la implementación incluida. Incluye el montaje, la traducción y los cambios. Si la carta no está publicada en 48 horas hábiles desde que tenemos tu material, no pagás la implementación."
 - **"¿Cuántas mesas y categorías incluye?"** "La Carta llega hasta 5 categorías y 8 mesas con QR (y 60 platillos). Si tenés más, Estándar llega a 20 categorías y 30 mesas."
-- **"¿El precio lleva IVA?"** Pendiente de decisión (ver PENDIENTES-STEVEN en `docs/plans/venta-loop-state.md`): no responder de memoria; decir "te lo confirmo en la propuesta".
+- **"¿Eso lleva IVA?"** "No, ya está incluido: los precios son finales, en colones y con IVA. Lo que ves en la web es lo que pagás." (D-047)
+- **"¿Desde cuándo pago la mensualidad?"** "Desde el día que tu carta queda publicada. Mientras la montamos, no corre; la implementación sí se paga al aprobar la propuesta." (D-035)
+- **"¿Y si después quiero pedidos?"** "Pasás a Estándar o Empresarial cuando quieras. Si es dentro de los primeros 6 meses, lo que pagaste por la implementación de la Carta se te descuenta de la del sistema." (D-034)
 - **"Mis clientes no escanean."** "Para eso está la tarjeta NFC (₡7 500): el cliente acerca el teléfono y la carta se abre sola, sin cámara. También hay stand con QR y NFC juntos, desde ₡10 000."
 - **"¿Y si no me gusta?"** "No hay contrato de permanencia: cancelás con 15 días de aviso. Y antes de decidir podés ver la carta demo desde tu celular."
 

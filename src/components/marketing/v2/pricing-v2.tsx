@@ -131,7 +131,7 @@ export function PricingV2() {
                     <dd className="whitespace-nowrap font-semibold text-brand-900">{formatCrc(setup.crc)}</dd>
                   </div>
                   <div className="flex justify-between gap-3 border-t border-dashed border-stone-250 pt-1.5">
-                    <dt className="font-semibold text-brand-900">Primer pago <span className="block text-xs font-medium text-brand-700/75">implementación + primer mes</span></dt>
+                    <dt className="font-semibold text-brand-900">Primer mes <span className="block text-xs font-medium text-brand-700/75">implementación + primera mensualidad</span></dt>
                     <dd className="whitespace-nowrap font-bold text-brand-900">{formatCrc(first.crc)}</dd>
                   </div>
                 </dl>
@@ -179,6 +179,11 @@ export function PricingV2() {
         })}
       </RevealOnView>
 
+      {/* D-047 y D-035: lo que un dueño de soda compara contra lo que va a pagar. */}
+      <p className="mt-6 text-center text-sm font-semibold leading-relaxed text-brand-900">
+        {terms.ivaIncluded} {terms.billingStart}
+      </p>
+
       {/* Lo que incluyen todos los planes */}
       <RevealOnView className="reveal-up mt-8 grid gap-4 rounded-2xl border border-accent-300/40 bg-cream-100/60 p-6 sm:grid-cols-3 sm:gap-6 sm:p-9">
         {allPlansInclude.map((s) => (
@@ -191,7 +196,7 @@ export function PricingV2() {
         ))}
       </RevealOnView>
       <p className="mt-4 text-sm font-medium leading-relaxed text-brand-700/85">
-        Los stands QR y las tarjetas NFC se cobran aparte, desde {formatCrc(hardwareBy("stand-qr-3d").priceCrc)} por unidad.{" "}
+        Los stands QR y las tarjetas NFC se cobran aparte y por adelantado, desde {formatCrc(hardwareBy("stand-qr-3d").priceCrc)} por unidad.{" "}
         <a href="#hardware" className="font-semibold text-brand-800 underline decoration-accent-400 underline-offset-4 hover:text-brand-900">Ver hardware de mesa</a>
       </p>
 

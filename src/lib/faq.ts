@@ -3,8 +3,9 @@ import { formatCrc } from "@/lib/currency/format";
 
 // Preguntas frecuentes de la landing. Un solo arreglo: lo usa el acordeón (#preguntas) y el
 // JSON-LD FAQPage, así que lo visible y lo estructurado coinciden 1:1. Respuestas tomadas de
-// PRICING y de las decisiones D-023 a D-027. Orden: precio → qué incluye → cómo pago → plazos →
-// hardware → lo demás. Máximo 15.
+// PRICING y de las decisiones D-023 a D-027, D-034 a D-038, D-047 y D-048. Orden: precio → qué
+// incluye → cómo pago → plazos → hardware → lo demás. Máximo 18. La factura electrónica no se
+// promete hasta que Steven la confirme (D-047).
 
 export type FaqItem = { id: string; q: string; a: string };
 
@@ -14,12 +15,14 @@ const firstMonth = PLAN_CODES.map((code) => {
   const setup = setupFeeFor(code);
   return `${plans[code].marketingName}: ${formatCrc(setup.crc)} de implementación + ${formatCrc(plans[code].priceCrc)} del primer mes = ${formatCrc(firstPaymentFor(code).crc)}.`;
 }).join(" ");
+// D-035: la implementación y la primera mensualidad no se pagan el mismo día.
+const whenPaid = "La implementación se paga al aprobar la propuesta y la primera mensualidad, el día que tu carta queda publicada.";
 
 export const FAQ_ITEMS: FaqItem[] = [
   {
     id: "primer-mes",
     q: "¿Cuánto pago en total el primer mes?",
-    a: `${firstMonth} Después pagás solo la mensualidad.${founderOfferActive() ? ` Si entrás entre los primeros ${founderOffer.spots} locales, la implementación de la Carta no se cobra y te damos 1 stand QR 3D, a cambio de dejarnos mostrar tu local como caso.` : ""}`,
+    a: `${firstMonth} ${whenPaid} Después pagás solo la mensualidad.${founderOfferActive() ? ` Si entrás entre los primeros ${founderOffer.spots} locales, la implementación de la Carta no se cobra y te damos 1 stand QR 3D, a cambio de dejarnos mostrar tu local como caso (nombre, logo y capturas de tu carta). ${terms.founderConsent}` : ""}`,
   },
   {
     id: "por-que-cuesta-mas",
@@ -29,7 +32,12 @@ export const FAQ_ITEMS: FaqItem[] = [
   {
     id: "que-incluye",
     q: "¿Qué incluye la implementación?",
-    a: `El diseño de tu carta con tu marca, la carga de platillos con fotos y precios, y la traducción al inglés (y al portugués en Empresarial). La del sistema completo suma pedidos desde la mesa, panel, reportes y la capacitación de tu equipo. En todos los planes, ${terms.menuChanges.charAt(0).toLowerCase()}${terms.menuChanges.slice(1)}, y ${terms.support.charAt(0).toLowerCase()}${terms.support.slice(1)}. El hardware de mesa se cobra aparte.`,
+    a: `El diseño de tu carta con tu marca, la carga de platillos con fotos y precios, y la traducción al inglés (y al portugués en Empresarial). La del sistema completo suma pedidos desde la mesa, panel, reportes y la capacitación de tu equipo. Después, en todos los planes van incluidos los cambios de precios y platillos por WhatsApp y el ${terms.support.charAt(0).toLowerCase()}${terms.support.slice(1)}. El hardware de mesa se cobra aparte.`,
+  },
+  {
+    id: "iva",
+    q: "¿Los precios incluyen IVA?",
+    a: `Sí. ${terms.ivaIncluded} Lo que ves en esta página es lo que pagás, sin sumarle el 13 % después.`,
   },
   {
     id: "como-pago",
@@ -37,9 +45,14 @@ export const FAQ_ITEMS: FaqItem[] = [
     a: "Por SINPE Móvil o transferencia bancaria. La implementación se paga al aprobar la propuesta y la mensualidad, por adelantado cada mes. No hay cobros automáticos ni tarjeta guardada.",
   },
   {
+    id: "cuando-empiezo",
+    q: "¿Cuándo empiezo a pagar la mensualidad?",
+    a: `${terms.billingStart} Mientras la estamos montando no corre. La implementación sí se paga antes, al aprobar la propuesta.`,
+  },
+  {
     id: "factura",
     q: "¿Me dan factura?",
-    a: "Recibís comprobante de cada pago. Si tu negocio necesita factura electrónica, avisanos antes de contratar y lo coordinamos. Ojo: DataFud no emite las facturas de tu restaurante; convive con el sistema de facturación que ya usás.",
+    a: "Recibís un comprobante de cada pago. Si necesitás algo más para tu contabilidad, preguntanos por WhatsApp antes de contratar. Ojo: DataFud no emite las facturas de tu restaurante; convive con el sistema de facturación que ya usás.",
   },
   {
     id: "contrato",
@@ -49,12 +62,17 @@ export const FAQ_ITEMS: FaqItem[] = [
   {
     id: "no-soy-tecnico",
     q: "No soy técnico. ¿Es complicado?",
-    a: `No, porque no lo montás vos. Nos pasás el menú, las fotos y el logo, y publicamos tu carta en ${delivery.menuHours} horas. Si vas por pedidos en mesa, en ${delivery.fullSystemDays} días te dejamos el sistema funcionando y capacitamos a tu equipo.`,
+    a: `No, porque no lo montás vos. Nos pasás el menú, las fotos y el logo, y publicamos tu carta en ${delivery.menuHours} horas hábiles. Si vas por pedidos en mesa, en ${delivery.fullSystemDays} días hábiles te dejamos el sistema funcionando y capacitamos a tu equipo.`,
   },
   {
     id: "garantia-48",
     q: "¿Qué pasa si no cumplen el plazo?",
     a: `${terms.guarantee48h} ${terms.guaranteeRefund} ${terms.guaranteeScope} El plazo corre desde que tenemos todo; si falta algo, te avisamos qué.`,
+  },
+  {
+    id: "habiles",
+    q: "¿Qué quiere decir “hábiles”?",
+    a: `${terms.businessDays} Por ejemplo, si nos mandás todo un viernes, el sábado y el domingo no cuentan.`,
   },
   {
     id: "cambios-de-precio",
@@ -64,17 +82,17 @@ export const FAQ_ITEMS: FaqItem[] = [
   {
     id: "empezar-con-carta",
     q: "¿Puedo empezar solo con la carta y sumar pedidos después?",
-    a: `Sí. Arrancás con la Carta y, cuando quieras recibir pedidos desde la mesa, pasás a Estándar o Empresarial: el cambio lleva la implementación del sistema completo (${formatCrc(PRICING.setupFee.sistema.crc)}) y desde ahí la mensualidad del plan nuevo. Los stands y las tarjetas que ya tenés siguen funcionando.`,
+    a: `Sí. Arrancás con la Carta y, cuando quieras recibir pedidos desde la mesa, pasás a Estándar o Empresarial: el cambio lleva la implementación del sistema completo (${formatCrc(PRICING.setupFee.sistema.crc)}) y desde ahí la mensualidad del plan nuevo. ${terms.upgradeCredit} Los stands y las tarjetas que ya tenés siguen funcionando.`,
+  },
+  {
+    id: "pago-hardware",
+    q: "¿Cómo se paga el hardware?",
+    a: `${terms.hardwarePayment} Se hace a medida, así que hay costo de material antes de entregarlo.${founderOfferActive() ? ` La excepción es el stand incluido en la oferta de los primeros ${founderOffer.spots} locales, que no se cobra.` : ""}`,
   },
   {
     id: "pedido-minimo",
-    q: "¿Hay pedido mínimo de stands?",
-    a: `No, se hacen desde 1 unidad. Stand QR 3D desde ${formatCrc(hardwareBy("stand-qr-3d").priceCrc)} y tarjeta NFC a ${formatCrc(hardwareBy("tarjeta-nfc").priceCrc)}. ${hardwareDelivery.custom} Están listos ${hardwareDelivery.leadTime} desde que aprobás el diseño.`,
-  },
-  {
-    id: "envios",
-    q: "¿Hacen envíos fuera de la GAM?",
-    a: `Sí. ${hardwareDelivery.gam} ${hardwareDelivery.outside}`,
+    q: "¿Hay pedido mínimo de stands? ¿Hacen envíos fuera de la GAM?",
+    a: `No hay mínimo: se hacen desde 1 unidad. Stand QR 3D desde ${formatCrc(hardwareBy("stand-qr-3d").priceCrc)} y tarjeta NFC a ${formatCrc(hardwareBy("tarjeta-nfc").priceCrc)}. ${hardwareDelivery.custom} Están listos ${hardwareDelivery.leadTime} desde que aprobás el diseño. ${hardwareDelivery.gam} ${hardwareDelivery.outside}`,
   },
   {
     id: "mis-clientes",

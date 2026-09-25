@@ -10,8 +10,8 @@
 
 ## Contador
 
-- Iteración actual: 4
-- Iteraciones consumidas: 4 / 14
+- Iteración actual: 5
+- Iteraciones consumidas: 5 / 14
 
 ## Capacidades del entorno
 
@@ -61,8 +61,8 @@
 | P01 | Estado y línea base | hecho | 1 | `3508adb` | READY `dpl_5VhKxyoA…` | Abajo |
 | P02 | Fotos de la demo (D-053, D-054) | hecho | 1 | `17e13cd` | READY `dpl_6GGEDs9i…` | Abajo |
 | P03 | El colón se ve como colón (D-052) | hecho | 1 | `bcef43e` + `f8e7c6d` | READY `dpl_26hqvz7L…` | Abajo |
-| P04 | Íconos y logo livianos | hecho | 1 | (este) | ver bloque | Abajo |
-| P05 | Decisiones comerciales en la web y los documentos | pendiente | 0 | | | |
+| P04 | Íconos y logo livianos | hecho | 1 | `84458e1` | READY `dpl_DnUoYnBR…` | Abajo |
+| P05 | Decisiones comerciales en la web y los documentos | hecho | 1 | (este) | ver bloque | Abajo |
 | P06 | Cierre sin QR que compita (D-056) y stand de reseñas (D-055) | pendiente | 0 | | | |
 | P07 | Tareas sueltas | pendiente | 0 | | | |
 | P08 | Verificación final, release 1.4.0 y puente | pendiente | 0 | | | |
@@ -157,6 +157,13 @@ cabecera.
 - WhatsApp Business y Google Business Profile. Las redes van a `SITE.social`.
 - Fotos reales de los 4 productos en `public/hardware/<código>.webp`.
 - `founderOffer.remaining = 9` cuando cierre el primer fundador.
+- **Del revisor fresco de P05 (necesitan decisión):** D-034 con pago anual (la implementación va
+  "incluida" en los ₡149 000: ¿cuánto se descuenta?) y con fundadores (pagaron ₡0); desde cuándo
+  se cuentan los 6 meses; si el hardware comprado meses después también va por adelantado (hoy
+  dice "junto con la implementación"). Los títulos (h1, OG, descripción del sitio) dicen "48
+  horas" sin "hábiles"; la garantía, las tarjetas, la FAQ y los términos sí lo dicen.
+- Los términos 1.1 ya no dicen "si la implementación se paga después del material, el plazo corre
+  desde el pago" (contradecía D-048). Si querés conservar esa salvaguarda, hay que decidirla.
 
 ## Informes por unidad
 
@@ -315,3 +322,45 @@ Licencia OFL al lado (`public/fonts/OFL-Inter.txt`). `@font-face` en `globals.cs
   ventana no dibuja la barra de pestañas, así que es una tira que carga `/favicon.ico` de verdad),
   logo del nav y del footer a DPR 3 a 375 y 1440 (`p04-logos.png`): nítido; el nav pide la
   variante `w=384` de `/_next/image` para 75×32 CSS.
+- **Producción (`dpl_DnUoYnBR…`, `84458e1`):** `/favicon.ico` 6 550 B, `/icon.png` 15 808 B,
+  `/apple-icon.png` 2 053 B, `/logo-main.png` 42 890 B, `/icono-main.png` 28 274 B; el HTML trae los
+  tres `<link>` de íconos.
+
+### P05 · Decisiones comerciales en la web y los documentos
+
+- **`PRICING.terms`** suma `ivaIncluded` (D-047), `businessDays` (D-048), `billingStart` (D-035),
+  `hardwarePayment` (D-036), `upgradeCredit` + `upgradeCreditMonths` (D-034) y `founderConsent`
+  (D-037); `guaranteeScope` pasa a "La garantía de plazo aplica solo a la implementación de la
+  Carta" (D-038). Las etiquetas de plazo de los planes dicen "hábiles" (D-048): la tarjeta decía
+  "15 días" y los términos "15 días hábiles". **Montos: 0 cambios** (los números de
+  `constants.ts` contra `6b3c231`: idénticos).
+- **Planes:** línea bajo las tarjetas "Precios finales en colones, IVA incluido. La mensualidad
+  arranca el día que tu carta queda publicada"; "Primer pago" pasa a "Primer mes ·
+  implementación + primera mensualidad"; el hardware "se cobra aparte y por adelantado".
+- **FAQ: 15 → 18.** Nuevas: "¿Los precios incluyen IVA?", "¿Cuándo empiezo a pagar la
+  mensualidad?", "¿Qué quiere decir “hábiles”?", "¿Cómo se paga el hardware?". Ajustadas: primer
+  mes (cuándo se paga cada parte y qué es "mostrar como caso"), factura (ya no menciona factura
+  electrónica), no soy técnico (hábiles), empezar con la Carta (D-034); "envíos" se une a "pedido
+  mínimo". Puerta G: `FAQ: 18 visibles · 18 en JSON-LD · 0 diferencias` (`.qa/bin/faq-ld.mjs`).
+- **Términos 1.1** (vigente desde el 25 de setiembre de 2026; privacidad sigue en 1.0, cada página
+  con su versión en `LegalPage`; `sitemap` con `TERMS_UPDATED_ISO`): IVA incluido, "hábiles",
+  mensualidad desde la publicación, hardware por adelantado, sección nueva "Pasar de la Carta a un
+  plan con pedidos" (D-034), sección "Oferta de fundadores" (D-037, solo mientras esté activa) y
+  garantía de plazo solo para la Carta (D-038).
+- **Documentos:** `OFERTA.md` §5 → "Decisiones cerradas (2026-09-25)", con D-032/D-033
+  renumeradas a D-047/D-048 y la nota histórica, D-038 "no se extiende por ahora" con su motivo y
+  D-043 con la redacción nueva; `PRODUCT.md` (condiciones comerciales y D-043), `MARKETING.md`
+  (objeciones de IVA e inicio de la mensualidad, pagos, 18 preguntas), `KIT-PROSPECCION.md`
+  ("¿Eso lleva IVA?" → "No, ya está incluido", más inicio de la mensualidad y paso a pedidos) y
+  `CONTENIDO-30-DIAS.md` (lámina de pagos). `CLAUDE.md`: términos 1.1.
+- `grep -rn "D-032\|D-033" docs/ventas` → solo `OFERTA.md:212-213`, la nota histórica marcada.
+- **Revisor fresco** (subagente sin contexto; leyó planes, FAQ y términos contra las decisiones).
+  Se corrigió lo que agregaba reglas no decididas: "(si llegara después, el plazo corre desde el
+  pago)" en los términos (contradecía D-048), "desde que el sistema queda funcionando" (no
+  decidido) y "sacamos tu local de nuestro material en un plazo razonable" (no está en D-037). Y lo
+  confuso: "mostrar como caso" ahora dice qué se muestra, y el primer mes dice qué se paga al
+  aprobar y qué al publicar. Lo que necesita una decisión y no redacción quedó en PENDIENTES-STEVEN.
+- Capturas miradas a 375: `.qa/pulido/p05-planes-375.png`, `p05-faq-375.png`, `p05-terminos-375.png`.
+- Puertas A (typecheck, lint, build, `qa:landing → OK · 23 avisos`), B (`git diff 6b3c231 -- supabase/`
+  vacío) y G en verde. La única mención de "factura electrónica" que queda en la web está en la guía
+  `/menu-digital-costa-rica`, que describe los POS de otros; no promete nada de DataFud.

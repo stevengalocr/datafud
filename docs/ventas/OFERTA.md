@@ -4,8 +4,9 @@
 > un precio o un plazo, se cambia ahí y se actualiza este archivo en el mismo commit. Nada de lo
 > que está acá puede prometer más de lo que la web promete: ver regla 10 de `CLAUDE.md`.
 >
-> Lo que está en §5 son **propuestas sin cerrar**: no se publican en la web ni se le dicen a un
-> cliente como si fueran política de la empresa hasta que Steven las confirme.
+> §5 son las **decisiones comerciales cerradas** el 2026-09-25 (D-034 a D-038, D-047 y D-048), ya
+> publicadas en la web (planes, FAQ y términos 1.1). Lo único que sigue abierto es la factura
+> electrónica 4.4: no se promete hasta que Steven la confirme.
 
 ---
 
@@ -40,9 +41,10 @@ Es lo que se entrega **en 48 horas** y lo que se vende primero. Incluye:
 - Fotos de los platillos y precios en colones.
 - **Cambios de precios y platillos por WhatsApp incluidos**, sin reimprimir nada.
 - Soporte por WhatsApp mientras el plan esté activo.
+- **La carta pesa menos de 2 MB al abrirla** (D-043), así abre con datos móviles en la mesa.
 - **Garantía:** si la carta no está publicada en 48 horas hábiles desde que recibimos menú, fotos
-  y logo, no se paga la implementación; si ya se pagó, se devuelve completa. La garantía cubre la
-  implementación de la Carta.
+  y logo, no se paga la implementación; si ya se pagó, se devuelve completa. La garantía de plazo
+  cubre solo la implementación de la Carta (D-038).
 
 **Pago anual: ₡149 000 al año** — dos meses gratis y la implementación incluida. Mes a mes el
 primer año sale ₡203 700, así que el anual ahorra ₡54 700.
@@ -57,7 +59,7 @@ Todo lo de Carta, más:
 - **Pedidos desde la mesa**: el comensal arma la orden y la manda a cocina.
 - **Panel del local**: comandas, menú editable, ventas del día y platillos más vendidos.
 - Hasta **150 platillos**, **20 categorías** y **30 mesas**.
-- Plazo: **sistema completo en 15 días**.
+- Plazo: **sistema completo en 15 días hábiles**.
 
 ### Plan Empresarial — ₡49 900 al mes + ₡125 000 de implementación (primer pago ₡174 900)
 
@@ -65,7 +67,7 @@ Todo lo de Estándar, más:
 
 - **Sin límite** de platillos, categorías ni mesas.
 - **Portugués** además de español e inglés.
-- Plazo: **sistema completo en 15 días**.
+- Plazo: **sistema completo en 15 días hábiles**.
 
 ### Hardware de mesa
 
@@ -90,11 +92,17 @@ sigue sirviendo. Un código no se reutiliza nunca para otro local.
 
 Mientras la oferta esté activa (`PRICING.founderOffer.enabled`): a los **primeros 10 locales**, la
 implementación de la Carta sin costo y **1 stand QR 3D incluido**, a cambio de dejarnos mostrar el
-local como caso. Cuando se llenen, se apaga en el código y desaparece de la web.
+local como caso. El local da ese permiso por WhatsApp (nombre, logo y capturas de su carta) y
+puede retirarlo cuando quiera sin perder el beneficio (D-037). Cuando se llenen, se apaga en el
+código y desaparece de la web. La web no dice cuántos cupos quedan (`remaining: null`) hasta que
+cierre el primero.
 
 ### Pagos y permanencia
 
-SINPE Móvil o transferencia. La implementación se paga al aprobar la propuesta. **Sin contrato de
+**Precios finales en colones, IVA incluido** (D-047). SINPE Móvil o transferencia. La
+implementación se paga al aprobar la propuesta; **la mensualidad arranca el día que la carta queda
+publicada** (D-035). El hardware se paga completo por adelantado, junto con la implementación,
+salvo el stand de fundadores (D-036). **Sin contrato de
 permanencia:** se cancela con 15 días de aviso por WhatsApp y el servicio sigue hasta el final del
 período ya pagado. Con menos de 15 días de aviso se cobra un período más y el servicio sigue
 activo hasta que termine. Si se cancela antes de empezar la implementación, se devuelve dentro de
@@ -197,34 +205,44 @@ teléfono de verdad antes de decirle al cliente que está listo.
 
 ---
 
-## 5. Decisiones propuestas, todavía sin cerrar
+## 5. Decisiones cerradas (2026-09-25)
 
-**No se publican en la web ni se le dicen a un cliente hasta que Steven las confirme.** Están acá
-para que se decidan de una vez, no para usarse como si ya estuvieran aprobadas.
+Las cerró Steven el 2026-09-25 y ya están en la web: línea bajo los planes, FAQ y términos 1.1.
+Los textos salen de `PRICING.terms`. **Numeración del vault:** hasta el 2026-09-25 este documento
+llamaba D-032 y D-033 a las dos primeras (referencia histórica); en el vault, que manda en la
+numeración, son **D-047** y **D-048**. Donde un documento viejo diga D-032/D-033 para IVA y plazos
+hábiles, léase D-047/D-048.
 
-- **D-032 · IVA.** Propuesta: publicar los precios **con IVA incluido**, que es lo que espera un
-  dueño de soda, y decirlo en una línea junto al precio. Falta confirmar además si DataFud puede
-  emitir factura electrónica 4.4 hoy; mientras no se sepa, en objeciones se responde "te lo
-  confirmamos en la propuesta", nunca de memoria.
-- **D-033 · Plazos hábiles.** Propuesta: "48 horas hábiles" y "15 días hábiles" significan de lunes
-  a viernes, sin feriados, y el reloj arranca cuando llega **todo** el material (menú, fotos y
-  logo), no cuando llega el primero.
-- **D-034 · Descuento de Carta a sistema.** Propuesta: si un local que ya pagó la implementación de
-  la Carta (₡24 900) sube a Estándar o Empresarial dentro de los primeros 6 meses, esos ₡24 900 se
-  le descuentan de la implementación del sistema (₡125 000). Sin esto, subir de plan castiga al
-  que empezó con la Carta.
-- **D-035 · Inicio de la mensualidad.** Propuesta: la mensualidad arranca el día que la carta queda
-  publicada, no el día que se aprueba la propuesta ni el día que se paga la implementación.
-- **D-036 · Pago del hardware.** Propuesta: el hardware se paga completo por adelantado, junto con
-  la implementación, porque hay costo de material antes de entregar.
-- **D-037 · Condiciones de fundadores.** Propuesta: el local acepta por escrito (un mensaje de
-  WhatsApp basta) que podemos mostrar su nombre, su logo y capturas de su carta como caso; puede
-  retirar el permiso avisando, y entonces sale del material en un plazo razonable. El beneficio
-  (implementación gratis + stand) no se retira si después retira el permiso.
-- **D-038 · Garantía del sistema.** Propuesta: extender la garantía de plazo al sistema completo —
-  si no está listo en 15 días hábiles desde que tenemos todo el material, no se paga la
-  implementación del sistema (₡125 000). Hoy la web solo garantiza la de la Carta, que es la
-  lectura conservadora de D-025 y la que se mantiene mientras esto no se cierre.
+- **D-047 · IVA incluido.** Todos los precios publicados son finales, con IVA incluido. En la web
+  se dice en una línea junto a los planes y en el FAQ: "Precios finales en colones, IVA incluido".
+  Motivo: el dueño de una soda compara el precio que ve contra lo que paga; si el 13 % aparece
+  después, se siente engañado. **La factura electrónica 4.4 no se promete** hasta que Steven la
+  confirme con Hacienda o su contador (entonces es un cambio de una línea en el FAQ).
+- **D-048 · "Hábiles".** "48 horas hábiles" y "15 días hábiles" cuentan de lunes a viernes, sin
+  feriados. El reloj arranca cuando llega **todo** el material: menú, fotos y logo. Se escribe así
+  en los términos, en el FAQ y en las etiquetas de plazo de los planes.
+- **D-034 · De Carta a sistema.** Si un local sube a Estándar o Empresarial dentro de los primeros
+  6 meses, se le descuenta de la implementación del sistema (₡125 000) lo que pagó por la de la
+  Carta (₡24 900). Va en el FAQ ("¿Puedo empezar solo con la carta y sumar pedidos después?") y en
+  los términos.
+- **D-035 · Inicio de la mensualidad.** La mensualidad arranca el día que la carta queda publicada,
+  no el día que se aprueba la propuesta ni el día que se paga la implementación. Va en la línea
+  bajo los planes, en el FAQ y en los términos.
+- **D-036 · Hardware.** Se paga completo por adelantado, junto con la implementación, porque hay
+  costo de material antes de entregar. Excepción: el stand incluido en la oferta de fundadores.
+  Va en el FAQ y en los términos.
+- **D-037 · Fundadores.** El local acepta por WhatsApp que DataFud muestre su nombre, su logo y
+  capturas de su carta. Puede retirar ese permiso cuando quiera; el beneficio (implementación de la
+  Carta sin costo + 1 stand) no se le quita. Va en los términos y acá. `founderOffer.remaining`
+  se queda en `null`: "Quedan 10 de 10" le avisa al prospecto que nadie compró todavía; Steven lo
+  pasa a 9 cuando cierre el primer fundador.
+- **D-038 · Garantía del sistema: no se extiende por ahora.** Solo la Carta tiene garantía de
+  plazo. Motivo: el backend todavía no existe y S1 sigue abierto; una garantía sobre algo sin
+  construir es un riesgo que no vale la pena. Se revisa después de entregar el primer sistema
+  completo. Los 15 días hábiles del sistema son un compromiso de trabajo, sin devolución.
+- **D-043 · Redacción final.** "La carta pesa menos de 2 MB al abrirla" (no "recorrida entera":
+  una carta de 60 platillos recorrida completa pasa de 3 MB, y lo que importa en la mesa es lo que
+  baja al abrir).
 
 ---
 
@@ -239,7 +257,7 @@ para que se decidan de una vez, no para usarse como si ya estuvieran aprobadas.
 | ₡6 000 · ₡7 500 · ₡10 000 (hardware) | `PRICING.hardware[*].priceCrc` |
 | 60 platillos · 5 categorías · 8 mesas (Carta) | `PRICING.plans.basico.maxProducts/maxCategories/maxTables` |
 | 150 · 20 · 30 (Estándar) | `PRICING.plans.estandar.*` |
-| 48 horas · 15 días | `PRICING.delivery.menuHours` / `.fullSystemDays` |
+| 48 horas hábiles · 15 días hábiles | `PRICING.delivery.menuHours` / `.fullSystemDays` (D-048) |
 | 3 a 5 días hábiles (hardware) | `PRICING.hardwareDelivery.leadTime` |
 | 15 días de aviso · 10 días de reembolso · 3 meses de garantía | `PRICING.terms.noticeDays` / `.refundDays` / `.hardwareWarrantyMonths` |
 | 10 cupos de fundadores | `PRICING.founderOffer.spots` |

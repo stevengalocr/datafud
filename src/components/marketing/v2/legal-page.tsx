@@ -11,6 +11,7 @@ import { SITE, waProps, whatsappDisplay } from "@/lib/site";
 
 export type LegalSection = { title: string; paragraphs: string[]; bullets?: string[] };
 
+/** Versión de la Política de privacidad (y valor por defecto). Los términos llevan la suya. */
 export const LEGAL_VERSION = "1.0";
 export const LEGAL_UPDATED = "22 de setiembre de 2026";
 
@@ -20,12 +21,16 @@ export function LegalPage({
   intro,
   sections,
   sibling,
+  version = LEGAL_VERSION,
+  updated = LEGAL_UPDATED,
 }: {
   eyebrow: string;
   title: string;
   intro: string;
   sections: LegalSection[];
   sibling: { href: string; label: string };
+  version?: string;
+  updated?: string;
 }) {
   return (
     <div className="min-h-screen bg-cream-50 font-sans text-brand-900 antialiased">
@@ -35,7 +40,7 @@ export function LegalPage({
         <p className="text-xs font-bold uppercase tracking-[0.2em] text-accent-700">{eyebrow}</p>
         <h1 className="mt-3 font-display text-[clamp(2rem,5vw,3.2rem)] leading-[1.08] tracking-tight text-brand-900">{title}</h1>
         <p className="mt-4 text-sm font-semibold text-brand-700/80">
-          Versión {LEGAL_VERSION} · vigente desde el {LEGAL_UPDATED}
+          Versión {version} · vigente desde el {updated}
         </p>
 
         <p className="mt-10 text-base font-medium leading-relaxed text-brand-800/85">{intro}</p>

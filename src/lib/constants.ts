@@ -61,13 +61,16 @@ const SETUP_FEE = {
   sistema: { usd: 249, crc: 125000 },
 } as const satisfies Record<SetupKind, Money>;
 
+/** Meses en que la implementación de la Carta se descuenta al pasar a un plan con pedidos (D-034). */
+const UPGRADE_CREDIT_MONTHS = 6;
+
 export const PRICING = {
   /** Implementación por tipo, pago único (D-023). La Carta ya no paga la del sistema. */
   setupFee: SETUP_FEE,
   /** Alias que usa el panel de cargos del super admin: implementación del sistema completo. */
   setupFeeUsd: SETUP_FEE.sistema.usd,
   nfcUnitUsd: 15, // Tarjeta NFC física por unidad (también en hardware)
-  /** Plazos prometidos (decisión D-012): 48 h solo la carta; sistema completo en 15 días. */
+  /** Plazos prometidos (D-012), en días hábiles (D-048): 48 h la carta; sistema completo en 15 días. */
   delivery: {
     menuHours: 48,
     fullSystemDays: 15,
@@ -83,7 +86,7 @@ export const PRICING = {
       maxProducts: 60,
       maxCategories: 5,
       maxTables: 8,
-      deliveryLabel: "Carta lista en 48 horas",
+      deliveryLabel: "Carta lista en 48 horas hábiles",
       tableOrdering: false,
       setup: "carta",
     },
@@ -97,7 +100,7 @@ export const PRICING = {
       maxProducts: 150,
       maxCategories: 20,
       maxTables: 30,
-      deliveryLabel: "Sistema completo en 15 días",
+      deliveryLabel: "Sistema completo en 15 días hábiles",
       tableOrdering: true,
       setup: "sistema",
     },
@@ -111,7 +114,7 @@ export const PRICING = {
       maxProducts: null,
       maxCategories: null,
       maxTables: null,
-      deliveryLabel: "Sistema completo en 15 días",
+      deliveryLabel: "Sistema completo en 15 días hábiles",
       tableOrdering: true,
       setup: "sistema",
     },
@@ -130,7 +133,7 @@ export const PRICING = {
     enabled: true,
     spots: 10,
     remaining: null as number | null,
-    text: "Primeros 10 locales: implementación de la Carta sin costo y 1 stand QR 3D incluido, a cambio de dejarnos mostrar tu local como caso.",
+    text: "Primeros 10 locales: implementación de la Carta sin costo y 1 stand QR 3D incluido, a cambio de dejarnos mostrar tu local como caso (nombre, logo y capturas de tu carta).",
     short: "Primeros 10 locales: implementación de la Carta sin costo",
   },
   /** Textos de la oferta que se repiten en planes, FAQ y legales (D-025). */
@@ -139,8 +142,8 @@ export const PRICING = {
       "Si tu carta no está publicada en 48 horas hábiles desde que recibimos menú, fotos y logo, no pagás la implementación.",
     /** Cómo se aplica la garantía si la implementación ya se pagó (se paga al aprobar la propuesta). */
     guaranteeRefund: "Si ya la pagaste, te la devolvemos completa.",
-    /** Alcance publicado de la garantía (lectura conservadora de D-025; Steven confirma si se extiende al sistema). */
-    guaranteeScope: "Aplica a la implementación de la Carta.",
+    /** Alcance de la garantía de plazo (D-038, 2026-09-25): solo la Carta, no el sistema completo. */
+    guaranteeScope: "La garantía de plazo aplica solo a la implementación de la Carta.",
     lateNotice: "Si avisás con menos de 15 días, se cobra un período más y el servicio sigue activo hasta que termine.",
     support: "Soporte por WhatsApp incluido mientras tengás el plan activo",
     menuChanges: "Cambios de precios y platillos por WhatsApp incluidos en todos los planes",
@@ -150,6 +153,21 @@ export const PRICING = {
     refundDays: 10,
     /** Garantía del hardware por defectos de fabricación (D-027). */
     hardwareWarrantyMonths: 3,
+    /** D-047: todo precio publicado es final, con IVA. No se promete factura electrónica en la web. */
+    ivaIncluded: "Precios finales en colones, IVA incluido.",
+    /** D-048: qué cuenta como "hábil" y desde cuándo corre el plazo. */
+    businessDays:
+      "“Hábiles” quiere decir de lunes a viernes, sin contar feriados. El plazo empieza a correr cuando recibimos todo el material: el menú con precios, las fotos y el logo.",
+    /** D-035: la mensualidad no corre mientras se monta la carta. */
+    billingStart: "La mensualidad arranca el día que tu carta queda publicada.",
+    /** D-036: el hardware se paga por adelantado (hay costo de material antes de entregar). */
+    hardwarePayment: "El hardware se paga completo por adelantado, junto con la implementación.",
+    /** D-034: pasar de la Carta a un plan con pedidos no castiga al que empezó con la Carta. */
+    upgradeCreditMonths: UPGRADE_CREDIT_MONTHS,
+    upgradeCredit: `Si pasás a Estándar o Empresarial dentro de los primeros ${UPGRADE_CREDIT_MONTHS} meses, te descontamos de la implementación del sistema lo que pagaste por la implementación de la Carta.`,
+    /** D-037: condiciones de la oferta de fundadores. */
+    founderConsent:
+      "Nos das el permiso por WhatsApp para mostrar el nombre, el logo y capturas de la carta de tu local. Podés retirarlo cuando quieras y el beneficio no se te quita.",
   },
   /** Hardware de mesa (decisión D-013). CRC primero desde 2026-09-22 (D-023); USD de referencia. */
   hardware: [

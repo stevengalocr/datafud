@@ -26,6 +26,15 @@ Todas las versiones notables del proyecto. Formato basado en
   (180 px, 2 KB) por convención, y `layout.tsx` ya no declara `icons`. `logo-main.png` baja de
   840 KB a 42,9 KB e `icono-main.png` (el que referencia el JSON-LD) de 782 KB a 28,3 KB, con el
   mismo nombre y las mismas dimensiones (PNG con paleta).
+- **Condiciones comerciales publicadas (D-034 a D-038, D-047, D-048).** Bajo los planes: "Precios
+  finales en colones, IVA incluido. La mensualidad arranca el día que tu carta queda publicada".
+  La FAQ pasa de 15 a 18 preguntas (IVA, cuándo empieza la mensualidad, qué son "hábiles", cómo se
+  paga el hardware; envíos se une a pedido mínimo) y la de "empezar con la Carta" suma el
+  descuento de la implementación dentro de los primeros 6 meses. JSON-LD `FAQPage` idéntico a lo
+  visible (18 = 18). Las etiquetas de plazo de los planes dicen "hábiles". **Términos 1.1** (25 de
+  setiembre de 2026): IVA incluido, plazos hábiles, inicio de la mensualidad, pago del hardware,
+  paso de la Carta a un plan con pedidos, oferta de fundadores y garantía de plazo solo para la
+  Carta. La web ya no promete factura electrónica. Ningún monto cambió.
 - **Las fotos de la demo muestran el platillo que nombran y se sirven desde el sitio (D-053).**
   El "gallo pinto" era un guiso de pollo, el "casado" una ensalada y la "limonada" tres cócteles;
   los panqueques llevaban una mano. Las 14 fotos (el café chorreado ya tiene la suya) son reales,

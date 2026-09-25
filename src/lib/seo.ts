@@ -17,6 +17,8 @@ export function pageSocial(path: string, title: string, description: string) {
 }
 
 export const LEGAL_UPDATED_ISO = "2026-09-22";
+/** Términos 1.1 (D-034 a D-038, D-047, D-048). La privacidad sigue en 1.0. */
+export const TERMS_UPDATED_ISO = "2026-09-25";
 
 // Solo datos reales: sin dirección postal (no se publica), sin reseñas ni cifras de clientes.
 export function organizationJsonLd() {

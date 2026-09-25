@@ -127,7 +127,14 @@ Colones primero (lo que ve el cliente tico); USD es la moneda interna y de la BD
 - **Oferta de fundadores** (`PRICING.founderOffer`, activa): primeros 10 locales, implementación de la
   Carta sin costo y 1 stand QR 3D incluido, a cambio de mostrar el local como caso.
 - **Garantía de 48 h:** si la carta no está publicada en 48 horas hábiles desde que recibimos menú,
-  fotos y logo, no se paga la implementación.
+  fotos y logo, no se paga la implementación. Solo la Carta tiene garantía de plazo (D-038).
+- **Condiciones comerciales (2026-09-25, términos 1.1):** precios finales en colones, IVA incluido
+  (D-047); "hábiles" = lunes a viernes sin feriados, desde que llega todo el material (D-048); la
+  mensualidad arranca el día que la carta queda publicada (D-035); el hardware se paga por
+  adelantado con la implementación, salvo el stand de fundadores (D-036); al pasar de la Carta a
+  un plan con pedidos en los primeros 6 meses se descuenta la implementación de la Carta (D-034);
+  el permiso de fundadores se da por WhatsApp y se puede retirar sin perder el beneficio (D-037).
+- **Peso de la carta (D-043):** la carta pesa menos de 2 MB al abrirla.
 - **Cambios de precios y platillos por WhatsApp** incluidos en todos los planes. **Sin permanencia**:
   se cancela con 15 días de aviso.
 - **Hardware de mesa** (`PRICING.hardware`): stand QR impreso en 3D desde ₡6 000, tarjeta NFC

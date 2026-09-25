@@ -1,6 +1,6 @@
 import type { MetadataRoute } from "next";
 import { SITE } from "@/lib/site";
-import { LEGAL_UPDATED_ISO } from "@/lib/seo";
+import { LEGAL_UPDATED_ISO, TERMS_UPDATED_ISO } from "@/lib/seo";
 import { CARTAS } from "@/content/cartas";
 
 // Solo rutas públicas y estáticas. Las privadas se excluyen en robots.ts.
@@ -22,7 +22,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${SITE.url}/menu-digital-costa-rica`, lastModified: now, changeFrequency: "monthly", priority: 0.8 },
     { url: `${SITE.url}/menu-digital-para-sodas`, lastModified: now, changeFrequency: "monthly", priority: 0.8 },
     { url: `${SITE.url}/menu-qr-restaurantes-turisticos`, lastModified: now, changeFrequency: "monthly", priority: 0.8 },
-    { url: `${SITE.url}/terminos`, lastModified: new Date(LEGAL_UPDATED_ISO), changeFrequency: "yearly", priority: 0.3 },
+    { url: `${SITE.url}/terminos`, lastModified: new Date(TERMS_UPDATED_ISO), changeFrequency: "yearly", priority: 0.3 },
     { url: `${SITE.url}/privacidad`, lastModified: new Date(LEGAL_UPDATED_ISO), changeFrequency: "yearly", priority: 0.3 },
     ...cartas,
   ];

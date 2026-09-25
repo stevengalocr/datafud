@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { pageSocial } from "@/lib/seo";
 import { LegalPage, type LegalSection } from "@/components/marketing/v2/legal-page";
-import { PLAN_CODES, PRICING, setupFeeFor, tablesLabel } from "@/lib/constants";
+import { PLAN_CODES, PRICING, founderOfferActive, setupFeeFor, tablesLabel } from "@/lib/constants";
 import { formatCrc } from "@/lib/currency/format";
 import { SITE, whatsappDisplay } from "@/lib/site";
 
@@ -15,7 +15,13 @@ export const metadata: Metadata = {
   ...pageSocial("/terminos", "Términos del servicio · DataFud", DESCRIPTION),
 };
 
-const { plans, terms, delivery, hardwareDelivery } = PRICING;
+const { plans, terms, delivery, hardwareDelivery, founderOffer } = PRICING;
+
+// 1.1 (2026-09-25): IVA incluido (D-047), plazos hábiles (D-048), inicio de la mensualidad (D-035),
+// pago del hardware (D-036), paso de la Carta al sistema (D-034), fundadores (D-037) y garantía
+// de plazo solo para la Carta (D-038).
+const TERMS_VERSION = "1.1";
+const TERMS_UPDATED = "25 de setiembre de 2026";
 
 // Todo monto y plazo sale de PRICING: si cambia la oferta, estos términos cambian con ella.
 const planBullets = PLAN_CODES.map((code) => {
@@ -41,28 +47,46 @@ const sections: LegalSection[] = [
   },
   {
     title: "Qué incluye cada plan",
-    paragraphs: ["Los precios están en colones costarricenses; el equivalente en dólares de la página es solo una referencia."],
+    paragraphs: [`Los precios están en colones costarricenses y son finales, con el IVA incluido; el equivalente en dólares de la página es solo una referencia.`],
     bullets: [
       ...planBullets,
-      `Todos los planes: ${terms.menuChanges.charAt(0).toLowerCase()}${terms.menuChanges.slice(1)}, y ${terms.support.charAt(0).toLowerCase()}${terms.support.slice(1)}.`,
+      `Todos los planes incluyen los cambios de precios y platillos por WhatsApp y el ${terms.support.charAt(0).toLowerCase()}${terms.support.slice(1)}.`,
       `Pago anual de la Carta: ${formatCrc(PRICING.annualCarta.crc)} por año, con la implementación de la Carta incluida.`,
     ],
   },
   {
     title: "Plazos y garantía de 48 horas",
     paragraphs: [
-      `Publicamos tu carta digital en ${delivery.menuHours} horas hábiles y dejamos el sistema completo (pedidos, panel y reportes) en ${delivery.fullSystemDays} días. El reloj empieza a correr cuando recibimos el menú con precios, las fotos y el logo; la implementación se paga antes, al aprobar la propuesta (si llegara después, el plazo corre desde el pago).`,
-      `Garantía: ${terms.guarantee48h} ${terms.guaranteeRefund} ${terms.guaranteeScope} Si recibimos materiales incompletos, te avisamos qué falta y el plazo empieza cuando lleguen.`,
+      `Publicamos tu carta digital en ${delivery.menuHours} horas hábiles y dejamos el sistema completo (pedidos, panel y reportes) en ${delivery.fullSystemDays} días hábiles. ${terms.businessDays} La implementación se paga antes, al aprobar la propuesta.`,
+      `Garantía: ${terms.guarantee48h} ${terms.guaranteeRefund} ${terms.guaranteeScope} El plazo de ${delivery.fullSystemDays} días hábiles del sistema completo es un compromiso de trabajo, sin garantía de devolución. Si recibimos materiales incompletos, te avisamos qué falta y el plazo empieza cuando lleguen.`,
     ],
   },
   {
     title: "Pagos",
     paragraphs: [
-      "Pagás por SINPE Móvil o transferencia bancaria. La implementación se paga al aprobar la propuesta y la mensualidad, por adelantado cada mes. No hacemos cobros automáticos ni guardamos datos de tarjetas.",
-      "Recibís comprobante de cada pago. Si tu negocio necesita factura electrónica, avisanos antes de contratar y lo coordinamos.",
+      `Pagás por SINPE Móvil o transferencia bancaria. La implementación se paga al aprobar la propuesta y la mensualidad, por adelantado cada mes. ${terms.billingStart} No hacemos cobros automáticos ni guardamos datos de tarjetas.`,
+      `${terms.hardwarePayment}${founderOfferActive() ? " La excepción es el stand incluido en la oferta de fundadores, que no se cobra." : ""}`,
+      "Recibís un comprobante de cada pago.",
       "Si una mensualidad queda sin pagar, podemos pausar la carta hasta que se regularice, siempre avisándote antes por WhatsApp. Cuando se recibe el pago, la carta vuelve a estar disponible.",
     ],
   },
+  {
+    title: "Pasar de la Carta a un plan con pedidos",
+    paragraphs: [
+      `Podés empezar con la Carta y pasar a Estándar o Empresarial cuando quieras. El cambio lleva la implementación del sistema completo (${formatCrc(PRICING.setupFee.sistema.crc)}) y desde ahí la mensualidad del plan nuevo. ${terms.upgradeCredit}`,
+    ],
+  },
+  ...(founderOfferActive()
+    ? [
+        {
+          title: "Oferta de fundadores",
+          paragraphs: [
+            `A los primeros ${founderOffer.spots} locales les damos la implementación de la Carta sin costo y 1 stand QR 3D, a cambio de dejarnos mostrar su local como caso: su nombre, su logo y capturas de su carta.`,
+            terms.founderConsent,
+          ],
+        },
+      ]
+    : []),
   {
     title: "Cancelación, sin permanencia",
     paragraphs: [
@@ -140,6 +164,8 @@ export default function TerminosPage() {
       intro="Acá está, en lenguaje claro, lo que podés esperar de DataFud y lo que nosotros esperamos de vos. Si algo no queda claro, preguntanos antes de contratar."
       sections={sections}
       sibling={{ href: "/privacidad", label: "Política de privacidad" }}
+      version={TERMS_VERSION}
+      updated={TERMS_UPDATED}
     />
   );
 }

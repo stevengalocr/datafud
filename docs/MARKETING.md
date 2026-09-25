@@ -70,7 +70,7 @@ servicio, datos del negocio, atención a clientes extranjeros.
 | **Planes y precios** (`#planes`) | Convertir | CRC primero, implementación y primer pago por plan, garantía, fundadores |
 | **Hardware** (`#hardware`) | Vender lo que va en la mesa | Precios en colones, sin mínimo, entrega GAM/Correos |
 | **Por qué DataFud** (`#confianza`) | Confianza verificable | 4 puntos + tarjeta "Atención DataFud" con el WhatsApp |
-| **Preguntas** (`#preguntas`) | Resolver objeciones | 15 preguntas de Costa Rica |
+| **Preguntas** (`#preguntas`) | Resolver objeciones | 18 preguntas de Costa Rica (IVA, inicio de la mensualidad, "hábiles" y pago del hardware desde 1.4.0) |
 | **Contacto + cierre** | Capturar | WhatsApp (canal único) + formulario (solo con `RESEND_API_KEY`) |
 
 Regla de repetición (V08): "48" y "15 días" aparecen como máximo 3 veces cada uno en el texto
@@ -107,7 +107,9 @@ visible de `/` (hero, planes y FAQ); la línea de tiempo no repite el plazo de l
   publicada en 48 horas hábiles desde que recibimos menú, fotos y logo, no pagás la implementación."
 - **Permanencia:** sin contrato; se cancela con aviso de 15 días por WhatsApp.
 - **Pagos:** SINPE Móvil o transferencia. Implementación al aprobar la propuesta; mensualidad por
-  adelantado. Comprobante de cada pago; factura electrónica se coordina si se avisa antes.
+  adelantado, desde el día que la carta queda publicada (D-035). Precios finales, IVA incluido
+  (D-047). Comprobante de cada pago; la factura electrónica no se promete en la web ni en la venta
+  hasta que Steven la confirme.
 
 ### Hardware de mesa (add-ons, D-013) — fuente: `PRICING.hardware`
 
@@ -162,11 +164,13 @@ por resultados.
 
 | Objeción | Respuesta comercial |
 |---|---|
-| "Es complicado / no soy técnico" | Te la montamos nosotros: carta en 48 h y sistema en 15 días |
+| "Es complicado / no soy técnico" | Te la montamos nosotros: carta en 48 horas hábiles y sistema en 15 días hábiles (D-048) |
 | "¿Y si no me sirve?" | Demo sin hablar con nadie y sin permanencia: cancelás con 15 días de aviso |
 | "Mis clientes no sabrán usarlo" | Solo escanear o tocar — sin apps ni cuentas |
 | "Ya tengo carta" | La digital se lee mejor en el celular y los cambios no requieren reimprimir; con el sistema completo, además, reportes de venta |
 | "Tengo clientes extranjeros" | Carta en español e inglés en todos los planes (la traducción la hacemos nosotros); portugués en Empresarial |
+| "¿Eso lleva IVA?" | No, ya está incluido: precios finales en colones, IVA incluido (D-047) |
+| "¿Cuándo empiezo a pagar?" | La mensualidad arranca el día que la carta queda publicada (D-035) |
 
 ## 9. Tono y voz
 

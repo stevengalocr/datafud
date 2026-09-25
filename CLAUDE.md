@@ -35,7 +35,8 @@ etiqueta "Render ilustrativo" y todo QR dibujado decodifica a `https://datafud.c
   `/menu-qr-restaurantes-turisticos`.
 - `src/app/(auth)/` login (Server Component + `login-form.tsx`), register (redirige), `actions.ts`
   (único uso de `service_role`), ruta privada del super admin (no enlazada, noindex).
-- `src/app/(legal)/` términos y privacidad, versión 1.0 (cifras desde `PRICING`).
+- `src/app/(legal)/` términos (versión 1.1, con D-034 a D-038, D-047 y D-048) y privacidad (1.0);
+  cifras y condiciones desde `PRICING` (`terms`).
 - `src/app/dashboard/` panel del restaurante · `src/app/admin/` super admin · `src/app/m/[tenant]/[table]/`
   menú del comensal (RPC `get_menu` / `place_order`, `MenuClient` con `ordering`) ·
   `src/app/preview/` demo sin backend (`/preview/carta` es la que se enseña primero).
