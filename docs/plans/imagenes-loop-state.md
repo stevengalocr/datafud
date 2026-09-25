@@ -8,8 +8,8 @@
 
 ## Contador
 
-- Iteración actual: 4
-- Iteraciones consumidas: 4 / 12
+- Iteración actual: 5
+- Iteraciones consumidas: 5 / 12
 
 ## Capacidades del entorno
 
@@ -46,9 +46,9 @@
 |---|---|---|---|---|---|---|
 | R01 | Estado, línea base y archivos | hecho | 1 | `ebd5e77` | READY `dpl_GSgjRAdP…` | Abajo |
 | R02 | Hero | hecho | 1 | `d5013ba` + `03e47c1` | READY `dpl_3e79x2bj…` | Abajo |
-| R03 | Tarjeta NFC en `#hardware` | hecho | 1 | `be38789` | ver puente | Abajo |
-| R04 | Fondo del cierre (footer) | hecho | 1 | ver puente | ver puente | Abajo |
-| R05 | QR real en los renders de estudio | pendiente | 0 | | | |
+| R03 | Tarjeta NFC en `#hardware` | hecho | 1 | `be38789` | READY `dpl_BFrhfgus…` | Abajo |
+| R04 | Fondo del cierre (footer) | hecho | 1 | `e9c5744` | READY `dpl_Dqv9PoVm…` | Abajo |
+| R05 | QR real en los renders de estudio | hecho | 1 | ver puente | ver puente | Abajo |
 | R06 | Auditoría de imágenes públicas | pendiente | 0 | | | |
 | R07 | Verificación final, release 1.3.1 y puente | pendiente | 0 | | | |
 
@@ -201,3 +201,37 @@ los tres, no solo a `stand-qr-3d.webp`.
 - Peso de la home (375×812): recorrida entera **399,2 → 382,1 KB**; al abrir 244,2 → 243,6 KB.
 - `cta-bg.png` borrado; `grep -rn "cta-bg" src scripts` → sin resultados. Puertas A en verde
   (`qa:landing → OK · 21 avisos`).
+- Producción (`?rev=e9c5744`): la home pide `renders/tarjeta-nfc` y `renders/ambiente-piedra`;
+  `nfc.png`, `cta-bg.png` y `banner.png` = 0. `/c/ejemplo 200`, `/q/demo26 307 → /c/ejemplo`.
+
+### R05 · QR real en los renders de estudio (D-051)
+
+- Antes:
+  ```
+  stand-qr-3d.webp     | 1536x1024 | 27692 B | None
+  stand-qr-3d-nfc.webp | 1536x1024 | 26986 B | None
+  stand-resenas.webp   | 1536x1024 | 25128 B | None
+  ```
+- Cómo (`.qa/bin/pegar-qr.py`, OpenCV en el venv temporal; solo se commitean las imágenes):
+  1. El panel es el hueco no verde más grande dentro del cuerpo verde del stand → cuadrilátero.
+  2. Se borran los módulos de la IA (`inpaint`) y se suaviza la luz del papel.
+  3. Matriz de `qrcode` (ECC H, versión 4, 33×33, la misma librería y nivel que el kit) con 1
+     módulo de margen, deformada al panel (con 2,5 px de retiro del borde) y supermuestreada ×4.
+  4. Papel × QR: módulos negro puro, blanco con la luz original. WebP calidad 86.
+- Después:
+  ```
+  stand-qr-3d.webp     | 1536x1024 | 37896 B | 'https://datafud.com/q/demo26'
+  stand-qr-3d-nfc.webp | 1536x1024 | 36082 B | 'https://datafud.com/q/demo26'
+  stand-resenas.webp   | 1536x1024 | 34726 B | 'https://datafud.com/q/demo26'
+  ```
+  Variantes servidas por `next/image` (640, 750 y 1080 px de cada una): **9 de 9** decodifican
+  a `https://datafud.com/q/demo26`.
+- **Trampa encontrada.** La primera lectura de las variantes servidas dio `None` en 4 de 6: el
+  caché local de `next/image` (`.next/cache/images`) se indexa por URL, ancho y calidad, **no por
+  el contenido**, y un `next build` no lo limpia. Seguía sirviendo los renders viejos. Con
+  `rm -rf .next/cache/images` y el servidor reiniciado, 9 de 9. En producción se comprueba igual
+  (R05 en producción, abajo).
+- Zoom ×2 de los bordes del pegado y capturas de `#hardware` a 375 y 1440 miradas: sin halos ni
+  bordes visibles. A la derecha el margen queda algo menor que 1 módulo por el bisel del panel;
+  decodifica igual.
+- Puertas A en verde (`qa:landing → OK · 21 avisos`).

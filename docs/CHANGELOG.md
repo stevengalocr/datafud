@@ -25,6 +25,14 @@ Todas las versiones notables del proyecto. Formato basado en
   contra el píxel más claro detrás de cada texto: todo AA a 375, 768, 1024 y 1440 px.
   `cta-bg.png` se borró del repo.
 
+### Fixed — Loop "imágenes" (2026-09-25)
+- **Los QR de los renders de estudio escanean (D-051).** `stand-qr-3d.webp`,
+  `stand-qr-3d-nfc.webp` y `stand-resenas.webp` tenían un QR dibujado por la IA, con módulos
+  borrosos, que no decodificaba. Se les pegó el QR real de `https://datafud.com/q/demo26` (ECC H,
+  el mismo que genera el kit de entrega) con perspectiva sobre el panel blanco, negro puro y 1
+  módulo de margen. Mismo nombre; pesan 35–38 KB. Decodifican el original y las variantes de
+  640, 750 y 1080 px que sirve `next/image`.
+
 ## [1.3.0] — 2026-09-25 · Entrega de la Carta lista
 
 Informe: `docs/plans/entrega-loop-report.md`.
