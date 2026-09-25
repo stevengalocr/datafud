@@ -7,6 +7,10 @@ Todas las versiones notables del proyecto. Formato basado en
 
 ## [Unreleased]
 
+## [1.2.0] — 2026-09-25 · Oferta sólida y Carta entregable
+
+Informe: `docs/plans/oferta-loop-report.md`.
+
 ### Added — Loop "oferta sólida" (2026-09-25)
 - **Carta entregable sin backend (D-040).** `/c/<slug>` publica la carta de un local desde
   `src/content/cartas/`, con el mismo formato que devuelve `get_menu`. `MenuClient` acepta
@@ -34,6 +38,16 @@ Todas las versiones notables del proyecto. Formato basado en
 - Los platillos de la demo suman descripción en inglés: la carta vende el cambio ES/EN y en inglés
   mostraba las descripciones en español.
 - `qa:landing` recorre además `/preview/carta` y `/c/ejemplo`.
+
+### Fixed — Loop "oferta sólida" (2026-09-25)
+- La demo decía "¡Orden enviada! La cocina ya la recibió." cuando no hay cocina ni base de datos:
+  nuevo `orderSentDemo` en los tres idiomas.
+- El conmutador ES/EN (32×25 px) y los chips de categoría (30 px de alto) pasan a 44 px, y los
+  botones de idioma suman `aria-label`, `aria-pressed` y `lang`.
+- El `sitemap` no incluía ninguna carta: una carta con `indexable: true` quedaba permitida en
+  Google pero nunca anunciada.
+- "Verde Limon" sin tilde en la descripción en inglés de la limonada.
+- La pantalla de confirmación ya no escribe "Mesa" cuando la carta no tiene mesa.
 
 ## [1.1.0] — 2026-09-22 · Landing lista para vender
 

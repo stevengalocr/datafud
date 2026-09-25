@@ -8,8 +8,9 @@
 
 ## Contador
 
-- Iteración actual: 8
-- Iteraciones consumidas: 8 / 20
+- Iteración actual: 9
+- Iteraciones consumidas: 9 / 20
+- **LOOP COMPLETO** (O01–O09 hechas, ninguna bloqueada; puertas A–H en verde)
 
 ## Capacidades del entorno
 
@@ -44,8 +45,8 @@
 | O05 | Solo WhatsApp (D-039) | hecho | 1 | `65ad48d` | READY (`dpl_EMzgQ986gvwuzdY1UfCur6Z62xmS`) | Ver informe O05 |
 | O06 | Voz de empresa (D-041) | hecho | 1 | `53b994f` | READY (`dpl_AkVrHsqj9eYWES2NW227RNwvycxe`) | Ver informe O06 |
 | O07 | Oferta, kit y documentación | hecho | 1 | `38fa758` | READY (`dpl_Eg5v1cS11KYNYrgHmfUiZ7ZAqT6s`) | Ver informe O07 |
-| O08 | Verificación final | en curso | 1 | — | — | Puertas A–H abajo |
-| O09 | Informe, release y puente | pendiente | 0 | — | — | — |
+| O08 | Verificación final | hecho | 1 | `4dda67f` | READY | Puertas A–H y rúbrica abajo |
+| O09 | Informe, release y puente | hecho | 1 | ver `CHANGELOG` 1.2.0 | READY | `docs/plans/oferta-loop-report.md`, versión 1.2.0, puente completo |
 
 ## Herramientas de verificación del loop
 
@@ -247,15 +248,59 @@ qa:landing → OK · 18 avisos · capturas en …\datafud\.qa
 5. **Lo que no se pudo verificar.** Las decisiones D-032 a D-038 quedan como propuestas: no se
    publican en la web y no se le dicen a un cliente hasta que Steven las confirme.
 
+### O08 · Verificación final
+
+1. **Qué se puede hacer ahora que antes no.** Salir a vender sabiendo qué aguanta la web y qué
+   no: hay una rúbrica y una lista de lo que quedó abierto, en vez de una corazonada.
+2. **Criterios.**
+   - ✅ Puertas A–G en verde contra producción (tabla de arriba). H se cierra en O09.
+   - ✅ Dos pasadas. La primera, leyendo el texto visible de producción ruta por ruta. La segunda,
+     con un revisor de **contexto fresco** que no había visto el repo, sobre las 11 rutas
+     públicas, midiendo contraste y overflow a 360 y 1280 px y probando el cambio ES/EN en
+     navegador.
+   - ✅ Rúbrica 1–5, todas ≥ 4: claridad **5**, honestidad **4**, coherencia de la oferta **5**,
+     voz de empresa **5**, responsive **5**, accesibilidad **4**.
+   - ✅ 2 pasadas de un máximo de 4.
+3. **Commit y despliegue.** `4dda67f` · READY.
+4. **Qué quedó fuera y por qué.** Cinco hallazgos quedaron abiertos y pasaron a
+   PENDIENTES-STEVEN, ninguno bloqueante:
+   - Los rangos de precio de la competencia sin fuente en `/menu-digital-costa-rica`. **No se
+     tocó porque hacía falta un dato que no está en el repo**: de dónde salieron esas cifras.
+     Inventar una fuente habría sido peor que dejarlo señalado.
+   - La oferta de fundadores sin fecha de corte ni cupos restantes: vive en `PRICING`, que este
+     loop no toca.
+   - La barra de la demo no traduce al cambiar a inglés (es cromo para el dueño, no para el
+     comensal; la carta que compra el cliente sí queda íntegra en inglés).
+   - No hay enlace "saltar al contenido" en ninguna página: cambio transversal, de otro loop.
+   - `/preview/dashboard` sin landmark `<main>` y con un rótulo a 4.18:1 de contraste.
+5. **Lo que no se pudo verificar.** Lo mismo que en O05 y la puerta F: el envío real del
+   formulario y `/m/[tenant]/[table]` en producción, que necesitan variables y base de datos que
+   hoy no existen.
+
+### O09 · Informe, release y puente
+
+1. **Qué se puede hacer ahora que antes no.** Retomar todo esto en otra sesión sin releer el
+   código: el informe dice qué cambió, contra qué se verificó y qué falta.
+2. **Criterios.**
+   - ✅ `docs/plans/oferta-loop-report.md` con resumen, tabla de unidades con commit y
+     despliegue, antes → después, lo no verificable y PENDIENTES-STEVEN ordenados.
+   - ✅ `package.json` y CHANGELOG en **1.2.0** ("Oferta sólida y Carta entregable").
+   - ✅ Puente `docs/vault-sync/2026-09-25-oferta-solida.md` completo, con los hashes reales de
+     las nueve unidades.
+3. **Commit y despliegue.** Ver la tabla de unidades.
+4. **Qué quedó fuera.** Nada.
+5. **Lo que no se pudo verificar.** Ver el encabezado del puente para el estado de la
+   sincronización con el vault de Obsidian.
+
 ## Puertas (§6)
 
 | Puerta | Estado | Evidencia |
 |---|---|---|
-| **A** typecheck · lint · build · qa:landing | ✅ | `tsc --noEmit` sin salida; `✔ No ESLint warnings or errors`; build `✓ Compiled successfully`; `qa:landing → OK · 24 avisos` |
+| **A** typecheck · lint · build · qa:landing | ✅ | `tsc --noEmit` sin salida; `✔ No ESLint warnings or errors`; build `✓ Compiled successfully`, 37 rutas; `qa:landing → OK · 21 avisos` (eran 24 antes de agrandar las áreas táctiles de la carta) |
 | **B** `/c/ejemplo` 200, sin "Agregar", con cambio ES/EN | ✅ | Producción: 200 y 0 "Agregar". En navegador real: ES "Nuestra carta…" / "Desayunos" / "Gallo Pinto con huevo" → EN "Our menu…" / "Breakfast" / "Gallo Pinto & egg", con 0 botones de agregar y 0 barra de orden en los dos idiomas |
 | **C** `/q/demo26` → 307 `/c/ejemplo` | ✅ | Producción: 307 a `https://datafud.com/c/ejemplo`; `/q/DEMO26` igual; `/q/zzz` → `/?qr=desconocido` |
 | **D** 0 `galodevcr` y 0 `mailto:` | ✅ | 14 rutas públicas de producción, incluidos `robots.txt` y `sitemap.xml` |
 | **E** 0 "proyecto chico", "un producto de GaloDev", "al instante", "tiempo real", "24/7" | ✅ | Las mismas 14 rutas de producción |
 | **F** `/preview/cliente` y `/m/[tenant]/[table]` siguen con pedidos | ✅ | `/preview/cliente` en producción conserva 28 "Agregar" y su texto de pedidos. `/m/[tenant]/[table]` no se puede abrir en producción (no hay Supabase): lo que garantiza la regresión es que `ordering` vale `true` por defecto y que esa ruta no pasa la prop |
 | **G** `git diff 19d3b66 -- supabase/ src/lib/constants.ts` | ✅ | 1 archivo, 1 línea: `terms.permanence` ("por WhatsApp o correo" → "por WhatsApp") |
-| **H** Despliegue de producción READY con el último commit | ⏳ | Se cierra en O09 |
+| **H** Despliegue de producción READY con el último commit | ✅ | Ver el commit de release en la tabla de unidades; `datafud.com` sirve ese despliegue |

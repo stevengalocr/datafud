@@ -10,6 +10,85 @@ Aplicado en vault: **no** (se decide en O09, según el conector de Google Drive 
 
 ---
 
+## Resumen · qué cambiar en cada página (aplicar tal cual)
+
+**Pendientes.md**
+
+Marcar cerrados (2026-09-25):
+- "No se puede entregar una carta sin montar Supabase" → ya se entrega desde `src/content/cartas/`.
+- "No hay forma de cambiar el destino de un QR impreso" → `/q/<código>`.
+- "Correo @gmail visible en la web" → canal único WhatsApp.
+- "La landing habla como proyecto personal" y "firma del fundador con foto pendiente" → voz de
+  empresa; el bloque de la foto ya no existe.
+- "La demo enseña pedidos desde la mesa, que son de otro plan" → la demo abre por el plan Carta.
+- "No hay un documento que diga qué se vende y qué no" → `docs/ventas/OFERTA.md`.
+- "Loop oferta sólida en curso" → cerrado con la versión 1.2.0.
+
+Agregar como abiertos (para Steven, en este orden):
+1. Imprimir el stand de muestra con `https://datafud.com/q/demo26`.
+2. WhatsApp Business en +506 7287 4779 (nombre DataFud, logo, catálogo con planes y stands).
+3. Decidir el IVA (propuesta: precios con IVA incluido) y confirmar factura electrónica 4.4.
+4. Confirmar D-033 a D-038 de `docs/ventas/OFERTA.md` §5.
+5. Los rangos de precio de la competencia en `/menu-digital-costa-rica`: publicar fuente y fecha,
+   o sacarlos.
+6. Fecha de corte o cupos restantes de la oferta de fundadores.
+7. Fotos reales de los 4 stands en `public/hardware/<código>.webp`.
+8. Redes en `SITE.social` y Google Business Profile.
+9. Opcional: `RESEND_API_KEY` para el formulario.
+10. Pulido de accesibilidad: enlace "saltar al contenido"; `<main>` y contraste del rótulo en
+    `/preview/dashboard`; traducir la barra de la demo.
+
+Agregar como regla permanente: al dar de alta una carta real, seguir los 4 pasos de
+`src/content/cartas/index.ts` y **probarla en un teléfono de verdad** antes de mandarle el enlace
+al cliente.
+
+**Decisiones.md** — cuatro ADR nuevos, el detalle en los bloques de O02, O03, O05 y O06:
+- **D-014** QR y NFC impresos permanentes (`/q/<código>`; un código nunca se reutiliza).
+- **D-039** Canal de contacto único: WhatsApp.
+- **D-040** Entrega de la Carta sin backend (`/c/<slug>` desde `src/content/cartas/`).
+- **D-041** Voz de empresa, con el límite explícito de no inventar sociedad ni equipo.
+
+Y siete **propuestas sin cerrar**, D-032 a D-038, escritas en `docs/ventas/OFERTA.md` §5. No se
+publican ni se le dicen a un cliente hasta que Steven las confirme.
+
+**Seguridad.md** — sin cambios en todo el loop. `git diff 19d3b66 -- supabase/` está vacío. S1,
+S3 y S10 siguen abiertos, y el plan de `OFERTA.md` §4 pone S1 y S3 como condición antes de que
+entre el primer dato real.
+
+**Arquitectura-Y-Base-De-Datos.md** — `MenuPayload` tiene dos orígenes: la RPC `get_menu` (en
+`/m/<tenant>/<mesa>`) y los archivos de `src/content/cartas/` (en `/c/<slug>`). Ese contrato
+común es lo que permite migrar un local de la Carta al sistema sin rehacer la UI.
+
+**Guia-De-Desarrollo.md**
+- Los 4 pasos para dar de alta una carta (`src/content/cartas/index.ts`).
+- Formato del código de QR: 6 caracteres en minúscula, sin `0`, `o`, `1`, `l` ni `i`; nunca se
+  reutiliza.
+- En la máquina de Steven el puerto 3000 puede estar ocupado por otro proyecto: `qa:landing` da
+  por bueno cualquier servidor que responda ahí y verificaría el sitio equivocado. Correrlo con
+  `QA_BASE=http://localhost:3177`.
+
+**Marca-Y-Marketing.md**
+- Canal único WhatsApp y voz de empresa (D-039 y D-041), con el límite de no inventar sociedad.
+- El bloque de confianza es "Atención DataFud · Ventas y soporte · Costa Rica".
+- El recorrido demo arranca en `/preview/carta`; `/preview/cliente` queda como "Carta con
+  pedidos", etiquetada "Estándar y Empresarial".
+- El stand de muestra lleva `/q/demo26`, nunca un enlace con UTM: un UTM impreso queda congelado
+  y mide una campaña que ya no existe.
+- Rúbrica de la revisión fresca del 2026-09-25 como línea base: claridad 5, honestidad 4,
+  coherencia 5, voz de empresa 5, responsive 5, accesibilidad 4.
+
+**Paneles-Y-Vistas.md** — rutas nuevas: `/c/[slug]` (carta pública estática, `noindex` si la
+carta no es `indexable`), `/q/[code]` (redirección 307) y `/preview/carta`.
+
+**Cuentas-y-Accesos.md** — `galodevcr@gmail.com` sigue siendo el destino de los leads, pero ya no
+es público: vive en `SITE.leadsEmail` y no se renderiza. `public/equipo/steven.webp` ya no se usa.
+
+**Plan-Landing-First.md** — el plan de 15 días hábiles para encender el backend al cerrar el
+primer cliente con pedidos está escrito en `docs/ventas/OFERTA.md` §4, con S1 y S3 antes de que
+entre un dato real y la migración de `/c` a `/m` sin tocar el material impreso.
+
+---
+
 ### O01 · Estado, línea base y puente · commit `06b00a7` · despliegue READY
 
 **Pendientes.md** — nada que cerrar todavía. Ítem nuevo: "Loop oferta sólida en curso
@@ -207,3 +286,56 @@ P0 (S1 y S3) antes de que entre un dato real.
 - `CLAUDE.md` suma `/c`, `/q`, `src/content/` y `leadsEmail` al mapa, y el canal único y la voz de
   empresa a la regla 10.
 - Grep cruzado: las 13 cifras en colones de `docs/ventas/` salen todas de `PRICING`.
+
+### O08 · Verificación final · commit `4dda67f` · despliegue READY
+
+**Pendientes.md** — ítems nuevos, todos de pulido y ninguno bloqueante para vender:
+- Los rangos de precio de la competencia en `/menu-digital-costa-rica` no citan fuente. Decidir:
+  publicar de dónde salen y con qué fecha, o sacarlos. **Es el único dato del sitio que un
+  cliente no puede verificar.**
+- La oferta de fundadores no dice hasta cuándo ni cuántos cupos quedan.
+- La barra de la demo (`PreviewBanner`) no traduce al cambiar a inglés.
+- No hay enlace "saltar al contenido" en ninguna página.
+- `/preview/dashboard` no tiene landmark `<main>` y el rótulo "Panel del restaurante" queda en
+  4.18:1 de contraste (AA pide 4.5:1).
+
+**Decisiones.md** — ninguna nueva.
+
+**Seguridad.md** — sin cambios. La revisión fue de contenido y accesibilidad, no de seguridad.
+Los hallazgos S1, S3 y S10 siguen como estaban y el plan de `OFERTA.md` §4 los pone como
+condición antes de que entre el primer dato real.
+
+**Otras páginas** — `Marca-Y-Marketing.md`: anotar la rúbrica de esta revisión (claridad 5,
+honestidad 4, coherencia 5, voz de empresa 5, responsive 5, accesibilidad 4) como línea base
+contra la cual comparar la próxima.
+
+**log.md** — `## [2026-09-25] ingest | Verificación final del loop`
+- Puertas A–G en verde contra producción; dos pasadas, la segunda con revisor de contexto fresco.
+- Rúbrica 1–5 con todas las notas ≥ 4.
+- Corregido: la demo afirmaba que la cocina recibió la orden; "Verde Limon" sin tilde en inglés;
+  conmutador ES/EN y chips de categoría por debajo de 44 px; botones de idioma sin nombre
+  accesible; el sitemap nunca habría incluido una carta `indexable`.
+- Medido por el revisor: 0 `mailto:` y 0 correos en 11 rutas; 0 imágenes sin `alt`; 0 botones sin
+  nombre accesible; 0 contrastes bajo AA en la landing (54 medidos); 0 overflow a 360 px.
+
+### O09 · Informe, release y puente · commit de release · despliegue READY
+
+**Pendientes.md** — cerrar: "Loop oferta sólida en curso". Agregar como cerrado: "Loop oferta
+sólida (O01–O09), informe en `docs/plans/oferta-loop-report.md`, versión 1.2.0".
+
+**Decisiones.md** — ninguna nueva. Quedan registradas en este puente D-014 (O03), D-039 (O05),
+D-040 (O02) y D-041 (O06), y como **propuestas sin cerrar** D-032 a D-038 en `OFERTA.md` §5.
+
+**Seguridad.md** — sin cambios en todo el loop. `supabase/` no se tocó: `git diff 19d3b66 --
+supabase/` está vacío.
+
+**Otras páginas** — ver el resumen de arriba.
+
+**log.md** — `## [2026-09-25] ingest | Release 1.2.0 · Oferta sólida y Carta entregable`
+- De `19d3b66` a 1.2.0 en nueve unidades, un intento cada una, ninguna bloqueada.
+- Se puede entregar una Carta en 48 h sin backend; los QR impresos son permanentes; el único
+  canal público es WhatsApp; la web habla como empresa.
+- El build pasa de 34 a 37 rutas (`/c/[slug]`, `/q/[code]`, `/preview/carta`).
+- Informe en `docs/plans/oferta-loop-report.md`, con los PENDIENTES-STEVEN ordenados por lo que
+  más desbloquea vender: imprimir el stand `/q/demo26`, montar el WhatsApp Business y cerrar el
+  IVA.
