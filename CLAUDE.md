@@ -117,7 +117,10 @@ etiqueta "Render ilustrativo" y todo QR dibujado decodifica a `https://datafud.c
   `next build` no lo limpia: al reemplazar una imagen con el **mismo nombre**, local sigue
   sirviendo la vieja. Borrar esa carpeta antes de verificar. Producción (Vercel) no tiene el
   problema.
-- La imagen OG no puede dibujar "₡" (la fuente dinámica no baja en el build): escribir "colones".
+- La imagen OG dibuja "₡" con la subfuente `src/lib/og-fonts/datafud-colon-400.ttf` (D-052). Pasar
+  `fonts` a `ImageResponse` reemplaza la fuente por defecto: `src/lib/og.tsx` la vuelve a pasar.
+- "₡" sale de `public/fonts/datafud-colon-*.woff2` (D-052), primera en los stacks de Tailwind.
+  No redeclarar `--font-sans` ni `--font-display` en `globals.css`: pisa a `next/font`.
 - Quedan restos del nombre viejo "Datfud" en `package.json`, `src/lib/supabase/types.ts` y los `.sql`.
 - Los triggers de límite de plan lanzan excepción: la UI tiene que mostrarla.
 

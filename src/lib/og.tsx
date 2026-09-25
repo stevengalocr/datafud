@@ -1,3 +1,5 @@
+import { readFileSync } from "node:fs";
+import path from "node:path";
 import { ImageResponse } from "next/og";
 import { PRICING } from "@/lib/constants";
 
@@ -5,6 +7,25 @@ import { PRICING } from "@/lib/constants";
 // build no depende de la red. Colores de docs/BRAND.md.
 export const OG_SIZE = { width: 1200, height: 630 };
 export const OG_CONTENT_TYPE = "image/png";
+
+// "₡" (D-052). La fuente por defecto de next/og no lo trae y, si falta un glifo, next/og intenta
+// bajarlo de Google Fonts en el build. Se le pasa la misma subfuente de Inter que usa la web, en
+// TTF (next/og no lee woff2). Pasar `fonts` reemplaza la fuente por defecto, así que también se
+// pasa esa, desde el paquete de next: si una versión de next la mueve, el build falla acá.
+const OG_FONTS = [
+  {
+    name: "Noto Sans",
+    data: readFileSync(path.join(process.cwd(), "node_modules/next/dist/compiled/@vercel/og/noto-sans-v27-latin-regular.ttf")),
+    weight: 400 as const,
+    style: "normal" as const,
+  },
+  {
+    name: "DataFudColon",
+    data: readFileSync(path.join(process.cwd(), "src/lib/og-fonts/datafud-colon-400.ttf")),
+    weight: 400 as const,
+    style: "normal" as const,
+  },
+];
 
 export function ogImage({ title, subtitle, kicker = "datafud.com" }: { title: string; subtitle: string; kicker?: string }) {
   return new ImageResponse(
@@ -61,6 +82,6 @@ export function ogImage({ title, subtitle, kicker = "datafud.com" }: { title: st
         </div>
       </div>
     ),
-    OG_SIZE
+    { ...OG_SIZE, fonts: OG_FONTS }
   );
 }

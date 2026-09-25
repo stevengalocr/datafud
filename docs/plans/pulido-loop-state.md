@@ -10,8 +10,8 @@
 
 ## Contador
 
-- Iteración actual: 2
-- Iteraciones consumidas: 2 / 14
+- Iteración actual: 3
+- Iteraciones consumidas: 3 / 14
 
 ## Capacidades del entorno
 
@@ -59,8 +59,8 @@
 | ID | Título | Estado | Intentos | Commit | Despliegue | Evidencia |
 |---|---|---|---|---|---|---|
 | P01 | Estado y línea base | hecho | 1 | `3508adb` | READY `dpl_5VhKxyoA…` | Abajo |
-| P02 | Fotos de la demo (D-053, D-054) | hecho | 1 | (este) | ver bloque | Abajo |
-| P03 | El colón se ve como colón (D-052) | pendiente | 0 | | | |
+| P02 | Fotos de la demo (D-053, D-054) | hecho | 1 | `17e13cd` | READY `dpl_6GGEDs9i…` | Abajo |
+| P03 | El colón se ve como colón (D-052) | hecho | 1 | `bcef43e` + (este) | ver bloque | Abajo |
 | P04 | Íconos y logo livianos | pendiente | 0 | | | |
 | P05 | Decisiones comerciales en la web y los documentos | pendiente | 0 | | | |
 | P06 | Cierre sin QR que compita (D-056) y stand de reseñas (D-055) | pendiente | 0 | | | |
@@ -219,3 +219,69 @@ cabecera.
 - **El peso de la carta subió** de 1,02 a 1,36 MB al abrir: las fotos de Unsplash venían a 600 px
   q75 y las de `carta-fotos.mjs` salen a 800 px q82 (el techo que usa una carta real) y ahora
   también el café tiene foto. Sigue bajo los 2 MB de D-043; queda anotado para P08.
+
+- **Producción (`dpl_6GGEDs9i…`, `17e13cd`):** `/_next/image?url=https://example.com/x.jpg&w=64&q=75`
+  → **400**; `/c/ejemplo?rev=17e13cd` pide las 14 `demo/platos/*.webp`, 0 menciones de
+  `unsplash`, 0 hosts externos, 1116,5 KB al abrir a 375; `demo/platos/p-cafe.webp` → 200
+  `image/webp` 39 500 B.
+
+### P03 · El colón se ve como colón (D-052)
+
+Dos commits: primero que las fuentes de marca pinten (`bcef43e`), después el glifo.
+
+**1. Fuentes de marca (`bcef43e`).** `globals.css` deja de redeclarar `--font-sans` y
+`--font-display` en `:root`. Medido con CDP en local:
+```
+h1     | CSS: "Young Serif", "Young Serif Fallback", Georgia, serif | pinta: Young Serif (web) ×40
+body p | CSS: "Hanken Grotesk", "Hanken Grotesk Fallback", …       | pinta: Hanken Grotesk (web) ×212
+```
+Capturas antes/después a 375 (home y carta) y 1440 (home) miradas: `.qa/pulido/p03-antes-despues-375.png`,
+`p03-home-1440-despues.png`. Young Serif es más ancha que Georgia: el h1 del hero pasa a tres
+líneas a 375 y 1440; nada se desborda (`qa:landing → OK`, 0 fallos). Los avisos pasan de 21 a 23:
+son dos más de la misma familia "áreas táctiles < 44 px" en enlaces de texto ("Ver hardware de
+mesa", "Demo") cuyo alto cambió con la fuente; no son regresiones de layout.
+
+**2. El glifo.** fontTools sobre todos los subsets que sirve Google Fonts:
+```
+Hanken+Grotesk   archivos=12  con U+20A1=0
+Young+Serif      archivos= 2  con U+20A1=0
+Noto+Sans        archivos=24  con U+20A1=3   (latin-ext, 400/600/700: el mismo archivo variable)
+Inter            archivos=21  con U+20A1=3   (latin-ext)
+Noto+Serif       archivos= 8  con U+20A1=1
+```
+Se eligió **Inter**: en la comparación a 12–14 px junto a Hanken Grotesk (`.qa/pulido/p03-comparacion.png`)
+su "₡" cruza la letra entera y no se confunde con "¢", que es lo que pasa con el de Noto Sans.
+Instancias 400/600/700 (`varLib.instancer`) y `pyftsubset` a U+20A1 en el venv temporal; nada
+nuevo en `package.json`:
+```
+datafud-colon-400.woff2   936 B  glifos=['.notdef', 'colonmonetary']
+datafud-colon-600.woff2   904 B
+datafud-colon-700.woff2   896 B
+```
+Licencia OFL al lado (`public/fonts/OFL-Inter.txt`). `@font-face` en `globals.css` con
+`unicode-range: U+20A1`; "DataFudColon" primero en `sans` y `display` de Tailwind y en `.font-display`.
+
+**Criterios:**
+- Glifo por glifo en toda la página (CDP, `.qa/bin/glifos.mjs`), antes = producción `bcef43e`,
+  después = local:
+  ```
+  /c/ejemplo antes:   1104 Hanken Grotesk · 133 Young Serif · 14 Times New Roman
+  /c/ejemplo después: 1104 Hanken Grotesk · 133 Young Serif · 14 Inter
+  /          antes:   7339 Hanken Grotesk · 1374 Young Serif · 27 Arial · 7 Times New Roman
+  /          después: 7339 Hanken Grotesk · 1374 Young Serif · 26 Inter · 8 Arial
+  ```
+  Solo cambian los "₡" (14 en la carta, 26 en la home); los 8 de Arial que quedan son los mismos
+  caracteres de antes que no son "₡". **0 cambios en otros caracteres.**
+- `document.fonts.check('13px DataFudColon', '₡')` → `true`, con las caras `100 500:loaded`,
+  `501 650:loaded`, `651 900:loaded` en la home (en producción antes daba `true` sin ninguna cara:
+  `check` es verdadero cuando no hay nada que cargar, por eso se acompaña del estado de las caras
+  y de la fuente que pinta).
+- Capturas con zoom (DPR 4) antes y después: carta 18 px, demo 12 px y hero 14 px —
+  `.qa/pulido/p03-precios-antes-despues.png`, miradas. El precio de 13 px del prompt no existe
+  (ver "Ajustes al repo").
+- **Imagen OG:** `next/og` no lee woff2 y pasar `fonts` reemplaza su fuente por defecto; se le pasa
+  la misma subfuente en TTF (`src/lib/og-fonts/datafud-colon-400.ttf`, 1 740 B) más su Noto Sans.
+  `/opengraph-image` dibuja "desde ₡14 900 al mes" (antes "14 900 colones"). Captura mirada:
+  `.qa/pulido/p03-og.png`.
+- Puertas: typecheck, lint, build y `qa:landing → OK · 23 avisos`; `€` = 0 y `mailto:` = 0 en `/`
+  y `/c/ejemplo`.

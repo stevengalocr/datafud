@@ -14,6 +14,13 @@ Todas las versiones notables del proyecto. Formato basado en
   Segoe UI/SF/Roboto mientras bajaba los `woff2` de Hanken Grotesk y Young Serif sin usarlos.
   Ahora pintan las de `docs/BRAND.md` (medido con CDP: Young Serif ×40 en el h1, Hanken Grotesk
   ×212 en el texto). El título del hero pasa a tres líneas a 375 px.
+- **"₡" se ve igual en todos los teléfonos (D-052).** Ni Hanken Grotesk ni Young Serif tienen
+  U+20A1 (verificado con fontTools): cada sistema lo dibujaba con su fuente (Times New Roman,
+  Arial, Roboto…) y a 13 px podía leerse como "€". Se agrega "DataFudColon": subfuentes de Inter
+  (OFL) con solo ese glifo, en 400/600/700, < 1 KB cada una, servidas desde `public/fonts/` con
+  `unicode-range: U+20A1` y primeras en los stacks `sans` y `display`. Ningún otro carácter
+  cambia de fuente (medido glifo por glifo con CDP en `/` y `/c/ejemplo`).
+- **La imagen OG dibuja "₡14 900" en lugar de "14 900 colones"** con la misma subfuente en TTF.
 - **Las fotos de la demo muestran el platillo que nombran y se sirven desde el sitio (D-053).**
   El "gallo pinto" era un guiso de pollo, el "casado" una ensalada y la "limonada" tres cócteles;
   los panqueques llevaban una mano. Las 14 fotos (el café chorreado ya tiene la suya) son reales,

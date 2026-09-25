@@ -49,8 +49,9 @@ const config: Config = {
         },
       },
       fontFamily: {
-        sans: ["var(--font-sans)", "system-ui", "sans-serif"],
-        display: ["var(--font-display)", "Georgia", "serif"],
+        // DataFudColon solo trae "₡" (D-052, ver globals.css): todo lo demás cae a la de marca.
+        sans: ["DataFudColon", "var(--font-sans)", "system-ui", "sans-serif"],
+        display: ["DataFudColon", "var(--font-display)", "Georgia", "serif"],
       },
       transitionTimingFunction: {
         "out-expo": "cubic-bezier(0.23, 1, 0.32, 1)",
