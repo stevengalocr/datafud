@@ -199,7 +199,7 @@ export const mockProducts: Product[] = [
   P("p-pizza", "c-bocas", "Pizza Artesanal", "Artisan pizza", "Masa madre, salsa de tomate fresco, mozzarella y cilantro.", "Sourdough base, fresh tomato sauce, mozzarella and cilantro.", 5200, "photo-1565299624946-b28f40a0ae38", 2),
   // Frescos & Café
   P("p-fresco", "c-bebidas", "Fresco Natural de Naranja", "Fresh orange juice", "Jugo de naranja recién exprimido, sin azúcar añadida.", "Freshly squeezed orange juice, no added sugar.", 1400, "photo-1600271886742-f049cd451bba", 1),
-  P("p-limonada", "c-bebidas", "Limonada de la casa", "House lemonade", "Limonada con hierbabuena, la favorita de Verde Limón.", "Lemonade with spearmint, the Verde Limon favourite.", 1300, "photo-1544145945-f90425340c7e", 2),
+  P("p-limonada", "c-bebidas", "Limonada de la casa", "House lemonade", "Limonada con hierbabuena, la favorita de Verde Limón.", "Lemonade with spearmint, the Verde Limón favourite.", 1300, "photo-1544145945-f90425340c7e", 2),
   P("p-cafehelado", "c-bebidas", "Café Helado", "Iced coffee", "Café costarricense frío con hielo y un toque de leche.", "Cold Costa Rican coffee over ice with a splash of milk.", 1800, "photo-1461023058943-07fcbe16d735", 3),
   P("p-cafe", "c-bebidas", "Café Chorreado", "Brewed coffee", "Café de altura colado a la tica, recién hecho.", "Highland coffee, filtered the Costa Rican way, freshly made.", 1000, null, 4),
   // Postres

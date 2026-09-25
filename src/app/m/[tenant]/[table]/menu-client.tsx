@@ -30,6 +30,9 @@ export interface MenuPayload {
   }[];
 }
 
+// Nombre del idioma para los lectores de pantalla, en su propio idioma.
+const LANG_NAMES: Partial<Record<Lang, string>> = { es: "Español", en: "English", pt: "Português" };
+
 export function MenuClient({
   data,
   slug,
@@ -141,9 +144,10 @@ export function MenuClient({
         >
           <Icon name="check" size={38} />
         </div>
-        <h1 className="mt-7 font-display text-3xl text-brand-900">{d.orderSent}</h1>
+        <h1 className="mt-7 font-display text-3xl text-brand-900">{demo ? d.orderSentDemo : d.orderSent}</h1>
         <p className="mt-3 text-sm text-brand-700/70">
-          {data.settings.restaurant_name} · {d.table} {data.table.label}
+          {data.settings.restaurant_name}
+          {data.table.label ? ` · ${d.table} ${data.table.label}` : ""}
         </p>
         <button
           onClick={() => setDone(false)}
@@ -179,8 +183,13 @@ export function MenuClient({
                 {langs.map((l) => (
                   <button
                     key={l}
+                    lang={l}
                     onClick={() => setLang(l)}
-                    className={`rounded-full px-2.5 py-1 text-[11px] font-bold uppercase transition-colors duration-200 ${lang === l ? "bg-white text-brand-900" : "text-white/80"}`}
+                    // El texto visible es "es"/"en": sin esto un lector de pantalla no dice qué
+                    // idioma es ni cuál está activo.
+                    aria-label={LANG_NAMES[l] ?? l}
+                    aria-pressed={lang === l}
+                    className={`flex min-h-11 min-w-11 items-center justify-center rounded-full px-2.5 text-[11px] font-bold uppercase transition-colors duration-200 ${lang === l ? "bg-white text-brand-900" : "text-white/80"}`}
                   >
                     {l}
                   </button>
@@ -209,7 +218,7 @@ export function MenuClient({
               <button
                 key={cat.id}
                 onClick={() => scrollToCat(cat.id)}
-                className="shrink-0 rounded-full border px-4 py-1.5 text-xs font-bold uppercase tracking-wider transition-colors duration-200"
+                className="flex min-h-11 shrink-0 items-center rounded-full border px-4 text-xs font-bold uppercase tracking-wider transition-colors duration-200"
                 style={on
                   ? { backgroundColor: primary, borderColor: primary, color: "#fff" }
                   : { backgroundColor: "transparent", borderColor: "#dedbd9", color: "#1b4030" }}
