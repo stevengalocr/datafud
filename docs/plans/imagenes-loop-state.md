@@ -50,8 +50,8 @@
 | R03 | Tarjeta NFC en `#hardware` | hecho | 1 | `be38789` | READY `dpl_BFrhfgus…` | Abajo |
 | R04 | Fondo del cierre (footer) | hecho | 1 | `e9c5744` | READY `dpl_Dqv9PoVm…` | Abajo |
 | R05 | QR real en los renders de estudio | hecho | 1 | `933d8a2` | READY `dpl_3hC2DbkM…` | Abajo |
-| R06 | Auditoría de imágenes públicas | hecho | 1 | `d84a8f8` | READY | Abajo |
-| R07 | Verificación final, release 1.3.1 y puente | hecho | 1 | release 1.3.1 | ver puente | Abajo e informe |
+| R06 | Auditoría de imágenes públicas | hecho | 1 | `d84a8f8` | READY `dpl_3ghyHuat…` | Abajo |
+| R07 | Verificación final, release 1.3.1 y puente | hecho | 1 | `316d576` | READY `dpl_2Kky21dK…` | Abajo e informe |
 
 ## Herramientas de verificación del loop
 
@@ -302,3 +302,13 @@ Puertas A en verde (`qa:landing → OK · 21 avisos`).
   llevan la etiqueta. Roces y hallazgos fuera de alcance en el informe y en PENDIENTES.
 - `package.json` → 1.3.1; CHANGELOG `[1.3.1]`; informe `docs/plans/imagenes-loop-report.md`;
   `CLAUDE.md` suma la regla de imágenes y la trampa del caché de `next/image`.
+- Puerta F en producción (`dpl_2Kky21dKbgFRwgaAEPiXB8W8fFGi`, alias `datafud.com`):
+  ```
+  home ?rev=316d576 — referencias
+    renders%2Fambiente-mesa 33 · renders%2Ftarjeta-nfc 11 · renders%2Fambiente-piedra 9
+    banner.png 0 · cta-bg.png 0 · nfc.png 0 · hardware-familia 0
+  /c/ejemplo 200
+  /q/demo26 307 https://datafud.com/c/ejemplo
+  /banner.png 404 · /cta-bg.png 404 · /nfc.png 404 · /hardware-familia.webp 404 · /libro-marca.png 404
+  ```
+  Capturas del hero, `#hardware` y el cierre a 375 y 1440 contra producción, miradas.

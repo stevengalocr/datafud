@@ -28,7 +28,7 @@ abren `https://datafud.com/q/demo26`.
 | R04 | Fondo del cierre | hecho | `e9c5744` | READY |
 | R05 | QR real en los renders de estudio | hecho | `933d8a2` | READY |
 | R06 | Auditoría de `public/` | hecho | `d84a8f8` | READY |
-| R07 | Verificación final y release 1.3.1 | hecho | release | ver puente |
+| R07 | Verificación final y release 1.3.1 | hecho | `316d576` | READY `dpl_2Kky21dK…` |
 
 Siete unidades, un intento cada una, ninguna bloqueada. 7 iteraciones de las 12 del tope.
 
@@ -56,7 +56,7 @@ mediana de 9. La diferencia de LCP está dentro del ruido; lo que baja sin discu
 | **C** 6 renders con QR | 6 de 6 decodifican a `https://datafud.com/q/demo26` (originales), más las variantes de `next/image` en local y en producción |
 | **D** "Render ilustrativo" | Hero + las 4 piezas de `#hardware`, visibles a 375 y 1440; `public/hardware/` no existe |
 | **E** peso de la home | 399,3 → 385,5 KB recorrida entera; 244,4 → 243,6 KB al abrir |
-| **F** producción | Ver el bloque R07 del puente |
+| **F** producción | `?rev=316d576`: renders nuevos servidos, los 5 archivos quitados → 404, `/c/ejemplo` 200, `/q/demo26` 307 |
 | **G** `git diff a7e9798 -- supabase/` | Vacío; `constants.ts` solo cambia `tarjeta-nfc.photo` |
 
 ## Revisión con contexto fresco
