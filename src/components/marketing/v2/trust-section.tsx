@@ -1,14 +1,16 @@
-import { existsSync } from "node:fs";
-import path from "node:path";
 import Image from "next/image";
 import { Icon, type IconName } from "@/components/ui/icon";
 import { RevealOnView } from "@/components/marketing/v2/reveal";
 import { TESTIMONIALS } from "@/lib/constants";
 import { SITE, hasWhatsApp, waProps, whatsappDisplay } from "@/lib/site";
 
-// Sección #confianza: "Por qué DataFud" en cuatro puntos verificables + firma del fundador.
+// Sección #confianza: "Por qué DataFud" en cuatro puntos verificables + la tarjeta de atención.
 // Sin testimonios, logos ni cifras inventadas: los testimonios solo aparecen si TESTIMONIALS
-// tiene entradas reales, y la foto del fundador solo si el archivo existe en public/.
+// tiene entradas reales.
+//
+// D-041: DataFud habla como empresa. Nada de "proyecto chico" ni firma personal. Eso no
+// autoriza a inventar sociedad, equipo ni dirección: los legales siguen nombrando al
+// responsable legal real (SITE.legalResponsible).
 
 type Point = { icon: IconName; title: string; desc: string };
 
@@ -35,10 +37,11 @@ const points: Point[] = [
   },
 ];
 
-const promises = ["Tu menú, tus fotos y tu marca son tuyos", "Te atiende una persona, no un bot"];
-
-// Se evalúa en el build (la landing es estática): subir la foto y redesplegar la activa.
-const founderPhoto = existsSync(path.join(process.cwd(), "public", SITE.founder.photo)) ? SITE.founder.photo : null;
+const promises = [
+  "Tu menú, tus fotos y tu marca son tuyos",
+  "Te atiende una persona de nuestro equipo, no un bot",
+  "Precios publicados, sin letra pequeña ni permanencia",
+];
 
 export function TrustSection() {
   const wa = waProps("confianza");
@@ -53,34 +56,19 @@ export function TrustSection() {
                 Lo que te llevás, dicho sin vueltas
               </h2>
               <p className="mt-5 max-w-md text-base font-medium leading-relaxed text-brand-800/80">
-                Somos un proyecto chico en Costa Rica: sabés quién te atiende, qué pagás y qué pasa
-                si un día querés irte.
+                DataFud es una empresa costarricense dedicada a sodas, cafeterías y restaurantes:
+                sabés qué pagás, qué recibís y qué pasa si un día querés irte.
               </p>
             </div>
 
-            {/* Firma del fundador */}
+            {/* Atención: quién responde del otro lado, como empresa. */}
             <div className="reveal-up mt-9 flex items-center gap-4 rounded-2xl border border-stone-200/80 bg-cream-50/70 p-5">
-              {founderPhoto ? (
-                <Image
-                  src={founderPhoto}
-                  alt={`${SITE.founder.name}, fundador de DataFud`}
-                  width={64}
-                  height={64}
-                  className="h-16 w-16 flex-shrink-0 rounded-2xl object-cover"
-                />
-              ) : (
-                <span
-                  className="flex h-16 w-16 flex-shrink-0 items-center justify-center rounded-2xl border border-accent-300 bg-brand-600 font-display text-2xl text-accent-100"
-                  aria-hidden="true"
-                >
-                  {SITE.founder.initials}
-                </span>
-              )}
+              <span className="flex h-16 w-16 flex-shrink-0 items-center justify-center rounded-2xl border border-stone-200/80 bg-white p-2">
+                <Image src="/icono-main.png" alt="" aria-hidden="true" width={48} height={48} className="h-full w-full object-contain" />
+              </span>
               <div className="min-w-0">
-                <p className="font-display text-xl leading-tight text-brand-900">{SITE.founder.name}</p>
-                <p className="text-sm font-medium text-brand-700/85">
-                  {SITE.founder.role} · {SITE.maker}
-                </p>
+                <p className="font-display text-xl leading-tight text-brand-900">Atención DataFud</p>
+                <p className="text-sm font-medium text-brand-700/85">Ventas y soporte · {SITE.country}</p>
                 {hasWhatsApp() && (
                   <a {...wa} className="inline-flex min-h-11 items-center gap-1.5 text-sm font-bold text-brand-700 underline decoration-accent-400 underline-offset-4 transition-colors hover:text-brand-900">
                     <Icon name="whatsapp" size={14} />
@@ -92,8 +80,8 @@ export function TrustSection() {
 
             <ul className="reveal-up mt-6 space-y-2">
               {promises.map((p) => (
-                <li key={p} className="flex items-center gap-2.5 text-sm font-semibold text-brand-800">
-                  <Icon name="check" size={14} className="text-accent-700" />
+                <li key={p} className="flex items-start gap-2.5 text-sm font-semibold text-brand-800">
+                  <Icon name="check" size={14} className="mt-1 flex-shrink-0 text-accent-700" />
                   {p}
                 </li>
               ))}

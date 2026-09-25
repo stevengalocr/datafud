@@ -24,13 +24,6 @@ export const SITE = {
     facebook: "",
     tiktok: "",
   } as Record<"instagram" | "facebook" | "tiktok", string>,
-  // Fundador. La foto se usa solo si el archivo existe en public/; si no, avatar con iniciales.
-  founder: {
-    name: "Steven Galo",
-    initials: "SG",
-    role: "Ingeniero en sistemas, en Costa Rica",
-    photo: "/equipo/steven.webp",
-  },
 } as const;
 
 export const SOCIAL_LABEL: Record<keyof typeof SITE.social, string> = {

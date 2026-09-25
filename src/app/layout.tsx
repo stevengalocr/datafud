@@ -36,8 +36,8 @@ export const metadata: Metadata = {
     "Costa Rica",
     "menú digital para sodas",
   ],
-  authors: [{ name: SITE.maker, url: SITE.url }],
-  creator: SITE.maker,
+  authors: [{ name: SITE.name, url: SITE.url }],
+  creator: SITE.name,
   openGraph: {
     type: "website",
     locale: "es_CR",

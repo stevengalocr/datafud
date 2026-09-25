@@ -28,8 +28,6 @@ export function organizationJsonLd() {
     url: SITE.url,
     logo: `${SITE.url}/icono-main.png`,
     telephone: `+${SITE.whatsapp}`,
-    founder: { "@type": "Person", name: SITE.founder.name },
-    parentOrganization: { "@type": "Organization", name: SITE.maker },
     areaServed: { "@type": "Country", name: SITE.country },
     contactPoint: [
       {

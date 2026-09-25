@@ -96,7 +96,7 @@ export function LegalPage({
             <Link href="/privacidad" className="inline-flex min-h-11 items-center hover:text-brand-900">Privacidad</Link>
           </nav>
           <p className="text-xs font-bold uppercase tracking-[0.16em] text-brand-700/75">
-            © {new Date().getFullYear()} DataFud · un producto de {SITE.maker}
+            © {new Date().getFullYear()} DataFud · {SITE.country}
           </p>
         </div>
       </footer>

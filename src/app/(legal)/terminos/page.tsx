@@ -28,7 +28,7 @@ const sections: LegalSection[] = [
   {
     title: "Quién ofrece el servicio",
     paragraphs: [
-      `DataFud lo ofrece ${SITE.legalResponsible}, con domicilio en ${SITE.country}. En este documento nos referimos a esa persona como "GaloDev" o "nosotros", y a quien contrata como "el cliente" o "vos".`,
+      `DataFud lo ofrece ${SITE.legalResponsible}, con domicilio en ${SITE.country}. En este documento nos referimos al titular como "DataFud" o "nosotros", y a quien contrata como "el cliente" o "vos".`,
       `Nos contactás por WhatsApp al ${whatsappDisplay()}. Al contratar DataFud aceptás estos términos.`,
     ],
   },
@@ -102,7 +102,7 @@ const sections: LegalSection[] = [
   {
     title: "Propiedad intelectual de DataFud",
     paragraphs: [
-      "El software, el diseño y la marca DataFud son de GaloDev. Mientras el servicio esté activo te damos una licencia de uso no exclusiva e intransferible.",
+      `El software, el diseño y la marca DataFud son de ${SITE.legalResponsible}. Mientras el servicio esté activo te damos una licencia de uso no exclusiva e intransferible.`,
     ],
   },
   {

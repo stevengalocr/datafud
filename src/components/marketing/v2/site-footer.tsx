@@ -109,7 +109,7 @@ export function SiteFooter() {
             </div>
 
             <div className="mt-10 flex flex-col gap-4 border-t border-white/10 pb-16 pt-8 text-xs md:pb-0 font-bold uppercase tracking-[0.16em] text-cream-100/50 sm:flex-row sm:items-center sm:justify-between">
-              <p>© {new Date().getFullYear()} DATAFUD · UN PRODUCTO DE <span className="text-accent-400">GALODEV</span></p>
+              <p>© {new Date().getFullYear()} DATAFUD · <span className="text-accent-400">COSTA RICA</span></p>
               <nav aria-label="Legal" className="flex flex-wrap items-center gap-x-5">
                 <Link href="/terminos" className="inline-flex min-h-11 items-center transition-colors duration-200 hover:text-white">Términos</Link>
                 <Link href="/privacidad" className="inline-flex min-h-11 items-center transition-colors duration-200 hover:text-white">Privacidad</Link>
