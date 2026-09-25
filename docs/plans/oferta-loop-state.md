@@ -22,7 +22,7 @@
 | gh CLI | Sí | `gh auth status` → `Logged in to github.com account stevengalocr` |
 | git push a main | Sí | `origin https://github.com/stevengalocr/datafud.git`, protocolo https con token de gh |
 | Vercel | Sí (MCP) | Proyecto `datafud` `prj_n957iGSeYbe4GbTsDxlP0ytLHJSt` |
-| Google Drive (vault) | Por confirmar en O09 | Conector presente en la sesión |
+| Google Drive (vault) | Sí, para crear archivos; no edita `.md` existentes | El puente se subió como archivo nuevo a `02-Proyectos/Datafud/Claude-Code/` (id `17F3sqxJrIz5wT78scurTKXk9N_Oj7QqV`) |
 | Puerto 3000 | **Ocupado por otro proyecto** | Un servidor ajeno (landing de BilBildin) responde en `:3000`; `qa:landing` y las verificaciones locales corren con `QA_BASE=http://localhost:3177` |
 
 ### Ajuste al repo (§4.2 del prompt)
@@ -46,7 +46,7 @@
 | O06 | Voz de empresa (D-041) | hecho | 1 | `53b994f` | READY (`dpl_AkVrHsqj9eYWES2NW227RNwvycxe`) | Ver informe O06 |
 | O07 | Oferta, kit y documentación | hecho | 1 | `38fa758` | READY (`dpl_Eg5v1cS11KYNYrgHmfUiZ7ZAqT6s`) | Ver informe O07 |
 | O08 | Verificación final | hecho | 1 | `4dda67f` | READY | Puertas A–H y rúbrica abajo |
-| O09 | Informe, release y puente | hecho | 1 | ver `CHANGELOG` 1.2.0 | READY | `docs/plans/oferta-loop-report.md`, versión 1.2.0, puente completo |
+| O09 | Informe, release y puente | hecho | 1 | `1b534b6` | READY (`dpl_H3S3dcC6n5LDoEXo5UkxCcyUutgC`) | `docs/plans/oferta-loop-report.md`, versión 1.2.0, puente completo y subido al vault |
 
 ## Herramientas de verificación del loop
 

@@ -6,7 +6,11 @@
 > nombren y el `log.md` del nodo (`## [AAAA-MM-DD] ingest | Título`). El resumen
 > "qué cambiar en cada página" se agrega arriba de todo al cerrar el loop (O09).
 
-Aplicado en vault: **no** (se decide en O09, según el conector de Google Drive de la sesión).
+Aplicado en vault: **parcial**. El conector de Google Drive de esta sesión crea archivos pero no
+edita el contenido de los `.md` que ya existen, así que este puente se subió como archivo nuevo al
+nodo Datafud del vault: `02-Proyectos/Datafud/Claude-Code/vault-sync-2026-09-25-oferta-solida.md`
+(id de Drive `17F3sqxJrIz5wT78scurTKXk9N_Oj7QqV`). Las páginas del vault se actualizan con
+"sincronizá el vault" usando el resumen de abajo.
 
 ---
 
@@ -318,7 +322,7 @@ contra la cual comparar la próxima.
 - Medido por el revisor: 0 `mailto:` y 0 correos en 11 rutas; 0 imágenes sin `alt`; 0 botones sin
   nombre accesible; 0 contrastes bajo AA en la landing (54 medidos); 0 overflow a 360 px.
 
-### O09 · Informe, release y puente · commit de release · despliegue READY
+### O09 · Informe, release y puente · commit `1b534b6` · despliegue READY (`dpl_H3S3dcC6n5LDoEXo5UkxCcyUutgC`)
 
 **Pendientes.md** — cerrar: "Loop oferta sólida en curso". Agregar como cerrado: "Loop oferta
 sólida (O01–O09), informe en `docs/plans/oferta-loop-report.md`, versión 1.2.0".

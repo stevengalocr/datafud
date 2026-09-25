@@ -39,7 +39,7 @@ siete decisiones que siguen abiertas.
 | O06 | Voz de empresa (D-041) | hecho | `53b994f` | READY |
 | O07 | Oferta, kit y documentación | hecho | `38fa758` | READY |
 | O08 | Verificación final | hecho | `4dda67f` | READY |
-| O09 | Informe, release y puente | hecho | ver `CHANGELOG` 1.2.0 | READY |
+| O09 | Informe, release y puente | hecho | `1b534b6` | READY (`dpl_H3S3dcC6n5LDoEXo5UkxCcyUutgC`) |
 
 Ocho unidades, **un intento cada una**, ninguna bloqueada. 9 iteraciones de las 20 del tope.
 
@@ -68,7 +68,7 @@ Ocho unidades, **un intento cada una**, ninguna bloqueada. 9 iteraciones de las 
 | **E** 0 "proyecto chico", "un producto de GaloDev", "al instante", "tiempo real", "24/7" | ✅ las mismas 14 rutas |
 | **F** `/preview/cliente` sigue con pedidos | ✅ 28 "Agregar" |
 | **G** `supabase/` y `constants.ts` sin cambios salvo `terms.permanence` | ✅ 1 archivo, 1 línea |
-| **H** Despliegue de producción READY con el último commit | ✅ |
+| **H** Despliegue de producción READY con el último commit | ✅ `dpl_H3S3dcC6n5LDoEXo5UkxCcyUutgC` sirviendo `datafud.com` |
 
 La evidencia literal de cada una está en `docs/plans/oferta-loop-state.md`.
 
@@ -140,3 +140,14 @@ Ordenados por lo que más desbloquea vender:
 8. **Redes** (Instagram, Facebook) → URLs en `SITE.social`, y Google Business Profile.
 9. **Opcional: `RESEND_API_KEY`** si se quiere el formulario. Sin ella la web funciona solo con
    WhatsApp, que es lo que D-039 pide igual.
+
+## Vault
+
+El puente `docs/vault-sync/2026-09-25-oferta-solida.md` está completo, con los hashes reales de
+las nueve unidades, y se subió al vault de Obsidian como archivo nuevo en
+`02-Proyectos/Datafud/Claude-Code/vault-sync-2026-09-25-oferta-solida.md`. El conector de Drive
+de esta sesión crea archivos pero no edita el contenido de los `.md` que ya existen, así que las
+páginas del vault (`Pendientes.md`, `Decisiones.md`, `Guia-De-Desarrollo.md`,
+`Marca-Y-Marketing.md`, `Paneles-Y-Vistas.md`, `Cuentas-y-Accesos.md`,
+`Arquitectura-Y-Base-De-Datos.md`, `Plan-Landing-First.md` y `log.md`) se actualizan con
+"sincronizá el vault", aplicando el resumen que encabeza el puente.
