@@ -16,6 +16,8 @@ export const dict = {
     quantity: "Cantidad",
     sending: "Enviando...",
     poweredBy: "Menú digital por",
+    orderingTagline: "Armá tu pedido desde la mesa y envialo a la cocina.",
+    cartaTagline: "Nuestra carta. Consultá a tu salonero para ordenar.",
   },
   en: {
     menu: "Menu",
@@ -31,6 +33,8 @@ export const dict = {
     quantity: "Quantity",
     sending: "Sending...",
     poweredBy: "Digital menu by",
+    orderingTagline: "Build your order at the table and send it to the kitchen.",
+    cartaTagline: "Our menu. Ask your server to order.",
   },
   pt: {
     menu: "Cardápio",
@@ -46,6 +50,8 @@ export const dict = {
     quantity: "Quantidade",
     sending: "Enviando...",
     poweredBy: "Cardápio digital por",
+    orderingTagline: "Monte seu pedido na mesa e envie para a cozinha.",
+    cartaTagline: "Nosso cardápio. Peça ao garçom para fazer seu pedido.",
   },
 } satisfies Record<Lang, Record<string, string>>;
 

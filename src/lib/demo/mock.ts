@@ -164,6 +164,7 @@ const P = (
   es: string,
   en: string,
   descEs: string,
+  descEn: string,
   price: number,
   imgId: string | null,
   sort: number,
@@ -173,7 +174,8 @@ const P = (
   tenant_id: "t-demo",
   category_id,
   name_i18n: { es, en },
-  description_i18n: { es: descEs },
+  // La carta demo vende el cambio ES/EN: la descripción también va en los dos idiomas.
+  description_i18n: { es: descEs, en: descEn },
   price,
   image_url: imgId ? img(imgId) : null,
   is_available: available,
@@ -185,24 +187,24 @@ const P = (
 
 export const mockProducts: Product[] = [
   // Desayunos
-  P("p-gallo", "c-desayunos", "Gallo Pinto con huevo", "Gallo Pinto & egg", "Arroz con frijoles típico, huevo al gusto, natilla y tortilla.", 2800, "photo-1604908176997-125f25cc6f3d", 1),
-  P("p-panqueques", "c-desayunos", "Panqueques con miel", "Honey pancakes", "Torre de panqueques esponjosos con miel de caña y banano.", 3200, "photo-1567620905732-2d1ec7ab7445", 2),
-  P("p-frutas", "c-desayunos", "Plato de Frutas", "Fruit plate", "Frutas frescas de temporada con granola y miel.", 2500, "photo-1490474418585-ba9bad8fd0ea", 3),
+  P("p-gallo", "c-desayunos", "Gallo Pinto con huevo", "Gallo Pinto & egg", "Arroz con frijoles típico, huevo al gusto, natilla y tortilla.", "Costa Rican rice and beans with eggs your way, sour cream and a tortilla.", 2800, "photo-1604908176997-125f25cc6f3d", 1),
+  P("p-panqueques", "c-desayunos", "Panqueques con miel", "Honey pancakes", "Torre de panqueques esponjosos con miel de caña y banano.", "A stack of fluffy pancakes with cane syrup and banana.", 3200, "photo-1567620905732-2d1ec7ab7445", 2),
+  P("p-frutas", "c-desayunos", "Plato de Frutas", "Fruit plate", "Frutas frescas de temporada con granola y miel.", "Fresh seasonal fruit with granola and honey.", 2500, "photo-1490474418585-ba9bad8fd0ea", 3),
   // Casados & Fuertes
-  P("p-casado", "c-fuertes", "Casado Completo", "Full Casado", "Arroz, frijoles, carne en salsa, plátano maduro, ensalada y picadillo.", 4200, "photo-1543339308-43e59d6b73a6", 1),
-  P("p-lomito", "c-fuertes", "Lomito en salsa", "Tenderloin in sauce", "Lomito a la parrilla en salsa de la casa con vegetales y puré.", 6500, "photo-1432139509613-5c4255815697", 2),
-  P("p-bowl", "c-fuertes", "Bowl Tropical", "Tropical bowl", "Bowl fresco de vegetales, palmito, maíz dulce y aderezo de la casa.", 3900, "photo-1546069901-ba9599a7e63c", 3),
+  P("p-casado", "c-fuertes", "Casado Completo", "Full Casado", "Arroz, frijoles, carne en salsa, plátano maduro, ensalada y picadillo.", "Rice, beans, beef in sauce, sweet plantain, salad and picadillo.", 4200, "photo-1543339308-43e59d6b73a6", 1),
+  P("p-lomito", "c-fuertes", "Lomito en salsa", "Tenderloin in sauce", "Lomito a la parrilla en salsa de la casa con vegetales y puré.", "Grilled tenderloin in house sauce with vegetables and mashed potato.", 6500, "photo-1432139509613-5c4255815697", 2),
+  P("p-bowl", "c-fuertes", "Bowl Tropical", "Tropical bowl", "Bowl fresco de vegetales, palmito, maíz dulce y aderezo de la casa.", "Fresh bowl of vegetables, heart of palm, sweet corn and house dressing.", 3900, "photo-1546069901-ba9599a7e63c", 3),
   // Bocas
-  P("p-hamburguesa", "c-bocas", "Hamburguesa Casera", "House burger", "Carne smash, queso, vegetales frescos y papas crocantes.", 4500, "photo-1551782450-a2132b4ba21d", 1),
-  P("p-pizza", "c-bocas", "Pizza Artesanal", "Artisan pizza", "Masa madre, salsa de tomate fresco, mozzarella y cilantro.", 5200, "photo-1565299624946-b28f40a0ae38", 2),
+  P("p-hamburguesa", "c-bocas", "Hamburguesa Casera", "House burger", "Carne smash, queso, vegetales frescos y papas crocantes.", "Smash patty, cheese, fresh vegetables and crispy fries.", 4500, "photo-1551782450-a2132b4ba21d", 1),
+  P("p-pizza", "c-bocas", "Pizza Artesanal", "Artisan pizza", "Masa madre, salsa de tomate fresco, mozzarella y cilantro.", "Sourdough base, fresh tomato sauce, mozzarella and cilantro.", 5200, "photo-1565299624946-b28f40a0ae38", 2),
   // Frescos & Café
-  P("p-fresco", "c-bebidas", "Fresco Natural de Naranja", "Fresh orange juice", "Jugo de naranja recién exprimido, sin azúcar añadida.", 1400, "photo-1600271886742-f049cd451bba", 1),
-  P("p-limonada", "c-bebidas", "Limonada de la casa", "House lemonade", "Limonada con hierbabuena, la favorita de Verde Limón.", 1300, "photo-1544145945-f90425340c7e", 2),
-  P("p-cafehelado", "c-bebidas", "Café Helado", "Iced coffee", "Café costarricense frío con hielo y un toque de leche.", 1800, "photo-1461023058943-07fcbe16d735", 3),
-  P("p-cafe", "c-bebidas", "Café Chorreado", "Brewed coffee", "Café de altura colado a la tica, recién hecho.", 1000, null, 4),
+  P("p-fresco", "c-bebidas", "Fresco Natural de Naranja", "Fresh orange juice", "Jugo de naranja recién exprimido, sin azúcar añadida.", "Freshly squeezed orange juice, no added sugar.", 1400, "photo-1600271886742-f049cd451bba", 1),
+  P("p-limonada", "c-bebidas", "Limonada de la casa", "House lemonade", "Limonada con hierbabuena, la favorita de Verde Limón.", "Lemonade with spearmint, the Verde Limon favourite.", 1300, "photo-1544145945-f90425340c7e", 2),
+  P("p-cafehelado", "c-bebidas", "Café Helado", "Iced coffee", "Café costarricense frío con hielo y un toque de leche.", "Cold Costa Rican coffee over ice with a splash of milk.", 1800, "photo-1461023058943-07fcbe16d735", 3),
+  P("p-cafe", "c-bebidas", "Café Chorreado", "Brewed coffee", "Café de altura colado a la tica, recién hecho.", "Highland coffee, filtered the Costa Rican way, freshly made.", 1000, null, 4),
   // Postres
-  P("p-brownie", "c-postres", "Brownie con helado", "Brownie à la mode", "Brownie tibio con helado de vainilla y salsa de caramelo.", 2900, "photo-1551024506-0bccd828d307", 1),
-  P("p-queque", "c-postres", "Queque de frutos rojos", "Berry cake", "Bizcocho suave con crema y frutos rojos frescos.", 2600, "photo-1565958011703-44f9829ba187", 2),
+  P("p-brownie", "c-postres", "Brownie con helado", "Brownie à la mode", "Brownie tibio con helado de vainilla y salsa de caramelo.", "Warm brownie with vanilla ice cream and caramel sauce.", 2900, "photo-1551024506-0bccd828d307", 1),
+  P("p-queque", "c-postres", "Queque de frutos rojos", "Berry cake", "Bizcocho suave con crema y frutos rojos frescos.", "Soft sponge cake with cream and fresh red berries.", 2600, "photo-1565958011703-44f9829ba187", 2),
 ];
 
 // Comandas en vivo — variedad de estados para el tablero de cocina.

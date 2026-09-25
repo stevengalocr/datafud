@@ -35,11 +35,15 @@ export function MenuClient({
   slug,
   token,
   demo = false,
+  ordering = true,
 }: {
   data: MenuPayload;
   slug: string;
   token: string;
   demo?: boolean;
+  // Modo Carta (D-040): `false` deja la carta de solo lectura — sin botones de agregar,
+  // sin barra de orden y sin hoja del carrito. Lo usan /c/<slug> y /preview/carta.
+  ordering?: boolean;
 }) {
   const langs = data.settings.enabled_languages?.length
     ? data.settings.enabled_languages
@@ -168,7 +172,7 @@ export function MenuClient({
         <div className="relative mx-auto flex max-w-2xl flex-col px-5 pb-7 pt-8">
           <div className="flex items-start justify-between gap-4">
             <span className="inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/10 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-white/90 backdrop-blur-sm">
-              <Icon name="qr" size={12} /> {d.menu} · {d.table} {data.table.label}
+              <Icon name="qr" size={12} /> {data.table.label ? `${d.menu} · ${d.table} ${data.table.label}` : d.menu}
             </span>
             {langs.length > 1 && (
               <div className="flex gap-1 rounded-full bg-white/15 p-1 backdrop-blur-sm">
@@ -188,7 +192,7 @@ export function MenuClient({
             {data.settings.restaurant_name}
           </h1>
           <p className="mt-2 max-w-md text-sm font-medium leading-relaxed text-white/75">
-            Pedí directo desde tu mesa. Tu orden llega al instante a la cocina.
+            {ordering ? d.orderingTagline : d.cartaTagline}
           </p>
         </div>
       </header>
@@ -263,7 +267,7 @@ export function MenuClient({
                         {desc && <p className="mt-1 line-clamp-2 text-xs leading-relaxed text-brand-700/65">{desc}</p>}
                         <div className="mt-auto flex items-center justify-between pt-2">
                           <span className="font-display text-lg" style={{ color: primary }}>{formatMoney(Number(p.price), currency)}</span>
-                          {qty === 0 ? (
+                          {!ordering ? null : qty === 0 ? (
                             <button
                               onClick={() => add(p.id)}
                               aria-label={`${d.addToOrder} ${t(p.name_i18n, lang)}`}
@@ -295,7 +299,7 @@ export function MenuClient({
       </main>
 
       {/* ── Barra flotante "ver pedido" ───────────────────── */}
-      {count > 0 && !cartOpen && (
+      {ordering && count > 0 && !cartOpen && (
         <div className="fixed inset-x-0 bottom-0 z-30 p-4">
           <button
             onClick={() => setCartOpen(true)}
@@ -312,7 +316,7 @@ export function MenuClient({
       )}
 
       {/* ── Hoja del carrito (bottom sheet) ───────────────── */}
-      {cartOpen && (
+      {ordering && cartOpen && (
         <div className="fixed inset-0 z-50">
           <div className="absolute inset-0 bg-brand-950/50 animate-[fade-in_0.25s_ease] backdrop-blur-sm" onClick={() => setCartOpen(false)} />
           <div className="absolute inset-x-0 bottom-0 mx-auto max-w-2xl rounded-t-3xl bg-cream-50 shadow-2xl animate-[fade-up_0.3s_cubic-bezier(0.23,1,0.32,1)_both]">
