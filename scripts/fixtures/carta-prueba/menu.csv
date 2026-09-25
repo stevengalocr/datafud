@@ -1,15 +1,15 @@
 categoria,nombre_es,nombre_en,desc_es,desc_en,precio,foto
-Entradas,Ceviche de corvina,Sea bass ceviche,"Corvina fresca en leche de tigre, cebolla morada y culantro.","Fresh sea bass in leche de tigre, red onion and cilantro.",8.50,ceviche.jpg
-Entradas,Patacones con frijol,Patacones with bean dip,"Plátano verde frito, dip de frijol y queso Turrialba.","Fried green plantain, bean dip and Turrialba cheese.",6.25,patacones.jpg
-Entradas,Chifrijo de la casa,House chifrijo,"Frijoles, chicharrón, pico de gallo y tortillas.","Beans, pork cracklings, pico de gallo and tortillas.",7.00,chifrijo.jpg
-Entradas,Sopa negra,Black bean soup,,,5.75,
-Fuertes,Casado con lomito,Casado with tenderloin,"Arroz, frijoles, maduro, ensalada y lomito a la plancha.","Rice, beans, sweet plantain, salad and grilled tenderloin.",14.90,casado.jpg
-Fuertes,Pescado entero al ajillo,Whole garlic fish,"Pargo entero, salsa de ajo, patacones y ensalada.","Whole snapper, garlic sauce, patacones and salad.",18.75,pescado.jpg
-Fuertes,Arroz con camarones,Shrimp rice,"Arroz salteado con camarones, vegetales y culantro coyote.","Stir-fried rice with shrimp, vegetables and culantro coyote.",16.50,arroz-camarones.jpg
-Fuertes,Olla de carne,Beef and vegetable stew,"Caldo de res con yuca, ñampí, chayote y elote.","Beef broth with cassava, taro, chayote and corn.",12.25,
-Fuertes,Vegetariano del día,Vegetarian of the day,"Preguntá por el plato del día: siempre lleva verduras de temporada.","Ask for today's dish: always made with seasonal vegetables.",10.00,
-Bebidas,Fresco de cas,Cas fruit drink,"Fruta ácida tica, en agua o en leche.","Tart Costa Rican fruit, with water or milk.",3.25,
-Bebidas,Agua de sapo,Agua de sapo,"Jengibre, tapa de dulce y limón. Se sirve bien frío.","Ginger, raw cane sugar and lime. Served very cold.",3.75,
-Bebidas,Café chorreado,Costa Rican brewed coffee,"Café de altura, colado a la tica.","Highland coffee, filtered the Costa Rican way.",2.50,
-Bebidas,Cerveza artesanal,Craft beer,"Rotativa: preguntá cuál hay hoy.","Rotating tap: ask what is on today.",5.50,
-Bebidas,Limonada con hierbabuena,Mint lemonade,"Limón criollo y hierbabuena de la huerta.","Local lime and mint from the garden.",4.25,
+Entradas|Starters,Ceviche de corvina,Sea bass ceviche,"Corvina fresca en leche de tigre, cebolla morada y culantro.","Fresh sea bass in leche de tigre, red onion and cilantro.",8.50,ceviche.jpg
+Entradas|Starters,Patacones con frijol,Patacones with bean dip,"Plátano verde frito, dip de frijol y queso Turrialba.","Fried green plantain, bean dip and Turrialba cheese.",6.25,patacones.jpg
+Entradas|Starters,Chifrijo de la casa,House chifrijo,"Frijoles, chicharrón, pico de gallo y tortillas.","Beans, pork cracklings, pico de gallo and tortillas.",7.00,chifrijo.jpg
+Entradas|Starters,Sopa negra,Black bean soup,,,5.75,
+Fuertes|Mains,Casado con lomito,Casado with tenderloin,"Arroz, frijoles, maduro, ensalada y lomito a la plancha.","Rice, beans, sweet plantain, salad and grilled tenderloin.",14.90,casado.jpg
+Fuertes|Mains,Pescado entero al ajillo,Whole garlic fish,"Pargo entero, salsa de ajo, patacones y ensalada.","Whole snapper, garlic sauce, patacones and salad.",18.75,pescado.jpg
+Fuertes|Mains,Arroz con camarones,Shrimp rice,"Arroz salteado con camarones, vegetales y culantro coyote.","Stir-fried rice with shrimp, vegetables and culantro coyote.",16.50,arroz-camarones.jpg
+Fuertes|Mains,Olla de carne,Beef and vegetable stew,"Caldo de res con yuca, ñampí, chayote y elote.","Beef broth with cassava, taro, chayote and corn.",12.25,
+Fuertes|Mains,Vegetariano del día,Vegetarian of the day,"Preguntá por el plato del día: siempre lleva verduras de temporada.","Ask for today's dish: always made with seasonal vegetables.",10.00,
+Bebidas|Drinks,Fresco de cas,Cas fruit drink,"Fruta ácida tica, en agua o en leche.","Tart Costa Rican fruit, with water or milk.",3.25,
+Bebidas|Drinks,Agua de sapo,Agua de sapo,"Jengibre, tapa de dulce y limón. Se sirve bien frío.","Ginger, raw cane sugar and lime. Served very cold.",3.75,
+Bebidas|Drinks,Café chorreado,Costa Rican brewed coffee,"Café de altura, colado a la tica.","Highland coffee, filtered the Costa Rican way.",2.50,
+Bebidas|Drinks,Cerveza artesanal,Craft beer,"Rotativa: preguntá cuál hay hoy.","Rotating tap: ask what is on today.",5.50,
+Bebidas|Drinks,Limonada con hierbabuena,Mint lemonade,"Limón criollo y hierbabuena de la huerta.","Local lime and mint from the garden.",4.25,

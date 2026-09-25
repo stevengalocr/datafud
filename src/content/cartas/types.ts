@@ -12,9 +12,12 @@ import type { MenuPayload } from "@/app/m/[tenant]/[table]/menu-client";
  * - `indexable`: `false` mientras el local no confirme que quiere salir en Google.
  * - `menu.table`: en modo Carta no hay mesa; se usa `{ id: "carta", label: "" }` para que la
  *   cabecera muestre solo "Menú".
+ * - `tagline`: subtítulo propio del local (D-045). Sin él se usa el del diccionario. Va acá y no
+ *   en `menu` porque es de la Carta, no del formato de `get_menu`.
  */
 export type CartaEstatica = {
   slug: string;
   indexable: boolean;
+  tagline?: { es: string; en: string; pt?: string };
   menu: MenuPayload;
 };

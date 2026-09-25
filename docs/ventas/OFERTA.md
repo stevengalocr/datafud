@@ -120,20 +120,31 @@ Se dice antes de cobrar, no después:
 
 ### Una Carta, en 48 horas (hoy, sin backend)
 
-Producción todavía no tiene base de datos: la Carta se publica desde el repo (D-040). Los pasos:
+Producción todavía no tiene base de datos: la Carta se publica desde el repo (D-040). El alta no
+se escribe a mano — con 60 platillos es lento y se cuelan erratas en los precios — sino desde una
+hoja de cálculo (D-046). Los pasos:
 
-1. **Alta del contenido.** Crear `src/content/cartas/<slug>.ts` con el `CartaEstatica` del local:
-   nombre, colores, logo, categorías, platillos, descripciones en español e inglés y precios. El
-   formato es el mismo que devuelve la RPC `get_menu`, así que nada se tira cuando el local pase a
-   un plan con pedidos.
-2. **Código impreso.** Si lleva QR o NFC, darle un código en `src/content/qr.ts` apuntando a
-   `/c/<slug>`. Seis caracteres en minúscula, sin `0`, `o`, `1`, `l` ni `i`.
-3. **Build y despliegue.** `npm run typecheck`, `lint` y `build` en verde; push a `main`; esperar
-   el despliegue en READY.
-4. **Prueba en un teléfono de verdad**, no solo en el navegador de la compu: abrir `/c/<slug>`,
+1. **Pasar el menú a una hoja.** `entregas/<slug>/menu.csv` con las columnas
+   `categoria,nombre_es,nombre_en,desc_es,desc_en,precio,foto`. La categoría acepta
+   `Entradas|Starters` para traducirla. Se exporta desde Excel o Google Sheets tal cual (el
+   script acepta separador `,` o `;` y el BOM de Excel).
+2. **Los datos del local.** `entregas/<slug>/carta.json` con `nombre`, `moneda` (CRC o USD),
+   `color_primario`, `color_acento`, `idiomas`, `tagline_es?`, `tagline_en?`, `logo?` y
+   `codigo_qr?`. Las fotos que mandó el local van en `entregas/<slug>/fotos/`, como vinieron.
+3. **Un comando.** `node scripts/carta-nueva.mjs <slug>` valida el CSV (precios, categorías,
+   fotos que falten, límites del plan Carta), optimiza las fotos, escribe
+   `src/content/cartas/<slug>.ts`, lo agrega a `CARTAS` y, si hay `codigo_qr`, pone la línea en
+   `src/content/qr.ts`. Con `--dry-run` valida sin escribir nada.
+4. **Build y despliegue.** `npm run typecheck`, `lint` y `build` en verde; push a `main`; esperar
+   el despliegue en READY. `entregas/` está en `.gitignore`: se commitean el `.ts` y las fotos
+   optimizadas de `public/cartas/<slug>/`, nunca las fuentes que mandó el local.
+5. **Kit para el local.** `node scripts/carta-kit.mjs <slug>` genera el QR en PNG, la hoja de QR
+   para recortar y el PDF de la carta en español e inglés.
+6. **Prueba en un teléfono de verdad**, no solo en el navegador de la compu: abrir `/c/<slug>`,
    revisar fotos, precios, el cambio a inglés y que el QR impreso caiga donde debe.
 
-Recién ahí se le manda el enlace al cliente.
+Recién ahí se le manda el enlace al cliente. Si un local se va:
+`node scripts/carta-borrar.mjs <slug>` — el código impreso queda reservado y no se reutiliza.
 
 ### El sistema completo, cuando cierre el primer cliente con pedidos
 
