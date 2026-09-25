@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { pageSocial } from "@/lib/seo";
 import { LegalPage, type LegalSection } from "@/components/marketing/v2/legal-page";
-import { SITE, isPixelEnabled } from "@/lib/site";
+import { SITE, isPixelEnabled, whatsappDisplay } from "@/lib/site";
 import { isTurnstileEnabled } from "@/lib/turnstile";
 import { isContactFormEnabled } from "@/lib/contact";
 
@@ -24,7 +24,7 @@ const sections: LegalSection[] = [
   {
     title: "Responsable",
     paragraphs: [
-      `El responsable de tus datos es ${SITE.legalResponsible}, con domicilio en ${SITE.country}. Para cualquier consulta sobre privacidad escribinos a ${SITE.email} o por WhatsApp.`,
+      `El responsable de tus datos es ${SITE.legalResponsible}, con domicilio en ${SITE.country}. Para cualquier consulta sobre privacidad escribinos por WhatsApp al ${whatsappDisplay()}.`,
     ],
   },
   {
@@ -81,7 +81,7 @@ const sections: LegalSection[] = [
   {
     title: "Tus derechos",
     paragraphs: [
-      `Podés pedirnos en cualquier momento acceder a tus datos, corregirlos (rectificación) o borrarlos (supresión), además de oponerte a un uso concreto o retirar tu consentimiento. Escribinos a ${SITE.email} o por WhatsApp y te respondemos dentro del plazo que fija la ley. También podés acudir a la Agencia de Protección de Datos de los Habitantes (PRODHAB).`,
+      `Podés pedirnos en cualquier momento acceder a tus datos, corregirlos (rectificación) o borrarlos (supresión), además de oponerte a un uso concreto o retirar tu consentimiento. Escribinos por WhatsApp al ${whatsappDisplay()} y te respondemos dentro del plazo que fija la ley. También podés acudir a la Agencia de Protección de Datos de los Habitantes (PRODHAB).`,
     ],
   },
   {
@@ -99,7 +99,7 @@ const sections: LegalSection[] = [
   {
     title: "Cambios a esta política",
     paragraphs: [
-      "Si cambiamos esta política, publicamos la nueva versión en esta página con su fecha y, si el cambio es relevante para clientes activos, lo avisamos por WhatsApp o correo.",
+      "Si cambiamos esta política, publicamos la nueva versión en esta página con su fecha y, si el cambio es relevante para clientes activos, lo avisamos por WhatsApp.",
     ],
   },
 ];

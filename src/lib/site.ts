@@ -15,8 +15,9 @@ export const SITE = {
   region: "Costa Rica",
   // Formato internacional sin "+", como lo exige wa.me.
   whatsapp: "50672874779",
-  // Correo donde llegan los leads (formulario y enlaces mailto).
-  email: "galodevcr@gmail.com",
+  // Destino interno de los leads del formulario (D-039). NUNCA se renderiza: el único canal
+  // público de DataFud es WhatsApp. No agregar enlaces mailto ni mostrarlo en ninguna página.
+  leadsEmail: "galodevcr@gmail.com",
   // Redes de la marca: vacías hasta que existan. El footer muestra solo las que tengan URL.
   social: {
     instagram: "",
@@ -95,10 +96,6 @@ export function hasWhatsApp(): boolean {
   return /^\d{8,15}$/.test(SITE.whatsapp);
 }
 
-export function hasEmail(): boolean {
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(SITE.email);
-}
-
 /** Número con formato legible para mostrar: "+506 7287 4779". */
 export function whatsappDisplay(): string {
   if (!hasWhatsApp()) return "";
@@ -129,12 +126,6 @@ export function waProps(origin: WaOrigin, message = WA_MESSAGES[origin]) {
     rel: external ? ("noopener noreferrer" as const) : undefined,
     "data-wa-origin": origin,
   };
-}
-
-/** Enlace mailto con asunto. Sin correo configurado devuelve "#contacto". */
-export function mailLink(subject = "Consulta desde datafud.com"): string {
-  if (!hasEmail()) return CONTACT_ANCHOR;
-  return `mailto:${SITE.email}?subject=${encodeURIComponent(subject)}`;
 }
 
 /**

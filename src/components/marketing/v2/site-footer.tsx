@@ -3,7 +3,7 @@ import Image from "next/image";
 import { RevealOnView } from "@/components/marketing/v2/reveal";
 import { MagneticCta } from "@/components/marketing/v2/magnetic-cta";
 import { Icon } from "@/components/ui/icon";
-import { SITE, hasEmail, hasWhatsApp, mailLink, socialLinks, waProps, whatsappDisplay } from "@/lib/site";
+import { SITE, hasWhatsApp, socialLinks, waProps, whatsappDisplay } from "@/lib/site";
 
 // Cierre oscuro (CTA final) + footer de la landing.
 const explore = [
@@ -95,11 +95,6 @@ export function SiteFooter() {
                   {hasWhatsApp() && (
                     <a {...waProps("footer")} className="inline-flex min-h-11 items-center gap-2 transition-colors duration-200 hover:text-white">
                       <Icon name="whatsapp" size={14} className="text-accent-400" /> {whatsappDisplay()}
-                    </a>
-                  )}
-                  {hasEmail() && (
-                  <a href={mailLink()} className="inline-flex min-h-11 items-center gap-2 transition-colors duration-200 hover:text-white">
-                      <Icon name="mail" size={14} className="text-accent-400" /> {SITE.email}
                     </a>
                   )}
                   <p className="flex min-h-11 items-center gap-2"><Icon name="pin" size={14} className="text-accent-400" /> {SITE.region}</p>

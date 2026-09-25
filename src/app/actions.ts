@@ -83,7 +83,7 @@ export async function sendContactAction(
     const resend = new Resend(apiKey);
     const { error } = await resend.emails.send({
       from,
-      to: [SITE.email],
+      to: [SITE.leadsEmail],
       subject: `Nuevo contacto desde datafud.com: ${business}`,
       text,
     });

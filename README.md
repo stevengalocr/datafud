@@ -84,9 +84,11 @@ Opcionales de la landing (todas vacías = la página funciona igual, sin errores
 
 La landing es estática: cualquier cambio de estas variables en Vercel exige **redesplegar**.
 
-**Correo de ventas:** vive en una sola línea, `SITE.email` en `src/lib/site.ts` (hoy
-`galodevcr@gmail.com`). Cuando exista el buzón `hola@datafud.com`, se cambia ahí y se
-redespliega; landing, legales, JSON-LD y formulario lo toman de ese valor.
+**Canal público: solo WhatsApp (D-039).** La web no muestra ningún correo: ni en la landing,
+ni en los legales, ni en el JSON-LD. El correo existe únicamente como destino interno de los
+mensajes del formulario y vive en una sola línea, `SITE.leadsEmail` en `src/lib/site.ts` (hoy
+`galodevcr@gmail.com`). Cuando exista el buzón `hola@datafud.com` se cambia ahí y se redespliega.
+No agregar enlaces `mailto:` ni renderizar ese valor en ninguna página.
 
 **Enlaces de campaña:** si la visita llega con `utm_source`, `utm_medium` y `utm_campaign`, se
 guardan en `sessionStorage` y se suman a los eventos de Vercel y del píxel. Enlaces listos en

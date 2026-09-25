@@ -136,7 +136,7 @@ export const PRICING = {
     lateNotice: "Si avisás con menos de 15 días, se cobra un período más y el servicio sigue activo hasta que termine.",
     support: "Soporte por WhatsApp incluido mientras tengás el plan activo",
     menuChanges: "Cambios de precios y platillos por WhatsApp incluidos en todos los planes",
-    permanence: "Sin contrato de permanencia: cancelás con 15 días de aviso por WhatsApp o correo.",
+    permanence: "Sin contrato de permanencia: cancelás con 15 días de aviso por WhatsApp.",
     noticeDays: 15,
     /** Reembolso de la implementación si se cancela antes de empezar (D-027). */
     refundDays: 10,

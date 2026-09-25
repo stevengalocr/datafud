@@ -3,7 +3,7 @@ import { pageSocial } from "@/lib/seo";
 import { LegalPage, type LegalSection } from "@/components/marketing/v2/legal-page";
 import { PLAN_CODES, PRICING, setupFeeFor, tablesLabel } from "@/lib/constants";
 import { formatCrc } from "@/lib/currency/format";
-import { SITE } from "@/lib/site";
+import { SITE, whatsappDisplay } from "@/lib/site";
 
 const DESCRIPTION =
   "Condiciones de DataFud: planes, plazos, garantía de 48 horas, pagos, cancelación, reembolsos, hardware de mesa y entrega, para restaurantes de Costa Rica.";
@@ -29,7 +29,7 @@ const sections: LegalSection[] = [
     title: "Quién ofrece el servicio",
     paragraphs: [
       `DataFud lo ofrece ${SITE.legalResponsible}, con domicilio en ${SITE.country}. En este documento nos referimos a esa persona como "GaloDev" o "nosotros", y a quien contrata como "el cliente" o "vos".`,
-      `Nos contactás por WhatsApp o al correo ${SITE.email}. Al contratar DataFud aceptás estos términos.`,
+      `Nos contactás por WhatsApp al ${whatsappDisplay()}. Al contratar DataFud aceptás estos términos.`,
     ],
   },
   {
@@ -66,7 +66,7 @@ const sections: LegalSection[] = [
   {
     title: "Cancelación, sin permanencia",
     paragraphs: [
-      `No hay contrato de permanencia. Cancelás cuando quieras avisándonos por WhatsApp o correo con ${terms.noticeDays} días de anticipación; el servicio sigue activo hasta el final del período ya pagado. Si avisás al menos ${terms.noticeDays} días antes de tu próxima fecha de pago, ese período ya no se cobra. ${terms.lateNotice}`,
+      `No hay contrato de permanencia. Cancelás cuando quieras avisándonos por WhatsApp con ${terms.noticeDays} días de anticipación; el servicio sigue activo hasta el final del período ya pagado. Si avisás al menos ${terms.noticeDays} días antes de tu próxima fecha de pago, ese período ya no se cobra. ${terms.lateNotice}`,
       "Si pagaste el año de la Carta, el período pagado son esos 12 meses: al cancelar, el servicio sigue activo hasta que terminen.",
     ],
   },
@@ -121,7 +121,7 @@ const sections: LegalSection[] = [
   {
     title: "Cambios a estos términos",
     paragraphs: [
-      `Si cambiamos estos términos de forma relevante, te avisamos por WhatsApp o correo con al menos ${terms.noticeDays} días de anticipación. Si no estás de acuerdo, podés cancelar sin costo antes de que entren en vigor.`,
+      `Si cambiamos estos términos de forma relevante, te avisamos por WhatsApp con al menos ${terms.noticeDays} días de anticipación. Si no estás de acuerdo, podés cancelar sin costo antes de que entren en vigor.`,
     ],
   },
   {

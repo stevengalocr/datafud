@@ -4,7 +4,7 @@ import { LandingNavV2 } from "@/components/marketing/v2/landing-nav-v2";
 import { AnalyticsEvents } from "@/components/marketing/v2/analytics-events";
 import { MetaPixel } from "@/components/marketing/v2/meta-pixel";
 import { Icon } from "@/components/ui/icon";
-import { SITE, mailLink } from "@/lib/site";
+import { SITE, waProps, whatsappDisplay } from "@/lib/site";
 
 // Plantilla de las páginas legales (/terminos, /privacidad): layout de marca, versión vigente
 // y secciones numeradas.
@@ -68,9 +68,12 @@ export function LegalPage({
 
         <div className="mt-16 flex flex-col gap-4 border-t border-stone-200/80 pt-8 sm:flex-row sm:items-center sm:justify-between">
           <p className="text-sm font-medium text-brand-700/80">
-            ¿Dudas sobre este documento? Escribinos a{" "}
-            <a href={mailLink(`Consulta sobre ${title}`)} className="inline-flex min-h-11 items-center font-bold text-brand-800 underline decoration-accent-400 underline-offset-4 hover:text-brand-900">
-              {SITE.email}
+            ¿Dudas sobre este documento? Escribinos por WhatsApp al{" "}
+            <a
+              {...waProps("contacto", `Hola, tengo una duda sobre ${title} de datafud.com.`)}
+              className="inline-flex min-h-11 items-center font-bold text-brand-800 underline decoration-accent-400 underline-offset-4 hover:text-brand-900"
+            >
+              {whatsappDisplay()}
             </a>
             .
           </p>

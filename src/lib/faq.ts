@@ -44,7 +44,7 @@ export const FAQ_ITEMS: FaqItem[] = [
   {
     id: "contrato",
     q: "¿Hay contrato?",
-    a: `No hay contrato de permanencia: cancelás con ${terms.noticeDays} días de aviso por WhatsApp o correo, y el servicio sigue hasta el final del período ya pagado. ${terms.lateNotice} Antes de decidir podés probar la demo, sin hablar con nadie.`,
+    a: `No hay contrato de permanencia: cancelás con ${terms.noticeDays} días de aviso por WhatsApp, y el servicio sigue hasta el final del período ya pagado. ${terms.lateNotice} Antes de decidir podés probar la demo, sin hablar con nadie.`,
   },
   {
     id: "no-soy-tecnico",

@@ -3,15 +3,17 @@ import { RevealOnView } from "@/components/marketing/v2/reveal";
 import { ContactForm } from "@/components/marketing/v2/contact-form";
 import { isContactFormEnabled } from "@/lib/contact";
 import { turnstileSiteKey } from "@/lib/turnstile";
-import { SITE, hasEmail, hasWhatsApp, mailLink, waProps, whatsappDisplay } from "@/lib/site";
+import { hasWhatsApp, waProps, whatsappDisplay } from "@/lib/site";
 
 // Sección #contacto. Server Component: decide en el servidor si existe RESEND_API_KEY.
-// Sin la clave, el formulario no se renderiza y quedan solo los accesos directos.
+// Sin la clave, el formulario no se renderiza y queda solo WhatsApp.
+//
+// D-039: el único canal público es WhatsApp. El correo existe solo como destino interno del
+// formulario (SITE.leadsEmail) y no se muestra en ninguna parte.
 export function ContactSection() {
   const formEnabled = isContactFormEnabled();
   const wa = waProps("contacto");
   const showWhatsApp = hasWhatsApp();
-  const showEmail = hasEmail();
 
   const checklist = [
     "El nombre de tu local y qué tipo de negocio es.",
@@ -49,25 +51,9 @@ export function ContactSection() {
                   <span className="flex flex-col">
                     <span className="text-xs font-bold uppercase tracking-[0.18em] text-accent-700">WhatsApp</span>
                     <span className="font-display text-lg leading-tight text-brand-900">{whatsappDisplay()}</span>
-                    <span className="mt-0.5 text-xs font-medium text-brand-700/70">La vía más rápida. Respondemos en horario de oficina.</span>
+                    <span className="mt-0.5 text-xs font-medium text-brand-700/70">Cotizaciones, dudas y soporte. Respondemos en horario de oficina.</span>
                   </span>
                   <Icon name="arrow-right" size={18} className="ml-auto text-brand-700/75 transition-transform duration-300 group-hover:translate-x-1" />
-                </a>
-              )}
-              {showEmail && (
-                <a
-                  href={mailLink("Consulta desde datafud.com")}
-                  className="group flex items-center gap-4 rounded-2xl border border-stone-200/80 bg-white px-5 py-4 transition-all duration-300 ease-out-expo hover:-translate-y-0.5 hover:border-accent-300/70 hover:shadow-[0_16px_40px_-24px_rgba(34,80,58,0.35)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-400 focus-visible:ring-offset-2"
-                >
-                  <span className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-xl border border-stone-200/60 bg-cream-100 text-brand-700">
-                    <Icon name="mail" size={20} />
-                  </span>
-                  <span className="flex min-w-0 flex-col">
-                    <span className="text-xs font-bold uppercase tracking-[0.18em] text-accent-700">Correo</span>
-                    <span className="truncate font-display text-lg leading-tight text-brand-900">{SITE.email}</span>
-                    <span className="mt-0.5 text-xs font-medium text-brand-700/70">Para cotizaciones formales o si preferís escribir largo.</span>
-                  </span>
-                  <Icon name="arrow-right" size={18} className="ml-auto flex-shrink-0 text-brand-700/75 transition-transform duration-300 group-hover:translate-x-1" />
                 </a>
               )}
             </div>
