@@ -175,9 +175,25 @@ export function MenuClient({
         />
         <div className="relative mx-auto flex max-w-2xl flex-col px-5 pb-7 pt-8">
           <div className="flex items-start justify-between gap-4">
-            <span className="inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/10 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-white/90 backdrop-blur-sm">
-              <Icon name="qr" size={12} /> {data.table.label ? `${d.menu} · ${d.table} ${data.table.label}` : d.menu}
-            </span>
+            <div className="flex min-w-0 items-center gap-3">
+              {/* Logo del local (D-042). La tarjeta del plan Carta promete "carta a tu marca:
+                  colores, logo y fotos": sin esto, el logo viajaba en el payload y no se pintaba.
+                  Va sobre fondo blanco porque la mayoría son PNG con transparencia hechos para
+                  fondo claro, y sobre la cabecera oscura desaparecerían. */}
+              {data.settings.logo_url && (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  src={data.settings.logo_url}
+                  alt={data.settings.restaurant_name}
+                  width={52}
+                  height={52}
+                  className="h-[52px] w-[52px] flex-shrink-0 rounded-xl bg-white object-contain p-1.5 shadow-sm"
+                />
+              )}
+              <span className="inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/10 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-white/90 backdrop-blur-sm">
+                <Icon name="qr" size={12} /> {data.table.label ? `${d.menu} · ${d.table} ${data.table.label}` : d.menu}
+              </span>
+            </div>
             {langs.length > 1 && (
               <div className="flex gap-1 rounded-full bg-white/15 p-1 backdrop-blur-sm">
                 {langs.map((l) => (

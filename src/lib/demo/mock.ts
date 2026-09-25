@@ -142,7 +142,9 @@ export const mockSettings: TenantSettings = {
   default_language: "es",
   enabled_languages: ["es", "en"],
   theme: { primary: "#22503a", accent: "#b8923f" },
-  logo_url: null,
+  // Logo inventado para el restaurante ficticio de la demo (D-042): sin él, la demo
+  // no enseña la promesa "carta a tu marca: colores, logo y fotos" del plan Carta.
+  logo_url: "/demo/logo-verde-limon.webp",
   restaurant_name: RESTAURANT.name,
   address: RESTAURANT.address,
   phone: RESTAURANT.phone,
@@ -261,7 +263,7 @@ export const mockMenuPayload: MenuPayload = {
     default_language: "es",
     enabled_languages: ["es", "en"],
     theme: { primary: "#22503a", accent: "#b8923f" },
-    logo_url: null,
+    logo_url: "/demo/logo-verde-limon.webp",
     restaurant_name: RESTAURANT.name,
   },
   categories: mockCategories.map((c) => ({ id: c.id, name_i18n: c.name_i18n, sort_order: c.sort_order })),
