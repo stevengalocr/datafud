@@ -8,8 +8,8 @@
 
 ## Contador
 
-- Iteración actual: 5
-- Iteraciones consumidas: 5 / 12
+- Iteración actual: 6
+- Iteraciones consumidas: 6 / 12
 
 ## Capacidades del entorno
 
@@ -48,8 +48,8 @@
 | R02 | Hero | hecho | 1 | `d5013ba` + `03e47c1` | READY `dpl_3e79x2bj…` | Abajo |
 | R03 | Tarjeta NFC en `#hardware` | hecho | 1 | `be38789` | READY `dpl_BFrhfgus…` | Abajo |
 | R04 | Fondo del cierre (footer) | hecho | 1 | `e9c5744` | READY `dpl_Dqv9PoVm…` | Abajo |
-| R05 | QR real en los renders de estudio | hecho | 1 | ver puente | ver puente | Abajo |
-| R06 | Auditoría de imágenes públicas | pendiente | 0 | | | |
+| R05 | QR real en los renders de estudio | hecho | 1 | `933d8a2` | READY `dpl_3hC2DbkM…` | Abajo |
+| R06 | Auditoría de imágenes públicas | hecho | 1 | ver puente | ver puente | Abajo |
 | R07 | Verificación final, release 1.3.1 y puente | pendiente | 0 | | | |
 
 ## Herramientas de verificación del loop
@@ -124,6 +124,9 @@ los tres, no solo a `stand-qr-3d.webp`.
 - Imprimir el stand de muestra con `/q/demo26` y escanearlo.
 - IVA y factura 4.4; confirmar propuestas D-034–D-038, D-047, D-048.
 - Siguen abiertos los del loop anterior (`docs/plans/entrega-loop-state.md`).
+- Decidir si `icono-main.png` (782 KB, favicon sin optimizar) se reexporta a 512 px.
+- Confirmar que el logo del local ficticio de la demo ("Verde Limón") puede seguir: la regla
+  §1.3 prohíbe marcas inventadas en imágenes; la demo lo presenta como ejemplo.
 
 ## Informes por unidad
 
@@ -235,3 +238,39 @@ los tres, no solo a `stand-qr-3d.webp`.
   bordes visibles. A la derecha el margen queda algo menor que 1 módulo por el bisel del panel;
   decodifica igual.
 - Puertas A en verde (`qa:landing → OK · 21 avisos`).
+- **Producción** (`dpl_3hC2DbkM…`): original + 750 + 1080 de cada uno, 9 de 9 decodifican a
+  `https://datafud.com/q/demo26`. El optimizador de Vercel no sirvió versiones viejas (a
+  diferencia del caché local).
+
+### R06 · Auditoría de todas las imágenes públicas
+
+Uso = `grep` de la ruta y del nombre en `src/`, `scripts/` y `next.config.mjs`. Cada imagen
+mirada a ojo.
+
+| Archivo | Bytes | Usado en | Veredicto |
+|---|---|---|---|
+| `/renders/ambiente-mesa.webp` | 159 200 | hero (`page.tsx`) | OK · render etiquetado, QR real |
+| `/renders/ambiente-piedra.webp` | 208 098 | fondo del cierre (`site-footer.tsx`) | OK · decorativo, QR real |
+| `/renders/tarjeta-nfc.webp` | 183 762 | `#hardware` (`constants.ts`) | OK · render etiquetado, QR real |
+| `/stand-qr-3d.webp` | 37 896 | `#hardware` | OK · render etiquetado, QR real (R05) |
+| `/stand-qr-3d-nfc.webp` | 36 082 | `#hardware` | OK · ídem |
+| `/stand-resenas.webp` | 34 726 | `#hardware` | OK · ídem |
+| `/logo-main.png` | 840 456 | nav, footer, login, legales | OK · el texto es la propia marca |
+| `/icono-main.png` | 782 659 | favicon, apple-icon, JSON-LD, confianza, sidebar | OK · isotipo sin texto (ver nota de peso) |
+| `/demo/logo-verde-limon.webp` | 4 268 | demo (`mock.ts`) | OK con nota · logo del local **ficticio** de la demo, que la web presenta como demo |
+| `/hardware-familia.webp` | 50 128 | — | **Borrado** · sin uso y con 3 QR inventados (`detectados 2, decodificados []`) |
+| `/libro-marca.png` | 2 230 638 | — (solo `BRAND.md`) | **Movido a `docs/marca/`** · texto con errores y promesa de "Orders. Analytics." |
+| `/banner.png`, `/cta-bg.png`, `/nfc.png` | — | — | Borrados en R02–R04 |
+
+Fuera de `public/`: las fotos de platillos de la demo son de Unsplash (fotos reales con licencia,
+permitidas por el prompt); la carta `/c/ejemplo` no tiene fotos. Las imágenes OG se generan con
+`opengraph-image` y llevan texto a propósito (son tarjetas para compartir, no fotos).
+
+**0 imágenes usadas que rompan §1.3.** Antes de borrarlos, producción servía los dos sobrantes:
+`/hardware-familia.webp 200`, `/libro-marca.png 200`.
+
+Hallazgo sin tocar (no es de este loop): `icono-main.png` pesa 782 KB y es el favicon y el
+`apple-icon` **sin optimizar** (no pasa por `next/image`). No afecta al LCP, pero cada primera
+visita lo baja. Queda en PENDIENTES para decidir si se reexporta a 512 px.
+
+Puertas A en verde (`qa:landing → OK · 21 avisos`).

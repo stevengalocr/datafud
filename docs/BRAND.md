@@ -18,7 +18,13 @@
 - Logo principal: `public/logo-main.png` (sobre fondo claro; en fondos oscuros va dentro de una placa blanca con esquinas redondeadas).
 - Isotipo / favicon: `public/icono-main.png`.
 - Motivo de marca: la **"D" construida con píxeles de QR + un tenedor**. Se usa como textura decorativa firma (la retícula `.qr-grid`).
-- Libro de marca: `public/libro-marca.png`.
+- Libro de marca: `docs/marca/libro-marca.png` (referencia interna, **no se publica**: es una
+  imagen generada con errores de texto —"GR Menus", "Analvtics"— y promete "Orders. Analytics.").
+- Imágenes de la web (D-049 a D-051): sin texto, precios, monedas, marcas inventadas, personas ni
+  comida generada; todo render de IA con la etiqueta "Render ilustrativo" y en `public/renders/` o
+  en la raíz de `public/`, nunca en `public/hardware/` (reservada a fotos reales); todo QR dibujado
+  decodifica a `https://datafud.com/q/demo26`. Excepciones: el logo propio (su texto es la marca)
+  y las fotos de comida de Unsplash de la demo (fotos reales con licencia).
 
 ---
 

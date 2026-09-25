@@ -33,6 +33,12 @@ Todas las versiones notables del proyecto. Formato basado en
   módulo de margen. Mismo nombre; pesan 35–38 KB. Decodifican el original y las variantes de
   640, 750 y 1080 px que sirve `next/image`.
 
+### Removed — Loop "imágenes" (2026-09-25)
+- `public/hardware-familia.webp`: sin uso desde que se agregó y con tres QR inventados por la IA
+  que no decodifican; se servía igual en `datafud.com/hardware-familia.webp`.
+- `public/libro-marca.png` pasa a `docs/marca/libro-marca.png`: sin uso en la web, con errores de
+  texto ("GR Menus", "Analvtics") y una promesa ("Orders. Analytics.") que la Carta no cumple.
+
 ## [1.3.0] — 2026-09-25 · Entrega de la Carta lista
 
 Informe: `docs/plans/entrega-loop-report.md`.
