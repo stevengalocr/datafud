@@ -7,6 +7,20 @@ Todas las versiones notables del proyecto. Formato basado en
 
 ## [Unreleased]
 
+### Changed — Loop "pulido" (2026-09-25)
+- **Las fotos de la demo muestran el platillo que nombran y se sirven desde el sitio (D-053).**
+  El "gallo pinto" era un guiso de pollo, el "casado" una ensalada y la "limonada" tres cócteles;
+  los panqueques llevaban una mano. Las 14 fotos (el café chorreado ya tiene la suya) son reales,
+  de Unsplash o Pexels, optimizadas con `carta-fotos.mjs` y alojadas en
+  `public/demo/platos/<id>.webp`; la portada de la demo pasa de una terraza frente al mar a un
+  desayuno tico (`public/demo/portada.webp`). Créditos en `docs/marca/creditos-demo.md`. Donde la
+  foto no calzaba con la descripción, se ajustó la descripción: el casado queda "con carne
+  mechada". `/c/ejemplo` hace 0 requests a otros hosts (antes 13 a `images.unsplash.com`).
+- **`/_next/image` solo acepta imágenes de Supabase Storage (D-054).** Con `hostname: "**"`
+  cualquiera podía usar el optimizador del sitio como proxy. Ahora
+  `/_next/image?url=https://example.com/x.jpg` responde 400.
+- **`qa:landing` falla si una página pide una imagen a otro host** (antes era un aviso).
+
 ## [1.3.1] — 2026-09-25 · Imágenes de la web sin texto ni marcas inventadas; QR reales
 
 Informe: `docs/plans/imagenes-loop-report.md`.

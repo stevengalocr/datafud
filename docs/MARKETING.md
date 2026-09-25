@@ -148,7 +148,7 @@ por resultados.
   textual tal como la dijo (sin retocar el sentido) y, opcional, una **foto propia** del local o del
   stand en su mesa en `public/clientes/`. Nunca stock, nunca inventado, nunca cifras que no se
   puedan mostrar. Guardar el permiso fuera del repo.
-- **Fotos de stock** (Unsplash): solo ambientación; sus `alt` dicen "Foto ilustrativa" y nunca se
+- **Fotos de stock** (Unsplash o Pexels, alojadas en `public/demo/`, D-053): solo la demo; sus `alt` dicen "Foto ilustrativa" y nunca se
   presentan como clientes.
 
 ## 7. Diferenciadores frente a alternativas

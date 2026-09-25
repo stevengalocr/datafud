@@ -24,7 +24,9 @@
   comida generada; todo render de IA con la etiqueta "Render ilustrativo" y en `public/renders/` o
   en la raíz de `public/`, nunca en `public/hardware/` (reservada a fotos reales); todo QR dibujado
   decodifica a `https://datafud.com/q/demo26`. Excepciones: el logo propio (su texto es la marca)
-  y las fotos de comida de Unsplash de la demo (fotos reales con licencia).
+  y las fotos de comida de la demo: fotos reales con licencia (Unsplash o Pexels), alojadas en
+  `public/demo/` y que muestran el platillo que nombran (D-053; créditos en
+  `docs/marca/creditos-demo.md`).
 
 ---
 

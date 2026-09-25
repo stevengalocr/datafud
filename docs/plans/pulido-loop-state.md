@@ -10,8 +10,8 @@
 
 ## Contador
 
-- Iteración actual: 1
-- Iteraciones consumidas: 1 / 14
+- Iteración actual: 2
+- Iteraciones consumidas: 2 / 14
 
 ## Capacidades del entorno
 
@@ -58,8 +58,8 @@
 
 | ID | Título | Estado | Intentos | Commit | Despliegue | Evidencia |
 |---|---|---|---|---|---|---|
-| P01 | Estado y línea base | en curso | 1 | | | Abajo |
-| P02 | Fotos de la demo (D-053, D-054) | pendiente | 0 | | | |
+| P01 | Estado y línea base | hecho | 1 | `3508adb` | READY `dpl_5VhKxyoA…` | Abajo |
+| P02 | Fotos de la demo (D-053, D-054) | hecho | 1 | (este) | ver bloque | Abajo |
 | P03 | El colón se ve como colón (D-052) | pendiente | 0 | | | |
 | P04 | Íconos y logo livianos | pendiente | 0 | | | |
 | P05 | Decisiones comerciales en la web y los documentos | pendiente | 0 | | | |
@@ -164,3 +164,58 @@ cabecera.
 
 - Línea base en verde (arriba). Tabla de peso, precios y los 14 platillos con su veredicto.
 - Hallazgo mayor: las fuentes de marca no pintan (ver "Ajustes al repo").
+
+### P02 · Fotos de la demo (D-053, D-054)
+
+- **Antes (criterio fallando):** el `qa:landing` endurecido contra el build de `6b3c231`:
+  ```
+  FALLO  / @ 768x1024: 4 imágenes pedidas a otro host (D-053): …/_next/image?url=https%3A%2F%2Fimages.unsplash.com%2Fphoto-1559339352…
+  FALLO  /preview/carta @ 375x812: 13 imágenes pedidas a otro host (D-053): https://images.unsplash.com/photo-1604908176997…
+  ```
+  y `datafud.com/_next/image?url=https://example.com/x.jpg&w=64&q=75` → **404** (el optimizador
+  intentó bajarla: era un proxy abierto).
+- **Búsqueda.** La API de Unsplash pide clave; se buscó desde el navegador integrado en Unsplash
+  (solo licencia libre, sin Unsplash+) y en Pexels. Cada candidata se miró en grande antes de
+  elegirla. Los autores de las fotos que se quedan se rastrearon por su id en la búsqueda de
+  Unsplash. Créditos completos en `docs/marca/creditos-demo.md`.
+- **Optimización:** `procesarFotos()` de `scripts/carta-fotos.mjs` (el mismo de una carta real),
+  vía `.qa/bin/demo-fotos.mjs`: 14 fotos a 800 px q82, de 24 a 138 KB (presupuesto de 150 KB por
+  foto con 14 fotos). Portada a 1600×900, 159 KB (se sirve por `next/image`).
+- `mock.ts`: `img(id)` → `/demo/platos/<id>.webp`; `RESTAURANT.cover` → `/demo/portada.webp`.
+- `next.config.mjs`: `remotePatterns` solo `*.supabase.co` (D-054). No queda ningún otro host en
+  uso: `grep -rn "unsplash" src` → 0. La única mención en `scripts/` es la regla de
+  `qa-landing.mjs` que ahora **falla** si una página pide una imagen a Unsplash, Pexels o a
+  cualquier host por `/_next/image` (antes era un aviso "depende de la red").
+
+| # | Platillo | Foto nueva | ¿Corresponde? (mirado en la captura a 375) |
+|---|---|---|---|
+| 1 | Gallo Pinto con huevo | Pexels 37347242 (recorte): gallo pinto, dos huevos fritos, patacones, banano, pan | Sí (descripción ajustada a la foto) |
+| 2 | Panqueques con miel | Unsplash dQTMhuR4vB4: torre con cuchara de miel, fresas, banano; sin manos | Sí (descripción ajustada) |
+| 3 | Plato de Frutas | Unsplash _Zn_7FzoL1w (la misma) | Sí (sin granola en la descripción) |
+| 4 | Casado con carne mechada | Pexels 29450679: arroz, frijoles negros, carne mechada, maduro | Sí (antes "Casado Completo": se renombró a lo que muestra) |
+| 5 | Lomito en salsa | Unsplash auIbTAcSH6E (la misma) | Sí (sin "puré") |
+| 6 | Bowl Tropical | Unsplash kcA-c3f_3FE (la misma) | Sí (sin "palmito") |
+| 7 | Hamburguesa Casera | Unsplash uVPV_nV17Tw (la misma) | Sí |
+| 8 | Pizza Artesanal | Unsplash MqT0asuoIcU (la misma) | Sí |
+| 9 | Fresco Natural de Naranja | Unsplash kkrXVKK-jhg (la misma) | Sí |
+| 10 | Limonada de la casa | Unsplash WDgN0XclV_w: limonada con hierbabuena y limón | Sí |
+| 11 | Café Helado | Unsplash L-sm1B4L1Ns (la misma) | Sí |
+| 12 | Café Chorreado | Pexels 6307233: café colado en bolsita de tela a una taza de peltre | Sí (antes sin foto) |
+| 13 | Brownie con helado | Unsplash idTwDKt2j2o (la misma) | Sí |
+| 14 | Queque de frutos rojos | Unsplash Mzy-OjtCI70 (la misma) | Sí |
+| — | Portada | Unsplash Ycuvvz_Px8c (recorte): gallo pinto con maduro, aguacate y pico de gallo | Sí, un desayuno tico |
+
+**14 de 14 corresponden.** Capturas miradas: `.qa/pulido/p02-carta-375-full.png`,
+`p02-demo-1440.png` (teléfono de `#demo`) y `p02-preview-375.png`.
+
+- **Después:**
+  ```
+  typecheck=0 · lint ✔ · build=0 · qa:landing → OK · 21 avisos (0 fallos D-053)
+  | `/` | 242.8 KB | 384.4 KB | 19 / 34 | 0 | 0 |
+  | `/c/ejemplo` | 1062.3 KB | 1062.3 KB | 25 / 25 | 0 | 0 |
+  peso-carta → OK: 1.36 MB al abrir (límite 2,00 MB)
+  /_next/image?url=https%3A%2F%2Fexample.com%2Fx.jpg&w=64&q=75 → 400   (local)
+  ```
+- **El peso de la carta subió** de 1,02 a 1,36 MB al abrir: las fotos de Unsplash venían a 600 px
+  q75 y las de `carta-fotos.mjs` salen a 800 px q82 (el techo que usa una carta real) y ahora
+  también el café tiene foto. Sigue bajo los 2 MB de D-043; queda anotado para P08.

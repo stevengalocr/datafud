@@ -40,7 +40,9 @@ const VIEWPORTS = [
 ];
 const PAGES = ["/", "/login", "/terminos", "/privacidad", "/preview", "/preview/carta", "/preview/cliente", "/preview/dashboard", "/c/ejemplo", ...MARKETING_PAGES];
 const IGNORED_URL = /_vercel\/insights/;
-const REMOTE_IMAGE = /\/_next\/image\?url=https?%3A|^https:\/\/images\.unsplash\.com\//;
+// Las fotos de la demo y de las cartas se sirven desde public/ (D-053): pedir una imagen a otro
+// host, directo o por /_next/image, es un fallo, no un aviso de red.
+const REMOTE_IMAGE = /\/_next\/image\?url=https?%3A|^https:\/\/(images\.unsplash\.com|images\.pexels\.com)\//;
 
 const failures = [];
 const warnings = new Set();
@@ -124,16 +126,19 @@ try {
       page.on("pageerror", (e) => consoleErrors.push("pageerror: " + e.message));
       // Sin NEXT_PUBLIC_META_PIXEL_ID en el build: cero requests a Meta.
       const metaReqs = [];
-      page.on("request", (r) => { if (/facebook\.net|facebook\.com\/tr/.test(r.url())) metaReqs.push(r.url()); });
+      const remoteImgs = [];
+      page.on("request", (r) => {
+        if (/facebook\.net|facebook\.com\/tr/.test(r.url())) metaReqs.push(r.url());
+        if (REMOTE_IMAGE.test(r.url())) remoteImgs.push(r.url());
+      });
       page.on("response", (r) => {
         const url = r.url();
         if (r.status() < 400 || IGNORED_URL.test(url)) return;
-        if (REMOTE_IMAGE.test(url)) warn(`${p} @ ${vp.name}: foto remota no cargó (${r.status()}); depende de la red del entorno`);
-        else failed.push(`${r.status()} ${url}`);
+        failed.push(`${r.status()} ${url}`);
       });
       page.on("requestfailed", (r) => {
         const url = r.url();
-        if (IGNORED_URL.test(url) || REMOTE_IMAGE.test(url)) return;
+        if (IGNORED_URL.test(url)) return;
         failed.push(`${url} ${r.failure()?.errorText}`);
       });
 
@@ -183,6 +188,7 @@ try {
         };
       });
       const tag = `${p} @ ${vp.name}`;
+      if (remoteImgs.length) fail(`${p} @ ${vp.name}: ${remoteImgs.length} imágenes pedidas a otro host (D-053): ${remoteImgs[0]}`);
       if (!process.env.NEXT_PUBLIC_META_PIXEL_ID && metaReqs.length) fail(`${p} @ ${vp.name}: ${metaReqs.length} requests a Meta sin la variable del píxel`);
       if (consoleErrors.length) fail(`${tag}: errores de consola: ${consoleErrors.slice(0, 3).join(" | ")}`);
       if (failed.length) fail(`${tag}: requests fallidos: ${failed.slice(0, 3).join(" | ")}`);

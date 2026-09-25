@@ -17,9 +17,10 @@ const now = new Date();
 const iso = (daysAgo = 0) =>
   new Date(now.getTime() - daysAgo * 86400000).toISOString();
 const minsAgo = (m: number) => new Date(now.getTime() - m * 60000).toISOString();
-// Foto de stock (Unsplash, licencia libre) lista para usar como imagen de platillo.
-const img = (id: string, w = 600) =>
-  `https://images.unsplash.com/${id}?auto=format&fit=crop&w=${w}&q=75`;
+// Fotos reales con licencia (Unsplash y Pexels), alojadas en el sitio (D-053): cada una muestra
+// el platillo que nombra. Se optimizaron con scripts/carta-fotos.mjs, como las de una carta
+// real, y los créditos están en docs/marca/creditos-demo.md.
+const img = (id: string) => `/demo/platos/${id}.webp`;
 
 export const RESTAURANT = {
   name: "Verde Limón",
@@ -27,7 +28,7 @@ export const RESTAURANT = {
   slug: "verde-limon",
   address: "Barrio Escalante, San José, Costa Rica",
   phone: "+506 2253 7788",
-  cover: img("photo-1559339352-11d035aa65de", 1600),
+  cover: "/demo/portada.webp",
 };
 
 export const mockPlans: Plan[] = [
@@ -189,24 +190,24 @@ const P = (
 
 export const mockProducts: Product[] = [
   // Desayunos
-  P("p-gallo", "c-desayunos", "Gallo Pinto con huevo", "Gallo Pinto & egg", "Arroz con frijoles típico, huevo al gusto, natilla y tortilla.", "Costa Rican rice and beans with eggs your way, sour cream and a tortilla.", 2800, "photo-1604908176997-125f25cc6f3d", 1),
-  P("p-panqueques", "c-desayunos", "Panqueques con miel", "Honey pancakes", "Torre de panqueques esponjosos con miel de caña y banano.", "A stack of fluffy pancakes with cane syrup and banana.", 3200, "photo-1567620905732-2d1ec7ab7445", 2),
-  P("p-frutas", "c-desayunos", "Plato de Frutas", "Fruit plate", "Frutas frescas de temporada con granola y miel.", "Fresh seasonal fruit with granola and honey.", 2500, "photo-1490474418585-ba9bad8fd0ea", 3),
+  P("p-gallo", "c-desayunos", "Gallo Pinto con huevo", "Gallo Pinto & egg", "Arroz con frijoles típico, huevos fritos, patacones, banano y pan casero.", "Costa Rican rice and beans with fried eggs, patacones, banana and homemade bread.", 2800, "p-gallo", 1),
+  P("p-panqueques", "c-desayunos", "Panqueques con miel", "Honey pancakes", "Torre de panqueques con miel, banano y fresas.", "A stack of pancakes with honey, banana and strawberries.", 3200, "p-panqueques", 2),
+  P("p-frutas", "c-desayunos", "Plato de Frutas", "Fruit plate", "Frutas frescas de temporada, picadas al momento.", "Fresh seasonal fruit, cut to order.", 2500, "p-frutas", 3),
   // Casados & Fuertes
-  P("p-casado", "c-fuertes", "Casado Completo", "Full Casado", "Arroz, frijoles, carne en salsa, plátano maduro, ensalada y picadillo.", "Rice, beans, beef in sauce, sweet plantain, salad and picadillo.", 4200, "photo-1543339308-43e59d6b73a6", 1),
-  P("p-lomito", "c-fuertes", "Lomito en salsa", "Tenderloin in sauce", "Lomito a la parrilla en salsa de la casa con vegetales y puré.", "Grilled tenderloin in house sauce with vegetables and mashed potato.", 6500, "photo-1432139509613-5c4255815697", 2),
-  P("p-bowl", "c-fuertes", "Bowl Tropical", "Tropical bowl", "Bowl fresco de vegetales, palmito, maíz dulce y aderezo de la casa.", "Fresh bowl of vegetables, heart of palm, sweet corn and house dressing.", 3900, "photo-1546069901-ba9599a7e63c", 3),
+  P("p-casado", "c-fuertes", "Casado con carne mechada", "Shredded beef casado", "Arroz, frijoles negros, carne mechada y plátano maduro.", "Rice, black beans, shredded beef and sweet plantain.", 4200, "p-casado", 1),
+  P("p-lomito", "c-fuertes", "Lomito en salsa", "Tenderloin in sauce", "Lomito a la parrilla en salsa de la casa con vegetales.", "Grilled tenderloin in house sauce with vegetables.", 6500, "p-lomito", 2),
+  P("p-bowl", "c-fuertes", "Bowl Tropical", "Tropical bowl", "Bowl fresco de vegetales, maíz dulce, huevo y aderezo de la casa.", "Fresh bowl of vegetables, sweet corn, egg and house dressing.", 3900, "p-bowl", 3),
   // Bocas
-  P("p-hamburguesa", "c-bocas", "Hamburguesa Casera", "House burger", "Carne smash, queso, vegetales frescos y papas crocantes.", "Smash patty, cheese, fresh vegetables and crispy fries.", 4500, "photo-1551782450-a2132b4ba21d", 1),
-  P("p-pizza", "c-bocas", "Pizza Artesanal", "Artisan pizza", "Masa madre, salsa de tomate fresco, mozzarella y cilantro.", "Sourdough base, fresh tomato sauce, mozzarella and cilantro.", 5200, "photo-1565299624946-b28f40a0ae38", 2),
+  P("p-hamburguesa", "c-bocas", "Hamburguesa Casera", "House burger", "Carne smash, queso, vegetales frescos y papas crocantes.", "Smash patty, cheese, fresh vegetables and crispy fries.", 4500, "p-hamburguesa", 1),
+  P("p-pizza", "c-bocas", "Pizza Artesanal", "Artisan pizza", "Masa madre, salsa de tomate fresco, mozzarella y cilantro.", "Sourdough base, fresh tomato sauce, mozzarella and cilantro.", 5200, "p-pizza", 2),
   // Frescos & Café
-  P("p-fresco", "c-bebidas", "Fresco Natural de Naranja", "Fresh orange juice", "Jugo de naranja recién exprimido, sin azúcar añadida.", "Freshly squeezed orange juice, no added sugar.", 1400, "photo-1600271886742-f049cd451bba", 1),
-  P("p-limonada", "c-bebidas", "Limonada de la casa", "House lemonade", "Limonada con hierbabuena, la favorita de Verde Limón.", "Lemonade with spearmint, the Verde Limón favourite.", 1300, "photo-1544145945-f90425340c7e", 2),
-  P("p-cafehelado", "c-bebidas", "Café Helado", "Iced coffee", "Café costarricense frío con hielo y un toque de leche.", "Cold Costa Rican coffee over ice with a splash of milk.", 1800, "photo-1461023058943-07fcbe16d735", 3),
-  P("p-cafe", "c-bebidas", "Café Chorreado", "Brewed coffee", "Café de altura colado a la tica, recién hecho.", "Highland coffee, filtered the Costa Rican way, freshly made.", 1000, null, 4),
+  P("p-fresco", "c-bebidas", "Fresco Natural de Naranja", "Fresh orange juice", "Jugo de naranja recién exprimido, sin azúcar añadida.", "Freshly squeezed orange juice, no added sugar.", 1400, "p-fresco", 1),
+  P("p-limonada", "c-bebidas", "Limonada de la casa", "House lemonade", "Limonada con hierbabuena, la favorita de Verde Limón.", "Lemonade with spearmint, the Verde Limón favourite.", 1300, "p-limonada", 2),
+  P("p-cafehelado", "c-bebidas", "Café Helado", "Iced coffee", "Café costarricense frío con hielo y un toque de leche.", "Cold Costa Rican coffee over ice with a splash of milk.", 1800, "p-cafehelado", 3),
+  P("p-cafe", "c-bebidas", "Café Chorreado", "Brewed coffee", "Café de altura colado a la tica, recién hecho.", "Highland coffee, filtered the Costa Rican way, freshly made.", 1000, "p-cafe", 4),
   // Postres
-  P("p-brownie", "c-postres", "Brownie con helado", "Brownie à la mode", "Brownie tibio con helado de vainilla y salsa de caramelo.", "Warm brownie with vanilla ice cream and caramel sauce.", 2900, "photo-1551024506-0bccd828d307", 1),
-  P("p-queque", "c-postres", "Queque de frutos rojos", "Berry cake", "Bizcocho suave con crema y frutos rojos frescos.", "Soft sponge cake with cream and fresh red berries.", 2600, "photo-1565958011703-44f9829ba187", 2),
+  P("p-brownie", "c-postres", "Brownie con helado", "Brownie à la mode", "Brownie tibio con helado de vainilla y salsa de caramelo.", "Warm brownie with vanilla ice cream and caramel sauce.", 2900, "p-brownie", 1),
+  P("p-queque", "c-postres", "Queque de frutos rojos", "Berry cake", "Bizcocho suave con crema y frutos rojos frescos.", "Soft sponge cake with cream and fresh red berries.", 2600, "p-queque", 2),
 ];
 
 // Comandas en vivo — variedad de estados para el tablero de cocina.
@@ -226,14 +227,14 @@ const oi = (id: string, order_id: string, product_id: string, name: string, pric
 });
 
 export const mockOrderItems: Record<string, OrderItem[]> = {
-  "o-1": [oi("oi-1", "o-1", "p-casado", "Casado Completo", 4200, 2, "Sin cebolla")],
+  "o-1": [oi("oi-1", "o-1", "p-casado", "Casado con carne mechada", 4200, 2, "Sin cebolla")],
   "o-2": [oi("oi-3", "o-2", "p-hamburguesa", "Hamburguesa Casera", 4500, 1)],
   "o-3": [oi("oi-4", "o-3", "p-lomito", "Lomito en salsa", 6500, 1), oi("oi-5", "o-3", "p-bowl", "Bowl Tropical", 3900, 1), oi("oi-6", "o-3", "p-limonada", "Limonada de la casa", 1300, 1)],
   "o-4": [oi("oi-7", "o-4", "p-panqueques", "Panqueques con miel", 3200, 1)],
   "o-5": [oi("oi-8", "o-5", "p-lomito", "Lomito en salsa", 6500, 1)],
   "o-6": [oi("oi-9", "o-6", "p-pizza", "Pizza Artesanal", 5200, 1)],
-  "o-7": [oi("oi-10", "o-7", "p-casado", "Casado Completo", 4200, 2), oi("oi-11", "o-7", "p-fresco", "Fresco Natural de Naranja", 1400, 1)],
-  "o-8": [oi("oi-12", "o-8", "p-casado", "Casado Completo", 4200, 1), oi("oi-13", "o-8", "p-brownie", "Brownie con helado", 2900, 1)],
+  "o-7": [oi("oi-10", "o-7", "p-casado", "Casado con carne mechada", 4200, 2), oi("oi-11", "o-7", "p-fresco", "Fresco Natural de Naranja", 1400, 1)],
+  "o-8": [oi("oi-12", "o-8", "p-casado", "Casado con carne mechada", 4200, 1), oi("oi-13", "o-8", "p-brownie", "Brownie con helado", 2900, 1)],
 };
 
 export const mockDailySales = [
@@ -248,7 +249,7 @@ export const mockDailySales = [
 
 // Ordenados por unidades vendidas, de mayor a menor.
 export const mockTopProducts = [
-  { name: "Casado Completo", units: 86, revenue: 361200 },
+  { name: "Casado con carne mechada", units: 86, revenue: 361200 },
   { name: "Hamburguesa Casera", units: 64, revenue: 288000 },
   { name: "Gallo Pinto con huevo", units: 58, revenue: 162400 },
   { name: "Fresco Natural de Naranja", units: 71, revenue: 99400 },
