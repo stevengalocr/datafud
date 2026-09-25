@@ -36,7 +36,7 @@ B–G), `faq-ld.mjs`, `glifos.mjs`, `salto.mjs`, `contraste.mjs` y `contraste-te
 | A02 | Condiciones (D-057 a D-061) | hecho | 1 | `96b3527` | READY `dpl_FnuznXxm…` | Abajo |
 | A03 | Pulido visual | hecho | 1 | `bef7c02` | READY `dpl_DyNvGYak…` | Abajo |
 | A04 | Nombre comercial (D-062) | hecho | 1 | `215a69b` | READY `dpl_2xFANABp…` | Abajo |
-| A05 | Verificación, release 1.4.1 y puente | hecho | 1 | (este) | ver bloque | Abajo e informe |
+| A05 | Verificación, release 1.4.1 y puente | hecho | 1 | `49f8311` | READY `dpl_DbfHPVz2…` | Abajo e informe |
 
 ## Línea base (literal)
 
@@ -161,4 +161,20 @@ Capturas antes (build con A02, sin A03) y después, con `.qa/bin/a03-shots.mjs`,
 - `package.json` y el lockfile → **1.4.1**; CHANGELOG "1.4.1 · Ajustes finales: fundadores en
   cualquier plan, plazos con material + pago, a quién le pagás".
 - Informe: `docs/plans/ajustes-loop-report.md`.
-- Puertas B–G en producción: en el commit de verificación que sigue al release.
+- **Puertas en producción** (`sh .qa/bin/puertas.sh https://datafud.com 49f8311`):
+  ```
+  B  supabase/: 0 líneas · montos de PRICING: 0 líneas cambiadas
+  C  6/6 renders → 'https://datafud.com/q/demo26' · cierre 375/768/1440 (y 1440@2x): None
+  D  /  mailto:=0 correos=0 €=0 · /c/ejemplo  mailto:=0 correos=0 €=0
+  E  peso-carta → OK: 1.41 MB al abrir (límite 2,00 MB) · /c/ejemplo 1112,4 KB a 375, 0 hosts externos
+  F  / → 200 · /c/ejemplo → 200 · /q/demo26 → 307 https://datafud.com/c/ejemplo · /terminos → Versión 1.2
+  G  FAQ: 18 visibles · 18 en JSON-LD · 0 diferencias
+  ```
+  Esa corrida pudo empezar mientras el release compilaba (servía `215a69b`, mismo contenido). Con
+  el release READY (`dpl_DbfHPVz2…`) se repitieron D, F y G: iguales. En producción: "48 horas"
+  sin "hábiles" solo en el H1 (las 6 páginas públicas); la pastilla dice "Primeros 10 locales, en
+  cualquier plan: ₡24 900 menos en la implementación y 1 stand QR 3D"; `#confianza` trae la línea
+  de D-062; el teléfono de `#demo` dice "Nuestra carta.". La puerta A se corrió en local antes de
+  cada commit.
+- **Puente** subido al vault: `02-Proyectos/Datafud/Claude-Code/vault-sync-2026-09-25-ajustes.md`
+  (aplicado: parcial, como en los loops anteriores).
