@@ -66,7 +66,7 @@
 | P05 | Decisiones comerciales en la web y los documentos | hecho | 1 | `fd1049b` | READY `dpl_Hxwq5Yzr…` | Abajo |
 | P06 | Cierre sin QR que compita (D-056) y stand de reseñas (D-055) | hecho | 1 | `e78de53` | READY `dpl_GHrsBy6f…` | Abajo |
 | P07 | Tareas sueltas | hecho | 1 | `2e47417` | READY `dpl_Cd6gqUvd…` | Abajo |
-| P08 | Verificación final, release 1.4.0 y puente | hecho | 1 | (este) | ver bloque | Abajo e informe |
+| P08 | Verificación final, release 1.4.0 y puente | hecho | 1 | `d472083` + `4c95d83` | READY `dpl_3bPsQkDo…` | Abajo e informe |
 
 ## Herramientas de verificación del loop
 
@@ -504,4 +504,18 @@ Licencia OFL al lado (`public/fonts/OFL-Inter.txt`). `@font-face` en `globals.cs
   F  / → 200 · /c/ejemplo → 200 · /q/demo26 → 307 https://datafud.com/c/ejemplo · /terminos → Versión 1.1
   G  FAQ: 18 visibles · 18 en JSON-LD · 0 diferencias
   ```
-  La corrida sobre el commit de release va en el commit de verificación que sigue.
+- **Puertas B–G en producción sobre la release `4c95d83` (`dpl_3bPsQkDo…`):**
+  ```
+  B  supabase/: 0 líneas · montos de PRICING: 0 líneas cambiadas
+  C  6/6 renders → 'https://datafud.com/q/demo26' · cierre 375/768/1440 (y 1440@2x): None
+  D  /  mailto:=0 correos=0 €=0 · /c/ejemplo  mailto:=0 correos=0 €=0
+  E  peso-carta → OK: 1.41 MB al abrir (límite 2,00 MB) · /c/ejemplo 1112,4 KB a 375, 0 hosts externos
+  F  / → 200 · /c/ejemplo → 200 · /q/demo26 → 307 https://datafud.com/c/ejemplo · /terminos → Versión 1.1
+  G  FAQ: 18 visibles · 18 en JSON-LD · 0 diferencias
+  ```
+  Además: la carta sirve "Gallo Pinto con maduro" y "Hamburguesa de pollo", `p-gallo.webp`
+  124 712 B; los 14 "₡" de la carta los pinta la subfuente (Inter ×14, Hanken Grotesk ×1070,
+  Young Serif ×133); el primer Tab de la home muestra "Saltar al contenido" y Enter lleva a
+  `MAIN#contenido`. La puerta A se corrió en local antes de cada commit.
+- **Puente** subido al vault: `02-Proyectos/Datafud/Claude-Code/vault-sync-2026-09-25-pulido.md`
+  (aplicado: parcial, como en los loops anteriores).
