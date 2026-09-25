@@ -30,7 +30,8 @@ function PriceTag({ item, wa, dark = false }: { item: HardwareItem; wa: boolean;
       <span className="font-display text-3xl leading-none">{formatCrc(item.priceCrc)}</span>
       <span className={cn("text-xs font-bold uppercase tracking-[0.14em]", dark ? "text-cream-100/70" : "text-brand-700/75")}>/ {item.unit}</span>
       {!pending && (
-        <span className={cn("text-xs font-semibold", dark ? "text-cream-100/70" : "text-brand-700/75")}>≈ {formatPublishedPrice(item.priceUsd, wa)}</span>
+        // En su propia línea en todas las piezas, como en los planes.
+        <span className={cn("mt-1 basis-full text-xs font-semibold", dark ? "text-cream-100/70" : "text-brand-700/75")}>≈&nbsp;{formatPublishedPrice(item.priceUsd, wa)}</span>
       )}
     </p>
   );

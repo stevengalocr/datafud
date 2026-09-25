@@ -117,7 +117,9 @@ export function PricingV2() {
                 <div className="mt-5 flex flex-wrap items-baseline gap-x-2 gap-y-1">
                   <span className="font-display text-[2.6rem] leading-none text-brand-900 sm:text-5xl">{formatCrc(plan.priceCrc)}</span>
                   <span className="text-xs font-semibold uppercase tracking-widest text-brand-700/75">/ mes</span>
-                  <span className="text-xs font-semibold text-brand-700/75">≈ {formatUsd(plan.priceUsd)}</span>
+                  {/* La referencia en dólares va siempre en su propia línea: en la misma, según el
+                      ancho del precio, a veces entraba y a veces no, y las tarjetas no coincidían. */}
+                  <span className="basis-full text-xs font-semibold text-brand-700/75">≈&nbsp;{formatUsd(plan.priceUsd)}</span>
                 </div>
 
                 <p className="mt-4 inline-flex items-center gap-2 rounded-full border border-accent-300/50 bg-accent-50 px-3 py-1 text-xs font-bold uppercase tracking-[0.08em] text-accent-800">

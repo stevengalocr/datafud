@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { Icon } from "@/components/ui/icon";
+import { dict } from "@/lib/i18n/dictionaries";
 import { RevealOnView } from "@/components/marketing/v2/reveal";
 import QRCode from "qrcode";
 import { RESTAURANT, mockProducts, mockCategories } from "@/lib/demo/mock";
@@ -53,7 +54,8 @@ export async function DemoSection() {
                     <div className="absolute inset-0 bg-gradient-to-t from-brand-950/85 via-brand-950/30 to-transparent" />
                     <div className="absolute inset-x-4 bottom-3 text-cream-50">
                       <p className="font-display text-xl leading-tight">{RESTAURANT.name}</p>
-                      <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-cream-100/80">{RESTAURANT.tagline.split(" · ")[0]}</p>
+                      {/* El mismo subtítulo que muestra /c/ejemplo (la carta que abre el QR). */}
+                      <p className="text-[11px] font-medium text-cream-100/85">{dict.es.cartaTagline}</p>
                     </div>
                   </div>
                   {/* Chips de categorías */}

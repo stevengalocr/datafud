@@ -52,7 +52,7 @@ export default function HomePage() {
 
       <main id="contenido" tabIndex={-1} className="outline-none">
       {/* ── Hero ───────────────────────────────────────────────── */}
-      <section className="relative overflow-hidden border-b border-stone-200/60">
+      <section data-wa-float-despues className="relative overflow-hidden border-b border-stone-200/60">
         <div className="qr-grid pointer-events-none absolute inset-0 opacity-70" />
         <div className="animate-glow-1 pointer-events-none absolute -left-40 top-0 h-[480px] w-[480px] rounded-full bg-brand-100/50 blur-3xl" />
         <div className="animate-glow-2 pointer-events-none absolute right-0 top-20 h-[360px] w-[360px] rounded-full bg-accent-100/40 blur-3xl" />

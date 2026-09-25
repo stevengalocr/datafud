@@ -7,8 +7,8 @@
 
 ## Contador
 
-- Iteración actual: 2
-- Iteraciones consumidas: 2
+- Iteración actual: 3
+- Iteraciones consumidas: 3
 
 ## Capacidades del entorno
 
@@ -32,8 +32,8 @@ B–G), `faq-ld.mjs`, `glifos.mjs`, `salto.mjs`, `contraste.mjs` y `contraste-te
 | ID | Título | Estado | Intentos | Commit | Despliegue | Evidencia |
 |---|---|---|---|---|---|---|
 | A01 | Estado y línea base | hecho | 1 | `ae568e2` | READY | Abajo |
-| A02 | Condiciones (D-057 a D-061) | hecho | 1 | (este) | ver bloque | Abajo |
-| A03 | Pulido visual | pendiente | 0 | | | |
+| A02 | Condiciones (D-057 a D-061) | hecho | 1 | `96b3527` | ver A03 | Abajo |
+| A03 | Pulido visual | hecho | 1 | (este) | ver bloque | Abajo |
 | A04 | Nombre comercial (D-062) | pendiente | 0 | | | |
 | A05 | Verificación, release 1.4.1 y puente | pendiente | 0 | | | |
 
@@ -97,3 +97,37 @@ Capturas (miradas) en `.qa/ajustes/`: `a01-hero-{375,1440}.png` y
 - Capturas miradas: `.qa/ajustes/a02-vista.png` (línea del hero, tarjeta de fundadores e imagen OG).
 - Puertas: typecheck 0 errores, lint ✔, build 0, `qa:landing → OK · 23 avisos`,
   `git diff 6b3c231 -- supabase/` vacío.
+
+### A03 · Pulido visual
+
+Capturas antes (build con A02, sin A03) y después, con `.qa/bin/a03-shots.mjs`,
+`a03-precios.mjs` y `faq-sticky.mjs`; todas miradas.
+
+- **Botón flotante de WhatsApp (375).** `WhatsAppFloat` pasa a componente de cliente: un
+  `IntersectionObserver` sobre el elemento marcado `data-wa-float-despues` (el hero de la landing y
+  el encabezado de las guías) lo muestra recién cuando ese bloque sale de la pantalla. Oculto
+  lleva `aria-hidden`, `tabIndex={-1}` y `pointer-events: none`; sin marcador se muestra siempre y
+  sin JavaScript también (regla `[data-wa-float]` en el `noscript` de `layout.tsx`): nunca queda
+  escondido para siempre. Medido:
+  ```
+  antes    375 arriba: flotante opacity=1 pointer=auto   (tapa la esquina del render)
+  después  375 arriba: flotante opacity=0 pointer=none
+  después  375 pasado el hero: flotante opacity=1 pointer=auto
+  ```
+  Captura: `.qa/ajustes/a03-comp-hero.png` (antes, después arriba, después al bajar).
+- **"≈ US$".** En los planes y en `PriceTag` de `#hardware` la referencia en dólares va con
+  `basis-full` (siempre en su propia línea) y `≈&nbsp;` (no se parte). Recortes de los 7 bloques de
+  precio a 375, 768 y 1440: `.qa/ajustes/a03-comp-precios.png`; ninguno la mezcla.
+- **FAQ en escritorio: sin cambio de código.** La columna izquierda ya es `lg:sticky lg:top-28`.
+  En el viewport real, recorriendo la lista:
+  ```
+  1440 inicio: título izquierdo a 282px del borde superior · mitad: 140px · final: 140px
+  1024 inicio: 268px · mitad: 140px · final: 140px
+  ```
+  El título y la tarjeta de WhatsApp acompañan toda la lista (`.qa/ajustes/a03-comp-faq.png`).
+  La "columna vacía" solo existe en capturas de página completa, que pintan el bloque *sticky*
+  en una sola posición.
+- **Teléfono de `#demo`.** Bajo "Verde Limón" dice `dict.es.cartaTagline` ("Nuestra carta."), el
+  mismo texto que muestra `/c/ejemplo`, en lugar de "SODA TICA". Antes/después:
+  `.qa/ajustes/a03-comp-demo-faq.png` (izquierda).
+- Puertas: typecheck 0 errores, lint ✔, build 0, `qa:landing → OK · 23 avisos`.

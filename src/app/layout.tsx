@@ -65,7 +65,7 @@ export default function RootLayout({
       <head>
         {/* Sin JS: el contenido que se revela al hacer scroll y las respuestas de la FAQ quedan visibles. */}
         <noscript>
-          <style>{`.reveal-up{opacity:1!important;transform:none!important}[data-faq-panel]{display:block!important}`}</style>
+          <style>{`.reveal-up{opacity:1!important;transform:none!important}[data-faq-panel]{display:block!important}[data-wa-float]{opacity:1!important;transform:none!important;pointer-events:auto!important}`}</style>
         </noscript>
       </head>
       <body>

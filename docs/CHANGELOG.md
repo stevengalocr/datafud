@@ -19,6 +19,11 @@ Todas las versiones notables del proyecto. Formato basado en
 - **"48 horas hábiles" en `<title>`/meta, OG, JSON-LD y guías (D-061).** El H1 se queda ("lista
   en 48 horas") y la línea de precio del hero dice "Garantía: carta en 48 horas hábiles".
 - **Términos 1.2** (25 de setiembre de 2026). Ningún monto cambió.
+- **El botón flotante de WhatsApp aparece recién al pasar el hero** (en el teléfono tapaba la
+  esquina del render; el hero ya tiene su propio botón). Sin JavaScript se muestra siempre.
+- **"≈ US$" en su propia línea** en todas las tarjetas de planes y de hardware.
+- **El teléfono de `#demo` dice "Nuestra carta."** bajo "Verde Limón", igual que `/c/ejemplo`
+  (decía "SODA TICA").
 
 ## [1.4.0] — 2026-09-25 · Lista para prospectar: demo con fotos reales, colón legible, condiciones comerciales cerradas
 
