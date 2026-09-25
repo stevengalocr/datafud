@@ -10,8 +10,8 @@
 
 ## Contador
 
-- Iteración actual: 3
-- Iteraciones consumidas: 3 / 14
+- Iteración actual: 4
+- Iteraciones consumidas: 4 / 14
 
 ## Capacidades del entorno
 
@@ -60,8 +60,8 @@
 |---|---|---|---|---|---|---|
 | P01 | Estado y línea base | hecho | 1 | `3508adb` | READY `dpl_5VhKxyoA…` | Abajo |
 | P02 | Fotos de la demo (D-053, D-054) | hecho | 1 | `17e13cd` | READY `dpl_6GGEDs9i…` | Abajo |
-| P03 | El colón se ve como colón (D-052) | hecho | 1 | `bcef43e` + (este) | ver bloque | Abajo |
-| P04 | Íconos y logo livianos | pendiente | 0 | | | |
+| P03 | El colón se ve como colón (D-052) | hecho | 1 | `bcef43e` + `f8e7c6d` | READY `dpl_26hqvz7L…` | Abajo |
+| P04 | Íconos y logo livianos | hecho | 1 | (este) | ver bloque | Abajo |
 | P05 | Decisiones comerciales en la web y los documentos | pendiente | 0 | | | |
 | P06 | Cierre sin QR que compita (D-056) y stand de reseñas (D-055) | pendiente | 0 | | | |
 | P07 | Tareas sueltas | pendiente | 0 | | | |
@@ -285,3 +285,33 @@ Licencia OFL al lado (`public/fonts/OFL-Inter.txt`). `@font-face` en `globals.cs
   `.qa/pulido/p03-og.png`.
 - Puertas: typecheck, lint, build y `qa:landing → OK · 23 avisos`; `€` = 0 y `mailto:` = 0 en `/`
   y `/c/ejemplo`.
+- **Producción (`dpl_26hqvz7L…`, `f8e7c6d`):** `/c/ejemplo?rev=f8e7c6d` → 1104 Hanken Grotesk ·
+  133 Young Serif · 14 Inter (los 14 "₡"); h1 de la home en Young Serif ×40; la imagen OG servida
+  dice "desde ₡14 900 al mes" (`.qa/pulido/p03-og-prod.png`, mirada).
+
+### P04 · Íconos y logo livianos
+
+- **Ajuste:** el JSON-LD (`src/lib/seo.ts`) referencia `icono-main.png`, no `logo-main.png`. Los
+  dos se recomprimen con el mismo nombre y las mismas dimensiones.
+- El PNG original trae el blanco con ruido de compresión (nunca 255 parejo): se limpió a blanco
+  puro antes de cuantizar. Con PIL (median cut, 16 colores) el cuadro dorado del ícono salía
+  verde grisáceo (mirado y descartado); con `sharp` (libimagequant, paleta de 256) se conserva.
+
+| Archivo | Antes | Después | Cómo |
+|---|---|---|---|
+| favicon | `icono-main.png` 782 659 B (1254×1254) | `src/app/favicon.ico` 6 550 B (16/32/48) | recorte al contenido + 3 % de margen |
+| `src/app/icon.png` | — | 15 808 B (512×512, ≤ 40 KB) | 10 % de margen, paleta |
+| `src/app/apple-icon.png` | — | 2 053 B (180×180, ≤ 25 KB) | 14 % de margen, paleta |
+| `public/logo-main.png` | 840 456 B | 42 890 B (1921×819, ≤ 120 KB) | mismo tamaño, paleta |
+| `public/icono-main.png` | 782 659 B | 28 274 B (1254×1254) | mismo tamaño, paleta |
+
+- `layout.tsx` sin `icons`: el HTML trae ahora
+  `<link rel="icon" href="/favicon.ico" sizes="16x16">`, `<link rel="icon" href="/icon.png?…" sizes="512x512">`
+  y `<link rel="apple-touch-icon" href="/apple-icon.png?…" sizes="180x180">`.
+- `.next/cache/images` borrado antes de verificar. Bytes servidos por `next start` = bytes del
+  archivo (se detectó y corrigió que `sharp(buf).toFile()` volvía a codificar el PNG sin paleta:
+  65 921 B en lugar de 42 890 B).
+- Capturas miradas: pestaña con el favicon servido (`.qa/pulido/p04-pestana.png`; Playwright sin
+  ventana no dibuja la barra de pestañas, así que es una tira que carga `/favicon.ico` de verdad),
+  logo del nav y del footer a DPR 3 a 375 y 1440 (`p04-logos.png`): nítido; el nav pide la
+  variante `w=384` de `/_next/image` para 75×32 CSS.

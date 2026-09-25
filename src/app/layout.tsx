@@ -52,7 +52,7 @@ export const metadata: Metadata = {
     description: SITE_DESCRIPTION,
   },
   robots: { index: true, follow: true },
-  icons: { icon: "/icono-main.png", apple: "/icono-main.png" },
+  // Íconos por convención de Next: src/app/favicon.ico, icon.png y apple-icon.png.
 };
 
 export default function RootLayout({

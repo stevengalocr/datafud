@@ -21,6 +21,11 @@ Todas las versiones notables del proyecto. Formato basado en
   `unicode-range: U+20A1` y primeras en los stacks `sans` y `display`. Ningún otro carácter
   cambia de fuente (medido glifo por glifo con CDP en `/` y `/c/ejemplo`).
 - **La imagen OG dibuja "₡14 900" en lugar de "14 900 colones"** con la misma subfuente en TTF.
+- **Íconos y logo livianos.** El favicon era `icono-main.png` de 782 KB. Ahora Next sirve
+  `src/app/favicon.ico` (16/32/48, 6,5 KB), `icon.png` (512 px, 15,8 KB) y `apple-icon.png`
+  (180 px, 2 KB) por convención, y `layout.tsx` ya no declara `icons`. `logo-main.png` baja de
+  840 KB a 42,9 KB e `icono-main.png` (el que referencia el JSON-LD) de 782 KB a 28,3 KB, con el
+  mismo nombre y las mismas dimensiones (PNG con paleta).
 - **Las fotos de la demo muestran el platillo que nombran y se sirven desde el sitio (D-053).**
   El "gallo pinto" era un guiso de pollo, el "casado" una ensalada y la "limonada" tres cócteles;
   los panqueques llevaban una mano. Las 14 fotos (el café chorreado ya tiene la suya) son reales,
