@@ -128,14 +128,21 @@ etiqueta "Render ilustrativo" y todo QR dibujado decodifica a `https://datafud.c
 
 ## Vault de Obsidian (memoria del proyecto) — protocolo de alineación
 
-El estado, las decisiones y las prioridades viven fuera del repo, en el vault de Obsidian
-(Google Drive, `Cerebro2.0/02-Proyectos/Datafud/`): `Pendientes.md`, `Decisiones.md`,
-`Seguridad.md`, `Cuentas-y-Accesos.md`, `Paneles-Y-Vistas.md`, `Arquitectura-Y-Base-De-Datos.md`,
-`Guia-De-Desarrollo.md`, `Marca-Y-Marketing.md`, `Plan-Landing-First.md`, `log.md`.
+El estado, las decisiones y las prioridades viven fuera del repo, en el **vault local de Obsidian**
+(`..\obsidian\Cerebro2.0\02-Proyectos\Datafud\`, es decir
+`C:\Users\steve\OneDrive\Desktop\claude-proyectos\obsidian\Cerebro2.0\02-Proyectos\Datafud\`):
+`Datafud.md` (hub), `Pendientes.md`, `Decisiones.md`, `Seguridad.md`, `Cuentas-y-Accesos.md`,
+`Paneles-Y-Vistas.md`, `Arquitectura-Y-Base-De-Datos.md`, `Guia-De-Desarrollo.md`,
+`Marca-Y-Marketing.md`, `Plan-Landing-First.md`, `Loop-De-Calidad.md`, `index.md`, `log.md`.
+La copia que vivía en Google Drive (`Cerebro2.0/02-Proyectos/Datafud/`) **quedó congelada el
+2026-09-29** como respaldo: no se escribe más ahí. La constitución del vault es
+`..\obsidian\Cerebro2.0\CLAUDE.md` y el protocolo completo,
+`..\obsidian\Cerebro2.0\00-Sistema\Protocolo-Repo-Vault.md`.
 
-**Toda sesión que cambie código, oferta, seguridad o decisiones deja el vault al día.** Como las
-sesiones en la nube normalmente no ven Drive, el repo lleva un archivo puente que después se aplica
-al vault tal cual:
+**Toda sesión que cambie código, oferta, seguridad o decisiones deja el vault al día.** Las
+sesiones **locales** (Claude Code en esta máquina) aplican los cambios directo a las páginas del
+nodo en el mismo commit. Las sesiones **en la nube** no ven el vault, así que el repo lleva un
+archivo puente que una sesión local aplica después («sincronizá el vault»):
 
 - Archivo: `docs/vault-sync/AAAA-MM-DD-<tema>.md` (uno por sesión o loop; se versiona).
 - Un bloque por unidad de trabajo, con este formato exacto:
@@ -147,8 +154,12 @@ al vault tal cual:
   **Otras páginas** — qué frase queda desactualizada en qué página y el texto nuevo propuesto.
   **log.md** — `## [AAAA-MM-DD] ingest | <título>` + 3-6 viñetas de qué se hizo y cómo se verificó.
   ```
-- Si la sesión sí tiene herramientas de Google Drive, además aplica los cambios en el vault
-  respetando su `CLAUDE.md` (frontmatter YAML, formato de log) y anota en el puente
-  "aplicado en vault: sí"; si no, "aplicado en vault: no".
+- Sesión local: aplica el bloque a las páginas del nodo respetando el `CLAUDE.md` del vault
+  (frontmatter YAML, enlaces con ruta completa, formato de log), corre
+  `node ..\obsidian\Cerebro2.0\00-Sistema\scripts\lint-vault.mjs 02-Proyectos/Datafud` y anota
+  en el puente "Aplicado en vault: sí". Sesión en la nube: deja "Aplicado en vault: no".
 - Una unidad sin su bloque no está terminada. El vault no se toca por iniciativa propia fuera de
-  este protocolo ni se escribe en `_raw/` u otros nodos.
+  este protocolo ni se escribe en `_raw/` u otros nodos. Nunca se copian credenciales al repo ni
+  al puente: se nombran, no se escriben.
+- Fin de línea: `.gitattributes` fuerza LF y `core.autocrlf=false` (desde el 2026-09-29). Antes de
+  `git add`, `git diff --stat --ignore-cr-at-eol` tiene que mostrar solo cambios reales.
