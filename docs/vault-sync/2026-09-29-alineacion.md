@@ -14,7 +14,7 @@
 **log.md** — cubierto por la entrada del 2026-09-30 (abajo).
 Aplicado en vault: sí
 
-### U07 · Nodo Datafud migrado de Drive y consolidado con 1.4.1 · commit (este) · despliegue n/a (solo docs)
+### U07 · Nodo Datafud migrado de Drive y consolidado con 1.4.1 · commit 5d2a583 · despliegue n/a (solo docs)
 **Pendientes.md** — Reescrita al 2026-09-30: bloque B cerrado en 1.4.0 y los roces del revisor final en
 1.4.1 (según los puentes `2026-09-25-pulido` y `2026-09-25-ajustes`, que estaban «parcial» y ahora
 «sí»). Bloque A (Steven): stand y NFC impresos y escaneados, WhatsApp Business, factura 4.4 y cédula,
