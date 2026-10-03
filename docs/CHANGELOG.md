@@ -7,6 +7,15 @@ Todas las versiones notables del proyecto. Formato basado en
 
 ## [Unreleased]
 
+## [1.5.0] — 2026-10-03 · Backend encendido: Supabase en producción, S1 y S3 cerrados, paneles con la marca
+
+Informes: `docs/plans/2026-10-03-supabase-produccion-informe.md` y
+`docs/plans/2026-10-03-auditoria-paneles.md`. Decisión: D-063 (base lista, sin clientes).
+
+### Added
+- `src/instrumentation.ts`: los errores del servidor quedan en los logs de Vercel con su mensaje
+  real (en producción Next solo muestra un digest).
+
 ### Design — Paneles con sesión y pantallas de acceso (2026-10-03)
 - **La entrada privada se podía usar a ciegas:** lo que se escribía en correo y contraseña era
   blanco sobre blanco y las etiquetas tenían contraste 1.6:1 (`cn` no resuelve conflictos de

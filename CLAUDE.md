@@ -4,11 +4,14 @@ SaaS multi-tenant de menú digital por QR/NFC para restaurantes, sodas y cafeter
 Next.js 15 (App Router) + React 19 + TypeScript + Supabase (Postgres, Auth, RLS) + Tailwind 3.
 Producción en Vercel (`datafud.com`, proyecto `datafud`). Versión en `package.json`.
 
-**Etapa actual: "landing primero" (D-010, 2026-09-19).** Producción NO tiene backend: Vercel no
-tiene variables de Supabase y no se montan ahora. La landing es la fachada de venta (WhatsApp +
-formulario); `/register` redirige a `/#contacto`; `/login` sin variables muestra un aviso, no
-un formulario; el nav no ofrece "Ingresar". El backend se enciende con el primer cliente de un
-plan con pedidos. No prometas en la landing nada que no exista: ver `docs/MARKETING.md` §9.
+**Etapa actual: backend encendido como base, sin clientes (D-063, 2026-10-03; antes "landing
+primero", D-010).** Producción tiene Supabase (`us-east-1`) con `schema.sql` aplicado y tres
+variables en Vercel, solo en Production: `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+y `NEXT_PUBLIC_SITE_URL`. La `service_role` no se carga hasta que algo la use. `/login` y la ruta
+privada muestran el formulario; `/admin` y `/dashboard` piden sesión. El registro público de Auth
+está cerrado: los usuarios se crean a mano. La landing sigue siendo la fachada de venta (WhatsApp +
+formulario); `/register` redirige a `/#contacto` y el nav no ofrece "Ingresar" hasta la prueba de
+aislamiento con dos negocios (D-018). No prometas en la landing nada que no exista: ver `docs/MARKETING.md` §9.
 Desde el loop "lista para vender" (2026-09-22, D-023 a D-031) la oferta se muestra en colones
 primero, la landing tiene 8 secciones, hay tres guías de SEO local y el material de venta vive en
 `docs/ventas/`. Desde el loop "oferta sólida" (2026-09-25, D-014 y D-039 a D-041) **una Carta se
