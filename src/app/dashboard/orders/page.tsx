@@ -34,7 +34,7 @@ export default async function OrdersPage() {
     <div>
       <PageHeader
         title="Órdenes"
-        description="Controla el estado de cada orden en tiempo real."
+        description="Pasá cada orden de pendiente a pagada. Las nuevas aparecen al recargar la página."
       />
       <OrderBoard
         orders={list}

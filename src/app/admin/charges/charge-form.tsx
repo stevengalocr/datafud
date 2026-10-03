@@ -3,7 +3,8 @@
 import { useRef, useState } from "react";
 import { registerCharge } from "../actions";
 import { Button } from "@/components/ui/button";
-import { Input, Label, Select } from "@/components/ui/input";
+import { FieldHint, Input, Label, Select } from "@/components/ui/input";
+import { formatUsdAmount } from "@/lib/currency/format";
 import { PRICING } from "@/lib/constants";
 import type { ChargeKind } from "@/lib/supabase/types";
 
@@ -21,6 +22,7 @@ export function ChargeForm({ tenants }: { tenants: TenantOption[] }) {
   const [kind, setKind] = useState<ChargeKind>("implementation");
   const [unit, setUnit] = useState<number>(PRICING.setupFeeUsd);
   const [qty, setQty] = useState<number>(1);
+  const [result, setResult] = useState<{ tone: "ok" | "error"; text: string } | null>(null);
 
   const onKindChange = (value: ChargeKind) => {
     setKind(value);
@@ -28,21 +30,30 @@ export function ChargeForm({ tenants }: { tenants: TenantOption[] }) {
     if (value !== "nfc_cards") setQty(1);
   };
 
-  const total = (unit * qty).toFixed(2);
+  const total = formatUsdAmount(Math.round(unit * qty * 100) / 100);
 
   return (
     <form
       ref={formRef}
       action={async (fd) => {
         setSaving(true);
-        await registerCharge(fd);
-        setSaving(false);
-        formRef.current?.reset();
-        onKindChange("implementation");
+        setResult(null);
+        // La acción lanza si los datos no pasan la validación: se avisa en vez de quedar trabado.
+        try {
+          await registerCharge(fd);
+          formRef.current?.reset();
+          onKindChange("implementation");
+          setResult({ tone: "ok", text: "Cargo registrado." });
+        } catch {
+          setResult({ tone: "error", text: "No se pudo registrar el cargo. Revisá la cantidad y el precio." });
+        } finally {
+          setSaving(false);
+        }
       }}
       className="grid gap-4 sm:grid-cols-2 lg:grid-cols-6 lg:items-end"
+      aria-busy={saving}
     >
-      <div className="lg:col-span-2">
+      <div className="sm:col-span-2">
         <Label htmlFor="tenant_id">Restaurante</Label>
         <Select id="tenant_id" name="tenant_id" required>
           {tenants.map((t) => (
@@ -52,7 +63,7 @@ export function ChargeForm({ tenants }: { tenants: TenantOption[] }) {
           ))}
         </Select>
       </div>
-      <div>
+      <div className="lg:col-span-2">
         <Label htmlFor="kind">Concepto</Label>
         <Select
           id="kind"
@@ -71,6 +82,7 @@ export function ChargeForm({ tenants }: { tenants: TenantOption[] }) {
           id="quantity"
           name="quantity"
           type="number"
+          inputMode="numeric"
           min={1}
           value={qty}
           onChange={(e) => setQty(Math.max(1, Number(e.target.value) || 1))}
@@ -83,6 +95,8 @@ export function ChargeForm({ tenants }: { tenants: TenantOption[] }) {
           id="unit_amount_usd"
           name="unit_amount_usd"
           type="number"
+          inputMode="decimal"
+          min={0}
           step="0.01"
           value={unit}
           onChange={(e) => setUnit(Number(e.target.value) || 0)}
@@ -96,17 +110,25 @@ export function ChargeForm({ tenants }: { tenants: TenantOption[] }) {
           <option value="pending">Pendiente</option>
         </Select>
       </div>
-      <div className="lg:col-span-4">
+      <div className="sm:col-span-2 lg:col-span-3">
         <Label htmlFor="description">Descripción (opcional)</Label>
         <Input id="description" name="description" placeholder="Ej. 10 tarjetas NFC para mesas" />
       </div>
-      <div className="lg:col-span-2 flex items-center gap-4">
-        <span className="text-sm text-slate-500">
-          Total: <span className="font-semibold text-slate-900">${total}</span>
-        </span>
-        <Button type="submit" disabled={saving}>
-          {saving ? "Registrando..." : "Registrar cargo"}
+      <div className="flex flex-col gap-3 sm:col-span-2 sm:flex-row sm:items-center sm:gap-4">
+        <p className="text-sm text-stone-600">
+          Total:{" "}
+          <span className="text-base font-semibold text-brand-950 tabular-nums">{total}</span>
+        </p>
+        <Button type="submit" disabled={saving} className="w-full sm:w-auto">
+          {saving ? "Registrando…" : "Registrar cargo"}
         </Button>
+      </div>
+      <div aria-live="polite" className="min-h-5 sm:col-span-2 lg:col-span-6">
+        {result && (
+          <FieldHint tone={result.tone === "error" ? "error" : "success"} className="font-medium">
+            {result.text}
+          </FieldHint>
+        )}
       </div>
     </form>
   );

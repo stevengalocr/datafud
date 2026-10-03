@@ -1,10 +1,13 @@
 "use client";
 
-import { useTransition } from "react";
+import { useState, useTransition } from "react";
 import { updateOrderStatus } from "../actions";
-import { Card, CardBody } from "@/components/ui/card";
+import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { EmptyState } from "@/components/shell/empty-state";
 import { formatMoney } from "@/lib/currency/format";
+import { formatDate, formatTime, localDayKey } from "@/lib/dates";
 import { ORDER_STATUS_COLOR, ORDER_STATUS_LABEL } from "@/lib/constants";
 import type { Order, OrderItem, OrderStatus } from "@/lib/supabase/types";
 
@@ -13,6 +16,14 @@ const NEXT_STATUS: Partial<Record<OrderStatus, OrderStatus>> = {
   preparing: "ready",
   ready: "delivered",
   delivered: "paid",
+};
+
+// El botón dice lo que hace la persona, no el nombre del estado ("Pasar a En preparación").
+const NEXT_ACTION: Partial<Record<OrderStatus, string>> = {
+  pending: "Empezar a preparar",
+  preparing: "Marcar lista",
+  ready: "Marcar entregada",
+  delivered: "Marcar pagada",
 };
 
 export function OrderBoard({
@@ -25,84 +36,114 @@ export function OrderBoard({
   currency: string;
 }) {
   const [pending, start] = useTransition();
+  const [busyId, setBusyId] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
   if (orders.length === 0) {
     return (
-      <Card>
-        <CardBody className="py-12 text-center text-sm text-slate-400">
-          No hay órdenes todavía. Cuando un cliente pida por QR, aparecerá aquí.
-        </CardBody>
-      </Card>
+      <EmptyState icon="receipt" title="Todavía no hay órdenes">
+        Cuando un cliente pida desde el QR de su mesa, la orden aparece acá. Recargá la página para
+        ver las nuevas.
+      </EmptyState>
     );
   }
 
+  const today = localDayKey();
+  const change = (id: string, status: OrderStatus) => {
+    setError(null);
+    setBusyId(id);
+    start(async () => {
+      try {
+        await updateOrderStatus(id, status);
+      } catch {
+        setError("No se pudo cambiar el estado de la orden. Probá de nuevo.");
+      } finally {
+        setBusyId(null);
+      }
+    });
+  };
+
   return (
-    <div className="grid gap-4 lg:grid-cols-2 xl:grid-cols-3">
-      {orders.map((o) => {
-        const items = itemsByOrder[o.id] ?? [];
-        const next = NEXT_STATUS[o.status];
-        return (
-          <Card key={o.id}>
-            <CardBody>
-              <div className="flex items-start justify-between">
-                <div>
-                  <p className="font-semibold text-slate-900">
-                    {formatMoney(Number(o.total), o.currency_code ?? currency)}
-                  </p>
-                  <p className="text-xs text-slate-400">
-                    {new Date(o.created_at).toLocaleString("es")}
-                  </p>
+    <div className="space-y-4">
+      {error && (
+        <p role="alert" className="rounded-lg border border-rose-200 bg-rose-50 px-4 py-3 text-sm font-medium text-rose-800">
+          {error}
+        </p>
+      )}
+      <ul className="grid gap-4 lg:grid-cols-2 xl:grid-cols-3">
+        {orders.map((o) => {
+          const items = itemsByOrder[o.id] ?? [];
+          const next = NEXT_STATUS[o.status];
+          const money = (n: number) => formatMoney(n, o.currency_code ?? currency);
+          const when =
+            localDayKey(o.created_at) === today
+              ? `Hoy, ${formatTime(o.created_at)}`
+              : `${formatDate(o.created_at)}, ${formatTime(o.created_at)}`;
+          const busy = pending && busyId === o.id;
+          return (
+            <li key={o.id}>
+              <Card className="flex h-full flex-col p-5" aria-busy={busy}>
+                <div className="flex items-start justify-between gap-3">
+                  <div>
+                    <p className="text-lg font-semibold text-brand-950 tabular-nums">
+                      {money(Number(o.total))}
+                    </p>
+                    <p className="text-xs text-stone-600">{when}</p>
+                  </div>
+                  <Badge className={ORDER_STATUS_COLOR[o.status]}>
+                    {ORDER_STATUS_LABEL[o.status]}
+                  </Badge>
                 </div>
-                <Badge className={ORDER_STATUS_COLOR[o.status]}>
-                  {ORDER_STATUS_LABEL[o.status]}
-                </Badge>
-              </div>
 
-              <ul className="mt-3 space-y-1 text-sm text-slate-600">
-                {items.map((it) => (
-                  <li key={it.id} className="flex justify-between">
-                    <span>
-                      {it.quantity}× {it.product_name_snapshot}
-                    </span>
-                    <span className="text-slate-400">
-                      {formatMoney(Number(it.line_total), o.currency_code ?? currency)}
-                    </span>
-                  </li>
-                ))}
-              </ul>
+                <ul className="mt-4 space-y-1.5 text-sm">
+                  {items.map((it) => (
+                    <li key={it.id} className="flex justify-between gap-3">
+                      <span className="text-brand-950">
+                        <span className="font-semibold tabular-nums">{it.quantity}×</span>{" "}
+                        {it.product_name_snapshot}
+                      </span>
+                      <span className="shrink-0 text-stone-600 tabular-nums">
+                        {money(Number(it.line_total))}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
 
-              {o.customer_note && (
-                <p className="mt-2 rounded bg-amber-50 px-2 py-1 text-xs text-amber-700">
-                  Nota: {o.customer_note}
-                </p>
-              )}
-
-              <div className="mt-4 flex gap-2">
-                {next && (
-                  <button
-                    onClick={() => start(() => void updateOrderStatus(o.id, next))}
-                    disabled={pending}
-                    className="flex-1 rounded-md bg-brand-500 px-3 py-1.5 text-xs font-medium text-white hover:bg-brand-600 disabled:opacity-50"
-                  >
-                    Pasar a {ORDER_STATUS_LABEL[next]}
-                  </button>
+                {o.customer_note && (
+                  <p className="mt-3 rounded-lg bg-accent-50 px-3 py-2 text-sm text-accent-900">
+                    <span className="font-semibold">Nota:</span> {o.customer_note}
+                  </p>
                 )}
-                {o.status !== "cancelled" && o.status !== "paid" && (
-                  <button
-                    onClick={() =>
-                      start(() => void updateOrderStatus(o.id, "cancelled"))
-                    }
-                    disabled={pending}
-                    className="rounded-md bg-rose-50 px-3 py-1.5 text-xs font-medium text-rose-700 hover:bg-rose-100 disabled:opacity-50"
-                  >
-                    Cancelar
-                  </button>
+
+                {(next || (o.status !== "cancelled" && o.status !== "paid")) && (
+                  <div className="mt-auto flex gap-2 pt-4">
+                    {next && (
+                      <Button
+                        className="flex-1"
+                        onClick={() => change(o.id, next)}
+                        disabled={pending}
+                      >
+                        {busy ? "Guardando…" : NEXT_ACTION[o.status]}
+                      </Button>
+                    )}
+                    {o.status !== "cancelled" && o.status !== "paid" && (
+                      <Button
+                        variant="danger-soft"
+                        onClick={() => {
+                          if (window.confirm("¿Cancelar esta orden?")) change(o.id, "cancelled");
+                        }}
+                        disabled={pending}
+                      >
+                        Cancelar
+                      </Button>
+                    )}
+                  </div>
                 )}
-              </div>
-            </CardBody>
-          </Card>
-        );
-      })}
+              </Card>
+            </li>
+          );
+        })}
+      </ul>
     </div>
   );
 }

@@ -19,7 +19,7 @@ export default async function AdminLayout({
   await requireRole("super_admin");
 
   return (
-    <AppShell brand="DataFud" subtitle="Administración SaaS" items={nav}>
+    <AppShell brand="DataFud" subtitle="Panel interno" items={nav}>
       {children}
     </AppShell>
   );

@@ -1,51 +1,64 @@
 "use client";
 
-import { useTransition } from "react";
+import { useState, useTransition } from "react";
 import { setTenantStatus } from "../actions";
+import { Button } from "@/components/ui/button";
 import type { TenantStatus } from "@/lib/supabase/types";
+
+// Suspender o cancelar le corta la carta y el panel a un local: se confirma antes.
+const CONFIRM: Partial<Record<TenantStatus, (name: string) => string>> = {
+  suspended: (n) => `¿Suspender a ${n}? Su carta y su panel dejan de funcionar hasta que lo reactivés.`,
+  cancelled: (n) => `¿Cancelar a ${n}? Su carta y su panel dejan de funcionar.`,
+};
 
 export function TenantStatusActions({
   tenantId,
+  tenantName,
   status,
 }: {
   tenantId: string;
+  tenantName: string;
   status: TenantStatus;
 }) {
   const [pending, start] = useTransition();
+  const [error, setError] = useState<string | null>(null);
 
-  const change = (next: TenantStatus) =>
-    start(() => {
-      void setTenantStatus(tenantId, next);
+  const change = (next: TenantStatus) => {
+    const ask = CONFIRM[next];
+    if (ask && !window.confirm(ask(tenantName))) return;
+    setError(null);
+    start(async () => {
+      try {
+        await setTenantStatus(tenantId, next);
+      } catch {
+        setError("No se pudo cambiar el estado. Probá de nuevo.");
+      }
     });
+  };
 
   return (
-    <div className="flex flex-wrap justify-end gap-2">
-      {status !== "active" && (
-        <button
-          onClick={() => change("active")}
-          disabled={pending}
-          className="rounded-md bg-brand-50 px-2.5 py-1 text-xs font-medium text-brand-700 hover:bg-brand-100 disabled:opacity-50"
-        >
-          Aprobar
-        </button>
-      )}
-      {status !== "suspended" && (
-        <button
-          onClick={() => change("suspended")}
-          disabled={pending}
-          className="rounded-md bg-amber-50 px-2.5 py-1 text-xs font-medium text-amber-700 hover:bg-amber-100 disabled:opacity-50"
-        >
-          Suspender
-        </button>
-      )}
-      {status !== "cancelled" && (
-        <button
-          onClick={() => change("cancelled")}
-          disabled={pending}
-          className="rounded-md bg-rose-50 px-2.5 py-1 text-xs font-medium text-rose-700 hover:bg-rose-100 disabled:opacity-50"
-        >
-          Cancelar
-        </button>
+    <div className="flex flex-col items-stretch gap-2 sm:items-end">
+      <div className="flex flex-wrap gap-2 sm:justify-end" aria-busy={pending}>
+        {status !== "active" && (
+          <Button size="sm" variant="soft" onClick={() => change("active")} disabled={pending}>
+            {status === "trial" ? "Aprobar" : "Reactivar"}
+          </Button>
+        )}
+        {status !== "suspended" && status !== "cancelled" && (
+          <Button size="sm" variant="soft" onClick={() => change("suspended")} disabled={pending}>
+            Suspender
+          </Button>
+        )}
+        {status !== "cancelled" && (
+          <Button size="sm" variant="danger-soft" onClick={() => change("cancelled")} disabled={pending}>
+            Cancelar
+          </Button>
+        )}
+      </div>
+      {error && (
+        <p role="alert" className="text-xs font-medium text-rose-800">
+          {error}
+        </p>
       )}
     </div>
   );

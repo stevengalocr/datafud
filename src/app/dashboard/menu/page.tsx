@@ -23,7 +23,7 @@ export default async function MenuPage() {
     <div>
       <PageHeader
         title="Menú"
-        description="Administra tus categorías y platillos en varios idiomas."
+        description="Tus categorías y platillos, en los idiomas de tu plan. Lo que cambiés acá se ve en la carta de tus mesas."
       />
       <MenuManager
         categories={(categories as Category[]) ?? []}

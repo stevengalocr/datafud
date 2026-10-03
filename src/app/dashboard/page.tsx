@@ -1,11 +1,15 @@
+import Link from "next/link";
 import { getTenantContext } from "@/lib/auth/tenant-context";
 import { createClient } from "@/lib/supabase/server";
 import { PageHeader } from "@/components/shell/page-header";
 import { StatCard } from "@/components/shell/stat-card";
-import { Card, CardBody } from "@/components/ui/card";
+import { EmptyState } from "@/components/shell/empty-state";
+import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import type { IconName } from "@/components/ui/icon";
+import { buttonClasses } from "@/components/ui/button";
+import { Icon, type IconName } from "@/components/ui/icon";
 import { formatMoney } from "@/lib/currency/format";
+import { formatDate, formatTime, localDayKey } from "@/lib/dates";
 import {
   ORDER_STATUS_COLOR,
   ORDER_STATUS_LABEL,
@@ -28,10 +32,10 @@ export default async function DashboardHome() {
     .limit(50);
   const list = (orders as Order[]) ?? [];
 
-  const today = new Date().toDateString();
-  const todayOrders = list.filter(
-    (o) => new Date(o.created_at).toDateString() === today
-  );
+  // "Hoy" es el día de Costa Rica, no el del servidor (UTC en Vercel): a las 7 p. m. en San José
+  // el servidor ya está en el día siguiente.
+  const today = localDayKey();
+  const todayOrders = list.filter((o) => localDayKey(o.created_at) === today);
   const soldToday = todayOrders
     .filter((o) => o.status === "paid" || o.status === "delivered")
     .reduce((s, o) => s + Number(o.total), 0);
@@ -45,11 +49,14 @@ export default async function DashboardHome() {
     { label: "Órdenes activas", value: String(pending), icon: "clock", accent: "slate" },
   ];
 
+  const displayName = settings?.restaurant_name || tenant.name;
+
   return (
     <div>
       <PageHeader
-        title={`Hola, ${tenant.name}`}
-        description="Resumen de tu negocio hoy."
+        eyebrow="Resumen de hoy"
+        title={displayName}
+        description="Lo que entró hoy y lo que todavía está en cocina."
         action={
           <Badge className={TENANT_STATUS_COLOR[tenant.status]}>
             {TENANT_STATUS_LABEL[tenant.status]}
@@ -58,33 +65,60 @@ export default async function DashboardHome() {
       />
 
       {tenant.status === "trial" && tenant.trial_ends_at && (
-        <div className="mb-6 rounded-xl border border-accent-200 bg-accent-50 px-5 py-3 text-sm text-accent-800">
-          Estás en periodo de prueba hasta el{" "}
-          <strong>
-            {new Date(tenant.trial_ends_at).toLocaleDateString("es")}
-          </strong>
-          .
-        </div>
+        <p className="mb-6 flex items-start gap-3 rounded-xl border border-accent-200 bg-accent-50 px-4 py-3 text-sm text-accent-900">
+          <Icon name="clock" size={18} className="mt-0.5 shrink-0 text-accent-700" />
+          <span>
+            Estás en periodo de prueba hasta el <strong>{formatDate(tenant.trial_ends_at)}</strong>.
+          </span>
+        </p>
       )}
 
-      <div className="grid gap-4 sm:grid-cols-3">
+      <section aria-label="Cifras de hoy" className="grid gap-3 sm:grid-cols-3 sm:gap-4">
         {stats.map((s) => (
           <StatCard key={s.label} {...s} />
         ))}
-      </div>
+      </section>
 
       <Card className="mt-6">
-        <CardBody>
-          <p className="mb-3 text-sm font-medium text-slate-700">Órdenes recientes</p>
-          <ul className="divide-y divide-slate-100">
+        <CardHeader className="justify-between">
+          <CardTitle>Órdenes recientes</CardTitle>
+          {list.length > 0 && (
+            <Link
+              href="/dashboard/orders"
+              className="inline-flex min-h-11 items-center gap-1.5 text-sm font-semibold text-brand-700 hover:text-brand-900"
+            >
+              Ver órdenes
+              <Icon name="arrow-right" size={16} />
+            </Link>
+          )}
+        </CardHeader>
+        {list.length === 0 ? (
+          <div className="p-5">
+            <EmptyState
+              icon="qr"
+              title="Todavía no hay órdenes"
+              action={
+                <Link href="/dashboard/tables" className={buttonClasses("secondary", "md")}>
+                  Ver mesas y QR
+                </Link>
+              }
+            >
+              Las órdenes llegan cuando un cliente escanea el QR de una mesa y pide desde el
+              teléfono. Imprimí los QR de tus mesas para empezar.
+            </EmptyState>
+          </div>
+        ) : (
+          <ul className="divide-y divide-stone-100">
             {list.slice(0, 8).map((o) => (
-              <li key={o.id} className="flex items-center justify-between py-2.5">
-                <div>
-                  <p className="font-medium text-slate-900">
+              <li key={o.id} className="flex items-center justify-between gap-4 px-5 py-3">
+                <div className="min-w-0">
+                  <p className="font-semibold text-brand-950 tabular-nums">
                     {formatMoney(Number(o.total), o.currency_code ?? currency)}
                   </p>
-                  <p className="text-xs text-slate-400">
-                    {new Date(o.created_at).toLocaleString("es")}
+                  <p className="text-xs text-stone-600">
+                    {localDayKey(o.created_at) === today
+                      ? `Hoy, ${formatTime(o.created_at)}`
+                      : formatDate(o.created_at)}
                   </p>
                 </div>
                 <Badge className={ORDER_STATUS_COLOR[o.status]}>
@@ -92,13 +126,8 @@ export default async function DashboardHome() {
                 </Badge>
               </li>
             ))}
-            {list.length === 0 && (
-              <li className="py-6 text-center text-sm text-slate-400">
-                Aún no hay órdenes. Comparte el QR de tus mesas para empezar.
-              </li>
-            )}
           </ul>
-        </CardBody>
+        )}
       </Card>
     </div>
   );
