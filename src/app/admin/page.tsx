@@ -10,24 +10,11 @@ import type { Tenant } from "@/lib/supabase/types";
 export const dynamic = "force-dynamic";
 
 export default async function AdminHome() {
-  try {
-    return await AdminHomeInner();
-  } catch (e) {
-    const err = e as Error & { digest?: string };
-    if (!err?.digest?.startsWith("NEXT_")) {
-      console.error("[datafud] /admin lanzó:", err?.name, err?.message, err?.stack?.split(String.fromCharCode(10)).slice(0, 6).join(" | "));
-    }
-    throw e;
-  }
-}
-
-async function AdminHomeInner() {
   const supabase = await createClient();
   const { data: tenants } = await supabase
     .from("tenants")
     .select("*")
     .order("created_at", { ascending: false });
-  if (!tenants) console.error("[datafud] /admin tenants vacío o con error");
 
   const list = (tenants as Tenant[]) ?? [];
   const total = list.length;
