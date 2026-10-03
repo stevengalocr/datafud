@@ -7,6 +7,30 @@ Todas las versiones notables del proyecto. Formato basado en
 
 ## [Unreleased]
 
+### Design — Movimiento, sombras y blindaje de los paneles (2026-10-03)
+Informe: `docs/plans/2026-10-03-movimiento-y-blindaje.md`.
+- **Profundidad con la marca:** escala de elevación `panel-xs/sm/md/lg` y `btn-primary` con
+  sombras tintadas del verde más oscuro (nada de gris). Tarjetas y cifras apenas separadas del
+  papel; cajón móvil, diálogo y tarjeta de acceso, encima de la página. El botón primario tiene
+  brillo arriba y apoyo abajo.
+- **Respuesta al toque:** botones a `scale(0.97)` en 160 ms, enlaces del menú y botones de la
+  barra móvil también; hover solo con mouse (`hov:`), así un toque en el teléfono no deja el
+  fondo pegado. Botones de 44 px en el teléfono.
+- **Entradas sin opacidad:** cambiar de sección sube el contenido 6 px (220 ms), las cifras
+  entran en cascada de 40 ms, el cajón se desliza 24 px con un velo que oscurece de a poco y los
+  avisos de error bajan 4 px. Nada parte de `opacity: 0` ni deja una transformación puesta;
+  con movimiento reducido no se desplaza nada.
+- **Acceso blindado:** con un error, el correo se queda, la contraseña se borra y recibe el foco,
+  el error se anuncia y los campos lo referencian; no se puede enviar dos veces.
+- **Primitivas para los formularios:** `SubmitButton` (estado de envío sola), `useFormSubmit`
+  (no vacía los campos cuando la acción falla, ignora el doble envío) y `useConfirm` (diálogo de
+  confirmación con la marca en lugar de `window.confirm`).
+- **Textos y cifras extremos:** una nota o un nombre sin espacios ya no ensanchan la página en
+  375 px (Órdenes desbordaba 351 px); cifras grandes parten línea; conteos con separador de miles.
+- **Error de panel:** «Intentar de nuevo» vuelve a pedir los datos al servidor y muestra que
+  está cargando (antes solo repintaba lo mismo).
+- Cerrar sesión muestra «Cerrando sesión…» y no se manda dos veces.
+
 ## [1.5.0] — 2026-10-03 · Backend encendido: Supabase en producción, S1 y S3 cerrados, paneles con la marca
 
 Informes: `docs/plans/2026-10-03-supabase-produccion-informe.md` y
