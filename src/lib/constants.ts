@@ -1,4 +1,4 @@
-import type { ChargeKind, OrderStatus, TenantStatus } from "@/lib/supabase/types";
+import type { ChargeKind, OrderStatus, PaymentStatus, TenantStatus } from "@/lib/supabase/types";
 import { formatCrc } from "@/lib/currency/format";
 
 // Fuente de verdad de la línea de venta. Debe coincidir con la landing
@@ -330,13 +330,16 @@ export const ORDER_STATUS_LABEL: Record<OrderStatus, string> = {
   cancelled: "Cancelada",
 };
 
+// Estados de la orden en la paleta de la marca (antes azul, violeta y esmeralda genéricos).
+// Se distinguen por peso, no solo por tono: "Lista" es la única sólida porque es la que no puede
+// esperar (el plato está servido en el pase).
 export const ORDER_STATUS_COLOR: Record<OrderStatus, string> = {
-  pending: "bg-amber-100 text-amber-800",
-  preparing: "bg-blue-100 text-blue-800",
-  ready: "bg-violet-100 text-violet-800",
-  delivered: "bg-emerald-100 text-emerald-800",
+  pending: "bg-accent-100 text-accent-900",
+  preparing: "bg-cream-200 text-brand-900 ring-1 ring-inset ring-stone-300",
+  ready: "bg-brand-600 text-cream-50",
+  delivered: "bg-stone-100 text-stone-700",
   paid: "bg-brand-100 text-brand-800",
-  cancelled: "bg-rose-100 text-rose-700",
+  cancelled: "bg-rose-50 text-rose-800 ring-1 ring-inset ring-rose-200",
 };
 
 export const TENANT_STATUS_LABEL: Record<TenantStatus, string> = {
@@ -347,10 +350,23 @@ export const TENANT_STATUS_LABEL: Record<TenantStatus, string> = {
 };
 
 export const TENANT_STATUS_COLOR: Record<TenantStatus, string> = {
-  trial: "bg-blue-100 text-blue-800",
+  trial: "bg-accent-100 text-accent-900",
   active: "bg-brand-100 text-brand-800",
-  suspended: "bg-amber-100 text-amber-800",
-  cancelled: "bg-rose-100 text-rose-700",
+  suspended: "bg-stone-200 text-stone-800",
+  cancelled: "bg-rose-50 text-rose-800 ring-1 ring-inset ring-rose-200",
+};
+
+/** Estado de mensualidades y cargos. La BD guarda el código en inglés; la UI nunca lo muestra. */
+export const PAYMENT_STATUS_LABEL: Record<PaymentStatus, string> = {
+  pending: "Pendiente",
+  paid: "Pagado",
+  overdue: "Vencido",
+};
+
+export const PAYMENT_STATUS_COLOR: Record<PaymentStatus, string> = {
+  pending: "bg-accent-100 text-accent-900",
+  paid: "bg-brand-100 text-brand-800",
+  overdue: "bg-rose-50 text-rose-800 ring-1 ring-inset ring-rose-200",
 };
 
 export const LANG_LABEL: Record<string, string> = {

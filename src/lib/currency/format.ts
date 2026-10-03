@@ -37,6 +37,13 @@ export function formatCrc(amount: number): string {
   return `${amount < 0 ? "-" : ""}₡${groupCr(amount)}`;
 }
 
+/** Montos en USD de los paneles internos: "US$249", o "US$12.50" cuando hay centavos. */
+export function formatUsdAmount(amount: number): string {
+  const n = Number(amount) || 0;
+  if (Number.isInteger(n)) return `${n < 0 ? "-" : ""}${formatUsd(n)}`;
+  return `${n < 0 ? "-" : ""}US$${Math.abs(n).toFixed(2)}`;
+}
+
 /** Dólares de referencia: "US$29". */
 export function formatUsd(amount: number): string {
   return `US$${groupCr(amount).replace(/ /g, ",")}`;
