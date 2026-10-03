@@ -1,12 +1,13 @@
 "use client";
 
-import { useActionState, useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import { createTenant, type CreatedTenant } from "../actions";
 import type { ActionResult } from "@/lib/action-result";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { FieldHint, Input, Label, Select } from "@/components/ui/input";
 import { Icon } from "@/components/ui/icon";
+import { useFormSubmit } from "@/components/ui/use-form-submit";
 
 type PlanOption = { code: string; name: string };
 
@@ -14,18 +15,34 @@ type PlanOption = { code: string; name: string };
 // la configuración; si algo falla, el servidor deshace todo. La contraseña temporal se ve una vez.
 export function CreateTenantForm({ plans }: { plans: PlanOption[] }) {
   const [open, setOpen] = useState(false);
-  const [state, action, pending] = useActionState<ActionResult<CreatedTenant> | null, FormData>(createTenant, null);
+  const [state, setState] = useState<ActionResult<CreatedTenant> | null>(null);
   const [done, setDone] = useState<CreatedTenant | null>(null);
-  const formRef = useRef<HTMLFormElement>(null);
-
-  useEffect(() => {
-    if (state?.ok && state.data) {
-      setDone(state.data);
-      formRef.current?.reset();
+  // Si el alta falla (correo repetido, dirección tomada), lo escrito se queda para corregirlo.
+  const { onSubmit, pending } = useFormSubmit(async (fd, form) => {
+    setState(null);
+    try {
+      const res = await createTenant(null, fd);
+      setState(res);
+      if (res.ok && res.data) {
+        form.reset();
+        setDone(res.data);
+      }
+    } catch {
+      setState({ ok: false, error: "No se pudo crear el local. Revisá tu conexión y probá de nuevo." });
     }
-  }, [state]);
+  });
 
-  if (done) return <CreatedPanel created={done} onClose={() => { setDone(null); setOpen(false); }} />;
+  if (done)
+    return (
+      <CreatedPanel
+        created={done}
+        onClose={() => {
+          setDone(null);
+          setState(null);
+          setOpen(false);
+        }}
+      />
+    );
 
   if (!open) {
     return (
@@ -50,7 +67,7 @@ export function CreateTenantForm({ plans }: { plans: PlanOption[] }) {
         </Button>
       </div>
 
-      <form ref={formRef} action={action} className="grid gap-4 sm:grid-cols-2" aria-busy={pending}>
+      <form onSubmit={onSubmit} className="grid gap-4 sm:grid-cols-2" aria-busy={pending}>
         <div className="sm:col-span-2">
           <Label htmlFor="ct-name">Nombre del local</Label>
           <Input autoFocus id="ct-name" name="name" required minLength={2} maxLength={80} autoComplete="organization" placeholder="Soda La Esquina" />
@@ -91,8 +108,8 @@ export function CreateTenantForm({ plans }: { plans: PlanOption[] }) {
         </div>
 
         <div className="flex flex-col gap-3 sm:col-span-2 sm:flex-row sm:items-center">
-          <Button type="submit" disabled={pending} className="w-full sm:w-auto">
-            {pending ? "Creando el local…" : "Crear restaurante"}
+          <Button type="submit" pending={pending} pendingText="Creando el local…" className="w-full sm:w-auto">
+            Crear restaurante
           </Button>
           <div aria-live="polite" className="min-h-5">
             {state && !state.ok && (

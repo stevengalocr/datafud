@@ -1,10 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { updateSettings } from "../actions";
 import { Button } from "@/components/ui/button";
 import { Card, CardBody, CardHeader, CardTitle } from "@/components/ui/card";
 import { FieldHint, Input, Label, Select } from "@/components/ui/input";
+import { useFormSubmit } from "@/components/ui/use-form-submit";
 import { LANG_LABEL } from "@/lib/constants";
 import type { Currency, Lang, TenantSettings } from "@/lib/supabase/types";
 
@@ -17,32 +18,39 @@ export function SettingsForm({
   settings: TenantSettings | null;
   currencies: Currency[];
 }) {
-  const [status, setStatus] = useState<"idle" | "saving" | "saved" | "error">("idle");
+  const [status, setStatus] = useState<"idle" | "saved" | "error">("idle");
   const [errorText, setErrorText] = useState<string | null>(null);
+  // Configuración: nunca se resetea (lo que se guardó es lo que queda en pantalla).
+  const { onSubmit, pending: saving } = useFormSubmit(async (fd) => {
+    setStatus("idle");
+    try {
+      const res = await updateSettings(fd);
+      if (res.ok) {
+        setErrorText(null);
+        setStatus("saved");
+      } else {
+        setErrorText(res.error);
+        setStatus("error");
+      }
+    } catch {
+      setErrorText(null);
+      setStatus("error");
+    }
+  });
+  // "Cambios guardados" se va solo a los 4 s; si se vuelve a guardar antes, el plazo empieza de nuevo.
+  useEffect(() => {
+    if (status !== "saved") return;
+    const id = setTimeout(() => setStatus("idle"), 4000);
+    return () => clearTimeout(id);
+  }, [status]);
   const theme = settings?.theme ?? {};
   const enabled = settings?.enabled_languages ?? ["es"];
 
   return (
     <form
-      action={async (fd) => {
-        setStatus("saving");
-        try {
-          const res = await updateSettings(fd);
-          if (res.ok) {
-            setErrorText(null);
-            setStatus("saved");
-            setTimeout(() => setStatus("idle"), 4000);
-          } else {
-            setErrorText(res.error);
-            setStatus("error");
-          }
-        } catch {
-          setErrorText(null);
-          setStatus("error");
-        }
-      }}
+      onSubmit={onSubmit}
       className="space-y-6"
-      aria-busy={status === "saving"}
+      aria-busy={saving}
     >
       <Card>
         <CardHeader>
@@ -154,8 +162,8 @@ export function SettingsForm({
       </Card>
 
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
-        <Button type="submit" disabled={status === "saving"} className="w-full sm:w-auto">
-          {status === "saving" ? "Guardando…" : "Guardar configuración"}
+        <Button type="submit" pending={saving} pendingText="Guardando…" className="w-full sm:w-auto">
+          Guardar configuración
         </Button>
         <div aria-live="polite" className="min-h-5">
           {status === "saved" && (

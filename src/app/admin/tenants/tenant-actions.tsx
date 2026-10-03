@@ -3,12 +3,22 @@
 import { useState, useTransition } from "react";
 import { setTenantStatus } from "../actions";
 import { Button } from "@/components/ui/button";
+import { useConfirm, type ConfirmOptions } from "@/components/ui/confirm-dialog";
 import type { TenantStatus } from "@/lib/supabase/types";
 
 // Suspender o cancelar le corta la carta y el panel a un local: se confirma antes.
-const CONFIRM: Partial<Record<TenantStatus, (name: string) => string>> = {
-  suspended: (n) => `¿Suspender a ${n}? Su carta y su panel dejan de funcionar hasta que lo reactivés.`,
-  cancelled: (n) => `¿Cancelar a ${n}? Su carta y su panel dejan de funcionar.`,
+const CONFIRM: Partial<Record<TenantStatus, (name: string) => ConfirmOptions>> = {
+  suspended: (n) => ({
+    title: `¿Suspender a ${n}?`,
+    description: "Su carta y su panel dejan de funcionar hasta que lo reactivés.",
+    confirmLabel: "Suspender local",
+    icon: "pause",
+  }),
+  cancelled: (n) => ({
+    title: `¿Cancelar a ${n}?`,
+    description: "Su carta y su panel dejan de funcionar.",
+    confirmLabel: "Cancelar local",
+  }),
 };
 
 export function TenantStatusActions({
@@ -22,10 +32,11 @@ export function TenantStatusActions({
 }) {
   const [pending, start] = useTransition();
   const [error, setError] = useState<string | null>(null);
+  const { confirm, dialog } = useConfirm();
 
-  const change = (next: TenantStatus) => {
+  const change = async (next: TenantStatus) => {
     const ask = CONFIRM[next];
-    if (ask && !window.confirm(ask(tenantName))) return;
+    if (ask && !(await confirm(ask(tenantName)))) return;
     setError(null);
     start(async () => {
       try {
@@ -61,6 +72,7 @@ export function TenantStatusActions({
           {error}
         </p>
       )}
+      {dialog}
     </div>
   );
 }

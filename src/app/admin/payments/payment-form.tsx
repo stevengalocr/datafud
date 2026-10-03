@@ -1,17 +1,31 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { registerPayment } from "../actions";
 import { Button } from "@/components/ui/button";
 import { FieldHint, Input, Label, Select } from "@/components/ui/input";
+import { useFormSubmit } from "@/components/ui/use-form-submit";
 
 type TenantOption = { id: string; name: string };
 type Result = { tone: "ok" | "error"; text: string } | null;
 
 export function PaymentForm({ tenants }: { tenants: TenantOption[] }) {
-  const formRef = useRef<HTMLFormElement>(null);
-  const [saving, setSaving] = useState(false);
   const [result, setResult] = useState<Result>(null);
+  // Si falla, lo escrito se queda; el formulario vuelve a sus valores solo si se registró.
+  const { onSubmit, pending: saving } = useFormSubmit(async (fd, form) => {
+    setResult(null);
+    try {
+      const res = await registerPayment(fd);
+      if (res.ok) {
+        form.reset();
+        setResult({ tone: "ok", text: "Pago registrado." });
+      } else {
+        setResult({ tone: "error", text: res.error });
+      }
+    } catch {
+      setResult({ tone: "error", text: "No se pudo registrar el pago. Revisá tu conexión y probá de nuevo." });
+    }
+  });
 
   const today = new Date().toISOString().slice(0, 10);
   const nextMonth = new Date();
@@ -20,26 +34,7 @@ export function PaymentForm({ tenants }: { tenants: TenantOption[] }) {
 
   return (
     <form
-      ref={formRef}
-      action={async (fd) => {
-        setSaving(true);
-        setResult(null);
-        // La acción lanza si los datos no pasan la validación; antes el botón se quedaba en
-        // "Registrando..." para siempre y no se decía nada.
-        try {
-          const res = await registerPayment(fd);
-          if (res.ok) {
-            formRef.current?.reset();
-            setResult({ tone: "ok", text: "Pago registrado." });
-          } else {
-            setResult({ tone: "error", text: res.error });
-          }
-        } catch {
-          setResult({ tone: "error", text: "No se pudo registrar el pago. Revisá tu conexión y probá de nuevo." });
-        } finally {
-          setSaving(false);
-        }
-      }}
+      onSubmit={onSubmit}
       className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5 lg:items-end"
       aria-busy={saving}
     >
@@ -66,8 +61,8 @@ export function PaymentForm({ tenants }: { tenants: TenantOption[] }) {
         <Input id="period_end" name="period_end" type="date" defaultValue={nextMonthStr} required />
       </div>
       <div className="flex flex-col gap-2 sm:col-span-2 sm:flex-row sm:items-center sm:gap-4 lg:col-span-5">
-        <Button type="submit" disabled={saving} className="w-full sm:w-auto">
-          {saving ? "Registrando…" : "Registrar pago"}
+        <Button type="submit" pending={saving} pendingText="Registrando…" className="w-full sm:w-auto">
+          Registrar pago
         </Button>
         <div aria-live="polite" className="min-h-5">
           {result && (

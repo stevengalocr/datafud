@@ -5,6 +5,7 @@ import { updateOrderStatus } from "../actions";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { useConfirm } from "@/components/ui/confirm-dialog";
 import { EmptyState } from "@/components/shell/empty-state";
 import { formatMoney } from "@/lib/currency/format";
 import { formatDate, formatTime, localDayKey } from "@/lib/dates";
@@ -38,6 +39,7 @@ export function OrderBoard({
   const [pending, start] = useTransition();
   const [busyId, setBusyId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const { confirm, dialog } = useConfirm();
 
   if (orders.length === 0) {
     return (
@@ -62,6 +64,16 @@ export function OrderBoard({
         setBusyId(null);
       }
     });
+  };
+
+  const askCancel = async (id: string) => {
+    const ok = await confirm({
+      title: "¿Cancelar esta orden?",
+      description: "El cliente ya no la verá en preparación.",
+      confirmLabel: "Cancelar orden",
+      cancelLabel: "Volver",
+    });
+    if (ok) change(id, "cancelled");
   };
 
   return (
@@ -130,9 +142,7 @@ export function OrderBoard({
                     {o.status !== "cancelled" && o.status !== "paid" && (
                       <Button
                         variant="danger-soft"
-                        onClick={() => {
-                          if (window.confirm("¿Cancelar esta orden?")) change(o.id, "cancelled");
-                        }}
+                        onClick={() => askCancel(o.id)}
                         disabled={pending}
                       >
                         Cancelar
@@ -145,6 +155,7 @@ export function OrderBoard({
           );
         })}
       </ul>
+      {dialog}
     </div>
   );
 }
