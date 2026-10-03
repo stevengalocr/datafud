@@ -689,10 +689,15 @@ revoke all on public.v_daily_sales, public.v_top_products, public.v_order_summar
 grant select on public.v_daily_sales, public.v_top_products, public.v_order_summary
   to authenticated, service_role;
 
--- Helpers que usan las políticas: solo para quien tiene sesión.
-revoke all on function public.current_tenant_id() from public;
-revoke all on function public.current_user_role() from public;
-revoke all on function public.is_super_admin() from public;
+-- Helpers que usan las políticas: solo para quien tiene sesión. En Supabase el esquema public
+-- trae privilegios por defecto que dan EXECUTE a anon sobre toda función nueva, así que no
+-- alcanza con revocar a PUBLIC: se revoca a anon explícitamente.
+revoke all on function public.current_tenant_id() from public, anon;
+revoke all on function public.current_user_role() from public, anon;
+revoke all on function public.is_super_admin() from public, anon;
+-- Funciones de trigger: nadie las llama por la API (los triggers no piden EXECUTE al dispararse).
+revoke all on function public.set_updated_at() from public, anon, authenticated;
+revoke all on function public.enforce_plan_limit() from public, anon, authenticated;
 grant execute on function public.current_tenant_id() to authenticated, service_role;
 grant execute on function public.current_user_role() to authenticated, service_role;
 grant execute on function public.is_super_admin() to authenticated, service_role;
