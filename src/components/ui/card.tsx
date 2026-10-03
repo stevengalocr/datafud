@@ -1,14 +1,15 @@
 import { cn } from "@/lib/utils/cn";
 
-// Superficie de los paneles: blanco sobre el crema de la página, borde cálido y sin sombra
-// genérica (la sombra no aporta jerarquía cuando todo es una tarjeta).
+// Superficie de los paneles: blanco sobre el crema de la página, borde cálido y la sombra más
+// baja de la escala (`panel-sm`, tintada con el verde de marca): apenas separa la tarjeta del
+// papel. Lo que flota encima de la página (cajón, diálogo) usa `panel-lg`; nada en medio.
 export function Card({
   className,
   ...props
 }: React.HTMLAttributes<HTMLDivElement>) {
   return (
     <div
-      className={cn("rounded-xl border border-stone-200 bg-white", className)}
+      className={cn("rounded-xl border border-stone-200 bg-white shadow-panel-sm", className)}
       {...props}
     />
   );

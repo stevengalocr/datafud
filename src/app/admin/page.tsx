@@ -49,7 +49,7 @@ export default async function AdminHome() {
         description="Cómo van los restaurantes que usan DataFud y lo que han pagado."
       />
 
-      <section aria-label="Cifras generales" className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-5">
+      <section aria-label="Cifras generales" className="panel-stagger grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-5">
         {stats.map((s) => (
           <StatCard key={s.label} {...s} />
         ))}
@@ -70,7 +70,7 @@ export default async function AdminHome() {
           {list.length > 0 && (
             <Link
               href="/admin/tenants"
-              className="inline-flex min-h-11 items-center gap-1.5 text-sm font-semibold text-brand-700 hover:text-brand-900"
+              className="inline-flex min-h-11 items-center gap-1.5 text-sm font-semibold text-brand-700 hov:text-brand-900"
             >
               Ver todos
               <Icon name="arrow-right" size={16} />

@@ -104,7 +104,7 @@ export default async function ChargesPage() {
                 </thead>
                 <tbody className="divide-y divide-stone-100">
                   {list.map((c) => (
-                    <tr key={c.id} className="align-top hover:bg-cream-50">
+                    <tr key={c.id} className="align-top hov:bg-cream-50">
                       <td className="px-5 py-3.5 font-medium text-brand-950">
                         {nameById.get(c.tenant_id) ?? "—"}
                       </td>

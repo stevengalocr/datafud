@@ -24,12 +24,13 @@ export function StatCard({
   }[accent];
 
   return (
-    <div className="rounded-xl border border-stone-200 bg-white px-5 py-4">
-      <p className="flex items-center gap-2 text-sm font-medium text-stone-600">
+    <div className="min-w-0 rounded-xl border border-stone-200 bg-white px-4 py-4 shadow-panel-sm sm:px-5">
+      <p className="flex min-w-0 items-center gap-2 text-sm font-medium text-stone-600">
         {icon && <Icon name={icon} size={16} className={cn("shrink-0", tone)} />}
         {label}
       </p>
-      <p className="mt-2 text-[1.75rem] font-semibold leading-none tracking-tight text-brand-950 tabular-nums">
+      {/* Cifras grandes (₡987 654 321) parten línea en vez de empujar la grilla en 375 px. */}
+      <p className="mt-2 text-[1.5rem] font-semibold leading-tight tracking-tight text-brand-950 tabular-nums [overflow-wrap:anywhere] sm:text-[1.75rem] sm:leading-none">
         {value}
       </p>
       {hint && <p className="mt-2 text-xs text-stone-600">{hint}</p>}

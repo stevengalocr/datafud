@@ -44,9 +44,9 @@ export default async function DashboardHome() {
   ).length;
 
   const stats: { label: string; value: string; icon: IconName; accent: "brand" | "accent" | "slate" }[] = [
-    { label: "Órdenes hoy", value: String(todayOrders.length), icon: "receipt", accent: "brand" },
+    { label: "Órdenes hoy", value: todayOrders.length.toLocaleString("es-CR"), icon: "receipt", accent: "brand" },
     { label: "Vendido hoy", value: formatMoney(soldToday, currency), icon: "wallet", accent: "accent" },
-    { label: "Órdenes activas", value: String(pending), icon: "clock", accent: "slate" },
+    { label: "Órdenes activas", value: pending.toLocaleString("es-CR"), icon: "clock", accent: "slate" },
   ];
 
   const displayName = settings?.restaurant_name || tenant.name;
@@ -73,7 +73,7 @@ export default async function DashboardHome() {
         </p>
       )}
 
-      <section aria-label="Cifras de hoy" className="grid gap-3 sm:grid-cols-3 sm:gap-4">
+      <section aria-label="Cifras de hoy" className="panel-stagger grid gap-3 sm:grid-cols-3 sm:gap-4">
         {stats.map((s) => (
           <StatCard key={s.label} {...s} />
         ))}
@@ -85,7 +85,7 @@ export default async function DashboardHome() {
           {list.length > 0 && (
             <Link
               href="/dashboard/orders"
-              className="inline-flex min-h-11 items-center gap-1.5 text-sm font-semibold text-brand-700 hover:text-brand-900"
+              className="inline-flex min-h-11 items-center gap-1.5 text-sm font-semibold text-brand-700 hov:text-brand-900"
             >
               Ver órdenes
               <Icon name="arrow-right" size={16} />
