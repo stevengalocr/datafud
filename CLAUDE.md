@@ -23,7 +23,7 @@ etiqueta "Render ilustrativo" y todo QR dibujado decodifica a `https://datafud.c
 - `npm run dev` — local en :3000 (sin `.env.local` cargan `/`, `/preview`, `/login` con aviso, legal).
 - `npm run typecheck` · `npm run lint` · `npm run build` — los tres en verde antes de cada commit.
 - `npm run qa:landing` — QA de la landing en navegador real (Playwright); ver `scripts/qa-landing.mjs`.
-- BD: `supabase/schema.sql` (idempotente, sin usuarios) → `supabase/verify.sql`. Solo en desarrollo:
+- BD: `supabase/schema.sql` (idempotente, sin usuarios) → `supabase/verify.sql` (SQL Editor o psql). Solo en desarrollo:
   `psql "$DBURL" -v seed_password='<tu-contraseña>' -f supabase/seed.dev.sql`.
 
 ## Mapa
@@ -58,10 +58,13 @@ etiqueta "Render ilustrativo" y todo QR dibujado decodifica a `https://datafud.c
 
 1. El aislamiento entre negocios es RLS. Tabla nueva de negocio = `tenant_id` + índice + RLS + política
    `tenant_id = current_tenant_id() or is_super_admin()` + entrada en `verify.sql`.
-2. Toda vista nueva lleva `with (security_invoker = true)`. Las tres vistas de reportes actuales
-   todavía no lo tienen (hallazgo S1 del vault): arreglarlo antes de encender el backend.
-3. El rol `anon` nunca recibe políticas sobre tablas. Solo RPC `security definer` con `search_path`
-   fijo, `revoke all … from public` y `grant execute` explícito (hoy: `get_menu`, `place_order`).
+2. Toda vista nueva lleva `with (security_invoker = true)` dentro del `create` y entra en la
+   sección 11 de `schema.sql` (solo `select` para `authenticated` y `service_role`). Las tres de
+   reportes ya lo cumplen (S1, 2026-10-03).
+3. El rol `anon` nunca recibe políticas ni permisos sobre tablas. Solo RPC `security definer` con
+   `search_path` fijo, `revoke all … from public` y `grant execute` explícito (hoy: `get_menu`,
+   `place_order`). Los permisos de la Data API son explícitos (sección 11 de `schema.sql`): un
+   proyecto nuevo de Supabase no los da solo. Tabla nueva = agregarla al `grant` de esa sección.
 4. Nunca usar un `tenant_id` ni un precio que venga del navegador: `place_order` lee precios de
    `products` y guarda snapshots.
 5. `createAdminClient()` (`service_role`) solo en `registerAction`. Para usarlo en otro lado, preguntar.
@@ -99,8 +102,10 @@ etiqueta "Render ilustrativo" y todo QR dibujado decodifica a `https://datafud.c
 
 ## Trampas conocidas
 
-- `middleware.ts` está en la raíz y la app vive en `src/`: Next lo ignora. Al encender el backend hay
-  que moverlo a `src/middleware.ts` y comprobar en el log del build que aparece "Middleware".
+- El middleware vive en `src/middleware.ts` (en la raíz Next lo ignoraba). Sin variables de Supabase
+  no hace nada y solo cubre paneles, `/login` y la ruta privada. El build avisa que `supabase-js`
+  usa `process.version` en el Edge Runtime: es conocido y no rompe.
+- `verify.sql` es SQL puro (una tabla con `ok`); el super admin se crea con `supabase/super-admin.sql`.
 - `NEXT_PUBLIC_SITE_URL` define la URL grabada en los QR (`dashboard/tables`); en producción debe
   ser `https://datafud.com`.
 - `/preview` no toca la BD: que se vea bien ahí no prueba el flujo real.
@@ -122,8 +127,6 @@ etiqueta "Render ilustrativo" y todo QR dibujado decodifica a `https://datafud.c
   `fonts` a `ImageResponse` reemplaza la fuente por defecto: `src/lib/og.tsx` la vuelve a pasar.
 - "₡" sale de `public/fonts/datafud-colon-*.woff2` (D-052), primera en los stacks de Tailwind.
   No redeclarar `--font-sans` ni `--font-display` en `globals.css`: pisa a `next/font`.
-- El nombre viejo del proyecto solo queda en los `.sql` de `supabase/`, que este loop no toca:
-  se corrige en el loop del backend.
 - Los triggers de límite de plan lanzan excepción: la UI tiene que mostrarla.
 
 ## Vault de Obsidian (memoria del proyecto) — protocolo de alineación

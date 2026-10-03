@@ -20,18 +20,21 @@ interface TopRow {
 }
 
 export default async function ReportsPage() {
-  const { settings } = await getTenantContext();
+  const { tenant, settings } = await getTenantContext();
   const supabase = await createClient();
   const currency = settings?.currency_code ?? "USD";
 
   const { data: daily } = await supabase
     .from("v_daily_sales")
     .select("*")
+    // Defensa en profundidad (S1): la vista ya filtra por RLS (security_invoker).
+    .eq("tenant_id", tenant.id)
     .order("day", { ascending: false })
     .limit(14);
   const { data: top } = await supabase
     .from("v_top_products")
-    .select("product_name, units_sold, revenue");
+    .select("product_name, units_sold, revenue")
+    .eq("tenant_id", tenant.id);
 
   const dailyRows = (daily as DailyRow[]) ?? [];
   const topRowsRaw = (top as TopRow[]) ?? [];

@@ -1,5 +1,5 @@
 -- =====================================================================
--- Datfud — Digital Menu SaaS · schema.sql (idempotente)
+-- DataFud — Digital Menu SaaS · schema.sql (idempotente)
 -- Multi-tenant (tenant_id + RLS). Correr completo en Supabase SQL Editor
 -- o:  psql "$DBURL" -f supabase/schema.sql
 -- Es seguro correrlo varias veces (idempotente).
@@ -306,13 +306,19 @@ do $$
 declare t text;
 begin
   foreach t in array array['tenants','profiles','subscription_payments','plans',
-                           'tenant_charges',
+                           'tenant_charges','currencies',
                            'categories','products','tables','orders','order_items',
                            'tenant_settings']
   loop
     execute format('alter table public.%I enable row level security;', t);
   end loop;
 end $$;
+
+-- CURRENCIES (S3): catálogo de solo lectura para usuarios con sesión. Nadie
+-- escribe por la API; la semilla de la sección 8 corre como dueño.
+drop policy if exists currencies_read on public.currencies;
+create policy currencies_read on public.currencies for select to authenticated
+  using (true);
 
 -- PLANS
 drop policy if exists plans_read on public.plans;
@@ -535,10 +541,14 @@ commit;
 
 -- ---------------------------------------------------------------------
 -- 7) Vistas de reportes
+-- security_invoker (S1): la vista corre con los permisos de quien consulta,
+-- así que el RLS de orders y order_items filtra por negocio. Sin esto, la
+-- vista corre como su dueño y un restaurante ve las ventas de otro.
+-- La opción va dentro del create: un "create or replace" futuro no la pierde.
 -- ---------------------------------------------------------------------
 begin;
 
-create or replace view public.v_daily_sales as
+create or replace view public.v_daily_sales with (security_invoker = true) as
 select
   o.tenant_id,
   date_trunc('day', o.created_at)::date as day,
@@ -550,7 +560,7 @@ from public.orders o
 where o.status in ('delivered','paid')
 group by o.tenant_id, date_trunc('day', o.created_at), o.currency_code;
 
-create or replace view public.v_top_products as
+create or replace view public.v_top_products with (security_invoker = true) as
 select
   oi.tenant_id,
   date_trunc('day', o.created_at)::date as day,
@@ -563,7 +573,7 @@ join public.orders o on o.id = oi.order_id
 where o.status in ('delivered','paid')
 group by oi.tenant_id, date_trunc('day', o.created_at), oi.product_id, oi.product_name_snapshot;
 
-create or replace view public.v_order_summary as
+create or replace view public.v_order_summary with (security_invoker = true) as
 select
   tenant_id,
   status,
@@ -631,6 +641,44 @@ commit;
 -- psql). En producción el super admin se crea a mano desde Authentication en
 -- el panel de Supabase y su fila en public.profiles con role = 'super_admin'.
 -- ---------------------------------------------------------------------
+
+-- ---------------------------------------------------------------------
+-- 11) Permisos de la Data API (S1)
+-- Desde el 2026-05-30 un proyecto nuevo de Supabase no da permisos sobre las
+-- tablas nuevas a los roles de la API: se dan aquí, explícitos.
+--   anon           -> nada sobre tablas ni vistas; solo ejecuta get_menu y
+--                     place_order (sección 7b).
+--   authenticated  -> lee y escribe; el RLS de la sección 6 decide qué filas
+--                     y qué operaciones. Vistas: solo lectura.
+--   service_role   -> igual que authenticated (salta el RLS por diseño; solo
+--                     la usa registerAction en el servidor).
+-- Idempotente: revoke y grant se pueden correr varias veces.
+-- ---------------------------------------------------------------------
+begin;
+
+revoke all on all tables in schema public from anon;
+
+grant select, insert, update, delete on
+  public.currencies, public.plans, public.tenants, public.profiles,
+  public.subscription_payments, public.tenant_charges, public.categories,
+  public.products, public.tables, public.orders, public.order_items,
+  public.tenant_settings
+  to authenticated, service_role;
+
+revoke all on public.v_daily_sales, public.v_top_products, public.v_order_summary
+  from authenticated, service_role;
+grant select on public.v_daily_sales, public.v_top_products, public.v_order_summary
+  to authenticated, service_role;
+
+-- Helpers que usan las políticas: solo para quien tiene sesión.
+revoke all on function public.current_tenant_id() from public;
+revoke all on function public.current_user_role() from public;
+revoke all on function public.is_super_admin() from public;
+grant execute on function public.current_tenant_id() to authenticated, service_role;
+grant execute on function public.current_user_role() to authenticated, service_role;
+grant execute on function public.is_super_admin() to authenticated, service_role;
+
+commit;
 
 -- =====================================================================
 -- Fin de schema.sql

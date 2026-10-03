@@ -7,6 +7,28 @@ Todas las versiones notables del proyecto. Formato basado en
 
 ## [Unreleased]
 
+### Security — Backend listo para encender (2026-10-03)
+- **S1 cerrado en el esquema.** Las tres vistas de reportes llevan `security_invoker = true` dentro
+  del `create`, así que el RLS de `orders` y `order_items` filtra por negocio. Reportes además
+  filtra por `tenant_id` (defensa en profundidad).
+- **S3 cerrado en el esquema.** `currencies` con RLS de solo lectura para usuarios con sesión.
+- **Permisos de la Data API explícitos** (sección 11 de `schema.sql`): desde el 2026-05-30 un
+  proyecto nuevo de Supabase no los da solo. `anon` no tiene ningún permiso sobre tablas ni
+  vistas (solo ejecuta `get_menu` y `place_order`); `authenticated` y `service_role` leen y
+  escriben las tablas y solo leen las vistas; los helpers de RLS solo para quien tiene sesión.
+- **El middleware corre.** `middleware.ts` pasó a `src/middleware.ts` (la línea "Middleware"
+  aparece en el build). Sin variables de Supabase no hace nada, y solo pasa por los paneles,
+  `/login` y la ruta privada: la landing, las cartas y los QR no lo tocan.
+
+### Changed
+- `verify.sql` es SQL puro: una sola tabla con `ok` por fila (enums, tablas, RLS, vistas con
+  `security_invoker`, monedas, planes, permisos de `anon` y `authenticated`, super admin). Corre
+  en el SQL Editor de Supabase y con `psql`.
+- `supabase/super-admin.sql`: el perfil del super admin, con `<correo>` a completar.
+- Encabezados de los `.sql` con el nombre DataFud; comentario de Resend en `.env.example` al día
+  con D-039.
+- Informe y runbook del encendido: `docs/plans/2026-10-03-supabase-produccion-informe.md`.
+
 ## [1.4.1] — 2026-09-25 · Ajustes finales: fundadores en cualquier plan, plazos con material + pago, a quién le pagás
 
 Informe: `docs/plans/ajustes-loop-report.md`.

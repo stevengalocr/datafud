@@ -1,5 +1,5 @@
 -- =====================================================================
--- Datfud — seed.dev.sql · SOLO DESARROLLO, NUNCA EN PRODUCCIÓN
+-- DataFud — seed.dev.sql · SOLO DESARROLLO, NUNCA EN PRODUCCIÓN
 -- =====================================================================
 -- Crea un super admin, un usuario y tenant demo, un menú y una orden de
 -- ejemplo para probar los paneles en local. Idempotente (se puede correr
