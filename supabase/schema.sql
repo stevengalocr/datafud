@@ -182,6 +182,8 @@ create table if not exists public.orders (
 );
 create index if not exists idx_orders_tenant on public.orders(tenant_id);
 create index if not exists idx_orders_created on public.orders(tenant_id, created_at);
+-- Para el límite de pedidos por mesa de place_order (S4).
+create index if not exists idx_orders_table_created on public.orders(table_id, created_at);
 
 create table if not exists public.order_items (
   id uuid primary key default gen_random_uuid(),
@@ -496,8 +498,22 @@ begin
     raise exception 'Mesa no válida';
   end if;
 
-  if p_items is null or jsonb_array_length(p_items) = 0 then
+  if p_items is null or jsonb_typeof(p_items) <> 'array' or jsonb_array_length(p_items) = 0 then
     raise exception 'La orden no tiene platillos';
+  end if;
+
+  -- S4: topes por pedido y frecuencia por mesa y por local, para que un QR no sirva para
+  -- llenar el tablero de un restaurante.
+  if jsonb_array_length(p_items) > 30 then
+    raise exception 'Un pedido lleva como máximo 30 platillos distintos';
+  end if;
+  if (select count(*) from public.orders
+       where table_id = v_table.id and created_at > now() - interval '10 minutes') >= 10 then
+    raise exception 'Hay muchos pedidos seguidos desde esta mesa. Esperá unos minutos o llamá al salonero';
+  end if;
+  if (select count(*) from public.orders
+       where tenant_id = v_tenant.id and created_at > now() - interval '1 minute') >= 60 then
+    raise exception 'El restaurante está recibiendo muchos pedidos. Probá de nuevo en un minuto';
   end if;
 
   select coalesce(currency_code, 'USD') into v_currency
@@ -505,12 +521,15 @@ begin
   if v_currency is null then v_currency := 'USD'; end if;
 
   insert into public.orders (tenant_id, table_id, status, currency_code, subtotal, total, customer_note)
-  values (v_tenant.id, v_table.id, 'pending', v_currency, 0, 0, nullif(p_note, ''))
+  values (v_tenant.id, v_table.id, 'pending', v_currency, 0, 0, nullif(left(trim(coalesce(p_note, '')), 300), ''))
   returning id into v_order_id;
 
   for v_item in select * from jsonb_array_elements(p_items)
   loop
     v_qty := greatest(1, coalesce((v_item->>'quantity')::int, 1));
+    if v_qty > 20 then
+      raise exception 'La cantidad máxima por platillo es 20';
+    end if;
     select * into v_product from public.products
       where id = (v_item->>'product_id')::uuid
         and tenant_id = v_tenant.id and is_active and is_available;
@@ -521,7 +540,7 @@ begin
                                        unit_price_snapshot, quantity, line_total, note)
       values (v_order_id, v_tenant.id, v_product.id,
               coalesce(v_product.name_i18n->>'es', v_product.name_i18n->>'en', 'Producto'),
-              v_product.price, v_qty, v_line, nullif(v_item->>'note', ''));
+              v_product.price, v_qty, v_line, nullif(left(trim(coalesce(v_item->>'note', '')), 200), ''));
     end if;
   end loop;
 

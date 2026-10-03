@@ -7,6 +7,23 @@ Todas las versiones notables del proyecto. Formato basado en
 
 ## [Unreleased]
 
+### Added — S10 y P1 (2026-10-03)
+- **Alta de local desde el super admin** (`/admin/tenants` → «Crear restaurante»): crea el local
+  activo, el usuario del dueño, su perfil y su configuración (colones por defecto); si algo falla
+  deshace todo. La contraseña temporal se muestra una sola vez, con un mensaje listo para WhatsApp.
+- **Editar categorías** (`updateCategory`): nombre en tres idiomas y orden en la carta.
+- **Órdenes que se actualizan solas**: el tablero se refresca cada 15 s con la pestaña a la vista
+  (no es tiempo real) e indica hace cuánto se actualizó.
+
+### Security
+- **S10 cerrado:** todas las Server Actions de `/admin` y `/dashboard` validan con Zod, verifican la
+  sesión y el rol en el servidor y devuelven el motivo del fallo (`ActionResult`). Los formularios lo
+  muestran y bloquean el doble envío.
+- **S4 cerrado:** `place_order` acepta hasta 30 platillos distintos y 20 unidades por platillo, como
+  máximo 10 pedidos por mesa cada 10 minutos y 60 por local por minuto; recorta notas largas. La
+  carta solo muestra los mensajes conocidos de la base. Índice nuevo `idx_orders_table_created`.
+  Hay que volver a correr `schema.sql` en producción.
+
 ## [1.5.0] — 2026-10-03 · Backend encendido: Supabase en producción, S1 y S3 cerrados, paneles con la marca
 
 Informes: `docs/plans/2026-10-03-supabase-produccion-informe.md` y

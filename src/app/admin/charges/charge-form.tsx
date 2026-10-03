@@ -40,12 +40,16 @@ export function ChargeForm({ tenants }: { tenants: TenantOption[] }) {
         setResult(null);
         // La acción lanza si los datos no pasan la validación: se avisa en vez de quedar trabado.
         try {
-          await registerCharge(fd);
-          formRef.current?.reset();
-          onKindChange("implementation");
-          setResult({ tone: "ok", text: "Cargo registrado." });
+          const res = await registerCharge(fd);
+          if (res.ok) {
+            formRef.current?.reset();
+            onKindChange("implementation");
+            setResult({ tone: "ok", text: "Cargo registrado." });
+          } else {
+            setResult({ tone: "error", text: res.error });
+          }
         } catch {
-          setResult({ tone: "error", text: "No se pudo registrar el cargo. Revisá la cantidad y el precio." });
+          setResult({ tone: "error", text: "No se pudo registrar el cargo. Revisá tu conexión y probá de nuevo." });
         } finally {
           setSaving(false);
         }

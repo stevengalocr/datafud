@@ -2,6 +2,7 @@ import { getTenantContext } from "@/lib/auth/tenant-context";
 import { createClient } from "@/lib/supabase/server";
 import { PageHeader } from "@/components/shell/page-header";
 import { OrderBoard } from "./order-board";
+import { AutoRefresh } from "./auto-refresh";
 import type { Order, OrderItem } from "@/lib/supabase/types";
 
 export const dynamic = "force-dynamic";
@@ -34,7 +35,8 @@ export default async function OrdersPage() {
     <div>
       <PageHeader
         title="Órdenes"
-        description="Pasá cada orden de pendiente a pagada. Las nuevas aparecen al recargar la página."
+        description="Pasá cada orden de pendiente a pagada. Las nuevas aparecen solas."
+        action={<AutoRefresh />}
       />
       <OrderBoard
         orders={list}

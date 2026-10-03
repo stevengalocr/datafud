@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { TENANT_STATUS_COLOR, TENANT_STATUS_LABEL } from "@/lib/constants";
 import { formatDate } from "@/lib/dates";
 import { TenantStatusActions } from "./tenant-actions";
+import { CreateTenantForm } from "./create-tenant-form";
 import type { Plan, Tenant } from "@/lib/supabase/types";
 
 export const dynamic = "force-dynamic";
@@ -27,12 +28,21 @@ export default async function TenantsPage() {
       <PageHeader
         eyebrow="Administración"
         title="Restaurantes"
-        description="Aprobá, suspendé o cancelá el acceso de cada local."
+        description="Creá un local y aprobá, suspendé o cancelá su acceso."
       />
+
+      <div className="mb-6">
+        <CreateTenantForm
+          plans={((plans as Plan[] | null) ?? [])
+            .slice()
+            .sort((a, b) => a.sort_order - b.sort_order)
+            .map((p) => ({ code: p.code, name: p.name }))}
+        />
+      </div>
 
       {list.length === 0 ? (
         <EmptyState icon="store" title="Todavía no hay restaurantes">
-          Cada local que se dé de alta aparece acá con su plan y su estado, listo para aprobarlo.
+          Creá el primero con «Crear restaurante»: aparece acá con su plan y su estado.
         </EmptyState>
       ) : (
         <>

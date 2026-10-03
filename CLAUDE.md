@@ -70,7 +70,10 @@ etiqueta "Render ilustrativo" y todo QR dibujado decodifica a `https://datafud.c
    proyecto nuevo de Supabase no los da solo. Tabla nueva = agregarla al `grant` de esa sección.
 4. Nunca usar un `tenant_id` ni un precio que venga del navegador: `place_order` lee precios de
    `products` y guarda snapshots.
-5. `createAdminClient()` (`service_role`) solo en `registerAction`. Para usarlo en otro lado, preguntar.
+5. `createAdminClient()` (`service_role`) solo en `registerAction` y en `createTenant` (alta de local del super
+   admin, autorizada por Steven el 2026-10-03), siempre después de verificar el rol en el servidor.
+   `SUPABASE_SERVICE_ROLE_KEY` vive solo en el servidor (Vercel: Sensitive, sin `NEXT_PUBLIC_`).
+   Para usarlo en otro lado, preguntar.
 6. Precios y límites viven en `PRICING` (`src/lib/constants.ts`) y de ahí los leen planes, hero, FAQ,
    términos, JSON-LD y guías; deben coincidir con las semillas de planes de `schema.sql` (USD y
    límites). Colones con `formatCrc()` ("₡14 900", sin decimales). Actualizar también
@@ -78,8 +81,9 @@ etiqueta "Render ilustrativo" y todo QR dibujado decodifica a `https://datafud.c
 7. `schema.sql` sigue idempotente y **sin usuarios, correos ni contraseñas**. Las semillas de personas
    solo en `seed.dev.sql`, con contraseña por variable. La contraseña que hubo en el historial está
    quemada: no se reutiliza. Nunca reescribir el historial de git.
-8. Toda Server Action valida con Zod y devuelve un estado que la UI muestra (hoy lo cumplen
-   `(auth)/actions.ts` y `app/actions.ts`; `dashboard/actions.ts` y `admin/actions.ts` no: S10).
+8. Toda Server Action valida con Zod y devuelve un estado que la UI muestra: `ActionResult` de
+   `src/lib/action-result.ts` (`ok` / `fail` / `zodFail` / `dbFail`). Nunca lanza hacia la interfaz
+   ni devuelve el mensaje crudo de la base (S10, cerrado el 2026-10-03).
 9. Marca: `docs/BRAND.md` y `.impeccable.md`. Iconos solo SVG (`src/components/ui/icon.tsx`). Sin
    emojis en UI, sin texto con degradado, sin `backdrop-blur`, voseo tico natural.
 10. Honestidad comercial: en la landing no van "tiempo real", "24/7", "exportación", "trial",

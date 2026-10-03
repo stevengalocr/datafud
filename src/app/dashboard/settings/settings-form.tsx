@@ -18,6 +18,7 @@ export function SettingsForm({
   currencies: Currency[];
 }) {
   const [status, setStatus] = useState<"idle" | "saving" | "saved" | "error">("idle");
+  const [errorText, setErrorText] = useState<string | null>(null);
   const theme = settings?.theme ?? {};
   const enabled = settings?.enabled_languages ?? ["es"];
 
@@ -26,10 +27,17 @@ export function SettingsForm({
       action={async (fd) => {
         setStatus("saving");
         try {
-          await updateSettings(fd);
-          setStatus("saved");
-          setTimeout(() => setStatus("idle"), 4000);
+          const res = await updateSettings(fd);
+          if (res.ok) {
+            setErrorText(null);
+            setStatus("saved");
+            setTimeout(() => setStatus("idle"), 4000);
+          } else {
+            setErrorText(res.error);
+            setStatus("error");
+          }
         } catch {
+          setErrorText(null);
           setStatus("error");
         }
       }}
@@ -155,7 +163,7 @@ export function SettingsForm({
           )}
           {status === "error" && (
             <FieldHint tone="error" className="font-medium">
-              No se pudieron guardar los cambios. Probá de nuevo.
+              {errorText ?? "No se pudieron guardar los cambios. Revisá tu conexión y probá de nuevo."}
             </FieldHint>
           )}
         </div>

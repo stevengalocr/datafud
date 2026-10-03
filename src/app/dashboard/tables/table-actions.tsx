@@ -18,10 +18,11 @@ export function AddTableForm() {
         setSaving(true);
         setError(null);
         try {
-          await createTable(fd);
-          ref.current?.reset();
+          const res = await createTable(fd);
+          if (res.ok) ref.current?.reset();
+          else setError(res.error);
         } catch {
-          setError("No se pudo agregar. Si llegaste al límite de mesas de tu plan, escribinos.");
+          setError("No se pudo agregar la mesa. Revisá tu conexión y probá de nuevo.");
         } finally {
           setSaving(false);
         }
@@ -56,15 +57,23 @@ export function AddTableForm() {
 
 export function DeleteTableButton({ id, label }: { id: string; label: string }) {
   const [pending, start] = useTransition();
+  const [error, setError] = useState<string | null>(null);
   return (
+    <>
     <Button
       size="sm"
       variant="danger-soft"
       onClick={() => {
         // Borrar la mesa invalida su QR: si ya está impreso, deja de abrir la carta.
         if (window.confirm(`¿Eliminar ${label}? Su QR deja de funcionar, aunque ya esté impreso.`)) {
+          setError(null);
           start(async () => {
-            await deleteTable(id);
+            try {
+              const res = await deleteTable(id);
+              if (!res.ok) setError(res.error);
+            } catch {
+              setError("No se pudo eliminar la mesa. Probá de nuevo.");
+            }
           });
         }
       }}
@@ -74,5 +83,11 @@ export function DeleteTableButton({ id, label }: { id: string; label: string }) 
       <Icon name="trash" size={16} />
       Eliminar
     </Button>
+    {error && (
+      <FieldHint tone="error" className="mt-1" role="alert">
+        {error}
+      </FieldHint>
+    )}
+    </>
   );
 }

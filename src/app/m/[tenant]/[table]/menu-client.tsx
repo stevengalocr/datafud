@@ -95,7 +95,8 @@ export function MenuClient({
     return () => { document.body.style.overflow = ""; };
   }, [cartOpen]);
 
-  const add = (id: string) => setCart((c) => ({ ...c, [id]: (c[id] ?? 0) + 1 }));
+  // Tope de 20 por platillo: el mismo que valida place_order (S4).
+  const add = (id: string) => setCart((c) => ({ ...c, [id]: Math.min(20, (c[id] ?? 0) + 1) }));
   const remove = (id: string) =>
     setCart((c) => {
       const n = (c[id] ?? 0) - 1;

@@ -1,10 +1,12 @@
 "use client";
 
 import { useState, useTransition } from "react";
+import { useFormStatus } from "react-dom";
 import {
   createCategory,
   createProduct,
   deleteCategory,
+  updateCategory,
   deleteProduct,
   toggleProductAvailability,
 } from "../actions";
@@ -18,9 +20,9 @@ import { formatMoney } from "@/lib/currency/format";
 import { t } from "@/lib/i18n/dictionaries";
 import type { Category, Product } from "@/lib/supabase/types";
 
-// Mensaje genérico cuando una acción falla. Las acciones del panel todavía no devuelven el motivo
-// (S10); el caso más común es haber llegado al límite de platillos o categorías del plan.
-const FAIL = "No se pudo guardar. Si llegaste al límite de tu plan, escribinos para ampliarlo.";
+// Las acciones devuelven el motivo cuando fallan (S10). Esto solo cubre un fallo de red.
+const FAIL = "No se pudo guardar. Revisá tu conexión y probá de nuevo.";
+type Res = { ok: boolean; error?: string } | undefined | void;
 
 export function MenuManager({
   categories,
@@ -35,17 +37,24 @@ export function MenuManager({
   const [showCat, setShowCat] = useState(false);
   const [showProd, setShowProd] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [editing, setEditing] = useState<string | null>(null);
 
-  const run = (fn: () => Promise<unknown>) => {
+  // Corre una acción y muestra su error, si lo hay. Devuelve si salió bien.
+  const exec = async (fn: () => Promise<Res>) => {
     setError(null);
-    start(async () => {
-      try {
-        await fn();
-      } catch {
-        setError(FAIL);
+    try {
+      const r = await fn();
+      if (r && !r.ok) {
+        setError(r.error ?? FAIL);
+        return false;
       }
-    });
+      return true;
+    } catch {
+      setError(FAIL);
+      return false;
+    }
   };
+  const run = (fn: () => Promise<Res>) => start(async () => void (await exec(fn)));
 
   const catName = (c: Category) => t(c.name_i18n, "es");
   const productsIn = (id: string) => products.filter((p) => p.category_id === id).length;
@@ -80,13 +89,7 @@ export function MenuManager({
             <form
               id="form-categoria"
               action={async (fd) => {
-                setError(null);
-                try {
-                  await createCategory(fd);
-                  setShowCat(false);
-                } catch {
-                  setError(FAIL);
-                }
+                if (await exec(() => createCategory(fd))) setShowCat(false);
               }}
               className="grid gap-3 rounded-lg border border-stone-200 bg-cream-50 p-4 sm:grid-cols-3"
             >
@@ -103,9 +106,7 @@ export function MenuManager({
                 <Input id="cat_name_pt" name="name_pt" placeholder="Refeições" />
               </div>
               <div className="sm:col-span-3">
-                <Button type="submit" size="sm">
-                  Guardar categoría
-                </Button>
+                <SubmitButton>Guardar categoría</SubmitButton>
               </div>
             </form>
           )}
@@ -123,7 +124,15 @@ export function MenuManager({
                   key={c.id}
                   className="flex items-center gap-1 rounded-full border border-stone-200 bg-white py-1 pl-3.5 pr-1 text-sm text-brand-950"
                 >
-                  <span>{catName(c)}</span>
+                  <button
+                    type="button"
+                    onClick={() => setEditing(editing === c.id ? null : c.id)}
+                    className="cursor-pointer rounded-full py-1 underline-offset-4 hover:underline"
+                    aria-expanded={editing === c.id}
+                    aria-label={`Editar la categoría ${catName(c)}`}
+                  >
+                    {catName(c)}
+                  </button>
                   <button
                     type="button"
                     onClick={() => {
@@ -143,6 +152,44 @@ export function MenuManager({
               ))}
             </ul>
           )}
+
+          {editing && categories.some((c) => c.id === editing) && (() => {
+            const c = categories.find((x) => x.id === editing)!;
+            return (
+              <form
+                key={c.id}
+                action={async (fd) => {
+                  if (await exec(() => updateCategory(fd))) setEditing(null);
+                }}
+                className="grid gap-3 rounded-lg border border-stone-200 bg-cream-50 p-4 sm:grid-cols-4"
+                aria-label={`Editar la categoría ${catName(c)}`}
+              >
+                <input type="hidden" name="id" value={c.id} />
+                <div>
+                  <Label htmlFor="ecat_es">Nombre (español)</Label>
+                  <Input id="ecat_es" name="name_es" defaultValue={c.name_i18n?.es ?? ""} required maxLength={60} autoFocus />
+                </div>
+                <div>
+                  <Label htmlFor="ecat_en">Nombre (inglés)</Label>
+                  <Input id="ecat_en" name="name_en" defaultValue={c.name_i18n?.en ?? ""} maxLength={60} />
+                </div>
+                <div>
+                  <Label htmlFor="ecat_pt">Nombre (portugués)</Label>
+                  <Input id="ecat_pt" name="name_pt" defaultValue={c.name_i18n?.pt ?? ""} maxLength={60} />
+                </div>
+                <div>
+                  <Label htmlFor="ecat_ord">Orden en la carta</Label>
+                  <Input id="ecat_ord" name="sort_order" type="number" inputMode="numeric" min="0" max="999" step="1" defaultValue={c.sort_order ?? 0} />
+                </div>
+                <div className="flex gap-2 sm:col-span-4">
+                  <SubmitButton>Guardar cambios</SubmitButton>
+                  <Button type="button" size="sm" variant="ghost" onClick={() => setEditing(null)}>
+                    Cancelar
+                  </Button>
+                </div>
+              </form>
+            );
+          })()}
         </CardBody>
       </Card>
 
@@ -169,13 +216,7 @@ export function MenuManager({
             <form
               id="form-platillo"
               action={async (fd) => {
-                setError(null);
-                try {
-                  await createProduct(fd);
-                  setShowProd(false);
-                } catch {
-                  setError(FAIL);
-                }
+                if (await exec(() => createProduct(fd))) setShowProd(false);
               }}
               className="grid gap-3 rounded-lg border border-stone-200 bg-cream-50 p-4 sm:grid-cols-2"
             >
@@ -214,9 +255,7 @@ export function MenuManager({
                 <Textarea id="p_desc_es" name="description_es" rows={2} placeholder="Arroz, frijoles, ensalada y maduro" />
               </div>
               <div className="sm:col-span-2">
-                <Button type="submit" size="sm">
-                  Guardar platillo
-                </Button>
+                <SubmitButton>Guardar platillo</SubmitButton>
               </div>
             </form>
           )}
@@ -280,5 +319,15 @@ export function MenuManager({
         </CardBody>
       </Card>
     </div>
+  );
+}
+
+// Botón de envío que se bloquea mientras el formulario se guarda: evita el doble envío.
+function SubmitButton({ children }: { children: React.ReactNode }) {
+  const { pending } = useFormStatus();
+  return (
+    <Button type="submit" size="sm" disabled={pending}>
+      {pending ? "Guardando…" : children}
+    </Button>
   );
 }

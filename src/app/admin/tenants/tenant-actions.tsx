@@ -29,9 +29,10 @@ export function TenantStatusActions({
     setError(null);
     start(async () => {
       try {
-        await setTenantStatus(tenantId, next);
+        const res = await setTenantStatus(tenantId, next);
+        if (!res.ok) setError(res.error);
       } catch {
-        setError("No se pudo cambiar el estado. Probá de nuevo.");
+        setError("No se pudo cambiar el estado. Revisá tu conexión y probá de nuevo.");
       }
     });
   };

@@ -42,8 +42,8 @@ export function OrderBoard({
   if (orders.length === 0) {
     return (
       <EmptyState icon="receipt" title="Todavía no hay órdenes">
-        Cuando un cliente pida desde el QR de su mesa, la orden aparece acá. Recargá la página para
-        ver las nuevas.
+        Cuando un cliente pida desde el QR de su mesa, la orden aparece acá. El tablero se actualiza
+        solo cada 15 segundos.
       </EmptyState>
     );
   }
@@ -54,7 +54,8 @@ export function OrderBoard({
     setBusyId(id);
     start(async () => {
       try {
-        await updateOrderStatus(id, status);
+        const res = await updateOrderStatus(id, status);
+        if (!res.ok) setError(res.error);
       } catch {
         setError("No se pudo cambiar el estado de la orden. Probá de nuevo.");
       } finally {

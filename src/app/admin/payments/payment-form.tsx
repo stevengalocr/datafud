@@ -27,11 +27,15 @@ export function PaymentForm({ tenants }: { tenants: TenantOption[] }) {
         // La acción lanza si los datos no pasan la validación; antes el botón se quedaba en
         // "Registrando..." para siempre y no se decía nada.
         try {
-          await registerPayment(fd);
-          formRef.current?.reset();
-          setResult({ tone: "ok", text: "Pago registrado." });
+          const res = await registerPayment(fd);
+          if (res.ok) {
+            formRef.current?.reset();
+            setResult({ tone: "ok", text: "Pago registrado." });
+          } else {
+            setResult({ tone: "error", text: res.error });
+          }
         } catch {
-          setResult({ tone: "error", text: "No se pudo registrar el pago. Revisá el monto y las fechas." });
+          setResult({ tone: "error", text: "No se pudo registrar el pago. Revisá tu conexión y probá de nuevo." });
         } finally {
           setSaving(false);
         }
