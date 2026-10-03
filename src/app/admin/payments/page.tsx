@@ -95,7 +95,7 @@ export default async function PaymentsPage() {
                 </thead>
                 <tbody className="divide-y divide-stone-100">
                   {list.map((p) => (
-                    <tr key={p.id} className="hover:bg-cream-50">
+                    <tr key={p.id} className="hov:bg-cream-50">
                       <td className="px-5 py-3.5 font-medium text-brand-950">
                         {nameById.get(p.tenant_id) ?? "—"}
                       </td>

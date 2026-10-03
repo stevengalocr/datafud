@@ -4,6 +4,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
+import { useFormStatus } from "react-dom";
 import { cn } from "@/lib/utils/cn";
 import { logoutAction } from "@/app/(auth)/actions";
 import { Icon, type IconName } from "@/components/ui/icon";
@@ -38,10 +39,12 @@ function NavLinks({
                 onClick={onNavigate}
                 aria-current={active ? "page" : undefined}
                 className={cn(
-                  "flex min-h-11 items-center gap-3 rounded-lg px-3 text-sm font-medium transition-colors duration-150",
+                  // Se presiona como un botón (0.98, 160 ms). El cambio de color no se anima al
+                  // llegar a la página: el activo se pinta al instante, es estado, no adorno.
+                  "flex min-h-11 items-center gap-3 rounded-lg px-3 text-sm font-medium [-webkit-tap-highlight-color:transparent] transition-[transform,background-color,color] duration-[160ms] ease-out-expo active:scale-[0.98]",
                   active
-                    ? "bg-brand-600 text-cream-50"
-                    : "text-stone-700 hover:bg-cream-100 hover:text-brand-900"
+                    ? "bg-brand-600 text-cream-50 shadow-btn-primary"
+                    : "text-stone-700 hov:bg-cream-100 hov:text-brand-900 active:bg-cream-100"
                 )}
               >
                 <Icon
@@ -49,7 +52,7 @@ function NavLinks({
                   size={18}
                   className={cn("shrink-0", active ? "text-accent-300" : "text-stone-500")}
                 />
-                {item.label}
+                <span className="min-w-0 truncate">{item.label}</span>
               </Link>
             </li>
           );
@@ -80,14 +83,26 @@ function Brand({ brand, subtitle }: { brand: string; subtitle: string }) {
 function LogoutButton() {
   return (
     <form action={logoutAction} className="border-t border-stone-200 p-3">
+      <LogoutSubmit />
+    </form>
+  );
+}
+
+// Cerrar sesión tarda un viaje al servidor: sin estado, un segundo toque lo mandaba dos veces y
+// nada decía que estaba pasando.
+function LogoutSubmit() {
+  const { pending } = useFormStatus();
+  return (
+    <>
       <button
         type="submit"
-        className="group flex min-h-11 w-full cursor-pointer items-center gap-3 rounded-lg px-3 text-sm font-medium text-stone-700 transition-colors duration-150 hover:bg-rose-50 hover:text-rose-800"
+        disabled={pending}
+        className="group flex min-h-11 w-full cursor-pointer items-center gap-3 rounded-lg px-3 text-sm font-medium text-stone-700 [-webkit-tap-highlight-color:transparent] transition-[transform,background-color,color] duration-[160ms] ease-out-expo hov:bg-rose-50 hov:text-rose-800 active:scale-[0.98] disabled:cursor-progress disabled:opacity-70"
       >
-        <Icon name="logout" size={18} className="shrink-0 text-stone-500 group-hover:text-rose-700" />
-        Cerrar sesión
+        <Icon name="logout" size={18} className="shrink-0 text-stone-500 group-hov:text-rose-700" />
+        {pending ? "Cerrando sesión…" : "Cerrar sesión"}
       </button>
-    </form>
+    </>
   );
 }
 
@@ -113,11 +128,24 @@ export function AppShell({
     triggerRef.current?.focus();
   }, []);
 
-  // Panel abierto: Escape lo cierra, el foco entra al panel y la página de atrás no se desplaza.
+  // Panel abierto: Escape lo cierra, Tab no se escapa del panel, el foco entra al panel y la
+  // página de atrás no se desplaza.
   useEffect(() => {
     if (!open) return;
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") close();
+      if (e.key === "Escape") return close();
+      if (e.key !== "Tab" || !panelRef.current) return;
+      const items = panelRef.current.querySelectorAll<HTMLElement>("a[href],button:not([disabled])");
+      if (items.length === 0) return;
+      const first = items[0];
+      const last = items[items.length - 1];
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
     };
     document.addEventListener("keydown", onKey);
     const prevOverflow = document.body.style.overflow;
@@ -148,7 +176,7 @@ export function AppShell({
       </aside>
 
       {/* Barra superior móvil */}
-      <header className="sticky top-0 z-40 flex h-16 items-center justify-between gap-3 border-b border-stone-200 bg-white px-4 lg:hidden">
+      <header className="sticky top-0 z-40 flex h-16 items-center justify-between gap-3 border-b border-stone-200 bg-white px-4 shadow-panel-xs lg:hidden">
         <Brand brand={brand} subtitle={subtitle} />
         <button
           ref={triggerRef}
@@ -157,7 +185,7 @@ export function AppShell({
           aria-label="Abrir menú"
           aria-expanded={open}
           aria-controls="menu-panel"
-          className="flex h-11 w-11 shrink-0 cursor-pointer items-center justify-center rounded-lg text-brand-900 hover:bg-cream-100"
+          className="flex h-11 w-11 shrink-0 cursor-pointer items-center justify-center rounded-lg text-brand-900 [-webkit-tap-highlight-color:transparent] transition-[transform,background-color] duration-[160ms] ease-out-expo hov:bg-cream-100 active:scale-[0.94] active:bg-cream-100"
         >
           <Icon name="menu" size={22} />
         </button>
@@ -166,14 +194,14 @@ export function AppShell({
       {/* Panel lateral móvil */}
       {open && (
         <div className="fixed inset-0 z-50 lg:hidden">
-          <div className="absolute inset-0 bg-brand-950/50" onClick={close} aria-hidden="true" />
+          <div className="scrim-in absolute inset-0 bg-brand-950/50" onClick={close} aria-hidden="true" />
           <div
             id="menu-panel"
             ref={panelRef}
             role="dialog"
             aria-modal="true"
             aria-label="Menú del panel"
-            className="drawer-in absolute left-0 top-0 flex h-full w-72 max-w-[85%] flex-col bg-white shadow-[8px_0_32px_-12px_rgba(10,26,19,0.35)]"
+            className="drawer-in absolute left-0 top-0 flex h-full w-72 max-w-[85%] flex-col bg-white shadow-panel-lg"
           >
             <div className="flex items-center justify-between gap-3 border-b border-stone-200 px-4 py-3.5">
               <Brand brand={brand} subtitle={subtitle} />
@@ -181,7 +209,7 @@ export function AppShell({
                 type="button"
                 onClick={close}
                 aria-label="Cerrar menú"
-                className="flex h-11 w-11 shrink-0 cursor-pointer items-center justify-center rounded-lg text-stone-700 hover:bg-cream-100"
+                className="flex h-11 w-11 shrink-0 cursor-pointer items-center justify-center rounded-lg text-stone-700 [-webkit-tap-highlight-color:transparent] transition-[transform,background-color] duration-[160ms] ease-out-expo hov:bg-cream-100 active:scale-[0.94] active:bg-cream-100"
               >
                 <Icon name="x" size={20} />
               </button>
@@ -193,7 +221,15 @@ export function AppShell({
       )}
 
       <main id="contenido" tabIndex={-1} className="min-w-0 flex-1 px-4 py-6 focus:outline-none sm:px-6 lg:px-10 lg:py-10">
-        <div className="mx-auto w-full max-w-6xl">{children}</div>
+        {/* `key` por ruta: la entrada corre al cambiar de sección, no cuando una acción refresca
+            los datos de la misma página. Solo transform (6 px), ver globals.css.
+            `overflow-wrap: anywhere` es la red de seguridad de todo el panel: un nombre, una
+            nota o un correo sin espacios parte línea en vez de ensanchar la página (en 375 px
+            una nota de 90 letras empujaba 351 px de scroll lateral). Solo parte donde no hay
+            otra salida; lo que no debe partirse (estados, fechas) lleva `whitespace-nowrap`. */}
+        <div key={pathname} className="panel-enter mx-auto w-full max-w-6xl [overflow-wrap:anywhere]">
+          {children}
+        </div>
       </main>
     </div>
   );

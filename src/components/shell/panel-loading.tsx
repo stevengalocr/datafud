@@ -14,13 +14,13 @@ export function PanelLoading() {
       <Bar className="mb-8 h-4 w-80 max-w-full" />
       <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
         {[0, 1, 2, 3].map((i) => (
-          <div key={i} className="rounded-xl border border-stone-200 bg-white px-5 py-4">
+          <div key={i} className="rounded-xl border border-stone-200 bg-white px-5 py-4 shadow-panel-sm">
             <Bar className="h-4 w-20" />
             <Bar className="mt-3 h-7 w-12" />
           </div>
         ))}
       </div>
-      <div className="mt-6 rounded-xl border border-stone-200 bg-white p-5">
+      <div className="mt-6 rounded-xl border border-stone-200 bg-white p-5 shadow-panel-sm">
         <Bar className="h-4 w-40" />
         {[0, 1, 2].map((i) => (
           <Bar key={i} className="mt-4 h-10 w-full" />

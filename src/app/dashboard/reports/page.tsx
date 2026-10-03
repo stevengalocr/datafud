@@ -69,9 +69,9 @@ export default async function ReportsPage() {
         description="Lo vendido en los últimos 14 días con ventas, el ticket promedio y los platillos que más salen."
       />
 
-      <section aria-label="Cifras de los últimos 14 días" className="grid gap-3 sm:grid-cols-3 sm:gap-4">
+      <section aria-label="Cifras de los últimos 14 días" className="panel-stagger grid gap-3 sm:grid-cols-3 sm:gap-4">
         <StatCard label="Vendido (14 días)" value={formatMoney(totalRevenue, currency)} icon="wallet" accent="accent" />
-        <StatCard label="Órdenes (14 días)" value={String(totalOrders)} icon="receipt" />
+        <StatCard label="Órdenes (14 días)" value={totalOrders.toLocaleString("es-CR")} icon="receipt" />
         <StatCard label="Ticket promedio" value={formatMoney(avgTicket, currency)} icon="chart" accent="slate" />
       </section>
 
@@ -103,7 +103,7 @@ export default async function ReportsPage() {
                     {dailyRows.map((r) => (
                       <tr key={r.day}>
                         <td className="py-2.5 text-stone-800">{formatDate(r.day)}</td>
-                        <td className="py-2.5 text-right text-stone-700 tabular-nums">{r.orders_count}</td>
+                        <td className="py-2.5 text-right text-stone-700 tabular-nums">{Number(r.orders_count).toLocaleString("es-CR")}</td>
                         <td className="py-2.5 text-right font-semibold text-brand-950 tabular-nums">
                           {formatMoney(Number(r.revenue), r.currency_code ?? currency)}
                         </td>
@@ -127,7 +127,7 @@ export default async function ReportsPage() {
                   {topRows.map((r) => (
                     <li key={r.name}>
                       <div className="mb-1.5 flex justify-between gap-3 text-sm">
-                        <span className="font-medium text-brand-950">{r.name}</span>
+                        <span className="min-w-0 font-medium text-brand-950 [overflow-wrap:anywhere]">{r.name}</span>
                         <span className="shrink-0 text-stone-600 tabular-nums">{r.units} u.</span>
                       </div>
                       <div className="h-2 w-full overflow-hidden rounded-full bg-cream-200" aria-hidden="true">

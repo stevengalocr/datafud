@@ -19,11 +19,12 @@ export function EmptyState({
   return (
     <div
       className={cn(
+        // Hundido, no elevado: borde punteado sobre el crema y sin sombra. Es un hueco a llenar.
         "qr-grid flex flex-col items-start gap-4 rounded-xl border border-dashed border-stone-300 bg-cream-50 px-5 py-8 sm:flex-row sm:items-center sm:px-6",
         className
       )}
     >
-      <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-stone-200 bg-white text-brand-600">
+      <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-stone-200 bg-white text-brand-600 shadow-panel-xs">
         <Icon name={icon} size={20} />
       </span>
       <div className="min-w-0 flex-1">

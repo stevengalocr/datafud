@@ -35,11 +35,11 @@ export default async function PlansPage() {
           Si esta lista está vacía, falta correr el esquema en este proyecto de Supabase.
         </EmptyState>
       ) : (
-        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+        <div className="panel-stagger grid gap-4 md:grid-cols-2 xl:grid-cols-3">
           {plans.map((p) => (
             <Card key={p.id} className="p-5">
-              <div className="flex items-baseline justify-between gap-3">
-                <h2 className="font-display text-xl text-brand-900">{p.name}</h2>
+              <div className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
+                <h2 className="min-w-0 font-display text-xl text-brand-900 [overflow-wrap:anywhere]">{p.name}</h2>
                 <p className="whitespace-nowrap text-xl font-semibold text-brand-700 tabular-nums">
                   {formatUsdAmount(Number(p.price_usd))}
                   <span className="text-sm font-normal text-stone-600">/mes</span>
