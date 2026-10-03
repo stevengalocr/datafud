@@ -3,8 +3,8 @@
 import { useState } from "react";
 import { updateSettings } from "../actions";
 import { Button } from "@/components/ui/button";
-import { Card, CardBody, CardHeader } from "@/components/ui/card";
-import { Input, Label, Select } from "@/components/ui/input";
+import { Card, CardBody, CardHeader, CardTitle } from "@/components/ui/card";
+import { FieldHint, Input, Label, Select } from "@/components/ui/input";
 import { LANG_LABEL } from "@/lib/constants";
 import type { Currency, Lang, TenantSettings } from "@/lib/supabase/types";
 
@@ -17,26 +17,32 @@ export function SettingsForm({
   settings: TenantSettings | null;
   currencies: Currency[];
 }) {
-  const [saved, setSaved] = useState(false);
+  const [status, setStatus] = useState<"idle" | "saving" | "saved" | "error">("idle");
   const theme = settings?.theme ?? {};
   const enabled = settings?.enabled_languages ?? ["es"];
 
   return (
     <form
       action={async (fd) => {
-        await updateSettings(fd);
-        setSaved(true);
-        setTimeout(() => setSaved(false), 2500);
+        setStatus("saving");
+        try {
+          await updateSettings(fd);
+          setStatus("saved");
+          setTimeout(() => setStatus("idle"), 4000);
+        } catch {
+          setStatus("error");
+        }
       }}
       className="space-y-6"
+      aria-busy={status === "saving"}
     >
       <Card>
         <CardHeader>
-          <p className="font-medium text-slate-800">Datos del negocio</p>
+          <CardTitle>Datos del negocio</CardTitle>
         </CardHeader>
         <CardBody className="grid gap-4 sm:grid-cols-2">
           <div>
-            <Label htmlFor="restaurant_name">Nombre</Label>
+            <Label htmlFor="restaurant_name">Nombre del local</Label>
             <Input
               id="restaurant_name"
               name="restaurant_name"
@@ -45,22 +51,22 @@ export function SettingsForm({
           </div>
           <div>
             <Label htmlFor="phone">Teléfono</Label>
-            <Input id="phone" name="phone" defaultValue={settings?.phone ?? ""} />
+            <Input id="phone" name="phone" type="tel" inputMode="tel" autoComplete="tel" defaultValue={settings?.phone ?? ""} />
           </div>
           <div className="sm:col-span-2">
             <Label htmlFor="address">Dirección</Label>
             <Input id="address" name="address" defaultValue={settings?.address ?? ""} />
           </div>
           <div className="sm:col-span-2">
-            <Label htmlFor="logo_url">URL del logo</Label>
-            <Input id="logo_url" name="logo_url" defaultValue={settings?.logo_url ?? ""} placeholder="https://..." />
+            <Label htmlFor="logo_url">Logo (enlace a la imagen)</Label>
+            <Input id="logo_url" name="logo_url" type="url" inputMode="url" defaultValue={settings?.logo_url ?? ""} placeholder="https://…" />
           </div>
         </CardBody>
       </Card>
 
       <Card>
         <CardHeader>
-          <p className="font-medium text-slate-800">Moneda e idiomas</p>
+          <CardTitle>Moneda e idiomas</CardTitle>
         </CardHeader>
         <CardBody className="grid gap-4 sm:grid-cols-2">
           <div>
@@ -91,39 +97,39 @@ export function SettingsForm({
               ))}
             </Select>
           </div>
-          <div className="sm:col-span-2">
-            <Label>Idiomas habilitados</Label>
-            <div className="flex gap-4">
+          <fieldset className="sm:col-span-2">
+            <legend className="mb-1.5 block text-sm font-medium text-stone-800">Idiomas de la carta</legend>
+            <div className="flex flex-wrap gap-x-6 gap-y-1">
               {LANGS.map((l) => (
-                <label key={l} className="flex items-center gap-2 text-sm text-slate-700">
+                <label key={l} className="flex min-h-11 cursor-pointer items-center gap-2.5 text-sm text-stone-800">
                   <input
                     type="checkbox"
                     name="enabled_languages"
                     value={l}
                     defaultChecked={enabled.includes(l)}
-                    className="h-4 w-4 rounded border-slate-300 text-brand-500"
+                    className="h-5 w-5 cursor-pointer rounded border-stone-300 accent-brand-600"
                   />
                   {LANG_LABEL[l]}
                 </label>
               ))}
             </div>
-          </div>
+          </fieldset>
         </CardBody>
       </Card>
 
       <Card>
         <CardHeader>
-          <p className="font-medium text-slate-800">Colores del menú</p>
+          <CardTitle>Colores de la carta</CardTitle>
         </CardHeader>
         <CardBody className="grid gap-4 sm:grid-cols-2">
           <div>
-            <Label htmlFor="theme_primary">Color primario</Label>
+            <Label htmlFor="theme_primary">Color principal</Label>
             <input
               id="theme_primary"
               name="theme_primary"
               type="color"
               defaultValue={theme.primary ?? "#22503a"}
-              className="h-10 w-full rounded-lg border border-slate-200"
+              className="h-11 w-full cursor-pointer rounded-lg border border-stone-300 bg-white p-1"
             />
           </div>
           <div>
@@ -133,17 +139,26 @@ export function SettingsForm({
               name="theme_accent"
               type="color"
               defaultValue={theme.accent ?? "#b8923f"}
-              className="h-10 w-full rounded-lg border border-slate-200"
+              className="h-11 w-full cursor-pointer rounded-lg border border-stone-300 bg-white p-1"
             />
           </div>
         </CardBody>
       </Card>
 
-      <div className="flex items-center gap-3">
-        <Button type="submit">Guardar configuración</Button>
-        {saved && (
-          <span className="text-sm font-medium text-brand-600">¡Guardado!</span>
-        )}
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+        <Button type="submit" disabled={status === "saving"} className="w-full sm:w-auto">
+          {status === "saving" ? "Guardando…" : "Guardar configuración"}
+        </Button>
+        <div aria-live="polite" className="min-h-5">
+          {status === "saved" && (
+            <FieldHint tone="success" className="font-medium">Cambios guardados.</FieldHint>
+          )}
+          {status === "error" && (
+            <FieldHint tone="error" className="font-medium">
+              No se pudieron guardar los cambios. Probá de nuevo.
+            </FieldHint>
+          )}
+        </div>
       </div>
     </form>
   );

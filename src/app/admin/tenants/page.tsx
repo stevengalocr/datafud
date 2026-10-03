@@ -1,8 +1,10 @@
 import { createClient } from "@/lib/supabase/server";
 import { PageHeader } from "@/components/shell/page-header";
+import { EmptyState } from "@/components/shell/empty-state";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { TENANT_STATUS_COLOR, TENANT_STATUS_LABEL } from "@/lib/constants";
+import { formatDate } from "@/lib/dates";
 import { TenantStatusActions } from "./tenant-actions";
 import type { Plan, Tenant } from "@/lib/supabase/types";
 
@@ -18,62 +20,91 @@ export default async function TenantsPage() {
 
   const list = (tenants as Tenant[]) ?? [];
   const planById = new Map((plans as Plan[] | null)?.map((p) => [p.id, p]) ?? []);
+  const planName = (t: Tenant) => (t.plan_id ? planById.get(t.plan_id)?.name ?? "—" : "Sin plan");
 
   return (
     <div>
       <PageHeader
+        eyebrow="Administración"
         title="Restaurantes"
-        description="Aprueba, suspende o cancela el acceso de cada cliente."
+        description="Aprobá, suspendé o cancelá el acceso de cada local."
       />
 
-      <Card className="overflow-hidden">
-        <div className="overflow-x-auto">
-        <table className="w-full min-w-[680px] text-sm">
-          <thead className="bg-slate-50 text-left text-xs uppercase tracking-wide text-slate-500">
-            <tr>
-              <th className="px-5 py-3 font-medium">Negocio</th>
-              <th className="px-5 py-3 font-medium">Plan</th>
-              <th className="px-5 py-3 font-medium">Estado</th>
-              <th className="px-5 py-3 font-medium">Registro</th>
-              <th className="px-5 py-3 text-right font-medium">Acciones</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-slate-100">
+      {list.length === 0 ? (
+        <EmptyState icon="store" title="Todavía no hay restaurantes">
+          Cada local que se dé de alta aparece acá con su plan y su estado, listo para aprobarlo.
+        </EmptyState>
+      ) : (
+        <>
+          {/* Teléfono: una ficha por local, sin tabla que obligue a desplazarse de lado. */}
+          <ul className="space-y-3 md:hidden">
             {list.map((t) => (
-              <tr key={t.id} className="hover:bg-slate-50/60">
-                <td className="px-5 py-3">
-                  <p className="font-medium text-slate-900">{t.name}</p>
-                  <p className="text-xs text-slate-400">
-                    {t.owner_email ?? "—"} · /{t.slug}
+              <li key={t.id}>
+                <Card className="p-4">
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="min-w-0">
+                      <p className="break-words font-semibold text-brand-950">{t.name}</p>
+                      <p className="mt-0.5 break-all text-xs text-stone-600">
+                        {t.owner_email ?? "Sin correo"} · /{t.slug}
+                      </p>
+                    </div>
+                    <Badge className={TENANT_STATUS_COLOR[t.status]}>
+                      {TENANT_STATUS_LABEL[t.status]}
+                    </Badge>
+                  </div>
+                  <p className="mt-3 text-sm text-stone-700">
+                    {planName(t)} · desde el {formatDate(t.created_at)}
                   </p>
-                </td>
-                <td className="px-5 py-3 text-slate-600">
-                  {t.plan_id ? planById.get(t.plan_id)?.name ?? "—" : "—"}
-                </td>
-                <td className="px-5 py-3">
-                  <Badge className={TENANT_STATUS_COLOR[t.status]}>
-                    {TENANT_STATUS_LABEL[t.status]}
-                  </Badge>
-                </td>
-                <td className="px-5 py-3 text-slate-500">
-                  {new Date(t.created_at).toLocaleDateString("es")}
-                </td>
-                <td className="px-5 py-3">
-                  <TenantStatusActions tenantId={t.id} status={t.status} />
-                </td>
-              </tr>
+                  <div className="mt-3 border-t border-stone-100 pt-3">
+                    <TenantStatusActions tenantId={t.id} tenantName={t.name} status={t.status} />
+                  </div>
+                </Card>
+              </li>
             ))}
-            {list.length === 0 && (
-              <tr>
-                <td colSpan={5} className="px-5 py-10 text-center text-slate-400">
-                  Aún no hay restaurantes registrados.
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
-        </div>
-      </Card>
+          </ul>
+
+          <Card className="hidden overflow-hidden md:block">
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm">
+                <caption className="sr-only">Restaurantes con su plan, estado y acciones</caption>
+                <thead className="bg-cream-100 text-left text-xs uppercase tracking-wide text-stone-600">
+                  <tr>
+                    <th scope="col" className="px-5 py-3 font-semibold">Negocio</th>
+                    <th scope="col" className="px-5 py-3 font-semibold">Plan</th>
+                    <th scope="col" className="px-5 py-3 font-semibold">Estado</th>
+                    <th scope="col" className="px-5 py-3 font-semibold">Alta</th>
+                    <th scope="col" className="px-5 py-3 text-right font-semibold">Acciones</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-stone-100">
+                  {list.map((t) => (
+                    <tr key={t.id} className="align-top hover:bg-cream-50">
+                      <td className="max-w-[22rem] px-5 py-3.5">
+                        <p className="font-medium text-brand-950">{t.name}</p>
+                        <p className="break-all text-xs text-stone-600">
+                          {t.owner_email ?? "Sin correo"} · /{t.slug}
+                        </p>
+                      </td>
+                      <td className="px-5 py-3.5 text-stone-700">{planName(t)}</td>
+                      <td className="px-5 py-3.5">
+                        <Badge className={TENANT_STATUS_COLOR[t.status]}>
+                          {TENANT_STATUS_LABEL[t.status]}
+                        </Badge>
+                      </td>
+                      <td className="whitespace-nowrap px-5 py-3.5 text-stone-600">
+                        {formatDate(t.created_at)}
+                      </td>
+                      <td className="px-5 py-3">
+                        <TenantStatusActions tenantId={t.id} tenantName={t.name} status={t.status} />
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </Card>
+        </>
+      )}
     </div>
   );
 }

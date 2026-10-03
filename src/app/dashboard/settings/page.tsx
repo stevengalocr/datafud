@@ -18,7 +18,7 @@ export default async function SettingsPage() {
     <div>
       <PageHeader
         title="Configuración"
-        description="Personaliza tu negocio: moneda, idiomas, branding y colores."
+        description="Los datos de tu local, la moneda, los idiomas y los colores de tu carta."
       />
       <SettingsForm
         settings={settings}

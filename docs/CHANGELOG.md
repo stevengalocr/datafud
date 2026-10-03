@@ -7,6 +7,32 @@ Todas las versiones notables del proyecto. Formato basado en
 
 ## [Unreleased]
 
+### Design — Paneles con sesión y pantallas de acceso (2026-10-03)
+- **La entrada privada se podía usar a ciegas:** lo que se escribía en correo y contraseña era
+  blanco sobre blanco y las etiquetas tenían contraste 1.6:1 (`cn` no resuelve conflictos de
+  Tailwind y el `bg-white` del Input ganaba). Ahora comparte el marco de `/login`.
+- **`/login` con la marca:** crema, serif, retícula QR, voseo ("Ingresá a tu panel"),
+  autocompletado y error anunciado; la ayuda va por WhatsApp (D-039). Sale el pendiente
+  «re-brandear /login».
+- **Paneles en la paleta de DataFud** (crema/verde/stone en vez de slate; estados de orden, local
+  y pago sin azul, violeta ni esmeralda). Nav activa sólida con `aria-current`, panel lateral
+  móvil accesible (Escape, foco, sin `opacity: 0` inicial), enlace "Saltar al contenido",
+  contenido a `max-w-6xl`. Cifras en la sans tabular: en Young Serif el "0" se leía "O".
+- **Estados vacíos que enseñan qué hacer** en Resumen, Restaurantes, Pagos, Cargos, Planes,
+  Menú, Órdenes, Mesas y Reportes; `error.tsx` (con el código del error) y `loading.tsx` en
+  `/admin` y `/dashboard`.
+- **Acciones seguras:** confirmación antes de suspender o cancelar un local, eliminar una
+  categoría, un platillo, una mesa (su QR impreso deja de servir) o cancelar una orden; los
+  formularios avisan si la acción falla en vez de quedarse en "Registrando..." para siempre.
+- **Teléfono:** fichas en vez de tablas anchas, botones de 40-44 px, campos de 16 px (sin zoom
+  en iOS) y sin desborde horizontal en Mesas.
+- **Copy honesto y en voseo:** Órdenes ya no dice "en tiempo real" (las nuevas aparecen al
+  recargar); estados de pago en español ("Pagado", no "paid"); las cifras de Cargos salen de
+  `PRICING`; los botones de orden dicen la acción ("Empezar a preparar", "Marcar lista").
+- **Fechas en la hora de Costa Rica** (`src/lib/dates.ts`): en Vercel el servidor está en UTC y
+  una orden de las 8 p. m. se mostraba del día siguiente; "Órdenes hoy" usa el día local.
+- Informe: `docs/plans/2026-10-03-auditoria-paneles.md`.
+
 ### Security — Backend listo para encender (2026-10-03)
 - **S1 cerrado en el esquema.** Las tres vistas de reportes llevan `security_invoker = true` dentro
   del `create`, así que el RLS de `orders` y `order_items` filtra por negocio. Reportes además

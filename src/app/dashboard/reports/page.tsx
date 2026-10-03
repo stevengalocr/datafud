@@ -1,8 +1,11 @@
 import { getTenantContext } from "@/lib/auth/tenant-context";
 import { createClient } from "@/lib/supabase/server";
 import { PageHeader } from "@/components/shell/page-header";
-import { Card, CardBody, CardHeader } from "@/components/ui/card";
+import { StatCard } from "@/components/shell/stat-card";
+import { EmptyState } from "@/components/shell/empty-state";
+import { Card, CardBody, CardHeader, CardTitle } from "@/components/ui/card";
 import { formatMoney } from "@/lib/currency/format";
+import { formatDate } from "@/lib/dates";
 
 export const dynamic = "force-dynamic";
 
@@ -57,93 +60,90 @@ export default async function ReportsPage() {
   const totalOrders = dailyRows.reduce((s, r) => s + Number(r.orders_count), 0);
   const avgTicket = totalOrders ? totalRevenue / totalOrders : 0;
 
+  const hasData = dailyRows.length > 0 || topRows.length > 0;
+
   return (
     <div>
       <PageHeader
         title="Reportes"
-        description="Platos del día, montos vendidos y ticket promedio."
+        description="Lo vendido en los últimos 14 días con ventas, el ticket promedio y los platillos que más salen."
       />
 
-      <div className="grid gap-4 sm:grid-cols-3">
-        <Stat label="Ingresos (14 días)" value={formatMoney(totalRevenue, currency)} />
-        <Stat label="Órdenes (14 días)" value={String(totalOrders)} />
-        <Stat label="Ticket promedio" value={formatMoney(avgTicket, currency)} />
-      </div>
+      <section aria-label="Cifras de los últimos 14 días" className="grid gap-3 sm:grid-cols-3 sm:gap-4">
+        <StatCard label="Vendido (14 días)" value={formatMoney(totalRevenue, currency)} icon="wallet" accent="accent" />
+        <StatCard label="Órdenes (14 días)" value={String(totalOrders)} icon="receipt" />
+        <StatCard label="Ticket promedio" value={formatMoney(avgTicket, currency)} icon="chart" accent="slate" />
+      </section>
 
-      <div className="mt-6 grid gap-6 lg:grid-cols-2">
-        <Card>
-          <CardHeader>
-            <p className="font-medium text-slate-800">Ventas por día</p>
-          </CardHeader>
-          <CardBody>
-            {dailyRows.length === 0 ? (
-              <p className="text-sm text-slate-400">Aún no hay ventas registradas.</p>
-            ) : (
-              <table className="w-full text-sm">
-                <thead className="text-left text-xs uppercase text-slate-500">
-                  <tr>
-                    <th className="py-2 font-medium">Día</th>
-                    <th className="py-2 font-medium">Órdenes</th>
-                    <th className="py-2 text-right font-medium">Vendido</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-slate-100">
-                  {dailyRows.map((r) => (
-                    <tr key={r.day}>
-                      <td className="py-2 text-slate-700">
-                        {new Date(r.day).toLocaleDateString("es")}
-                      </td>
-                      <td className="py-2 text-slate-600">{r.orders_count}</td>
-                      <td className="py-2 text-right font-medium text-slate-900">
-                        {formatMoney(Number(r.revenue), r.currency_code ?? currency)}
-                      </td>
+      {!hasData ? (
+        <EmptyState icon="chart" title="Todavía no hay ventas para mostrar" className="mt-6">
+          Los reportes se arman con las órdenes pagadas o entregadas. Cuando entren las primeras,
+          acá vas a ver las ventas de cada día y los platillos que más se piden.
+        </EmptyState>
+      ) : (
+        <div className="mt-6 grid gap-6 lg:grid-cols-2">
+          <Card>
+            <CardHeader>
+              <CardTitle>Ventas por día</CardTitle>
+            </CardHeader>
+            <CardBody className="pt-2">
+              {dailyRows.length === 0 ? (
+                <p className="text-sm text-stone-600">Todavía no hay ventas registradas.</p>
+              ) : (
+                <table className="w-full text-sm">
+                  <caption className="sr-only">Órdenes y monto vendido por día</caption>
+                  <thead className="text-left text-xs uppercase tracking-wide text-stone-600">
+                    <tr>
+                      <th scope="col" className="py-2 font-semibold">Día</th>
+                      <th scope="col" className="py-2 text-right font-semibold">Órdenes</th>
+                      <th scope="col" className="py-2 text-right font-semibold">Vendido</th>
                     </tr>
+                  </thead>
+                  <tbody className="divide-y divide-stone-100">
+                    {dailyRows.map((r) => (
+                      <tr key={r.day}>
+                        <td className="py-2.5 text-stone-800">{formatDate(r.day)}</td>
+                        <td className="py-2.5 text-right text-stone-700 tabular-nums">{r.orders_count}</td>
+                        <td className="py-2.5 text-right font-semibold text-brand-950 tabular-nums">
+                          {formatMoney(Number(r.revenue), r.currency_code ?? currency)}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              )}
+            </CardBody>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle>Platillos más vendidos</CardTitle>
+            </CardHeader>
+            <CardBody>
+              {topRows.length === 0 ? (
+                <p className="text-sm text-stone-600">Todavía no hay datos de platillos.</p>
+              ) : (
+                <ol className="space-y-4">
+                  {topRows.map((r) => (
+                    <li key={r.name}>
+                      <div className="mb-1.5 flex justify-between gap-3 text-sm">
+                        <span className="font-medium text-brand-950">{r.name}</span>
+                        <span className="shrink-0 text-stone-600 tabular-nums">{r.units} u.</span>
+                      </div>
+                      <div className="h-2 w-full overflow-hidden rounded-full bg-cream-200" aria-hidden="true">
+                        <div
+                          className="h-full rounded-full bg-brand-600"
+                          style={{ width: `${(r.units / maxUnits) * 100}%` }}
+                        />
+                      </div>
+                    </li>
                   ))}
-                </tbody>
-              </table>
-            )}
-          </CardBody>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <p className="font-medium text-slate-800">Platos más vendidos</p>
-          </CardHeader>
-          <CardBody>
-            {topRows.length === 0 ? (
-              <p className="text-sm text-slate-400">Aún no hay datos de platillos.</p>
-            ) : (
-              <ul className="space-y-3">
-                {topRows.map((r) => (
-                  <li key={r.name}>
-                    <div className="mb-1 flex justify-between text-sm">
-                      <span className="font-medium text-slate-800">{r.name}</span>
-                      <span className="text-slate-500">{r.units} uds.</span>
-                    </div>
-                    <div className="h-2 w-full overflow-hidden rounded-full bg-slate-100">
-                      <div
-                        className="h-full rounded-full bg-brand-500"
-                        style={{ width: `${(r.units / maxUnits) * 100}%` }}
-                      />
-                    </div>
-                  </li>
-                ))}
-              </ul>
-            )}
-          </CardBody>
-        </Card>
-      </div>
+                </ol>
+              )}
+            </CardBody>
+          </Card>
+        </div>
+      )}
     </div>
-  );
-}
-
-function Stat({ label, value }: { label: string; value: string }) {
-  return (
-    <Card>
-      <CardBody>
-        <p className="text-sm text-slate-500">{label}</p>
-        <p className="mt-1 text-2xl font-bold text-slate-900">{value}</p>
-      </CardBody>
-    </Card>
   );
 }

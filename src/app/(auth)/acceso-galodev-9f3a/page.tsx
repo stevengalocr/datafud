@@ -9,7 +9,11 @@ import { useActionState } from "react";
 import { loginAction, type ActionState } from "../actions";
 import { Button } from "@/components/ui/button";
 import { Input, Label } from "@/components/ui/input";
+import { AuthError, AuthFrame } from "@/components/shell/auth-frame";
 
+// Misma familia visual que /login (antes: tarjeta azul noche con los campos en blanco sobre
+// blanco, porque `cn` no resuelve conflictos y `bg-white` del Input ganaba a `bg-slate-800`).
+// Sin enlace a WhatsApp ni a la landing: es una puerta interna. El logo tampoco enlaza.
 export default function OwnerAccessPage() {
   const [state, formAction, pending] = useActionState<ActionState, FormData>(
     loginAction,
@@ -17,52 +21,38 @@ export default function OwnerAccessPage() {
   );
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-slate-950 px-5">
-      <div className="w-full max-w-sm">
-        <div className="rounded-2xl border border-white/10 bg-slate-900 p-8">
-          <h1 className="font-display text-2xl text-white">Acceso</h1>
-          <p className="mt-1 text-sm text-slate-400">Panel interno</p>
-
-          <form action={formAction} className="mt-6 space-y-4">
-            <div>
-              <Label htmlFor="email" className="text-slate-300">
-                Correo
-              </Label>
-              <Input
-                id="email"
-                name="email"
-                type="email"
-                autoComplete="off"
-                className="border-white/10 bg-slate-800 text-white placeholder:text-slate-500"
-                required
-              />
-            </div>
-            <div>
-              <Label htmlFor="password" className="text-slate-300">
-                Contraseña
-              </Label>
-              <Input
-                id="password"
-                name="password"
-                type="password"
-                autoComplete="off"
-                className="border-white/10 bg-slate-800 text-white placeholder:text-slate-500"
-                required
-              />
-            </div>
-
-            {state?.error && (
-              <p className="rounded-lg bg-rose-500/10 px-3 py-2 text-sm text-rose-300">
-                {state.error}
-              </p>
-            )}
-
-            <Button type="submit" size="lg" className="w-full" disabled={pending}>
-              {pending ? "Verificando..." : "Entrar"}
-            </Button>
-          </form>
+    <AuthFrame eyebrow="DataFud · Panel interno" title="Acceso de administración" logoHref={null}>
+      <form action={formAction} className="space-y-4" aria-busy={pending}>
+        <div>
+          <Label htmlFor="email">Correo</Label>
+          <Input
+            id="email"
+            name="email"
+            type="email"
+            inputMode="email"
+            autoComplete="off"
+            aria-invalid={state?.error ? true : undefined}
+            required
+          />
         </div>
-      </div>
-    </div>
+        <div>
+          <Label htmlFor="password">Contraseña</Label>
+          <Input
+            id="password"
+            name="password"
+            type="password"
+            autoComplete="off"
+            aria-invalid={state?.error ? true : undefined}
+            required
+          />
+        </div>
+
+        {state?.error && <AuthError>{state.error}</AuthError>}
+
+        <Button type="submit" size="lg" className="w-full" disabled={pending}>
+          {pending ? "Verificando…" : "Entrar"}
+        </Button>
+      </form>
+    </AuthFrame>
   );
 }

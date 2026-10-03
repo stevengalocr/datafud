@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
@@ -27,47 +27,51 @@ function NavLinks({
   onNavigate?: () => void;
 }) {
   return (
-    <nav className="flex-1 space-y-1 p-3">
-      {items.map((item) => {
-        const active = isActive(pathname, item.href);
-        return (
-          <Link
-            key={item.href}
-            href={item.href}
-            onClick={onNavigate}
-            className={cn(
-              "flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors duration-200",
-              active
-                ? "bg-brand-50 text-brand-700"
-                : "text-slate-600 hover:bg-cream-100 hover:text-slate-900"
-            )}
-          >
-            <Icon
-              name={item.icon}
-              size={18}
-              className={active ? "text-brand-600" : "text-slate-400"}
-            />
-            {item.label}
-          </Link>
-        );
-      })}
+    <nav aria-label="Secciones del panel" className="flex-1 overflow-y-auto p-3">
+      <ul className="space-y-1">
+        {items.map((item) => {
+          const active = isActive(pathname, item.href);
+          return (
+            <li key={item.href}>
+              <Link
+                href={item.href}
+                onClick={onNavigate}
+                aria-current={active ? "page" : undefined}
+                className={cn(
+                  "flex min-h-11 items-center gap-3 rounded-lg px-3 text-sm font-medium transition-colors duration-150",
+                  active
+                    ? "bg-brand-600 text-cream-50"
+                    : "text-stone-700 hover:bg-cream-100 hover:text-brand-900"
+                )}
+              >
+                <Icon
+                  name={item.icon}
+                  size={18}
+                  className={cn("shrink-0", active ? "text-accent-300" : "text-stone-500")}
+                />
+                {item.label}
+              </Link>
+            </li>
+          );
+        })}
+      </ul>
     </nav>
   );
 }
 
 function Brand({ brand, subtitle }: { brand: string; subtitle: string }) {
   return (
-    <div className="flex items-center gap-2.5">
+    <div className="flex min-w-0 items-center gap-3">
       <Image
         src="/icono-main.png"
-        alt={brand}
+        alt=""
         width={36}
         height={36}
-        className="h-9 w-9 rounded-lg"
+        className="h-9 w-9 shrink-0 rounded-lg"
       />
       <div className="min-w-0">
-        <p className="truncate font-bold leading-tight text-slate-900">{brand}</p>
-        <p className="truncate text-xs text-slate-500">{subtitle}</p>
+        <p className="truncate font-display text-[1.0625rem] leading-tight text-brand-900">{brand}</p>
+        <p className="truncate text-xs text-stone-600">{subtitle}</p>
       </div>
     </div>
   );
@@ -75,19 +79,19 @@ function Brand({ brand, subtitle }: { brand: string; subtitle: string }) {
 
 function LogoutButton() {
   return (
-    <form action={logoutAction} className="border-t border-stone-100 p-3">
+    <form action={logoutAction} className="border-t border-stone-200 p-3">
       <button
         type="submit"
-        className="flex w-full cursor-pointer items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-slate-600 transition-colors duration-200 hover:bg-rose-50 hover:text-rose-700"
+        className="group flex min-h-11 w-full cursor-pointer items-center gap-3 rounded-lg px-3 text-sm font-medium text-stone-700 transition-colors duration-150 hover:bg-rose-50 hover:text-rose-800"
       >
-        <Icon name="logout" size={18} className="text-slate-400" />
+        <Icon name="logout" size={18} className="shrink-0 text-stone-500 group-hover:text-rose-700" />
         Cerrar sesión
       </button>
     </form>
   );
 }
 
-// Shell responsivo: sidebar fijo en escritorio, barra + drawer en móvil.
+// Shell responsivo: sidebar fijo en escritorio, barra + panel lateral en el teléfono.
 export function AppShell({
   brand,
   subtitle,
@@ -101,12 +105,42 @@ export function AppShell({
 }) {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
+  const triggerRef = useRef<HTMLButtonElement>(null);
+  const panelRef = useRef<HTMLDivElement>(null);
+
+  const close = useCallback(() => {
+    setOpen(false);
+    triggerRef.current?.focus();
+  }, []);
+
+  // Panel abierto: Escape lo cierra, el foco entra al panel y la página de atrás no se desplaza.
+  useEffect(() => {
+    if (!open) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") close();
+    };
+    document.addEventListener("keydown", onKey);
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    panelRef.current?.querySelector<HTMLElement>("a,button")?.focus();
+    return () => {
+      document.removeEventListener("keydown", onKey);
+      document.body.style.overflow = prevOverflow;
+    };
+  }, [open, close]);
 
   return (
-    <div className="min-h-screen bg-cream-50 lg:flex">
+    <div className="min-h-screen bg-cream-50 text-stone-900 lg:flex">
+      <a
+        href="#contenido"
+        className="sr-only z-[60] rounded-lg bg-brand-600 px-4 py-2 text-sm font-semibold text-cream-50 focus:not-sr-only focus:fixed focus:left-3 focus:top-3"
+      >
+        Saltar al contenido
+      </a>
+
       {/* Sidebar escritorio */}
       <aside className="sticky top-0 hidden h-screen w-64 flex-shrink-0 flex-col border-r border-stone-200 bg-white lg:flex">
-        <div className="border-b border-stone-100 px-5 py-4">
+        <div className="border-b border-stone-200 px-5 py-4">
           <Brand brand={brand} subtitle={subtitle} />
         </div>
         <NavLinks items={items} pathname={pathname} />
@@ -114,37 +148,42 @@ export function AppShell({
       </aside>
 
       {/* Barra superior móvil */}
-      <header className="sticky top-0 z-40 flex h-14 items-center justify-between border-b border-stone-200 bg-white px-4 lg:hidden">
+      <header className="sticky top-0 z-40 flex h-16 items-center justify-between gap-3 border-b border-stone-200 bg-white px-4 lg:hidden">
         <Brand brand={brand} subtitle={subtitle} />
         <button
+          ref={triggerRef}
+          type="button"
           onClick={() => setOpen(true)}
           aria-label="Abrir menú"
-          className="flex h-10 w-10 items-center justify-center rounded-lg text-slate-600 hover:bg-cream-100"
+          aria-expanded={open}
+          aria-controls="menu-panel"
+          className="flex h-11 w-11 shrink-0 cursor-pointer items-center justify-center rounded-lg text-brand-900 hover:bg-cream-100"
         >
-          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round">
-            <path d="M4 7h16M4 12h16M4 17h16" />
-          </svg>
+          <Icon name="menu" size={22} />
         </button>
       </header>
 
-      {/* Drawer móvil */}
+      {/* Panel lateral móvil */}
       {open && (
         <div className="fixed inset-0 z-50 lg:hidden">
+          <div className="absolute inset-0 bg-brand-950/50" onClick={close} aria-hidden="true" />
           <div
-            className="absolute inset-0 bg-slate-900/40 animate-fade-in"
-            onClick={() => setOpen(false)}
-          />
-          <div className="absolute left-0 top-0 flex h-full w-72 max-w-[80%] flex-col bg-white shadow-xl animate-[fade-in_0.2s_ease]">
-            <div className="flex items-center justify-between border-b border-stone-100 px-5 py-4">
+            id="menu-panel"
+            ref={panelRef}
+            role="dialog"
+            aria-modal="true"
+            aria-label="Menú del panel"
+            className="drawer-in absolute left-0 top-0 flex h-full w-72 max-w-[85%] flex-col bg-white shadow-[8px_0_32px_-12px_rgba(10,26,19,0.35)]"
+          >
+            <div className="flex items-center justify-between gap-3 border-b border-stone-200 px-4 py-3.5">
               <Brand brand={brand} subtitle={subtitle} />
               <button
-                onClick={() => setOpen(false)}
+                type="button"
+                onClick={close}
                 aria-label="Cerrar menú"
-                className="flex h-9 w-9 items-center justify-center rounded-lg text-slate-500 hover:bg-cream-100"
+                className="flex h-11 w-11 shrink-0 cursor-pointer items-center justify-center rounded-lg text-stone-700 hover:bg-cream-100"
               >
-                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round">
-                  <path d="M6 6l12 12M18 6L6 18" />
-                </svg>
+                <Icon name="x" size={20} />
               </button>
             </div>
             <NavLinks items={items} pathname={pathname} onNavigate={() => setOpen(false)} />
@@ -153,7 +192,9 @@ export function AppShell({
         </div>
       )}
 
-      <main className="min-w-0 flex-1 p-4 sm:p-6 lg:p-8">{children}</main>
+      <main id="contenido" tabIndex={-1} className="min-w-0 flex-1 px-4 py-6 focus:outline-none sm:px-6 lg:px-10 lg:py-10">
+        <div className="mx-auto w-full max-w-6xl">{children}</div>
+      </main>
     </div>
   );
 }

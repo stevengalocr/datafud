@@ -1,32 +1,38 @@
 import { Icon, type IconName } from "@/components/ui/icon";
 import { cn } from "@/lib/utils/cn";
 
+// Cifra de resumen. El número va en la sans de la UI con cifras tabulares: en Young Serif el "0"
+// se leía como una "O" y, con todo en cero, el panel parecía decir "O restaurantes".
+// No es un enlace, así que no reacciona al pasar el mouse.
 export function StatCard({
   label,
   value,
   icon,
+  hint,
   accent = "brand",
 }: {
   label: string;
   value: string | number;
-  icon: IconName;
+  icon?: IconName;
+  hint?: string;
   accent?: "brand" | "accent" | "slate";
 }) {
   const tone = {
-    brand: "bg-brand-50 text-brand-600",
-    accent: "bg-accent-50 text-accent-600",
-    slate: "bg-stone-100 text-stone-600",
+    brand: "text-brand-600",
+    accent: "text-accent-700",
+    slate: "text-stone-500",
   }[accent];
 
   return (
-    <div className="rounded-2xl border border-stone-200/70 bg-white p-5 transition-shadow duration-200 hover:shadow-[0_8px_30px_rgba(34,80,58,0.06)]">
-      <div className="flex items-center justify-between">
-        <p className="text-sm text-slate-500">{label}</p>
-        <span className={cn("flex h-9 w-9 items-center justify-center rounded-xl", tone)}>
-          <Icon name={icon} size={18} />
-        </span>
-      </div>
-      <p className="mt-3 font-display text-3xl text-slate-900">{value}</p>
+    <div className="rounded-xl border border-stone-200 bg-white px-5 py-4">
+      <p className="flex items-center gap-2 text-sm font-medium text-stone-600">
+        {icon && <Icon name={icon} size={16} className={cn("shrink-0", tone)} />}
+        {label}
+      </p>
+      <p className="mt-2 text-[1.75rem] font-semibold leading-none tracking-tight text-brand-950 tabular-nums">
+        {value}
+      </p>
+      {hint && <p className="mt-2 text-xs text-stone-600">{hint}</p>}
     </div>
   );
 }

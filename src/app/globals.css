@@ -242,6 +242,17 @@ body {
   transition: transform 0.25s var(--ease-out);
 }
 
+/* Panel lateral del menú en el teléfono (paneles). Entra deslizándose 16 px, sin opacidad: si la
+   animación no corre, el panel ya está visible en su lugar. Sin `fill-mode` a propósito, para que
+   no quede una transformación puesta al terminar. */
+.drawer-in {
+  animation: drawer-in 0.2s var(--ease-out);
+}
+@keyframes drawer-in {
+  from { transform: translateX(-16px); }
+  to { transform: none; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
