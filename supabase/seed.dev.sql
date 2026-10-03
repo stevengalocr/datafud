@@ -106,7 +106,7 @@ begin
   select id into v_tenant_id from public.tenants where slug = 'demo';
   if v_tenant_id is null then
     insert into public.tenants (name, slug, status, plan_id, trial_ends_at, owner_email, owner_name)
-    values ('Soda Demo Datfud','demo','active', v_plan_estandar, now() + interval '30 days',
+    values ('Soda Demo DataFud','demo','active', v_plan_estandar, now() + interval '30 days',
             current_setting('seed.demo_email'),'Demo Owner')
     returning id into v_tenant_id;
   end if;
@@ -125,7 +125,7 @@ begin
       theme, restaurant_name)
   values (v_tenant_id, 'CRC', 'es', array['es','en'],
       jsonb_build_object('primary','#16a34a','accent','#f59e0b','admin_primary','#0ea5e9'),
-      'Soda Demo Datfud')
+      'Soda Demo DataFud')
   on conflict (tenant_id) do nothing;
 
   -- Categorías
