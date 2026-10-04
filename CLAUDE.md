@@ -8,7 +8,9 @@ Producción en Vercel (`datafud.com`, proyecto `datafud`). Versión en `package.
 primero", D-010).** Producción tiene Supabase (`us-east-1`) con `schema.sql` aplicado y tres
 variables en Vercel, solo en Production: `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`
 y `NEXT_PUBLIC_SITE_URL`. La `service_role` no se carga hasta que algo la use. `/login` y la ruta
-privada muestran el formulario; `/admin` y `/dashboard` piden sesión. El registro público de Auth
+privada muestran el formulario; `/admin` y `/dashboard` piden sesión. **Error abierto (P0):** en
+Vercel, las páginas de los paneles que crean el cliente de Supabase fallan («Esta página no
+cargó»); en local funcionan. Estado y pruebas en `docs/plans/2026-10-04-paneles-en-vercel.md`. El registro público de Auth
 está cerrado: los usuarios se crean a mano. La landing sigue siendo la fachada de venta (WhatsApp +
 formulario); `/register` redirige a `/#contacto` y el nav no ofrece "Ingresar" hasta la prueba de
 aislamiento con dos negocios (D-018). No prometas en la landing nada que no exista: ver `docs/MARKETING.md` §9.
