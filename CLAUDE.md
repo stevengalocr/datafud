@@ -8,9 +8,9 @@ Producción en Vercel (`datafud.com`, proyecto `datafud`). Versión en `package.
 primero", D-010).** Producción tiene Supabase (`us-east-1`) con `schema.sql` aplicado y tres
 variables en Vercel, solo en Production: `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`
 y `NEXT_PUBLIC_SITE_URL`. La `service_role` no se carga hasta que algo la use. `/login` y la ruta
-privada muestran el formulario; `/admin` y `/dashboard` piden sesión. **Error abierto (P0):** en
-Vercel, las páginas de los paneles que crean el cliente de Supabase fallan («Esta página no
-cargó»); en local funcionan. Estado y pruebas en `docs/plans/2026-10-04-paneles-en-vercel.md`. El registro público de Auth
+privada muestran el formulario; `/admin` y `/dashboard` piden sesión. El P0 de los paneles
+en Vercel («Esta página no cargó») quedó resuelto el 2026-10-03 (`6382835`): no era Supabase sino
+la imagen OG (ver Trampas y `docs/plans/2026-10-04-paneles-en-vercel.md`). El registro público de Auth
 está cerrado: los usuarios se crean a mano. La landing sigue siendo la fachada de venta (WhatsApp +
 formulario); `/register` redirige a `/#contacto` y el nav no ofrece "Ingresar" hasta la prueba de
 aislamiento con dos negocios (D-018). No prometas en la landing nada que no exista: ver `docs/MARKETING.md` §9.
@@ -132,6 +132,10 @@ etiqueta "Render ilustrativo" y todo QR dibujado decodifica a `https://datafud.c
   `next build` no lo limpia: al reemplazar una imagen con el **mismo nombre**, local sigue
   sirviendo la vieja. Borrar esa carpeta antes de verificar. Producción (Vercel) no tiene el
   problema.
+- **Ningún módulo que importen los metadatos hace E/S al importarse** (`opengraph-image`, `icon`,
+  layouts, `src/lib/og.tsx`). Next los importa en cada ruta dinámica y en Vercel esas funciones no
+  llevan los archivos leídos con `process.cwd()`: los metadatos fallan y el panel cae en
+  «Esta página no cargó» al navegar, sin log. Para reproducirlo: `next start <repo>` desde otra carpeta.
 - La imagen OG dibuja "₡" con la subfuente `src/lib/og-fonts/datafud-colon-400.ttf` (D-052). Pasar
   `fonts` a `ImageResponse` reemplaza la fuente por defecto: `src/lib/og.tsx` la vuelve a pasar.
 - "₡" sale de `public/fonts/datafud-colon-*.woff2` (D-052), primera en los stacks de Tailwind.

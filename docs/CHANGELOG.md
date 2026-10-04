@@ -7,6 +7,13 @@ Todas las versiones notables del proyecto. Formato basado en
 
 ## [Unreleased]
 
+### Fixed — paneles en Vercel (P0, 2026-10-03)
+- **«Esta página no cargó» al navegar por `/admin`, `/dashboard` y `/m/` en producción.** Causa:
+  `src/lib/og.tsx` leía las fuentes de la imagen OG con `readFileSync` al importarse; Next importa
+  los `opengraph-image` para armar los metadatos de toda ruta dinámica y en Vercel esos archivos no
+  viajan con la función. Ahora se leen al dibujar la imagen (en el build). No era Supabase.
+  Detalle y reproducción en `docs/plans/2026-10-04-paneles-en-vercel.md`.
+
 ### Changed — dependencias de Supabase (2026-10-03)
 - **`@supabase/ssr` 0.5.2 → 0.12.7 y `supabase-js` 2.107 → 2.117**, la combinación compatible (la
   0.12 pide 2.114 o más). **No resolvió** el error abierto de los paneles en Vercel: toda página de

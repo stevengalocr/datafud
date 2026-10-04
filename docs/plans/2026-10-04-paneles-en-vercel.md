@@ -1,7 +1,30 @@
-# Paneles con sesión que fallan en Vercel — estado del diagnóstico (2026-10-03, cierre del día)
+# Paneles con sesión que fallan en Vercel — RESUELTO (2026-10-03, noche)
 
-> Punto de partida para la próxima sesión. Todo lo de abajo está verificado con los logs de Vercel
-> (`get_runtime_logs`) o con pruebas locales; lo que no está verificado se marca como hipótesis.
+> **Causa raíz:** `src/lib/og.tsx` leía dos fuentes TTF con `readFileSync` **al importarse**.
+> Next importa cada `opengraph-image` (la raíz, las guías y los legales) para armar los metadatos
+> de **toda ruta dinámica** (`/admin/*`, `/dashboard/*`, `/m/*`). En Vercel la función de esas
+> rutas no lleva esos archivos, la lectura fallaba y los metadatos quedaban en error
+> (`{"metadata":"$undefined","error":"$Z"}` en el payload RSC). En la carga completa no se notaba;
+> al navegar con el menú lateral, el router lanzaba ese error dentro del segmento de la página y
+> caía en `error.tsx` («Esta página no cargó»), sin `digest` y sin log en el servidor.
+>
+> **Por qué parecía Supabase:** las páginas estáticas resuelven los metadatos en el build (donde
+> los archivos existen). `diag4` (sin imports) se prerenderizaba estática y cargaba; `diag5` usaba
+> `cookies()` vía `createClient()`, pasaba a dinámica y fallaba. Supabase no tenía nada que ver:
+> `/m/demo/1`, pública y sin sesión, fallaba igual.
+>
+> **Reproducción local:** `next build` y luego `next start <repo>` **desde otra carpeta** (cambia
+> `process.cwd()`, como en Vercel): `/m/demo/1` devuelve `"error":"$Z"`. Desde la carpeta del repo,
+> no.
+>
+> **Arreglo (`6382835`):** las fuentes se leen dentro de `ogImage()`, al dibujar (en el build),
+> con caché en memoria. Verificado en local con la misma reproducción y en producción (ver abajo).
+> **Regla:** ningún módulo que importen los metadatos (`opengraph-image`, `icon`, layouts) hace
+> E/S al importarse.
+
+---
+
+## Historia del diagnóstico (tal como quedó al cierre del 2026-10-03)
 
 ## Síntoma
 
