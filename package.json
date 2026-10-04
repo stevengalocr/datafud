@@ -12,8 +12,8 @@
     "qa:landing": "node scripts/qa-landing.mjs"
   },
   "dependencies": {
-    "@supabase/ssr": "^0.5.2",
-    "@supabase/supabase-js": "^2.45.4",
+    "@supabase/ssr": "^0.12.7",
+    "@supabase/supabase-js": "^2.117.2",
     "@vercel/analytics": "^2.0.1",
     "next": "^15.5.25",
     "qrcode": "^1.5.4",

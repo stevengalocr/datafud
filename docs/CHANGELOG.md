@@ -7,6 +7,18 @@ Todas las versiones notables del proyecto. Formato basado en
 
 ## [Unreleased]
 
+### Fixed — /admin en producción (2026-10-03)
+- **`@supabase/ssr` 0.5.2 → 0.12.7 y `supabase-js` 2.107 → 2.117.** La 0.5.2 no es compatible con
+  `supabase-js` 2.107 (la 0.12 pide 2.114 o más). En Vercel, cualquier página de los paneles que
+  creaba el cliente de Supabase devolvía «Esta página no cargó» sin registrar error en el servidor;
+  aislado con páginas mínimas: sin el cliente cargaba, solo con crearlo fallaba.
+- `createAdminClient` con import normal en lugar de `require()` dinámico: el build ya no avisa de
+  «Critical dependency» ni de `process.version` en el Edge Runtime, y Supabase no se empaqueta dos veces.
+- Fuera el código muerto: `registerAction` (nadie lo importaba; era el otro uso de la `service_role`)
+  y `src/lib/supabase/client.ts` (sin uso).
+- `schema.sql`: los helpers de RLS y las funciones de trigger ya no se pueden ejecutar como `anon`
+  (Supabase da EXECUTE a `anon` por privilegios por defecto en `public`).
+
 ### Added — S10 y P1 (2026-10-03)
 - **Alta de local desde el super admin** (`/admin/tenants` → «Crear restaurante»): crea el local
   activo, el usuario del dueño, su perfil y su configuración (colones por defecto); si algo falla

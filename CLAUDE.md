@@ -37,7 +37,7 @@ etiqueta "Render ilustrativo" y todo QR dibujado decodifica a `https://datafud.c
 - `src/app/(marketing)/` guías de SEO local: `/menu-digital-costa-rica`, `/menu-digital-para-sodas`,
   `/menu-qr-restaurantes-turisticos`.
 - `src/app/(auth)/` login (Server Component + `login-form.tsx`), register (redirige), `actions.ts`
-  (único uso de `service_role`), ruta privada del super admin (no enlazada, noindex).
+  (login y logout), ruta privada del super admin (no enlazada, noindex).
 - `src/app/(legal)/` términos (versión 1.1, con D-034 a D-038, D-047 y D-048) y privacidad (1.0);
   cifras y condiciones desde `PRICING` (`terms`).
 - `src/app/dashboard/` panel del restaurante · `src/app/admin/` super admin · `src/app/m/[tenant]/[table]/`
@@ -70,8 +70,8 @@ etiqueta "Render ilustrativo" y todo QR dibujado decodifica a `https://datafud.c
    proyecto nuevo de Supabase no los da solo. Tabla nueva = agregarla al `grant` de esa sección.
 4. Nunca usar un `tenant_id` ni un precio que venga del navegador: `place_order` lee precios de
    `products` y guarda snapshots.
-5. `createAdminClient()` (`service_role`) solo en `registerAction` y en `createTenant` (alta de local del super
-   admin, autorizada por Steven el 2026-10-03), siempre después de verificar el rol en el servidor.
+5. `createAdminClient()` (`service_role`) solo en `createTenant` (alta de local del super admin, autorizada
+   por Steven el 2026-10-03), siempre después de verificar el rol en el servidor.
    `SUPABASE_SERVICE_ROLE_KEY` vive solo en el servidor (Vercel: Sensitive, sin `NEXT_PUBLIC_`).
    Para usarlo en otro lado, preguntar.
 6. Precios y límites viven en `PRICING` (`src/lib/constants.ts`) y de ahí los leen planes, hero, FAQ,
