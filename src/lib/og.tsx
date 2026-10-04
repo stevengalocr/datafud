@@ -12,20 +12,29 @@ export const OG_CONTENT_TYPE = "image/png";
 // bajarlo de Google Fonts en el build. Se le pasa la misma subfuente de Inter que usa la web, en
 // TTF (next/og no lee woff2). Pasar `fonts` reemplaza la fuente por defecto, así que también se
 // pasa esa, desde el paquete de next: si una versión de next la mueve, el build falla acá.
-const OG_FONTS = [
-  {
-    name: "Noto Sans",
-    data: readFileSync(path.join(process.cwd(), "node_modules/next/dist/compiled/@vercel/og/noto-sans-v27-latin-regular.ttf")),
-    weight: 400 as const,
-    style: "normal" as const,
-  },
-  {
-    name: "DataFudColon",
-    data: readFileSync(path.join(process.cwd(), "src/lib/og-fonts/datafud-colon-400.ttf")),
-    weight: 400 as const,
-    style: "normal" as const,
-  },
-];
+//
+// Se leen al dibujar, nunca al importar: Next importa cada `opengraph-image` para armar los
+// metadatos de toda ruta dinámica (paneles, `/m/`) y en Vercel esas rutas corren sin estos
+// archivos. Leerlos al importar rompía los metadatos y, con ellos, la navegación de los paneles
+// («Esta página no cargó», 2026-10-04).
+let ogFonts: NonNullable<ConstructorParameters<typeof ImageResponse>[1]>["fonts"];
+function loadOgFonts() {
+  ogFonts ??= [
+    {
+      name: "Noto Sans",
+      data: readFileSync(path.join(process.cwd(), "node_modules/next/dist/compiled/@vercel/og/noto-sans-v27-latin-regular.ttf")),
+      weight: 400,
+      style: "normal",
+    },
+    {
+      name: "DataFudColon",
+      data: readFileSync(path.join(process.cwd(), "src/lib/og-fonts/datafud-colon-400.ttf")),
+      weight: 400,
+      style: "normal",
+    },
+  ];
+  return ogFonts;
+}
 
 export function ogImage({ title, subtitle, kicker = "datafud.com" }: { title: string; subtitle: string; kicker?: string }) {
   return new ImageResponse(
@@ -82,6 +91,6 @@ export function ogImage({ title, subtitle, kicker = "datafud.com" }: { title: st
         </div>
       </div>
     ),
-    { ...OG_SIZE, fonts: OG_FONTS }
+    { ...OG_SIZE, fonts: loadOgFonts() }
   );
 }
