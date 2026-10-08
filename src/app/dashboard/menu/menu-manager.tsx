@@ -6,6 +6,7 @@ import {
   createProduct,
   deleteCategory,
   updateCategory,
+  updateProduct,
   deleteProduct,
   toggleProductAvailability,
 } from "../actions";
@@ -45,6 +46,8 @@ export function MenuManager({
   const [editError, setEditError] = useState<string | null>(null);
   const [prodError, setProdError] = useState<string | null>(null);
   const [editing, setEditing] = useState<string | null>(null);
+  const [editingProd, setEditingProd] = useState<string | null>(null);
+  const [editProdError, setEditProdError] = useState<string | null>(null);
   const { confirm, dialog } = useConfirm();
 
   const catName = (c: Category) => t(c.name_i18n, "es");
@@ -76,6 +79,9 @@ export function MenuManager({
   });
   const editForm = useFormSubmit(async (fd) => {
     if (await exec(() => updateCategory(fd), setEditError)) setEditing(null);
+  });
+  const editProdForm = useFormSubmit(async (fd) => {
+    if (await exec(() => updateProduct(fd), setEditProdError)) setEditingProd(null);
   });
   const prodForm = useFormSubmit(async (fd, form) => {
     if (await exec(() => createProduct(fd), setProdError)) {
@@ -365,6 +371,19 @@ export function MenuManager({
                     </Button>
                     <Button
                       size="sm"
+                      variant="soft"
+                      onClick={() => {
+                        setEditingProd(editingProd === p.id ? null : p.id);
+                        setEditProdError(null);
+                      }}
+                      disabled={pending}
+                      aria-expanded={editingProd === p.id}
+                      aria-label={`Editar ${t(p.name_i18n, "es")}`}
+                    >
+                      Editar
+                    </Button>
+                    <Button
+                      size="sm"
                       variant="danger-soft"
                       onClick={() => askDeleteProduct(p)}
                       disabled={pending}
@@ -378,6 +397,85 @@ export function MenuManager({
               ))}
             </ul>
           )}
+
+          {editingProd && products.some((x) => x.id === editingProd) && (() => {
+            const p = products.find((x) => x.id === editingProd)!;
+            return (
+              <form
+                key={p.id}
+                onSubmit={editProdForm.onSubmit}
+                aria-busy={editProdForm.pending}
+                className="grid gap-3 rounded-lg border border-stone-200 bg-cream-50 p-4 sm:grid-cols-2"
+                aria-label={`Editar ${t(p.name_i18n, "es")}`}
+              >
+                <input type="hidden" name="id" value={p.id} />
+                <div>
+                  <Label htmlFor="ep_name_es">Nombre (español)</Label>
+                  <Input id="ep_name_es" name="name_es" defaultValue={p.name_i18n?.es ?? ""} required maxLength={80} autoFocus />
+                </div>
+                <div>
+                  <Label htmlFor="ep_cat">Categoría</Label>
+                  <Select id="ep_cat" name="category_id" defaultValue={p.category_id ?? ""} required>
+                    {p.category_id === null && <option value="">Elegí una categoría</option>}
+                    {categories.map((c) => (
+                      <option key={c.id} value={c.id}>
+                        {catName(c)}
+                      </option>
+                    ))}
+                  </Select>
+                </div>
+                <div>
+                  <Label htmlFor="ep_name_en">Nombre (inglés)</Label>
+                  <Input id="ep_name_en" name="name_en" defaultValue={p.name_i18n?.en ?? ""} maxLength={80} />
+                </div>
+                <div>
+                  <Label htmlFor="ep_name_pt">Nombre (portugués)</Label>
+                  <Input id="ep_name_pt" name="name_pt" defaultValue={p.name_i18n?.pt ?? ""} maxLength={80} />
+                </div>
+                <div>
+                  <Label htmlFor="ep_price">Precio ({currency})</Label>
+                  <Input id="ep_price" name="price" type="number" inputMode="decimal" min="0" step="0.01" defaultValue={Number(p.price)} required />
+                </div>
+                <div>
+                  <Label htmlFor="ep_image">Foto (enlace, opcional)</Label>
+                  <Input id="ep_image" name="image_url" type="url" inputMode="url" placeholder="https://…" defaultValue={p.image_url ?? ""} />
+                </div>
+                <div>
+                  <Label htmlFor="ep_desc_es">Descripción (español)</Label>
+                  <Textarea id="ep_desc_es" name="description_es" rows={2} defaultValue={p.description_i18n?.es ?? ""} maxLength={300} />
+                </div>
+                <div>
+                  <Label htmlFor="ep_desc_en">Descripción (inglés)</Label>
+                  <Textarea id="ep_desc_en" name="description_en" rows={2} defaultValue={p.description_i18n?.en ?? ""} maxLength={300} />
+                </div>
+                <div>
+                  <Label htmlFor="ep_desc_pt">Descripción (portugués)</Label>
+                  <Textarea id="ep_desc_pt" name="description_pt" rows={2} defaultValue={p.description_i18n?.pt ?? ""} maxLength={300} />
+                </div>
+                <div>
+                  <Label htmlFor="ep_ord">Orden en la carta</Label>
+                  <Input id="ep_ord" name="sort_order" type="number" inputMode="numeric" min="0" max="999" step="1" defaultValue={p.sort_order ?? 0} />
+                </div>
+                <div className="space-y-2 sm:col-span-2">
+                  <div className="flex gap-2">
+                    <Button type="submit" size="sm" pending={editProdForm.pending} pendingText="Guardando…">
+                      Guardar cambios
+                    </Button>
+                    <Button
+                      type="button"
+                      size="sm"
+                      variant="ghost"
+                      onClick={() => setEditingProd(null)}
+                      disabled={editProdForm.pending}
+                    >
+                      Cancelar
+                    </Button>
+                  </div>
+                  {editProdError && <FieldHint tone="error">{editProdError}</FieldHint>}
+                </div>
+              </form>
+            );
+          })()}
         </CardBody>
       </Card>
       {dialog}

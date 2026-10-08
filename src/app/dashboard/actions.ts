@@ -128,6 +128,38 @@ export async function createProduct(formData: FormData): Promise<ActionResult> {
   return ok();
 }
 
+export async function updateProduct(formData: FormData): Promise<ActionResult> {
+  const c = await ctx();
+  if (!c) return fail(SIN_SESION);
+  const id = uuid.safeParse(formData.get("id"));
+  const parsed = productSchema.safeParse({
+    nameEs: formData.get("name_es"),
+    categoryId: (formData.get("category_id") as string) || null,
+    price: formData.get("price") ?? 0,
+    imageUrl: (formData.get("image_url") as string) || null,
+    sortOrder: formData.get("sort_order") ?? 0,
+  });
+  if (!id.success) return zodFail(id.error);
+  if (!parsed.success) return zodFail(parsed.error);
+  const p = parsed.data;
+  const { data, error } = await c.supabase
+    .from("products")
+    .update({
+      category_id: p.categoryId,
+      name_i18n: i18nFrom(formData, "name", 80),
+      description_i18n: i18nFrom(formData, "description", 300),
+      price: p.price,
+      image_url: p.imageUrl,
+      sort_order: p.sortOrder,
+    })
+    .eq("id", id.data)
+    .select("id");
+  if (error) return dbFail("updateProduct", error, "No se pudo guardar el platillo. Probá de nuevo.");
+  if (!data?.length) return fail("Ese platillo ya no existe. Recargá la página.");
+  revalidatePath("/dashboard/menu");
+  return ok();
+}
+
 export async function toggleProductAvailability(id: string, available: boolean): Promise<ActionResult> {
   const c = await ctx();
   if (!c) return fail(SIN_SESION);

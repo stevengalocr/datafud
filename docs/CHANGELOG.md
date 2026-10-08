@@ -7,6 +7,10 @@ Todas las versiones notables del proyecto. Formato basado en
 
 ## [Unreleased]
 
+### Added
+- **Editar platillos desde el panel.** Cada platillo tiene un botón «Editar» con nombre, descripción
+  (ES/EN/PT), categoría, precio, foto y orden; antes había que borrarlo y crearlo de nuevo.
+
 ### Fixed — paneles en Vercel (P0, 2026-10-03)
 - **«Esta página no cargó» al navegar por `/admin`, `/dashboard` y `/m/` en producción.** Causa:
   `src/lib/og.tsx` leía las fuentes de la imagen OG con `readFileSync` al importarse; Next importa
