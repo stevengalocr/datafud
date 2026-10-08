@@ -10,6 +10,10 @@ Todas las versiones notables del proyecto. Formato basado en
 ### Added
 - **Editar platillos desde el panel.** Cada platillo tiene un botón «Editar» con nombre, descripción
   (ES/EN/PT), categoría, precio, foto y orden; antes había que borrarlo y crearlo de nuevo.
+- **Subir fotos de platillos y el logo** (requiere aplicar `schema.sql` en producción: sección 12, bucket
+  `media`). Botón «Subir foto» / «Subir logo» junto al campo de dirección; la imagen se reduce en el
+  navegador (1600 px, WebP) y se guarda en la carpeta del negocio. Sin el bucket, la subida avisa y el
+  campo de dirección sigue funcionando. Las fotos viejas no se borran al reemplazarlas.
 
 ### Fixed — paneles en Vercel (P0, 2026-10-03)
 - **«Esta página no cargó» al navegar por `/admin`, `/dashboard` y `/m/` en producción.** Causa:

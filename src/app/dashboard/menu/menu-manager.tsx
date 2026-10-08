@@ -10,6 +10,7 @@ import {
   deleteProduct,
   toggleProductAvailability,
 } from "../actions";
+import { ImageUpload } from "../image-upload";
 import { Button } from "@/components/ui/button";
 import { Card, CardBody, CardHeader, CardTitle } from "@/components/ui/card";
 import { FieldHint, Input, Label, Select, Textarea } from "@/components/ui/input";
@@ -318,6 +319,7 @@ export function MenuManager({
               <div>
                 <Label htmlFor="p_image">Foto (enlace, opcional)</Label>
                 <Input id="p_image" name="image_url" type="url" inputMode="url" placeholder="https://…" />
+                <ImageUpload kind="products" targetId="p_image" label="Subir foto" />
               </div>
               <div className="sm:col-span-2">
                 <Label htmlFor="p_desc_es">Descripción (español)</Label>
@@ -439,6 +441,7 @@ export function MenuManager({
                 <div>
                   <Label htmlFor="ep_image">Foto (enlace, opcional)</Label>
                   <Input id="ep_image" name="image_url" type="url" inputMode="url" placeholder="https://…" defaultValue={p.image_url ?? ""} />
+                  <ImageUpload kind="products" targetId="ep_image" label="Subir foto" initialUrl={p.image_url ?? ""} />
                 </div>
                 <div>
                   <Label htmlFor="ep_desc_es">Descripción (español)</Label>

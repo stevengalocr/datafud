@@ -3,6 +3,7 @@
 -- SQL puro (sin comandos de psql): se pega completo en el SQL Editor de
 -- Supabase o se corre con  psql "$DBURL" -f supabase/verify.sql
 -- Devuelve una sola tabla. Esperado: ok = true en todas las filas.
+-- Las filas de Storage (16 a 21) dan false hasta aplicar la sección 12 de schema.sql.
 -- La última fila (super admin) da false hasta crear el super admin a mano.
 -- =====================================================================
 
@@ -69,7 +70,35 @@ chequeos (orden, chequeo, valor, esperado) as (
   select 15, 'anon ejecuta place_order',
          has_function_privilege('anon', 'public.place_order(text, uuid, jsonb, text)', 'EXECUTE')::int, 1
   union all
-  select 16, 'super admin (false hasta crearlo a mano)', count(*)::int, 1
+  select 16, 'Storage: bucket media existe', count(*)::int, 1
+    from storage.buckets where id = 'media'
+  union all
+  select 17, 'Storage: bucket media es público (lectura de las fotos del menú)', count(*)::int, 1
+    from storage.buckets where id = 'media' and public
+  union all
+  select 18, 'Storage: bucket media limita a 2 MB', count(*)::int, 1
+    from storage.buckets where id = 'media' and file_size_limit = 2097152
+  union all
+  select 19, 'Storage: bucket media solo jpeg, png y webp', count(*)::int, 1
+    from storage.buckets
+   where id = 'media'
+     and allowed_mime_types @> array['image/jpeg', 'image/png', 'image/webp']
+     and allowed_mime_types <@ array['image/jpeg', 'image/png', 'image/webp']
+  union all
+  select 20, 'Storage: políticas de escritura (insert, update, delete) para authenticated', count(*)::int, 3
+    from pg_policies
+   where schemaname = 'storage' and tablename = 'objects'
+     and policyname in ('media_tenant_insert', 'media_tenant_update', 'media_tenant_delete')
+     and roles = array['authenticated']::name[]
+     and (coalesce(qual, '') || coalesce(with_check, '')) like '%current_tenant_id%'
+  union all
+  select 21, 'Storage: ninguna política de anon ni public sobre el bucket media', count(*)::int, 0
+    from pg_policies
+   where schemaname = 'storage' and tablename = 'objects'
+     and (roles && array['anon', 'public']::name[])
+     and (coalesce(qual, '') || coalesce(with_check, '') || policyname) like '%media%'
+  union all
+  select 22, 'super admin (false hasta crearlo a mano)', count(*)::int, 1
     from public.profiles where role = 'super_admin' and tenant_id is null
 )
 select chequeo, valor, esperado, valor = esperado as ok

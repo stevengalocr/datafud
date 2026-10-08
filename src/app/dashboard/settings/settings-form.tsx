@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { updateSettings } from "../actions";
+import { ImageUpload } from "../image-upload";
 import { Button } from "@/components/ui/button";
 import { Card, CardBody, CardHeader, CardTitle } from "@/components/ui/card";
 import { FieldHint, Input, Label, Select } from "@/components/ui/input";
@@ -76,6 +77,7 @@ export function SettingsForm({
           <div className="sm:col-span-2">
             <Label htmlFor="logo_url">Logo (enlace a la imagen)</Label>
             <Input id="logo_url" name="logo_url" type="url" inputMode="url" defaultValue={settings?.logo_url ?? ""} placeholder="https://…" />
+            <ImageUpload kind="logo" targetId="logo_url" label="Subir logo" initialUrl={settings?.logo_url ?? ""} />
           </div>
         </CardBody>
       </Card>
