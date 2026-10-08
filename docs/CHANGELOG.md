@@ -9,6 +9,29 @@ Todas las versiones notables del proyecto. Formato basado en
 
 ---
 
+## [1.6.1] — 2026-10-07 · Pulido del panel de menú, la subida de fotos y la prueba de aislamiento
+
+### Fixed
+- **Editar un platillo:** el formulario entra a la vista (sin saltos si el sistema pide menos
+  movimiento) y el foco va al primer campo; mientras guarda, los botones Editar y Eliminar de esa fila
+  quedan deshabilitados.
+- **Subir foto:** si la dirección se cambia a mano, la vista previa la sigue (o se oculta si no es una
+  https válida); el botón queda ligado al campo de dirección para lectores de pantalla; la imagen en
+  memoria se libera también cuando falla el redimensionado.
+- **«La subida todavía no está activa»** solo sale cuando el bucket no existe; otros errores de Storage
+  (por ejemplo un archivo no encontrado) muestran el mensaje genérico de reintentar.
+- `scripts/prueba-aislamiento.mjs`: un 403 o «Unauthorized» genérico ya no cuenta como rechazo de RLS
+  (un JWT vencido queda «inconcluso»), y una falla durante la limpieza no impide el resumen ni cambia
+  el código de salida.
+
+### Changed
+- Crear y editar un platillo comparten el armado de campos desde el formulario (mismos mensajes y
+  validaciones) y el panel de menú ya no usa una función autoejecutada dentro del JSX.
+- `docs/plans/2026-10-04-oleada-de-pruebas.md` describe las cuatro salidas del script (0, 1, 2 y 3) y
+  cómo borrar un archivo de prueba que haya quedado en Storage.
+
+---
+
 ## [1.6.0] — 2026-10-07 · Panel listo antes de la oleada: editar platillos, fotos y logo, aislamiento reforzado
 
 ### Added
