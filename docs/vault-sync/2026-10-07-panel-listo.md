@@ -29,10 +29,10 @@ Aplicado en vault: sí
 **log.md** — ver P05.
 Aplicado en vault: sí
 
-### P04 · S15: las referencias entre tablas no cruzan de un negocio a otro · commit ba9cfcb · despliegue: sección 13 de `schema.sql` en aplicación por Steven; falta confirmar `verify.sql` 22 a 26
-**Pendientes.md** — Ítem nuevo en el detalle (no en la cola): confirmar `verify.sql` filas 22 a 26 en producción y correr la prueba de aislamiento (sección 2b). Si la fila 25 no da 0, correr la consulta del aviso `WARNING: S15:`, corregir las filas y volver a correr `schema.sql`.
+### P04 · S15: las referencias entre tablas no cruzan de un negocio a otro · commit ba9cfcb · despliegue: `schema.sql` (sección 13) aplicado en producción el 2026-10-07 y `verify.sql` con las 27 filas en true; código pendiente
+**Pendientes.md** — Ítem nuevo en el detalle (no en la cola): S15 aplicado en producción; falta correr la prueba de aislamiento con dos negocios (sección 2b) en la oleada.
 **Decisiones.md** — ninguna.
-**Seguridad.md** — hallazgo nuevo **S15** (media): las FK entre tablas de negocio no validaban el negocio (B creaba filas que apuntaban a filas de A; el tope por mesa de `place_order` contaba órdenes de otro negocio; borrados de A tocaban filas de B). Revisión del 2026-10-07. Estado: **cerrado en código; pendiente de confirmar `verify.sql` 22–26 en producción**. FK compuestas `(tenant_id, col)` → `(tenant_id, id)` en `products.category_id`, `orders.table_id`, `order_items.order_id` y `order_items.product_id`; el tope por mesa filtra por negocio.
+**Seguridad.md** — hallazgo nuevo **S15** (media): las FK entre tablas de negocio no validaban el negocio (B creaba filas que apuntaban a filas de A; el tope por mesa de `place_order` contaba órdenes de otro negocio; borrados de A tocaban filas de B). Revisión del 2026-10-07. Estado: **cerrado y aplicado en producción el 2026-10-07 (`verify.sql` 22–26 en true); falta correr `prueba-aislamiento.mjs` con dos negocios en la oleada**. FK compuestas `(tenant_id, col)` → `(tenant_id, id)` en `products.category_id`, `orders.table_id`, `order_items.order_id` y `order_items.product_id`; el tope por mesa filtra por negocio.
 **Otras páginas** — ninguna.
 **log.md** — ver P05.
 Aplicado en vault: sí
