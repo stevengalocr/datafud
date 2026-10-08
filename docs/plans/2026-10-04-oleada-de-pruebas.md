@@ -48,7 +48,12 @@
   `tenant_id` de test) y corre el Security Advisor de Supabase. La prueba es repetible:
   `node scripts/prueba-aislamiento.mjs` (A = test, B = test2; variables `AISLAMIENTO_A_EMAIL`,
   `AISLAMIENTO_A_PASSWORD`, `AISLAMIENTO_B_EMAIL`, `AISLAMIENTO_B_PASSWORD` más las dos de Supabase;
-  sin variables explica cómo correrla). Sale 0 si todo pasa y 1 si algo falla; borra sus filas de prueba.
+  sin variables explica cómo correrla). Borra sus filas de prueba. Salidas: **0** todo pasó;
+  **1** algo falló (hay fuga: no abrir el registro); **2** faltan variables, no se pudo preparar o se
+  interrumpió; **3** quedó incompleta (alguna comprobación inconclusa: arreglar la causa y repetir;
+  no prueba el aislamiento). Puede quedar un archivo de prueba en Storage (bucket `media`, nombre con
+  `zz-aislamiento`): el script lo avisa al final y se borra a mano en Supabase, Storage, `media`,
+  carpeta del `tenant_id` de test.
 - Si todo pasa: decidir si se vuelve a enlazar «Ingresar» en la landing.
 
 **5. Super admin**
