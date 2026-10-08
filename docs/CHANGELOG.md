@@ -14,8 +14,8 @@ Todas las versiones notables del proyecto. Formato basado en
 ### Added
 - **Editar platillos desde el panel.** Cada platillo tiene un botón «Editar» con nombre, descripción
   (ES/EN/PT), categoría, precio, foto y orden; antes había que borrarlo y crearlo de nuevo.
-- **Subir fotos de platillos y el logo** (requiere aplicar `schema.sql` en producción: sección 12, bucket
-  `media`). Botón «Subir foto» / «Subir logo» junto al campo de dirección; la imagen se reduce en el
+- **Subir fotos de platillos y el logo** (`schema.sql` sección 12, bucket
+  `media`: aplicado en producción el 2026-10-07). Botón «Subir foto» / «Subir logo» junto al campo de dirección; la imagen se reduce en el
   navegador (1600 px, WebP) y se guarda en la carpeta del negocio. Sin el bucket, la subida avisa y el
   campo de dirección sigue funcionando. Las fotos viejas no se borran al reemplazarlas.
 - `scripts/prueba-aislamiento.mjs`: con la sesión de un negocio B intenta leer, insertar, modificar y
@@ -50,8 +50,8 @@ Todas las versiones notables del proyecto. Formato basado en
   (no es tiempo real) e indica hace cuánto se actualizó.
 
 ### Security
-- **Seguridad: las referencias entre tablas no pueden cruzar de un negocio a otro (S15; requiere aplicar
-  `schema.sql` en producción).** Un platillo solo puede tener una categoría de su negocio, una orden una
+- **Seguridad: las referencias entre tablas no pueden cruzar de un negocio a otro (S15; aplicado en
+  producción el 2026-10-07, `verify.sql` en true).** Un platillo solo puede tener una categoría de su negocio, una orden una
   mesa de su negocio y una línea una orden y un platillo de su negocio (FK compuestas `(tenant_id, id)`,
   sección 13). El tope de pedidos por mesa de `place_order` cuenta solo órdenes del mismo negocio, así que
   otro negocio ya no puede bloquear las mesas de uno. Si alguna fila existente apuntara a otro negocio,
@@ -63,7 +63,7 @@ Todas las versiones notables del proyecto. Formato basado en
 - **S4 cerrado:** `place_order` acepta hasta 30 platillos distintos y 20 unidades por platillo, como
   máximo 10 pedidos por mesa cada 10 minutos y 60 por local por minuto; recorta notas largas. La
   carta solo muestra los mensajes conocidos de la base. Índice nuevo `idx_orders_table_created`.
-  Hay que volver a correr `schema.sql` en producción.
+  Aplicado en producción el 2026-10-07.
 
 ### Design — Movimiento, sombras y blindaje de los paneles (2026-10-03)
 Informe: `docs/plans/2026-10-03-movimiento-y-blindaje.md`.
