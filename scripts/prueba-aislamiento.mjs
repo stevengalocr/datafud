@@ -230,6 +230,26 @@ const limpiezaA = []; // { tabla, id }
 const limpiezaB = []; // { tabla, id }
 const archivosAborrar = []; // { cliente, ruta }
 
+// PNG válido de 1x1 píxel: el bucket media solo acepta jpeg/png/webp, así el rechazo que se mide es el de RLS y no el del tipo.
+const PNG_1X1 = Buffer.from(
+  "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==",
+  "base64",
+);
+const nuevoPng = () => new Blob([PNG_1X1], { type: "image/png" });
+
+/** ¿Existe el objeto? Por la URL pública (el bucket es público y no hay política de select). true = 200, false = 400/404, null = no se pudo saber. */
+async function existeEnMedia(ruta) {
+  try {
+    const { data } = A.cliente.storage.from("media").getPublicUrl(ruta);
+    const res = await fetch(`${data.publicUrl}?t=${Date.now()}`, { cache: "no-store" });
+    if (res.status === 200) return true;
+    if (res.status === 400 || res.status === 404) return false;
+    return null;
+  } catch {
+    return null;
+  }
+}
+
 async function crearComoA(tabla, fila) {
   const { data, error } = await A.cliente.from(tabla).insert(fila).select("*").single();
   if (error || !data) {
@@ -245,12 +265,20 @@ async function limpiar() {
     const { error } = await B.cliente.from(tabla).delete().eq("id", id);
     if (error) aviso(`No se pudo borrar ${tabla}/${id} con B: ${limpio(error)}. Borrarla a mano.`);
   }
+  // El bucket no tiene política de select (a propósito): remove() puede no borrar nada sin avisar.
+  // Se confirma por la URL pública y, si el archivo sigue, se avisa para borrarlo a mano.
+  const sobrantes = [];
   for (const { cliente, ruta } of archivosAborrar.splice(0).reverse()) {
+    if (!ruta) continue;
     try {
       await cliente.storage.from("media").remove([ruta]);
     } catch {
       /* mejor esfuerzo */
     }
+    if ((await existeEnMedia(ruta)) !== false) sobrantes.push(ruta);
+  }
+  for (const ruta of [...new Set(sobrantes)]) {
+    aviso(`Quedó un archivo de prueba en Storage (bucket media): ${ruta}. Borrarlo a mano en Supabase, Storage, media.`);
   }
   for (const { tabla, id } of limpiezaA.splice(0).reverse()) {
     const { error } = await A.cliente.from(tabla).delete().eq("id", id);
@@ -531,9 +559,9 @@ try {
   // 4) Storage: bucket `media`
   // -------------------------------------------------------------------
   console.log("\n4) Storage (bucket media)");
-  const ruta = `${A.tenantId}/${MARCA}-${Date.now()}.txt`;
-  const contenido = new Blob([MARCA], { type: "text/plain" });
-  const subidaB = await B.cliente.storage.from("media").upload(ruta, contenido, { upsert: false });
+  const ruta = `${A.tenantId}/${MARCA}-${Date.now()}.png`;
+  const contenido = nuevoPng();
+  const subidaB = await B.cliente.storage.from("media").upload(ruta, contenido, { upsert: false, contentType: "image/png" });
   const sinBucket = (e) => e && (/bucket not found/i.test(e.message ?? "") || String(e.statusCode ?? e.status ?? "") === "404");
   if (sinBucket(subidaB.error)) {
     omitido("el bucket media no existe todavía: se omite la prueba de storage");
@@ -547,8 +575,8 @@ try {
       else inconcluso(`B sube a la carpeta del negocio de A en media: falló por otra causa, no por RLS (${limpio(subidaB.error)})`);
     }
     // Control positivo: A sí puede subir a su carpeta; si no, el rechazo de B no demuestra nada.
-    const rutaA = `${A.tenantId}/${MARCA}-propio-${Date.now()}.txt`;
-    const subidaA = await A.cliente.storage.from("media").upload(rutaA, contenido, { upsert: false });
+    const rutaA = `${A.tenantId}/${MARCA}-propio-${Date.now()}.png`;
+    const subidaA = await A.cliente.storage.from("media").upload(rutaA, contenido, { upsert: false, contentType: "image/png" });
     if (subidaA.error) {
       inconcluso(`A tampoco pudo subir a su propia carpeta de media (${limpio(subidaA.error)}): el rechazo a B no es concluyente.`);
     } else {
@@ -556,12 +584,15 @@ try {
       ok("A sube a su propia carpeta de media (control positivo)");
       // B no debe poder borrar ni listar lo de A.
       const borrado = await B.cliente.storage.from("media").remove([rutaA]);
-      const { data: sigue } = await A.cliente.storage.from("media").list(A.tenantId, { search: `${MARCA}-propio` });
-      resultado(
-        (sigue ?? []).length > 0 && !(borrado.data ?? []).length,
-        "B intenta borrar un archivo de A en media: el archivo sigue ahí",
-        "B intenta borrar un archivo de A en media: el archivo desapareció",
-      );
+      const sigue = await existeEnMedia(rutaA);
+      if (sigue === null) inconcluso("B intenta borrar un archivo de A en media: no se pudo comprobar por la URL pública si el archivo sigue");
+      else {
+        resultado(
+          sigue && !(borrado.data ?? []).length,
+          "B intenta borrar un archivo de A en media: el archivo sigue ahí",
+          "B intenta borrar un archivo de A en media: el archivo desapareció",
+        );
+      }
       const listadoB = await B.cliente.storage.from("media").list(A.tenantId);
       comprobarCero(
         listadoB.error,
@@ -572,7 +603,7 @@ try {
     }
   }
   {
-    const subidaAnon = await anon.storage.from("media").upload(`${A.tenantId}/${MARCA}-anon-${Date.now()}.txt`, contenido, { upsert: false });
+    const subidaAnon = await anon.storage.from("media").upload(`${A.tenantId}/${MARCA}-anon-${Date.now()}.png`, contenido, { upsert: false, contentType: "image/png" });
     if (sinBucket(subidaAnon.error)) {
       omitido("anon sube a media: el bucket no existe todavía");
     } else {
