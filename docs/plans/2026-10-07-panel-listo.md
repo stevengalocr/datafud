@@ -130,7 +130,7 @@ bloquear los pedidos en las mesas de A. Además, borrar en A pone en null o borr
    producto con la `category_id` de A ni una mesa u orden ligada a A (debe fallar); limpieza de lo
    que se creara por error.
 5. Registrar el hallazgo en el reporte con un id `S` nuevo (la siguiente libre en
-   `..\obsidian\Cerebro2.0-Proyectos\Datafud\Seguridad.md`, solo lectura en esta tarea) para
+   `..\obsidian\Cerebro2.0\02-Proyectos\Datafud\Seguridad.md`, solo lectura en esta tarea; hoy la última es S14) para
    que la Task 4 lo lleve al vault.
 6. CHANGELOG: «Seguridad: las referencias entre tablas no pueden cruzar de un negocio a otro
    (requiere aplicar `schema.sql` en producción)».
