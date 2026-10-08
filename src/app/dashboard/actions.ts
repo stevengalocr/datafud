@@ -102,16 +102,21 @@ const productSchema = z.object({
   sortOrder: orden,
 });
 
-export async function createProduct(formData: FormData): Promise<ActionResult> {
-  const c = await ctx();
-  if (!c) return fail(SIN_SESION);
-  const parsed = productSchema.safeParse({
+// Los campos del platillo salen del FormData en un solo lugar: crear y editar validan igual.
+function parseProductForm(formData: FormData) {
+  return productSchema.safeParse({
     nameEs: formData.get("name_es"),
     categoryId: (formData.get("category_id") as string) || null,
     price: formData.get("price") ?? 0,
     imageUrl: (formData.get("image_url") as string) || null,
     sortOrder: formData.get("sort_order") ?? 0,
   });
+}
+
+export async function createProduct(formData: FormData): Promise<ActionResult> {
+  const c = await ctx();
+  if (!c) return fail(SIN_SESION);
+  const parsed = parseProductForm(formData);
   if (!parsed.success) return zodFail(parsed.error);
   const p = parsed.data;
   const { error } = await c.supabase.from("products").insert({
@@ -132,13 +137,7 @@ export async function updateProduct(formData: FormData): Promise<ActionResult> {
   const c = await ctx();
   if (!c) return fail(SIN_SESION);
   const id = uuid.safeParse(formData.get("id"));
-  const parsed = productSchema.safeParse({
-    nameEs: formData.get("name_es"),
-    categoryId: (formData.get("category_id") as string) || null,
-    price: formData.get("price") ?? 0,
-    imageUrl: (formData.get("image_url") as string) || null,
-    sortOrder: formData.get("sort_order") ?? 0,
-  });
+  const parsed = parseProductForm(formData);
   if (!id.success) return zodFail(id.error);
   if (!parsed.success) return zodFail(parsed.error);
   const p = parsed.data;
@@ -221,7 +220,10 @@ export async function uploadImage(formData: FormData): Promise<ActionResult<{ ur
     const { error } = await c.supabase.storage.from("media").upload(path, bytes, { contentType: type, upsert: false });
     if (error) {
       // Bucket sin crear (aún no se aplicó schema.sql) o Storage caído: la página sigue y la URL pegada también.
-      const apagado = /bucket not found|not found/i.test(error.message ?? "");
+      // Solo el bucket inexistente cuenta como «no activa»: un «Object not found» u otro 404 no.
+      const msg = error.message ?? "";
+      const code = String((error as { statusCode?: string | number }).statusCode ?? "");
+      const apagado = /bucket not found/i.test(msg) || (code === "404" && /bucket/i.test(msg));
       return dbFail("uploadImage", { message: error.message }, apagado ? STORAGE_APAGADO : "No se pudo subir la imagen. Probá de nuevo o pegá la dirección de la foto.");
     }
     const { data } = c.supabase.storage.from("media").getPublicUrl(path);

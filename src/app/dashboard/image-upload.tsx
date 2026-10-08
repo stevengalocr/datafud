@@ -22,9 +22,16 @@ async function shrink(file: File): Promise<File | null> {
   canvas.width = Math.max(1, Math.round(bitmap.width * scale));
   canvas.height = Math.max(1, Math.round(bitmap.height * scale));
   const g = canvas.getContext("2d");
-  if (!g) return null;
-  g.drawImage(bitmap, 0, 0, canvas.width, canvas.height);
-  bitmap.close();
+  if (!g) {
+    bitmap.close();
+    return null;
+  }
+  try {
+    g.drawImage(bitmap, 0, 0, canvas.width, canvas.height);
+  } finally {
+    // También si drawImage falla: el bitmap no se queda en memoria.
+    bitmap.close();
+  }
   let blob = await toBlob(canvas, "image/webp", 0.82);
   if (!blob || blob.type !== "image/webp") {
     // JPG no tiene transparencia: sin fondo blanco, los píxeles transparentes de un PNG salen negros.
@@ -36,6 +43,15 @@ async function shrink(file: File): Promise<File | null> {
   if (!blob) return null;
   const ext = blob.type === "image/webp" ? "webp" : "jpg";
   return new File([blob], `imagen.${ext}`, { type: blob.type });
+}
+
+/** Dirección https válida para la vista previa; si no, no hay vista previa. */
+function previewable(value: string) {
+  try {
+    return new URL(value.trim()).protocol === "https:" ? value.trim() : "";
+  } catch {
+    return "";
+  }
 }
 
 type State = { phase: "idle" | "uploading" | "done" | "error"; text: string };
@@ -59,16 +75,23 @@ export function ImageUpload({
   const [preview, setPreview] = useState(initialUrl);
   const [state, setState] = useState<State>({ phase: "idle", text: "" });
 
-  // Si el formulario se limpia (platillo nuevo guardado), la vista previa también.
+  // Si el formulario se limpia (platillo nuevo guardado), la vista previa también. Y si la dirección
+  // se escribe o se pega a mano, la vista previa la sigue (o se oculta si no es una https válida).
   useEffect(() => {
-    const form = (document.getElementById(targetId) as HTMLInputElement | null)?.form;
-    if (!form) return;
+    const input = document.getElementById(targetId) as HTMLInputElement | null;
+    const form = input?.form;
+    if (!input) return;
+    const onInput = () => setPreview(previewable(input.value));
+    input.addEventListener("input", onInput);
     const onReset = () => {
       setPreview("");
       setState({ phase: "idle", text: "" });
     };
-    form.addEventListener("reset", onReset);
-    return () => form.removeEventListener("reset", onReset);
+    form?.addEventListener("reset", onReset);
+    return () => {
+      input.removeEventListener("input", onInput);
+      form?.removeEventListener("reset", onReset);
+    };
   }, [targetId]);
 
   async function onPick(e: React.ChangeEvent<HTMLInputElement>) {
@@ -117,7 +140,7 @@ export function ImageUpload({
   return (
     <div className="mt-2 flex flex-wrap items-center gap-3">
       <input ref={fileRef} type="file" accept="image/jpeg,image/png,image/webp" onChange={onPick} className="hidden" tabIndex={-1} aria-hidden="true" />
-      <Button type="button" variant="secondary" size="sm" pending={state.phase === "uploading"} pendingText="Subiendo…" onClick={() => fileRef.current?.click()}>
+      <Button type="button" variant="secondary" size="sm" aria-controls={targetId} aria-describedby={targetId} pending={state.phase === "uploading"} pendingText="Subiendo…" onClick={() => fileRef.current?.click()}>
         {label}
       </Button>
       {preview && (

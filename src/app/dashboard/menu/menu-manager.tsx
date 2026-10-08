@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useEffect, useRef, useState, useTransition } from "react";
 import {
   createCategory,
   createProduct,
@@ -50,6 +50,7 @@ export function MenuManager({
   const [editingProd, setEditingProd] = useState<string | null>(null);
   const [editProdError, setEditProdError] = useState<string | null>(null);
   const { confirm, dialog } = useConfirm();
+  const editProdRef = useRef<HTMLFormElement>(null);
 
   const catName = (c: Category) => t(c.name_i18n, "es");
   const productsIn = (id: string) => products.filter((p) => p.category_id === id).length;
@@ -90,6 +91,19 @@ export function MenuManager({
       setShowProd(false);
     }
   });
+
+  // Al abrir «Editar» de un platillo el formulario sale debajo de la lista, a veces lejos de la fila:
+  // se trae a la vista (sin saltos si la persona pidió menos movimiento) y el foco va al primer campo.
+  useEffect(() => {
+    const form = editProdRef.current;
+    if (!editingProd || !form) return;
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    form.scrollIntoView({ block: "nearest", behavior: reduce ? "auto" : "smooth" });
+    form.querySelector<HTMLInputElement>("#ep_name_es")?.focus({ preventScroll: true });
+  }, [editingProd]);
+
+  const editingCategory = editing ? categories.find((x) => x.id === editing) : undefined;
+  const editingProduct = editingProd ? products.find((x) => x.id === editingProd) : undefined;
 
   const askDeleteCategory = async (c: Category) => {
     const n = productsIn(c.id);
@@ -211,53 +225,50 @@ export function MenuManager({
             </ul>
           )}
 
-          {editing && categories.some((c) => c.id === editing) && (() => {
-            const c = categories.find((x) => x.id === editing)!;
-            return (
-              <form
-                key={c.id}
-                onSubmit={editForm.onSubmit}
-                aria-busy={editForm.pending}
-                className="grid gap-3 rounded-lg border border-stone-200 bg-cream-50 p-4 sm:grid-cols-4"
-                aria-label={`Editar la categoría ${catName(c)}`}
-              >
-                <input type="hidden" name="id" value={c.id} />
-                <div>
-                  <Label htmlFor="ecat_es">Nombre (español)</Label>
-                  <Input id="ecat_es" name="name_es" defaultValue={c.name_i18n?.es ?? ""} required maxLength={60} autoFocus />
+          {editingCategory && (
+            <form
+              key={editingCategory.id}
+              onSubmit={editForm.onSubmit}
+              aria-busy={editForm.pending}
+              className="grid gap-3 rounded-lg border border-stone-200 bg-cream-50 p-4 sm:grid-cols-4"
+              aria-label={`Editar la categoría ${catName(editingCategory)}`}
+            >
+              <input type="hidden" name="id" value={editingCategory.id} />
+              <div>
+                <Label htmlFor="ecat_es">Nombre (español)</Label>
+                <Input id="ecat_es" name="name_es" defaultValue={editingCategory.name_i18n?.es ?? ""} required maxLength={60} autoFocus />
+              </div>
+              <div>
+                <Label htmlFor="ecat_en">Nombre (inglés)</Label>
+                <Input id="ecat_en" name="name_en" defaultValue={editingCategory.name_i18n?.en ?? ""} maxLength={60} />
+              </div>
+              <div>
+                <Label htmlFor="ecat_pt">Nombre (portugués)</Label>
+                <Input id="ecat_pt" name="name_pt" defaultValue={editingCategory.name_i18n?.pt ?? ""} maxLength={60} />
+              </div>
+              <div>
+                <Label htmlFor="ecat_ord">Orden en la carta</Label>
+                <Input id="ecat_ord" name="sort_order" type="number" inputMode="numeric" min="0" max="999" step="1" defaultValue={editingCategory.sort_order ?? 0} />
+              </div>
+              <div className="space-y-2 sm:col-span-4">
+                <div className="flex gap-2">
+                  <Button type="submit" size="sm" pending={editForm.pending} pendingText="Guardando…">
+                    Guardar cambios
+                  </Button>
+                  <Button
+                    type="button"
+                    size="sm"
+                    variant="ghost"
+                    onClick={() => setEditing(null)}
+                    disabled={editForm.pending}
+                  >
+                    Cancelar
+                  </Button>
                 </div>
-                <div>
-                  <Label htmlFor="ecat_en">Nombre (inglés)</Label>
-                  <Input id="ecat_en" name="name_en" defaultValue={c.name_i18n?.en ?? ""} maxLength={60} />
-                </div>
-                <div>
-                  <Label htmlFor="ecat_pt">Nombre (portugués)</Label>
-                  <Input id="ecat_pt" name="name_pt" defaultValue={c.name_i18n?.pt ?? ""} maxLength={60} />
-                </div>
-                <div>
-                  <Label htmlFor="ecat_ord">Orden en la carta</Label>
-                  <Input id="ecat_ord" name="sort_order" type="number" inputMode="numeric" min="0" max="999" step="1" defaultValue={c.sort_order ?? 0} />
-                </div>
-                <div className="space-y-2 sm:col-span-4">
-                  <div className="flex gap-2">
-                    <Button type="submit" size="sm" pending={editForm.pending} pendingText="Guardando…">
-                      Guardar cambios
-                    </Button>
-                    <Button
-                      type="button"
-                      size="sm"
-                      variant="ghost"
-                      onClick={() => setEditing(null)}
-                      disabled={editForm.pending}
-                    >
-                      Cancelar
-                    </Button>
-                  </div>
-                  {editError && <FieldHint tone="error">{editError}</FieldHint>}
-                </div>
-              </form>
-            );
-          })()}
+                {editError && <FieldHint tone="error">{editError}</FieldHint>}
+              </div>
+            </form>
+          )}
         </CardBody>
       </Card>
 
@@ -378,7 +389,7 @@ export function MenuManager({
                         setEditingProd(editingProd === p.id ? null : p.id);
                         setEditProdError(null);
                       }}
-                      disabled={pending}
+                      disabled={pending || (editProdForm.pending && editingProd === p.id)}
                       aria-expanded={editingProd === p.id}
                       aria-label={`Editar ${t(p.name_i18n, "es")}`}
                     >
@@ -388,7 +399,7 @@ export function MenuManager({
                       size="sm"
                       variant="danger-soft"
                       onClick={() => askDeleteProduct(p)}
-                      disabled={pending}
+                      disabled={pending || (editProdForm.pending && editingProd === p.id)}
                       aria-label={`Eliminar ${t(p.name_i18n, "es")}`}
                     >
                       <Icon name="trash" size={16} />
@@ -400,85 +411,83 @@ export function MenuManager({
             </ul>
           )}
 
-          {editingProd && products.some((x) => x.id === editingProd) && (() => {
-            const p = products.find((x) => x.id === editingProd)!;
-            return (
-              <form
-                key={p.id}
-                onSubmit={editProdForm.onSubmit}
-                aria-busy={editProdForm.pending}
-                className="grid gap-3 rounded-lg border border-stone-200 bg-cream-50 p-4 sm:grid-cols-2"
-                aria-label={`Editar ${t(p.name_i18n, "es")}`}
-              >
-                <input type="hidden" name="id" value={p.id} />
-                <div>
-                  <Label htmlFor="ep_name_es">Nombre (español)</Label>
-                  <Input id="ep_name_es" name="name_es" defaultValue={p.name_i18n?.es ?? ""} required maxLength={80} autoFocus />
+          {editingProduct && (
+            <form
+              ref={editProdRef}
+              key={editingProduct.id}
+              onSubmit={editProdForm.onSubmit}
+              aria-busy={editProdForm.pending}
+              className="grid gap-3 rounded-lg border border-stone-200 bg-cream-50 p-4 sm:grid-cols-2"
+              aria-label={`Editar ${t(editingProduct.name_i18n, "es")}`}
+            >
+              <input type="hidden" name="id" value={editingProduct.id} />
+              <div>
+                <Label htmlFor="ep_name_es">Nombre (español)</Label>
+                <Input id="ep_name_es" name="name_es" defaultValue={editingProduct.name_i18n?.es ?? ""} required maxLength={80} />
+              </div>
+              <div>
+                <Label htmlFor="ep_cat">Categoría</Label>
+                <Select id="ep_cat" name="category_id" defaultValue={editingProduct.category_id ?? ""} required>
+                  {editingProduct.category_id === null && <option value="">Elegí una categoría</option>}
+                  {categories.map((c) => (
+                    <option key={c.id} value={c.id}>
+                      {catName(c)}
+                    </option>
+                  ))}
+                </Select>
+              </div>
+              <div>
+                <Label htmlFor="ep_name_en">Nombre (inglés)</Label>
+                <Input id="ep_name_en" name="name_en" defaultValue={editingProduct.name_i18n?.en ?? ""} maxLength={80} />
+              </div>
+              <div>
+                <Label htmlFor="ep_name_pt">Nombre (portugués)</Label>
+                <Input id="ep_name_pt" name="name_pt" defaultValue={editingProduct.name_i18n?.pt ?? ""} maxLength={80} />
+              </div>
+              <div>
+                <Label htmlFor="ep_price">Precio ({currency})</Label>
+                <Input id="ep_price" name="price" type="number" inputMode="decimal" min="0" step="0.01" defaultValue={Number(editingProduct.price)} required />
+              </div>
+              <div>
+                <Label htmlFor="ep_image">Foto (enlace, opcional)</Label>
+                <Input id="ep_image" name="image_url" type="url" inputMode="url" placeholder="https://…" defaultValue={editingProduct.image_url ?? ""} />
+                <ImageUpload kind="products" targetId="ep_image" label="Subir foto" initialUrl={editingProduct.image_url ?? ""} />
+              </div>
+              <div>
+                <Label htmlFor="ep_desc_es">Descripción (español)</Label>
+                <Textarea id="ep_desc_es" name="description_es" rows={2} defaultValue={editingProduct.description_i18n?.es ?? ""} maxLength={300} />
+              </div>
+              <div>
+                <Label htmlFor="ep_desc_en">Descripción (inglés)</Label>
+                <Textarea id="ep_desc_en" name="description_en" rows={2} defaultValue={editingProduct.description_i18n?.en ?? ""} maxLength={300} />
+              </div>
+              <div>
+                <Label htmlFor="ep_desc_pt">Descripción (portugués)</Label>
+                <Textarea id="ep_desc_pt" name="description_pt" rows={2} defaultValue={editingProduct.description_i18n?.pt ?? ""} maxLength={300} />
+              </div>
+              <div>
+                <Label htmlFor="ep_ord">Orden en la carta</Label>
+                <Input id="ep_ord" name="sort_order" type="number" inputMode="numeric" min="0" max="999" step="1" defaultValue={editingProduct.sort_order ?? 0} />
+              </div>
+              <div className="space-y-2 sm:col-span-2">
+                <div className="flex gap-2">
+                  <Button type="submit" size="sm" pending={editProdForm.pending} pendingText="Guardando…">
+                    Guardar cambios
+                  </Button>
+                  <Button
+                    type="button"
+                    size="sm"
+                    variant="ghost"
+                    onClick={() => setEditingProd(null)}
+                    disabled={editProdForm.pending}
+                  >
+                    Cancelar
+                  </Button>
                 </div>
-                <div>
-                  <Label htmlFor="ep_cat">Categoría</Label>
-                  <Select id="ep_cat" name="category_id" defaultValue={p.category_id ?? ""} required>
-                    {p.category_id === null && <option value="">Elegí una categoría</option>}
-                    {categories.map((c) => (
-                      <option key={c.id} value={c.id}>
-                        {catName(c)}
-                      </option>
-                    ))}
-                  </Select>
-                </div>
-                <div>
-                  <Label htmlFor="ep_name_en">Nombre (inglés)</Label>
-                  <Input id="ep_name_en" name="name_en" defaultValue={p.name_i18n?.en ?? ""} maxLength={80} />
-                </div>
-                <div>
-                  <Label htmlFor="ep_name_pt">Nombre (portugués)</Label>
-                  <Input id="ep_name_pt" name="name_pt" defaultValue={p.name_i18n?.pt ?? ""} maxLength={80} />
-                </div>
-                <div>
-                  <Label htmlFor="ep_price">Precio ({currency})</Label>
-                  <Input id="ep_price" name="price" type="number" inputMode="decimal" min="0" step="0.01" defaultValue={Number(p.price)} required />
-                </div>
-                <div>
-                  <Label htmlFor="ep_image">Foto (enlace, opcional)</Label>
-                  <Input id="ep_image" name="image_url" type="url" inputMode="url" placeholder="https://…" defaultValue={p.image_url ?? ""} />
-                  <ImageUpload kind="products" targetId="ep_image" label="Subir foto" initialUrl={p.image_url ?? ""} />
-                </div>
-                <div>
-                  <Label htmlFor="ep_desc_es">Descripción (español)</Label>
-                  <Textarea id="ep_desc_es" name="description_es" rows={2} defaultValue={p.description_i18n?.es ?? ""} maxLength={300} />
-                </div>
-                <div>
-                  <Label htmlFor="ep_desc_en">Descripción (inglés)</Label>
-                  <Textarea id="ep_desc_en" name="description_en" rows={2} defaultValue={p.description_i18n?.en ?? ""} maxLength={300} />
-                </div>
-                <div>
-                  <Label htmlFor="ep_desc_pt">Descripción (portugués)</Label>
-                  <Textarea id="ep_desc_pt" name="description_pt" rows={2} defaultValue={p.description_i18n?.pt ?? ""} maxLength={300} />
-                </div>
-                <div>
-                  <Label htmlFor="ep_ord">Orden en la carta</Label>
-                  <Input id="ep_ord" name="sort_order" type="number" inputMode="numeric" min="0" max="999" step="1" defaultValue={p.sort_order ?? 0} />
-                </div>
-                <div className="space-y-2 sm:col-span-2">
-                  <div className="flex gap-2">
-                    <Button type="submit" size="sm" pending={editProdForm.pending} pendingText="Guardando…">
-                      Guardar cambios
-                    </Button>
-                    <Button
-                      type="button"
-                      size="sm"
-                      variant="ghost"
-                      onClick={() => setEditingProd(null)}
-                      disabled={editProdForm.pending}
-                    >
-                      Cancelar
-                    </Button>
-                  </div>
-                  {editProdError && <FieldHint tone="error">{editProdError}</FieldHint>}
-                </div>
-              </form>
-            );
-          })()}
+                {editProdError && <FieldHint tone="error">{editProdError}</FieldHint>}
+              </div>
+            </form>
+          )}
         </CardBody>
       </Card>
       {dialog}
