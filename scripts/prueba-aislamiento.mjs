@@ -137,13 +137,12 @@ const inconcluso = (msg) => {
 };
 const resultado = (pasa, msgOk, msgFalla) => (pasa ? ok(msgOk) : falla(msgFalla));
 
-// Un rechazo solo cuenta como prueba de aislamiento si lo hizo RLS / los permisos (42501, 403).
-// Cualquier otro error (límite de plan, red, JWT vencido, NOT NULL) no demuestra nada: es inconcluso.
+// Un rechazo solo cuenta como prueba de aislamiento si lo hizo RLS / los permisos: código 42501 o el
+// mensaje de RLS («new row violates row-level security policy», «permission denied»). Un 403 o un
+// «Unauthorized» genérico no basta (Storage los devuelve también con un JWT vencido): es inconcluso,
+// igual que cualquier otro error (límite de plan, red, NOT NULL).
 const esRls = (e) =>
-  Boolean(e) &&
-  (e.code === "42501" ||
-    String(e.statusCode ?? e.status ?? "") === "403" ||
-    /row-level security|permission denied|not authorized|unauthorized/i.test(e.message ?? ""));
+  Boolean(e) && (e.code === "42501" || /row-level security|permission denied/i.test(e.message ?? ""));
 
 // S15: FK compuestas (tenant_id, <columna>) de la sección 13 de schema.sql. Un rechazo de referencia
 // cruzada solo vale si lo hizo exactamente esa FK: código 23503 y su nombre en el mensaje.
@@ -649,7 +648,12 @@ try {
   process.exitCode = 2;
 } finally {
   console.log("\nLimpieza de filas de prueba");
-  await limpiar();
+  try {
+    await limpiar();
+  } catch (e) {
+    // Una falla al limpiar no debe impedir el resumen ni cambiar la prioridad de la salida.
+    aviso(`La limpieza se interrumpió (${limpio(e)}). Borrar a mano las filas y archivos con «${MARCA}».`);
+  }
 }
 
 const total = oks + fallas + inconclusas;
