@@ -106,6 +106,35 @@ la sesión de `test2`. Hoy no hay con qué hacerlo de forma repetible.
 5. No se corre contra producción en esta tarea. Se verifica con `node --check` y corriendo sin
    variables (debe explicar y salir con 2).
 
+## Task 5: Referencias entre negocios (hallazgo de la revisión de la Task 3)
+
+**Por qué:** la revisión de seguridad del 2026-10-07 confirmó (severidad media) que las políticas RLS
+solo validan el `tenant_id` de la fila, y las FK no pasan por RLS. `get_menu` entrega a cualquiera con
+el QR los id de local, mesas, categorías y platillos. Con eso, B puede crear en su propio negocio filas
+que apuntan a filas de A (un producto con `category_id` de A, una orden con `table_id` de A), y el tope
+de `place_order` (10 pedidos por mesa en 10 min) cuenta por `table_id` sin filtrar el negocio: B puede
+bloquear los pedidos en las mesas de A. Además, borrar en A pone en null o borra en cascada filas de B.
+
+1. En `supabase/schema.sql`, de forma idempotente, garantizar que toda referencia entre tablas de
+   negocio apunte al **mismo** `tenant_id`: revisar cada FK entre tablas de negocio (al menos
+   `products.category_id`, `orders.table_id`, `order_items.order_id`, `order_items.product_id` y las
+   que haya en suscripciones o pagos) y elegir el mecanismo que mejor encaje con el esquema existente
+   (FK compuestas `(tenant_id, id)` con `unique (tenant_id, id)` en la tabla padre, o un trigger
+   `before insert or update` que lo verifique). El mecanismo y el porqué van en el reporte.
+   Debe aplicarse sobre una base que ya tiene datos sin romperla: si una fila existente violara la
+   regla, el script lo detecta y lo informa en vez de fallar a medias (en producción hoy solo existe
+   el local «test»).
+2. `place_order`: los conteos del límite por mesa y por local filtran también por `tenant_id`.
+3. `supabase/verify.sql`: filas que comprueben el mecanismo.
+4. `scripts/prueba-aislamiento.mjs`: comprobación nueva: B no puede insertar en su negocio un
+   producto con la `category_id` de A ni una mesa u orden ligada a A (debe fallar); limpieza de lo
+   que se creara por error.
+5. Registrar el hallazgo en el reporte con un id `S` nuevo (la siguiente libre en
+   `..\obsidian\Cerebro2.0-Proyectos\Datafud\Seguridad.md`, solo lectura en esta tarea) para
+   que la Task 4 lo lleve al vault.
+6. CHANGELOG: «Seguridad: las referencias entre tablas no pueden cruzar de un negocio a otro
+   (requiere aplicar `schema.sql` en producción)».
+
 ## Task 4: Release 1.6.0, vault-sync y vault
 
 1. `package.json` → 1.6.0; `docs/CHANGELOG.md`: «Unreleased» pasa a 1.6.0 con fecha 2026-10-07.
