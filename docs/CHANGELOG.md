@@ -7,6 +7,11 @@ Todas las versiones notables del proyecto. Formato basado en
 
 ## [Unreleased]
 
+### Added — prueba de aislamiento (2026-10-07)
+- `scripts/prueba-aislamiento.mjs`: con la sesión de un negocio B intenta leer, insertar, modificar y
+  borrar datos de un negocio A (tablas, vistas de reportes y bucket `media` si existe) y prueba al rol
+  anónimo; sale 0 si todo pasa. Es el paso 4 de la oleada de pruebas (D-018).
+
 ### Fixed — paneles en Vercel (P0, 2026-10-03)
 - **«Esta página no cargó» al navegar por `/admin`, `/dashboard` y `/m/` en producción.** Causa:
   `src/lib/og.tsx` leía las fuentes de la imagen OG con `readFileSync` al importarse; Next importa
