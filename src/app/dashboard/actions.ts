@@ -182,6 +182,56 @@ export async function deleteProduct(id: string): Promise<ActionResult> {
   return ok();
 }
 
+// ---------- Fotos y logo (Supabase Storage) ----------
+const IMAGE_TYPES = { "image/jpeg": "jpg", "image/png": "png", "image/webp": "webp" } as const;
+const IMAGE_MAX_BYTES = 2 * 1024 * 1024;
+const STORAGE_APAGADO = "La subida de fotos todavía no está activa. Pegá la dirección de la foto.";
+
+const uploadSchema = z.object({
+  kind: z.enum(["products", "logo"], { message: "Tipo de imagen inválido." }),
+  file: z
+    .custom<File>((f) => typeof File !== "undefined" && f instanceof File, "Elegí una imagen.")
+    .refine((f) => f.size > 0, "Elegí una imagen.")
+    .refine((f) => f.type in IMAGE_TYPES, "La imagen tiene que ser JPG, PNG o WebP.")
+    .refine((f) => f.size <= IMAGE_MAX_BYTES, "La imagen pesa más de 2 MB."),
+});
+
+// El contenido tiene que ser de verdad una imagen del tipo declarado (no solo el nombre o el type del navegador).
+function matchesMagic(type: keyof typeof IMAGE_TYPES, b: Uint8Array) {
+  const at = (i: number, s: string) => [...s].every((ch, k) => b[i + k] === ch.charCodeAt(0));
+  if (type === "image/jpeg") return b[0] === 0xff && b[1] === 0xd8 && b[2] === 0xff;
+  if (type === "image/png") return b[0] === 0x89 && at(1, "PNG");
+  return at(0, "RIFF") && at(8, "WEBP");
+}
+
+/** Sube una imagen a `media/<tenant>/<products|logo>/<uuid>.<ext>` con la sesión de quien la sube (RLS de Storage). */
+export async function uploadImage(formData: FormData): Promise<ActionResult<{ url: string }>> {
+  try {
+    const c = await ctx();
+    if (!c) return fail(SIN_SESION);
+    const parsed = uploadSchema.safeParse({ kind: formData.get("kind"), file: formData.get("file") });
+    if (!parsed.success) return zodFail(parsed.error);
+    const { kind, file } = parsed.data;
+    const type = file.type as keyof typeof IMAGE_TYPES;
+    const bytes = new Uint8Array(await file.arrayBuffer());
+    if (!matchesMagic(type, bytes)) return fail("La imagen tiene que ser JPG, PNG o WebP.");
+
+    // La carpeta del negocio sale de la sesión, nunca del navegador (regla 4).
+    const path = `${c.tenantId}/${kind}/${crypto.randomUUID()}.${IMAGE_TYPES[type]}`;
+    const { error } = await c.supabase.storage.from("media").upload(path, bytes, { contentType: type, upsert: false });
+    if (error) {
+      // Bucket sin crear (aún no se aplicó schema.sql) o Storage caído: la página sigue y la URL pegada también.
+      const apagado = /bucket not found|not found/i.test(error.message ?? "");
+      return dbFail("uploadImage", { message: error.message }, apagado ? STORAGE_APAGADO : "No se pudo subir la imagen. Probá de nuevo o pegá la dirección de la foto.");
+    }
+    const { data } = c.supabase.storage.from("media").getPublicUrl(path);
+    return ok({ url: data.publicUrl });
+  } catch (e) {
+    console.error("[datafud] uploadImage:", e instanceof Error ? e.message : "-");
+    return fail(STORAGE_APAGADO);
+  }
+}
+
 // ---------- Mesas ----------
 const tableSchema = z.object({ label: z.string().trim().min(1, "Escribí el nombre de la mesa.").max(40, "El nombre es muy largo.") });
 
