@@ -229,8 +229,7 @@ export async function uploadImage(formData: FormData): Promise<ActionResult<{ ur
     const { data } = c.supabase.storage.from("media").getPublicUrl(path);
     return ok({ url: data.publicUrl });
   } catch (e) {
-    console.error("[datafud] uploadImage:", e instanceof Error ? e.message : "-");
-    return fail(STORAGE_APAGADO);
+    return dbFail("uploadImage", { message: e instanceof Error ? e.message : "-" }, "No se pudo subir la foto. Probá de nuevo o pegá la dirección.");
   }
 }
 

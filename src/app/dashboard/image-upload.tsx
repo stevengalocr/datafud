@@ -144,7 +144,7 @@ export function ImageUpload({
         {label}
       </Button>
       {preview && (
-        <Image src={preview} alt="Vista previa" width={44} height={44} unoptimized className="h-11 w-11 rounded-lg border border-stone-300 object-cover" />
+        <Image src={preview} alt="Vista previa" width={44} height={44} unoptimized onError={() => setPreview("")} className="h-11 w-11 rounded-lg border border-stone-300 object-cover" />
       )}
       <div aria-live="polite" className="min-w-0 text-sm">
         {state.phase === "uploading" && <FieldHint>{state.text}</FieldHint>}

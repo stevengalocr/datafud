@@ -337,7 +337,7 @@ export function MenuManager({
                 <Textarea id="p_desc_es" name="description_es" rows={2} placeholder="Arroz, frijoles, ensalada y maduro" />
               </div>
               <div className="space-y-2 sm:col-span-2">
-                <Button type="submit" size="sm" pending={prodForm.pending} pendingText="Guardando…">
+                <Button type="submit" size="sm" pending={prodForm.pending} disabled={editProdForm.pending} pendingText="Guardando…">
                   Guardar platillo
                 </Button>
                 {prodError && <FieldHint tone="error">{prodError}</FieldHint>}
@@ -389,7 +389,7 @@ export function MenuManager({
                         setEditingProd(editingProd === p.id ? null : p.id);
                         setEditProdError(null);
                       }}
-                      disabled={pending || (editProdForm.pending && editingProd === p.id)}
+                      disabled={pending || editProdForm.pending}
                       aria-expanded={editingProd === p.id}
                       aria-label={`Editar ${t(p.name_i18n, "es")}`}
                     >
@@ -399,7 +399,7 @@ export function MenuManager({
                       size="sm"
                       variant="danger-soft"
                       onClick={() => askDeleteProduct(p)}
-                      disabled={pending || (editProdForm.pending && editingProd === p.id)}
+                      disabled={pending || editProdForm.pending}
                       aria-label={`Eliminar ${t(p.name_i18n, "es")}`}
                     >
                       <Icon name="trash" size={16} />

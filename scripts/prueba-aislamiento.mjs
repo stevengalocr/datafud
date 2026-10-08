@@ -34,8 +34,9 @@
 // Nunca imprime contraseñas ni tokens. No correrlo con claves de otro proyecto que no sea el
 // que querés probar: escribe y borra filas de prueba con la sesión de A.
 //
-// Un rechazo solo cuenta como ok si lo hizo RLS o los permisos (código 42501 / 403); en las
-// referencias de la sección 2b, solo si lo hizo la FK compuesta esperada (23503 + su nombre). Cualquier otro
+// Un rechazo solo cuenta como ok si lo hizo RLS o los permisos (código 42501 o el mensaje de RLS o de
+// permisos; un 403 genérico no basta); en las referencias de la sección 2b, solo si lo hizo la FK
+// compuesta esperada (23503 + su nombre). Cualquier otro
 // error (límite del plan de A, red, sesión vencida) es "inconcluso": no prueba nada y la corrida
 // no queda verde. Lo mismo si falta una fila de A para probar update/delete.
 // Si el script se corta de golpe, las filas de prueba son las de A y las de B con "zz-aislamiento"
@@ -561,7 +562,10 @@ try {
   const ruta = `${A.tenantId}/${MARCA}-${Date.now()}.png`;
   const contenido = nuevoPng();
   const subidaB = await B.cliente.storage.from("media").upload(ruta, contenido, { upsert: false, contentType: "image/png" });
-  const sinBucket = (e) => e && (/bucket not found/i.test(e.message ?? "") || String(e.statusCode ?? e.status ?? "") === "404");
+  const sinBucket = (e) =>
+    Boolean(e) &&
+    (/bucket not found/i.test(e.message ?? "") ||
+      (String(e.statusCode ?? e.status ?? "") === "404" && /bucket/i.test(e.message ?? "")));
   if (sinBucket(subidaB.error)) {
     omitido("el bucket media no existe todavía: se omite la prueba de storage");
   } else {

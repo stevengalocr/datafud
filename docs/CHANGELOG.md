@@ -13,13 +13,13 @@ Todas las versiones notables del proyecto. Formato basado en
 
 ### Fixed
 - **Editar un platillo:** el formulario entra a la vista (sin saltos si el sistema pide menos
-  movimiento) y el foco va al primer campo; mientras guarda, los botones Editar y Eliminar de esa fila
-  quedan deshabilitados.
+  movimiento) y el foco va al primer campo; mientras guarda, los botones Editar y Eliminar de todas
+  las filas (y el de crear un platillo) quedan deshabilitados.
 - **Subir foto:** si la dirección se cambia a mano, la vista previa la sigue (o se oculta si no es una
-  https válida); el botón queda ligado al campo de dirección para lectores de pantalla; la imagen en
+  https válida o la imagen no carga); el botón queda ligado al campo de dirección para lectores de pantalla; la imagen en
   memoria se libera también cuando falla el redimensionado.
-- **«La subida todavía no está activa»** solo sale cuando el bucket no existe; otros errores de Storage
-  (por ejemplo un archivo no encontrado) muestran el mensaje genérico de reintentar.
+- **«La subida todavía no está activa»** solo sale cuando el bucket no existe; cualquier otro error de
+  Storage (un archivo no encontrado, una falla inesperada) muestra el mensaje genérico de reintentar.
 - `scripts/prueba-aislamiento.mjs`: un 403 o «Unauthorized» genérico ya no cuenta como rechazo de RLS
   (un JWT vencido queda «inconcluso»), y una falla durante la limpieza no impide el resumen ni cambia
   el código de salida.
