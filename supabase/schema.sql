@@ -704,6 +704,51 @@ grant execute on function public.is_super_admin() to authenticated, service_role
 
 commit;
 
+-- ---------------------------------------------------------------------
+-- 12) Storage: fotos de platillos y logos (bucket "media")
+-- Público para leer: el comensal ve las fotos del menú sin sesión (la lectura la da el bucket
+-- público, por la URL del objeto; NO hay política de select y anon no recibe ninguna).
+-- Escribir: solo usuarios con sesión (authenticated), y solo dentro de la carpeta de su negocio:
+-- el nombre del objeto empieza con "<tenant_id>/" (la app sube a <tenant_id>/products|logo/<uuid>.<ext>).
+-- El super admin puede en cualquier carpeta. Límite de 2 MB y solo jpeg/png/webp, que el servidor
+-- de Storage hace cumplir. Idempotente.
+-- ---------------------------------------------------------------------
+begin;
+
+insert into storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
+values ('media', 'media', true, 2097152, array['image/jpeg', 'image/png', 'image/webp'])
+on conflict (id) do update
+  set public = excluded.public,
+      file_size_limit = excluded.file_size_limit,
+      allowed_mime_types = excluded.allowed_mime_types;
+
+drop policy if exists media_tenant_insert on storage.objects;
+create policy media_tenant_insert on storage.objects for insert to authenticated
+  with check (
+    bucket_id = 'media'
+    and ((storage.foldername(name))[1] = public.current_tenant_id()::text or public.is_super_admin())
+  );
+
+drop policy if exists media_tenant_update on storage.objects;
+create policy media_tenant_update on storage.objects for update to authenticated
+  using (
+    bucket_id = 'media'
+    and ((storage.foldername(name))[1] = public.current_tenant_id()::text or public.is_super_admin())
+  )
+  with check (
+    bucket_id = 'media'
+    and ((storage.foldername(name))[1] = public.current_tenant_id()::text or public.is_super_admin())
+  );
+
+drop policy if exists media_tenant_delete on storage.objects;
+create policy media_tenant_delete on storage.objects for delete to authenticated
+  using (
+    bucket_id = 'media'
+    and ((storage.foldername(name))[1] = public.current_tenant_id()::text or public.is_super_admin())
+  );
+
+commit;
+
 -- =====================================================================
 -- Fin de schema.sql
 -- =====================================================================
