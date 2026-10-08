@@ -26,7 +26,13 @@ async function shrink(file: File): Promise<File | null> {
   g.drawImage(bitmap, 0, 0, canvas.width, canvas.height);
   bitmap.close();
   let blob = await toBlob(canvas, "image/webp", 0.82);
-  if (!blob || blob.type !== "image/webp") blob = await toBlob(canvas, "image/jpeg", 0.85);
+  if (!blob || blob.type !== "image/webp") {
+    // JPG no tiene transparencia: sin fondo blanco, los píxeles transparentes de un PNG salen negros.
+    g.globalCompositeOperation = "destination-over";
+    g.fillStyle = "#fff";
+    g.fillRect(0, 0, canvas.width, canvas.height);
+    blob = await toBlob(canvas, "image/jpeg", 0.85);
+  }
   if (!blob) return null;
   const ext = blob.type === "image/webp" ? "webp" : "jpg";
   return new File([blob], `imagen.${ext}`, { type: blob.type });
@@ -70,16 +76,24 @@ export function ImageUpload({
     e.target.value = "";
     if (!picked) return;
     setState({ phase: "uploading", text: "Subiendo…" });
+    let small: File | null = null;
     try {
-      const small = await shrink(picked);
-      if (!small) throw new Error("canvas");
-      if (small.size > MAX_BYTES) {
-        setState({ phase: "error", text: "La imagen sigue siendo muy pesada. Probá con una más chica." });
-        return;
-      }
-      const fd = new FormData();
-      fd.set("kind", kind);
-      fd.set("file", small);
+      small = await shrink(picked);
+    } catch {
+      small = null;
+    }
+    if (!small) {
+      setState({ phase: "error", text: "No pudimos leer esa imagen. Probá con otra (JPG, PNG o WebP)." });
+      return;
+    }
+    if (small.size > MAX_BYTES) {
+      setState({ phase: "error", text: "La imagen sigue siendo muy pesada. Probá con una más chica." });
+      return;
+    }
+    const fd = new FormData();
+    fd.set("kind", kind);
+    fd.set("file", small);
+    try {
       const res = await uploadImage(fd);
       if (!res.ok || !res.data) {
         setState({ phase: "error", text: res.ok ? "No se pudo subir la imagen. Probá de nuevo." : res.error });
@@ -93,7 +107,10 @@ export function ImageUpload({
       setPreview(res.data.url);
       setState({ phase: "done", text: "Listo. Guardá para aplicar el cambio." });
     } catch {
-      setState({ phase: "error", text: "No pudimos leer esa imagen. Probá con otra (JPG, PNG o WebP)." });
+      setState({
+        phase: "error",
+        text: `No se pudo subir ${kind === "logo" ? "el logo" : "la foto"}. Recargá la página y probá de nuevo, o pegá la dirección.`,
+      });
     }
   }
 
