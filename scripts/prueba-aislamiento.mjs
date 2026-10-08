@@ -29,7 +29,14 @@
 // Nunca imprime contraseñas ni tokens. No correrlo con claves de otro proyecto que no sea el
 // que querés probar: escribe y borra filas de prueba con la sesión de A.
 //
-// Salida: exit 0 si todo pasa, 1 si algo falla, 2 si faltan variables o no se pudo preparar la prueba.
+// Un rechazo solo cuenta como ok si lo hizo RLS o los permisos (código 42501 / 403). Cualquier otro
+// error (límite del plan de A, red, sesión vencida) es "inconcluso": no prueba nada y la corrida
+// no queda verde. Lo mismo si falta una fila de A para probar update/delete.
+// Si el script se corta de golpe, las filas de prueba son las de A con "zz-aislamiento" en el
+// nombre, la etiqueta o la nota: borrarlas a mano.
+//
+// Salida: exit 0 si todo pasa, 1 si algo falla (hay fuga), 2 si faltan variables, no se pudo preparar
+// o se interrumpió, 3 si quedó incompleta (alguna comprobación inconclusa; no es una prueba válida).
 
 import { createClient } from "@supabase/supabase-js";
 
@@ -88,7 +95,8 @@ Cómo correrla (con dos usuarios de restaurante de locales distintos, por ejempl
 Con la sesión de B intenta leer y escribir los datos de A; también prueba al rol anónimo.
 Crea unas filas de prueba con la sesión de A y las borra al final. Detalle en el comentario
 al inicio de scripts/prueba-aislamiento.mjs.
-Salida: 0 si todo pasa, 1 si algo falla, 2 si faltan variables o no se pudo preparar.`);
+Salida: 0 si todo pasa, 1 si algo falla, 2 si faltan variables o no se pudo preparar,
+3 si quedó incompleta (alguna comprobación inconclusa).`);
   process.exit(2);
 }
 
@@ -99,6 +107,7 @@ let fallas = 0;
 let oks = 0;
 let omitidas = 0;
 let avisos = 0;
+let inconclusas = 0;
 
 const ok = (msg) => {
   oks++;
@@ -116,7 +125,29 @@ const aviso = (msg) => {
   avisos++;
   console.log(`aviso  ${msg}`);
 };
+const inconcluso = (msg) => {
+  inconclusas++;
+  console.log(`inconcluso ${msg}`);
+};
 const resultado = (pasa, msgOk, msgFalla) => (pasa ? ok(msgOk) : falla(msgFalla));
+
+// Un rechazo solo cuenta como prueba de aislamiento si lo hizo RLS / los permisos (42501, 403).
+// Cualquier otro error (límite de plan, red, JWT vencido, NOT NULL) no demuestra nada: es inconcluso.
+const esRls = (e) =>
+  Boolean(e) &&
+  (e.code === "42501" ||
+    String(e.statusCode ?? e.status ?? "") === "403" ||
+    /row-level security|permission denied|not authorized|unauthorized/i.test(e.message ?? ""));
+
+// Lectura o escritura que debe afectar cero filas: con error solo vale si lo causó RLS/permisos.
+function comprobarCero(error, data, msgOk, msgFalla) {
+  if (error) {
+    if (esRls(error)) ok(`${msgOk} (rechazado: ${limpio(error)})`);
+    else inconcluso(`${msgOk}: error que no es de RLS (${limpio(error)})`);
+    return;
+  }
+  resultado((data ?? []).length === 0, msgOk, msgFalla);
+}
 
 // Quita de un mensaje de error cualquier cosa que se parezca a un token.
 const limpio = (e) =>
@@ -178,7 +209,6 @@ const anon = nuevoCliente();
 
 // Lo que se creó con la sesión legítima de A y hay que borrar al final (en orden inverso).
 const limpiezaA = []; // { tabla, id }
-const limpiezaB = []; // { tabla, id }: filas que B logró crear por error o que creó a propósito
 const archivosAborrar = []; // { cliente, ruta }
 
 async function crearComoA(tabla, fila) {
@@ -199,10 +229,6 @@ async function limpiar() {
       /* mejor esfuerzo */
     }
   }
-  for (const { tabla, id } of limpiezaB.splice(0).reverse()) {
-    const { error } = await B.cliente.from(tabla).delete().eq("id", id);
-    if (error) aviso(`No se pudo borrar ${tabla}/${id} con B: ${limpio(error)}. Borrarla a mano.`);
-  }
   for (const { tabla, id } of limpiezaA.splice(0).reverse()) {
     const { error } = await A.cliente.from(tabla).delete().eq("id", id);
     if (error) aviso(`No se pudo borrar ${tabla}/${id} con A: ${limpio(error)}. Borrarla a mano.`);
@@ -222,7 +248,7 @@ try {
     price: 1,
   });
   const mesa = await crearComoA("tables", { tenant_id: A.tenantId, label: MARCA });
-  const orden = await crearComoA("orders", { tenant_id: A.tenantId, table_id: mesa?.id ?? null, customer_note: MARCA });
+  const orden = await crearComoA("orders", { tenant_id: A.tenantId, table_id: mesa?.id ?? null, customer_note: MARCA, status: "paid", subtotal: 1, total: 1 });
   const linea = orden
     ? await crearComoA("order_items", {
         order_id: orden.id,
@@ -251,7 +277,8 @@ try {
       if (/does not exist|schema cache|could not find/i.test(error.message ?? "")) {
         falla(`B lee ${tipo} ${def.nombre}: no existe en la base (${limpio(error)}). schema.sql y la base no coinciden.`);
       } else {
-        ok(`B lee ${tipo} ${def.nombre}: la API la rechaza (${limpio(error)})`);
+        if (esRls(error)) ok(`B lee ${tipo} ${def.nombre}: la API la rechaza (${limpio(error)})`);
+        else inconcluso(`B lee ${tipo} ${def.nombre}: error que no es de RLS (${limpio(error)})`);
       }
       continue;
     }
@@ -266,19 +293,20 @@ try {
   for (const [tabla, fila] of Object.entries(semillas)) {
     if (!fila) continue;
     const { data, error } = await B.cliente.from(tabla).select("id").eq("id", fila.id);
-    resultado(!error && (data ?? []).length === 0, `B lee ${tabla} por id de una fila de A: cero filas`, `B lee ${tabla} por id de una fila de A: la ve`);
+    comprobarCero(error, data, `B lee ${tabla} por id de una fila de A: cero filas`, `B lee ${tabla} por id de una fila de A: la ve`);
   }
   for (const def of TABLAS.filter((t) => t.clave === "tenant_id")) {
     const { data, error } = await B.cliente.from(def.nombre).select("*").eq("tenant_id", A.tenantId);
-    resultado(
-      error || (data ?? []).length === 0,
+    comprobarCero(
+      error,
+      data,
       `B filtra ${def.nombre} por el tenant_id de A: cero filas`,
       `B filtra ${def.nombre} por el tenant_id de A: obtiene ${(data ?? []).length} fila(s)`,
     );
   }
   {
     const { data, error } = await B.cliente.from("tenants").select("id").eq("id", A.tenantId);
-    resultado(error || (data ?? []).length === 0, "B lee tenants por el id de A: cero filas", "B lee tenants por el id de A: ve el negocio");
+    comprobarCero(error, data, "B lee tenants por el id de A: cero filas", "B lee tenants por el id de A: ve el negocio");
   }
   // Con qué rigor se probó cada tabla: si A no tiene filas, que B vea cero no demuestra mucho.
   for (const def of TABLAS) {
@@ -302,8 +330,10 @@ try {
     if (!error && (data ?? []).length > 0) {
       falla(`B inserta en ${tabla} con el tenant_id de A: lo logró`);
       for (const r of data) limpiezaA.push({ tabla, id: r.id }); // A es dueña de la fila: la borra A
+    } else if (esRls(error)) {
+      ok(`B inserta en ${tabla} con el tenant_id de A: rechazado por RLS (${limpio(error)})`);
     } else {
-      ok(`B inserta en ${tabla} con el tenant_id de A: rechazado (${error ? limpio(error) : "sin filas"})`);
+      inconcluso(`B inserta en ${tabla} con el tenant_id de A: falló por otra causa, no por RLS (${error ? limpio(error) : "sin error y sin filas"}); si A está al tope del plan, borrar filas de A y repetir`);
     }
   }
 
@@ -320,18 +350,20 @@ try {
   };
   for (const [tabla, fila] of Object.entries(semillas)) {
     if (!fila) {
-      omitido(`update/delete en ${tabla}: A no pudo crear una fila de prueba`);
+      inconcluso(`update/delete en ${tabla}: A no pudo crear una fila de prueba, no se probó`);
       continue;
     }
     const upd = await B.cliente.from(tabla).update(cambios[tabla]).eq("id", fila.id).select("id");
-    resultado(
-      !upd.error ? (upd.data ?? []).length === 0 : true,
+    comprobarCero(
+      upd.error,
+      upd.data,
       `B hace update en ${tabla} sobre una fila de A: 0 filas afectadas`,
       `B hace update en ${tabla} sobre una fila de A: modificó ${(upd.data ?? []).length} fila(s)`,
     );
     const del = await B.cliente.from(tabla).delete().eq("id", fila.id).select("id");
-    resultado(
-      !del.error ? (del.data ?? []).length === 0 : true,
+    comprobarCero(
+      del.error,
+      del.data,
       `B hace delete en ${tabla} sobre una fila de A: 0 filas afectadas`,
       `B hace delete en ${tabla} sobre una fila de A: borró ${(del.data ?? []).length} fila(s)`,
     );
@@ -344,13 +376,14 @@ try {
   // tenants y tenant_settings: update que reescribe el mismo valor (no destructivo); sin delete a propósito.
   if (tenantA) {
     const { data, error } = await B.cliente.from("tenants").update({ name: tenantA.name }).eq("id", A.tenantId).select("id");
-    resultado(
-      !error ? (data ?? []).length === 0 : true,
+    comprobarCero(
+      error,
+      data,
       "B hace update en tenants sobre el negocio de A: 0 filas afectadas",
       "B hace update en tenants sobre el negocio de A: modificó el negocio",
     );
   } else {
-    omitido("update en tenants: A no pudo leer su propio negocio");
+    inconcluso("update en tenants: A no pudo leer su propio negocio, no se probó");
   }
   if (settingsA) {
     const { data, error } = await B.cliente
@@ -358,13 +391,14 @@ try {
       .update({ restaurant_name: settingsA.restaurant_name })
       .eq("tenant_id", A.tenantId)
       .select("tenant_id");
-    resultado(
-      !error ? (data ?? []).length === 0 : true,
+    comprobarCero(
+      error,
+      data,
       "B hace update en tenant_settings de A: 0 filas afectadas",
       "B hace update en tenant_settings de A: modificó la configuración",
     );
   } else {
-    omitido("update en tenant_settings: A no tiene fila de configuración");
+    inconcluso("update en tenant_settings: A no tiene fila de configuración, no se probó");
   }
 
   // -------------------------------------------------------------------
@@ -383,13 +417,14 @@ try {
       archivosAborrar.push({ cliente: A.cliente, ruta });
       falla("B sube un archivo a la carpeta del negocio de A en media: lo logró");
     } else {
-      ok(`B sube a la carpeta del negocio de A en media: rechazado (${limpio(subidaB.error)})`);
+      if (esRls(subidaB.error)) ok(`B sube a la carpeta del negocio de A en media: rechazado (${limpio(subidaB.error)})`);
+      else inconcluso(`B sube a la carpeta del negocio de A en media: falló por otra causa, no por RLS (${limpio(subidaB.error)})`);
     }
     // Control positivo: A sí puede subir a su carpeta; si no, el rechazo de B no demuestra nada.
     const rutaA = `${A.tenantId}/${MARCA}-propio-${Date.now()}.txt`;
     const subidaA = await A.cliente.storage.from("media").upload(rutaA, contenido, { upsert: false });
     if (subidaA.error) {
-      aviso(`A tampoco pudo subir a su propia carpeta de media (${limpio(subidaA.error)}): el rechazo a B no es concluyente.`);
+      inconcluso(`A tampoco pudo subir a su propia carpeta de media (${limpio(subidaA.error)}): el rechazo a B no es concluyente.`);
     } else {
       archivosAborrar.push({ cliente: A.cliente, ruta: rutaA });
       ok("A sube a su propia carpeta de media (control positivo)");
@@ -402,8 +437,9 @@ try {
         "B intenta borrar un archivo de A en media: el archivo desapareció",
       );
       const listadoB = await B.cliente.storage.from("media").list(A.tenantId);
-      resultado(
-        Boolean(listadoB.error) || (listadoB.data ?? []).length === 0,
+      comprobarCero(
+        listadoB.error,
+        listadoB.data,
         "B lista la carpeta del negocio de A en media: cero archivos",
         `B lista la carpeta del negocio de A en media: ve ${(listadoB.data ?? []).length} archivo(s)`,
       );
@@ -414,8 +450,11 @@ try {
     if (sinBucket(subidaAnon.error)) {
       omitido("anon sube a media: el bucket no existe todavía");
     } else {
-      resultado(Boolean(subidaAnon.error), "anon sube a media: rechazado", "anon sube a media: lo logró");
-      if (!subidaAnon.error) archivosAborrar.push({ cliente: A.cliente, ruta: subidaAnon.data?.path });
+      if (!subidaAnon.error) {
+        falla("anon sube a media: lo logró");
+        archivosAborrar.push({ cliente: A.cliente, ruta: subidaAnon.data?.path });
+      } else if (esRls(subidaAnon.error)) ok("anon sube a media: rechazado");
+      else inconcluso(`anon sube a media: falló por otra causa, no por RLS (${limpio(subidaAnon.error)})`);
     }
   }
 
@@ -426,15 +465,21 @@ try {
   for (const def of [...TABLAS, ...VISTAS]) {
     const tipo = VISTAS.includes(def) ? "vista" : "tabla";
     const { data, error } = await anon.from(def.nombre).select("*").limit(5);
-    resultado(
-      error || (data ?? []).length === 0,
-      `anon lee ${tipo} ${def.nombre}: ${error ? "rechazado" : "cero filas"}`,
+    comprobarCero(
+      error,
+      data,
+      `anon lee ${tipo} ${def.nombre}: cero filas`,
       `anon lee ${tipo} ${def.nombre}: obtiene ${(data ?? []).length} fila(s)`,
     );
   }
   for (const tabla of ["categories", "products", "tables", "orders"]) {
-    const { data, error } = await anon.from(tabla).insert({ tenant_id: A.tenantId }).select("id");
-    resultado(error || (data ?? []).length === 0, `anon inserta en ${tabla}: rechazado`, `anon inserta en ${tabla}: lo logró`);
+    const { data, error } = await anon
+      .from(tabla)
+      .insert({ tenant_id: A.tenantId, ...(tabla === "tables" ? { label: `${MARCA}-anon` } : {}) })
+      .select("id");
+    if (!error && (data ?? []).length) falla(`anon inserta en ${tabla}: lo logró`);
+    else if (esRls(error)) ok(`anon inserta en ${tabla}: rechazado (${limpio(error)})`);
+    else inconcluso(`anon inserta en ${tabla}: falló por otra causa, no por RLS (${error ? limpio(error) : "sin error y sin filas"})`);
     if (!error && (data ?? []).length) for (const r of data) limpiezaA.push({ tabla, id: r.id });
   }
   // Los catálogos globales no son datos de un negocio, pero anon tampoco debería tocarlos como tablas.
@@ -450,12 +495,21 @@ try {
   await limpiar();
 }
 
-if (process.exitCode === 2) process.exit(2);
-const total = oks + fallas;
-console.log(`\nResumen: ${oks} ok, ${fallas} FALLA, ${omitidas} omitida(s), ${avisos} aviso(s) de ${total} comprobaciones.`);
+const total = oks + fallas + inconclusas;
+console.log(
+  `\nResumen: ${oks} ok, ${fallas} FALLA, ${inconclusas} inconcluso(s), ${omitidas} omitida(s) (bucket), ${avisos} aviso(s) de ${total} comprobaciones.`,
+);
 if (fallas > 0) {
   console.log("RESULTADO: FALLA. Hay datos de un negocio al alcance de otro: no abrir el registro ni enlazar «Ingresar».");
   process.exit(1);
+}
+if (process.exitCode === 2) {
+  console.log("RESULTADO: incompleto. La prueba se interrumpió antes de terminar; no prueba el aislamiento.");
+  process.exit(2);
+}
+if (inconclusas > 0) {
+  console.log("RESULTADO: incompleto. Hubo comprobaciones inconclusas (error que no es de RLS, o falta una fila de A para probar): arreglar la causa y repetir. No prueba el aislamiento todavía.");
+  process.exit(3);
 }
 console.log("RESULTADO: ok. B no ve ni toca los datos de A.");
 process.exit(0);
