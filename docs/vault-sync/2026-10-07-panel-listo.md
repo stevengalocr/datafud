@@ -64,3 +64,14 @@ Aplicado en vault: sí
 - Verificado en producción tras 1.6.1: `/`, `/login`, `/preview/carta`, `/c/ejemplo`, la guía y la imagen OG responden 200; `/dashboard` y `/admin` redirigen (307) al login; `/q/demo26` redirige (307).
 - Pendiente de la oleada, con Steven: test2, `prueba-aislamiento.mjs`, foto y logo desde el iPhone, un pedido real y el Security Advisor.
 Aplicado en vault: sí
+
+### P07 · Oleada, primer paso: login y sonda anónima en producción · commit n/a (solo verificación) · despliegue en producción 2026-10-07 (main @ b4e332b)
+**Pendientes.md** — sin cerrar líneas: la oleada sigue abierta. Anotar en el detalle que el segundo local de prueba es **test3**.
+**Decisiones.md** — ninguna.
+**Seguridad.md** — sin cambios de S#. Evidencia nueva a favor del aislamiento (rol anónimo), sin reemplazar la prueba con dos negocios.
+**Otras páginas** — ninguna.
+**log.md** — `## [2026-10-07] query | Oleada: login y sonda anónima en producción`
+- Steven probó el login en producción el 2026-10-07: ok. Creó el segundo local de prueba con el nombre **test3** (no test2).
+- Sonda anónima de solo lectura contra producción (clave `anon`, sin sesión): las 10 tablas de negocio y las 3 vistas de reportes rechazan con 42501; el bucket `media` no deja listar ningún objeto; `get_menu` con una mesa inexistente devuelve vacío.
+- Sigue pendiente de la oleada, con Steven: `prueba-aislamiento.mjs` con test y test3 (desde su PowerShell, contraseñas ocultas), foto y logo PNG transparente desde el iPhone, un pedido real desde el QR y el Security Advisor.
+Aplicado en vault: sí
