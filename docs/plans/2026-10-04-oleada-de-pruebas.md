@@ -45,7 +45,10 @@
 - Crear un segundo local, **test2**, desde `/admin`.
 - Con el usuario de test2: no ve categorías, productos, mesas, órdenes ni reportes de test.
 - Claude repite la prueba contra la API con la sesión de test2 (lecturas y escrituras con el
-  `tenant_id` de test) y corre el Security Advisor de Supabase.
+  `tenant_id` de test) y corre el Security Advisor de Supabase. La prueba es repetible:
+  `node scripts/prueba-aislamiento.mjs` (A = test, B = test2; variables `AISLAMIENTO_A_EMAIL`,
+  `AISLAMIENTO_A_PASSWORD`, `AISLAMIENTO_B_EMAIL`, `AISLAMIENTO_B_PASSWORD` más las dos de Supabase;
+  sin variables explica cómo correrla). Sale 0 si todo pasa y 1 si algo falla; borra sus filas de prueba.
 - Si todo pasa: decidir si se vuelve a enlazar «Ingresar» en la landing.
 
 **5. Super admin**
