@@ -4,6 +4,8 @@
 -- Supabase o se corre con  psql "$DBURL" -f supabase/verify.sql
 -- Devuelve una sola tabla. Esperado: ok = true en todas las filas.
 -- Las filas de Storage (16 a 21) dan false hasta aplicar la sección 12 de schema.sql.
+-- Las filas S15 (22 a 26) dan false hasta aplicar la sección 13 y la 7b de schema.sql; la 25
+-- cuenta filas que ya apuntan a otro negocio (si no es 0, schema.sql avisó cuáles con un WARNING).
 -- La última fila (super admin) da false hasta crear el super admin a mano.
 -- =====================================================================
 
@@ -98,7 +100,52 @@ chequeos (orden, chequeo, valor, esperado) as (
      and (roles && array['anon', 'public']::name[])
      and (coalesce(qual, '') || coalesce(with_check, '') || policyname) like '%media%'
   union all
-  select 22, 'super admin (false hasta crearlo a mano)', count(*)::int, 1
+  select 22, 'S15: referencias entre tablas de negocio con FK compuesta (tenant_id, ...)', count(*)::int, 4
+    from pg_constraint c
+   where c.contype = 'f'
+     and c.confrelid in ('public.categories'::regclass, 'public.products'::regclass,
+                         'public.tables'::regclass, 'public.orders'::regclass)
+     and array_length(c.conkey, 1) = 2
+     and (select a.attname from pg_attribute a where a.attrelid = c.conrelid and a.attnum = c.conkey[1]) = 'tenant_id'
+     and (select a.attname from pg_attribute a where a.attrelid = c.confrelid and a.attnum = c.confkey[1]) = 'tenant_id'
+     and (select a.attname from pg_attribute a where a.attrelid = c.confrelid and a.attnum = c.confkey[2]) = 'id'
+  union all
+  select 23, 'S15: ninguna FK de una sola columna hacia categories, products, tables u orders', count(*)::int, 0
+    from pg_constraint c
+   where c.contype = 'f'
+     and c.confrelid in ('public.categories'::regclass, 'public.products'::regclass,
+                         'public.tables'::regclass, 'public.orders'::regclass)
+     and array_length(c.conkey, 1) = 1
+  union all
+  select 24, 'S15: al borrar el padre, set null vacía solo la referencia y order_items se borra con su orden',
+         count(*)::int, 4
+    from pg_constraint c
+   where c.contype = 'f'
+     and array_length(c.conkey, 1) = 2
+     and ((c.conrelid, c.confrelid, c.confdeltype) in
+            (('public.products'::regclass, 'public.categories'::regclass, 'n'),
+             ('public.orders'::regclass, 'public.tables'::regclass, 'n'),
+             ('public.order_items'::regclass, 'public.products'::regclass, 'n'))
+          and array_length(c.confdelsetcols, 1) = 1 and c.confdelsetcols[1] = c.conkey[2]
+       or (c.conrelid, c.confrelid, c.confdeltype) =
+            ('public.order_items'::regclass, 'public.orders'::regclass, 'c'))
+  union all
+  select 25, 'S15: filas que apuntan a una fila de otro negocio', (
+      (select count(*) from public.products h join public.categories p on p.id = h.category_id
+        where p.tenant_id <> h.tenant_id)
+    + (select count(*) from public.orders h join public.tables p on p.id = h.table_id
+        where p.tenant_id <> h.tenant_id)
+    + (select count(*) from public.order_items h join public.orders p on p.id = h.order_id
+        where p.tenant_id <> h.tenant_id)
+    + (select count(*) from public.order_items h join public.products p on p.id = h.product_id
+        where p.tenant_id <> h.tenant_id))::int, 0
+  union all
+  select 26, 'S15: place_order cuenta el tope por mesa solo con órdenes del mismo negocio', count(*)::int, 1
+    from pg_proc p join pg_namespace n on n.oid = p.pronamespace
+   where n.nspname = 'public' and p.proname = 'place_order'
+     and p.prosrc like '%where tenant_id = v_tenant.id and table_id = v_table.id and created_at >%'
+  union all
+  select 27, 'super admin (false hasta crearlo a mano)', count(*)::int, 1
     from public.profiles where role = 'super_admin' and tenant_id is null
 )
 select chequeo, valor, esperado, valor = esperado as ok

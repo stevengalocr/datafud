@@ -136,6 +136,7 @@ create index if not exists idx_categories_tenant on public.categories(tenant_id)
 create table if not exists public.products (
   id uuid primary key default gen_random_uuid(),
   tenant_id uuid not null references public.tenants(id) on delete cascade,
+  -- La sección 13 (S15) cambia esta FK por (tenant_id, category_id): la categoría es del mismo negocio.
   category_id uuid references public.categories(id) on delete set null,
   name_i18n jsonb not null default '{}'::jsonb,
   description_i18n jsonb not null default '{}'::jsonb,
@@ -171,6 +172,7 @@ begin;
 create table if not exists public.orders (
   id uuid primary key default gen_random_uuid(),
   tenant_id uuid not null references public.tenants(id) on delete cascade,
+  -- La sección 13 (S15) cambia esta FK por (tenant_id, table_id): la mesa es del mismo negocio.
   table_id uuid references public.tables(id) on delete set null,
   status order_status not null default 'pending',
   currency_code text references public.currencies(code),
@@ -187,6 +189,7 @@ create index if not exists idx_orders_table_created on public.orders(table_id, c
 
 create table if not exists public.order_items (
   id uuid primary key default gen_random_uuid(),
+  -- La sección 13 (S15) cambia las FK de order_id y product_id por compuestas con tenant_id.
   order_id uuid not null references public.orders(id) on delete cascade,
   tenant_id uuid not null references public.tenants(id) on delete cascade,
   product_id uuid references public.products(id) on delete set null,
@@ -503,12 +506,13 @@ begin
   end if;
 
   -- S4: topes por pedido y frecuencia por mesa y por local, para que un QR no sirva para
-  -- llenar el tablero de un restaurante.
+  -- llenar el tablero de un restaurante. Los dos conteos filtran por el negocio (S15): las
+  -- órdenes de otro negocio nunca cuentan para el tope de esta mesa.
   if jsonb_array_length(p_items) > 30 then
     raise exception 'Un pedido lleva como máximo 30 platillos distintos';
   end if;
   if (select count(*) from public.orders
-       where table_id = v_table.id and created_at > now() - interval '10 minutes') >= 10 then
+       where tenant_id = v_tenant.id and table_id = v_table.id and created_at > now() - interval '10 minutes') >= 10 then
     raise exception 'Hay muchos pedidos seguidos desde esta mesa. Esperá unos minutos o llamá al salonero';
   end if;
   if (select count(*) from public.orders
@@ -746,6 +750,104 @@ create policy media_tenant_delete on storage.objects for delete to authenticated
     bucket_id = 'media'
     and ((storage.foldername(name))[1] = public.current_tenant_id()::text or public.is_super_admin())
   );
+
+commit;
+
+-- ---------------------------------------------------------------------
+-- 13) Referencias dentro del mismo negocio (S15)
+-- RLS solo mira el tenant_id de la fila y las FK no pasan por RLS: con FK de una sola columna,
+-- el negocio B podía crear en su negocio un platillo con la categoría de A, o una orden con la
+-- mesa de A (get_menu entrega esos id a quien tenga el QR), y así llenar el tope de pedidos de
+-- esa mesa o quedar colgado de los borrados de A. Desde aquí cada referencia entre tablas de
+-- negocio es una FK compuesta (tenant_id, <columna>) -> padre (tenant_id, id): la fila referida
+-- tiene que ser del mismo negocio, lo valida Postgres al insertar y al modificar, en los dos
+-- lados. Al borrar el padre, "set null (<columna>)" vacía solo la referencia (no el tenant_id;
+-- necesita Postgres 15 o más) y order_items se sigue borrando con su orden.
+--   products.category_id   -> categories   on delete set null (category_id)
+--   orders.table_id        -> tables       on delete set null (table_id)
+--   order_items.order_id   -> orders       on delete cascade
+--   order_items.product_id -> products     on delete set null (product_id)
+-- Las demás FK de schema.sql apuntan a tenants (la propia), a catálogos globales (plans,
+-- currencies) o a auth.users (approved_by, que solo escribe el super admin): no cruzan negocios.
+-- Idempotente y sobre una base con datos: si alguna fila existente ya apunta a otro negocio,
+-- esa referencia NO se cambia, se avisa con un WARNING (con la consulta para listar las filas)
+-- y verify.sql la marca en false; no borra ni modifica datos. Corregir esas filas y volver a
+-- correr schema.sql. Todo dentro de una transacción: o queda aplicado o queda como estaba.
+-- ---------------------------------------------------------------------
+begin;
+
+-- Padres: unique (tenant_id, id), que la FK compuesta necesita. Siempre se puede agregar: id ya es único.
+do $$
+declare
+  r record;
+begin
+  for r in
+    select * from (values
+      ('categories', 'categories_tenant_id_id_key'),
+      ('products',   'products_tenant_id_id_key'),
+      ('tables',     'tables_tenant_id_id_key'),
+      ('orders',     'orders_tenant_id_id_key')
+    ) v(tabla, nombre)
+  loop
+    if not exists (select 1 from pg_constraint
+                    where conrelid = format('public.%I', r.tabla)::regclass and conname = r.nombre) then
+      execute format('alter table public.%I add constraint %I unique (tenant_id, id)', r.tabla, r.nombre);
+    end if;
+  end loop;
+end $$;
+
+-- Hijas: FK compuesta en lugar de la de una columna.
+do $$
+declare
+  r record;
+  v_consulta text;
+  v_malas bigint;
+  v_vieja name;
+begin
+  if current_setting('server_version_num')::int < 150000 then
+    raise warning 'S15: este Postgres es anterior al 15 (no tiene "on delete set null (columna)"). No se cambió ninguna referencia; verify.sql lo marca en false.';
+    return;
+  end if;
+
+  for r in
+    select * from (values
+      ('products',    'category_id', 'categories', 'products_category_same_tenant_fkey',    'on delete set null (category_id)'),
+      ('orders',      'table_id',    'tables',     'orders_table_same_tenant_fkey',         'on delete set null (table_id)'),
+      ('order_items', 'order_id',    'orders',     'order_items_order_same_tenant_fkey',    'on delete cascade'),
+      ('order_items', 'product_id',  'products',   'order_items_product_same_tenant_fkey',  'on delete set null (product_id)')
+    ) v(hija, col, padre, nombre, al_borrar)
+  loop
+    if not exists (select 1 from pg_constraint
+                    where conrelid = format('public.%I', r.hija)::regclass and conname = r.nombre) then
+      -- Antes de cambiarla: ¿hay filas que ya apuntan a otro negocio?
+      v_consulta := format(
+        'select h.id, h.tenant_id, h.%1$I, p.tenant_id as tenant_del_padre from public.%2$I h join public.%3$I p on p.id = h.%1$I where p.tenant_id <> h.tenant_id',
+        r.col, r.hija, r.padre);
+      execute format('select count(*) from (%s) x', v_consulta) into v_malas;
+      if v_malas > 0 then
+        raise warning 'S15: % fila(s) de %.% apuntan a % de otro negocio. Esa referencia NO se cambió (sigue la FK de una columna). Para verlas: %',
+          v_malas, r.hija, r.col, r.padre, v_consulta;
+        continue;
+      end if;
+      execute format(
+        'alter table public.%I add constraint %I foreign key (tenant_id, %I) references public.%I (tenant_id, id) %s',
+        r.hija, r.nombre, r.col, r.padre, r.al_borrar);
+    end if;
+
+    -- Con la compuesta puesta, la FK vieja de una sola columna sobra: se quita (por estructura, no por nombre).
+    for v_vieja in
+      select c.conname
+        from pg_constraint c
+       where c.conrelid = format('public.%I', r.hija)::regclass
+         and c.contype = 'f'
+         and c.confrelid = format('public.%I', r.padre)::regclass
+         and c.conkey = array[(select a.attnum from pg_attribute a
+                                where a.attrelid = c.conrelid and a.attname = r.col)]::int2[]
+    loop
+      execute format('alter table public.%I drop constraint %I', r.hija, v_vieja);
+    end loop;
+  end loop;
+end $$;
 
 commit;
 

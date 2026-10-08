@@ -18,6 +18,15 @@ Todas las versiones notables del proyecto. Formato basado en
   borrar datos de un negocio A (tablas, vistas de reportes y bucket `media` si existe) y prueba al rol
   anónimo; sale 0 si todo pasa, 1 si algo falla y 3 si la prueba quedó incompleta. Es el paso 4 de la oleada de pruebas (D-018).
 
+### Security
+- **Seguridad: las referencias entre tablas no pueden cruzar de un negocio a otro (S15; requiere aplicar
+  `schema.sql` en producción).** Un platillo solo puede tener una categoría de su negocio, una orden una
+  mesa de su negocio y una línea una orden y un platillo de su negocio (FK compuestas `(tenant_id, id)`,
+  sección 13). El tope de pedidos por mesa de `place_order` cuenta solo órdenes del mismo negocio, así que
+  otro negocio ya no puede bloquear las mesas de uno. Si alguna fila existente apuntara a otro negocio,
+  `schema.sql` no la toca y avisa cuáles son. Lo comprueban `verify.sql` (filas 22 a 26) y
+  `scripts/prueba-aislamiento.mjs` (sección 2b).
+
 ### Fixed — paneles en Vercel (P0, 2026-10-03)
 - **«Esta página no cargó» al navegar por `/admin`, `/dashboard` y `/m/` en producción.** Causa:
   `src/lib/og.tsx` leía las fuentes de la imagen OG con `readFileSync` al importarse; Next importa

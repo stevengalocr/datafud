@@ -14,6 +14,11 @@
 // Comprobaciones (una línea ok / FALLA cada una):
 //   - B lee cada tabla y vista de negocio: cero filas de A (cualquier fila ajena cuenta como FALLA).
 //   - B inserta con el tenant_id de A en categories, products, tables y orders: debe fallar.
+//   - S15: B crea en SU negocio filas que apuntan a filas de A (un platillo con la categoría de A,
+//     una orden con la mesa de A, líneas con la orden o el platillo de A, y cambiar la categoría
+//     de un platillo propio por la de A): debe fallar por la FK compuesta de la sección 13 de
+//     schema.sql (código 23503 con el nombre de esa FK). Si la base no tiene la sección 13, B lo
+//     logra y es FALLA. Lo que B cree en su negocio (incluido el control positivo) lo borra B.
 //   - B hace update y delete sobre filas de A por id: deben afectar cero filas (y A las ve intactas).
 //   - Si existe el bucket `media`: B sube a la carpeta <tenant_id de A>/: debe fallar.
 //     Si el bucket no existe, la comprobación se omite (no cuenta como FALLA).
@@ -29,11 +34,12 @@
 // Nunca imprime contraseñas ni tokens. No correrlo con claves de otro proyecto que no sea el
 // que querés probar: escribe y borra filas de prueba con la sesión de A.
 //
-// Un rechazo solo cuenta como ok si lo hizo RLS o los permisos (código 42501 / 403). Cualquier otro
+// Un rechazo solo cuenta como ok si lo hizo RLS o los permisos (código 42501 / 403); en las
+// referencias de la sección 2b, solo si lo hizo la FK compuesta esperada (23503 + su nombre). Cualquier otro
 // error (límite del plan de A, red, sesión vencida) es "inconcluso": no prueba nada y la corrida
 // no queda verde. Lo mismo si falta una fila de A para probar update/delete.
-// Si el script se corta de golpe, las filas de prueba son las de A con "zz-aislamiento" en el
-// nombre, la etiqueta o la nota: borrarlas a mano.
+// Si el script se corta de golpe, las filas de prueba son las de A y las de B con "zz-aislamiento"
+// en el nombre, la etiqueta o la nota: borrarlas a mano.
 //
 // Salida: exit 0 si todo pasa, 1 si algo falla (hay fuga), 2 si faltan variables, no se pudo preparar
 // o se interrumpió, 3 si quedó incompleta (alguna comprobación inconclusa; no es una prueba válida).
@@ -139,6 +145,17 @@ const esRls = (e) =>
     String(e.statusCode ?? e.status ?? "") === "403" ||
     /row-level security|permission denied|not authorized|unauthorized/i.test(e.message ?? ""));
 
+// S15: FK compuestas (tenant_id, <columna>) de la sección 13 de schema.sql. Un rechazo de referencia
+// cruzada solo vale si lo hizo exactamente esa FK: código 23503 y su nombre en el mensaje.
+const FK_MISMO_NEGOCIO = {
+  "products.category_id": "products_category_same_tenant_fkey",
+  "orders.table_id": "orders_table_same_tenant_fkey",
+  "order_items.order_id": "order_items_order_same_tenant_fkey",
+  "order_items.product_id": "order_items_product_same_tenant_fkey",
+};
+const esFkMismoNegocio = (e, referencia) =>
+  Boolean(e) && e.code === "23503" && String(e.message ?? "").includes(FK_MISMO_NEGOCIO[referencia]);
+
 // Lectura o escritura que debe afectar cero filas: con error solo vale si lo causó RLS/permisos.
 function comprobarCero(error, data, msgOk, msgFalla) {
   if (error) {
@@ -209,6 +226,8 @@ const anon = nuevoCliente();
 
 // Lo que se creó con la sesión legítima de A y hay que borrar al final (en orden inverso).
 const limpiezaA = []; // { tabla, id }
+// Lo que B creó en su propio negocio (control positivo o referencias cruzadas que no debió lograr): lo borra B, antes que lo de A.
+const limpiezaB = []; // { tabla, id }
 const archivosAborrar = []; // { cliente, ruta }
 
 async function crearComoA(tabla, fila) {
@@ -222,6 +241,10 @@ async function crearComoA(tabla, fila) {
 }
 
 async function limpiar() {
+  for (const { tabla, id } of limpiezaB.splice(0).reverse()) {
+    const { error } = await B.cliente.from(tabla).delete().eq("id", id);
+    if (error) aviso(`No se pudo borrar ${tabla}/${id} con B: ${limpio(error)}. Borrarla a mano.`);
+  }
   for (const { cliente, ruta } of archivosAborrar.splice(0).reverse()) {
     try {
       await cliente.storage.from("media").remove([ruta]);
@@ -335,6 +358,109 @@ try {
     } else {
       inconcluso(`B inserta en ${tabla} con el tenant_id de A: falló por otra causa, no por RLS (${error ? limpio(error) : "sin error y sin filas"}); si A está al tope del plan, borrar filas de A y repetir`);
     }
+  }
+
+  // -------------------------------------------------------------------
+  // 2b) Referencias de B hacia filas de A (S15)
+  // -------------------------------------------------------------------
+  console.log("\n2b) B crea en su negocio filas que apuntan a filas de A (deben fallar por la FK del mismo negocio)");
+  // Una inserción o un update de B con una referencia a A: ok solo si lo rechaza la FK compuesta esperada.
+  const comprobarReferencia = (referencia, { data, error }, tabla, msg) => {
+    if (!error && (data ?? []).length > 0) {
+      falla(`${msg}: lo logró (la referencia cruza de negocio; falta la sección 13 de schema.sql)`);
+      if (tabla) for (const r of data) limpiezaB.push({ tabla, id: r.id });
+    } else if (esFkMismoNegocio(error, referencia)) {
+      ok(`${msg}: rechazado por ${FK_MISMO_NEGOCIO[referencia]}`);
+    } else {
+      inconcluso(`${msg}: falló por otra causa, no por la FK del mismo negocio (${error ? limpio(error) : "sin error y sin filas"})`);
+    }
+  };
+
+  // Control positivo: B crea una orden y un platillo en su propio negocio, sin referencias.
+  // Sirven de partida para la línea con el platillo de A y para el update de la categoría.
+  const ordenB = await B.cliente
+    .from("orders")
+    .insert({ tenant_id: B.tenantId, customer_note: `${MARCA}-B-propia`, status: "paid", subtotal: 1, total: 1 })
+    .select("id")
+    .single();
+  if (ordenB.data) limpiezaB.push({ tabla: "orders", id: ordenB.data.id });
+  const productoB = await B.cliente
+    .from("products")
+    .insert({ tenant_id: B.tenantId, category_id: null, name_i18n: { es: `${MARCA}-B-propio` }, price: 1 })
+    .select("id")
+    .single();
+  if (productoB.data) limpiezaB.push({ tabla: "products", id: productoB.data.id });
+  if (ordenB.data && productoB.data) ok("B crea una orden y un platillo en su propio negocio (control positivo)");
+  else aviso(`B no pudo crear filas en su propio negocio (${limpio(ordenB.error ?? productoB.error)}); las pruebas que las usan quedan inconclusas.`);
+
+  const lineaB = (extra) => ({
+    tenant_id: B.tenantId,
+    product_name_snapshot: `${MARCA}-B`,
+    unit_price_snapshot: 1,
+    quantity: 1,
+    line_total: 1,
+    ...extra,
+  });
+  const referencias = [
+    {
+      referencia: "products.category_id",
+      semilla: "categories",
+      msg: "B inserta en su negocio un platillo con la categoría de A",
+      tabla: "products",
+      intento: () =>
+        B.cliente
+          .from("products")
+          .insert({ tenant_id: B.tenantId, category_id: semillas.categories.id, name_i18n: { es: `${MARCA}-B` }, price: 1 })
+          .select("id"),
+    },
+    {
+      referencia: "orders.table_id",
+      semilla: "tables",
+      msg: "B inserta en su negocio una orden con la mesa de A",
+      tabla: "orders",
+      intento: () =>
+        B.cliente.from("orders").insert({ tenant_id: B.tenantId, table_id: semillas.tables.id, customer_note: `${MARCA}-B` }).select("id"),
+    },
+    {
+      referencia: "order_items.order_id",
+      semilla: "orders",
+      msg: "B inserta en su negocio una línea colgada de una orden de A",
+      tabla: "order_items",
+      intento: () => B.cliente.from("order_items").insert(lineaB({ order_id: semillas.orders.id })).select("id"),
+    },
+    {
+      referencia: "order_items.product_id",
+      semilla: "products",
+      partida: ordenB.data,
+      msg: "B inserta en una orden suya una línea con el platillo de A",
+      tabla: "order_items",
+      intento: () =>
+        B.cliente
+          .from("order_items")
+          .insert(lineaB({ order_id: ordenB.data.id, product_id: semillas.products.id }))
+          .select("id"),
+    },
+    {
+      referencia: "products.category_id",
+      semilla: "categories",
+      partida: productoB.data,
+      msg: "B cambia la categoría de un platillo suyo por la de A (update)",
+      tabla: null, // el platillo ya está en limpiezaB
+      intento: () => B.cliente.from("products").update({ category_id: semillas.categories.id }).eq("id", productoB.data.id).select("id"),
+    },
+  ];
+  // Una mesa no tiene columnas que apunten a otra tabla de negocio: "una mesa de B ligada a A" solo
+  // puede ser una mesa con el tenant_id de A, y eso ya lo prueba la sección 2.
+  for (const r of referencias) {
+    if (!semillas[r.semilla]) {
+      inconcluso(`${r.msg}: A no pudo crear la fila de ${r.semilla} a la que apuntar, no se probó`);
+      continue;
+    }
+    if ("partida" in r && !r.partida) {
+      inconcluso(`${r.msg}: B no pudo crear su propia fila de partida, no se probó`);
+      continue;
+    }
+    comprobarReferencia(r.referencia, await r.intento(), r.tabla, r.msg);
   }
 
   // -------------------------------------------------------------------
