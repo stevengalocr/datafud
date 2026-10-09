@@ -1,4 +1,6 @@
 import { createClient } from "@/lib/supabase/server";
+import { requireRole } from "@/lib/auth/session";
+import { must } from "@/app/dashboard/_lib/queries";
 import { PageHeader } from "@/components/shell/page-header";
 import { EmptyState } from "@/components/shell/empty-state";
 import { Card } from "@/components/ui/card";
@@ -12,15 +14,15 @@ import type { Plan, Tenant } from "@/lib/supabase/types";
 export const dynamic = "force-dynamic";
 
 export default async function TenantsPage() {
+  await requireRole("super_admin");
   const supabase = await createClient();
-  const { data: tenants } = await supabase
-    .from("tenants")
-    .select("*")
-    .order("created_at", { ascending: false });
-  const { data: plans } = await supabase.from("plans").select("*");
-
-  const list = (tenants as Tenant[]) ?? [];
-  const planById = new Map((plans as Plan[] | null)?.map((p) => [p.id, p]) ?? []);
+  const [tenantsRes, plansRes] = await Promise.all([
+    supabase.from("tenants").select("*").order("created_at", { ascending: false }),
+    supabase.from("plans").select("*"),
+  ]);
+  const list = must<Tenant>(tenantsRes, "admin.tenants");
+  const plans = must<Plan>(plansRes, "admin.plans");
+  const planById = new Map(plans.map((p) => [p.id, p]));
   const planName = (t: Tenant) => (t.plan_id ? planById.get(t.plan_id)?.name ?? "—" : "Sin plan");
 
   return (
@@ -33,7 +35,7 @@ export default async function TenantsPage() {
 
       <div className="mb-6">
         <CreateTenantForm
-          plans={((plans as Plan[] | null) ?? [])
+          plans={plans
             .slice()
             .sort((a, b) => a.sort_order - b.sort_order)
             .map((p) => ({ code: p.code, name: p.name }))}

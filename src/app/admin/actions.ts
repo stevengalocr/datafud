@@ -5,6 +5,7 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { createAdminClient, createClient } from "@/lib/supabase/server";
 import { type ActionResult, dbFail, fail, ok, zodFail } from "@/lib/action-result";
+import { changeOwnPassword, type PasswordResult } from "@/lib/auth/change-password";
 
 // Toda acción del super admin verifica el rol en el servidor antes de tocar nada.
 async function superAdmin() {
@@ -31,8 +32,13 @@ export async function setTenantStatus(tenantId: string, status: string): Promise
   const id = uuid.safeParse(tenantId);
   const st = statusSchema.safeParse(status);
   if (!id.success || !st.success) return fail("Estado inválido.");
-  const { error } = await ctx.supabase.from("tenants").update({ status: st.data }).eq("id", id.data);
+  const { data, error } = await ctx.supabase
+    .from("tenants")
+    .update({ status: st.data })
+    .eq("id", id.data)
+    .select("id");
   if (error) return dbFail("setTenantStatus", error, "No se pudo cambiar el estado. Probá de nuevo.");
+  if (!data?.length) return fail("Ese restaurante ya no existe. Recargá la página.");
   revalidatePath("/admin/tenants");
   revalidatePath("/admin");
   return ok();
@@ -186,7 +192,7 @@ const paymentSchema = z
   })
   .refine((v) => v.periodEnd >= v.periodStart, { message: "«Hasta» no puede ser antes de «Desde»." });
 
-export async function registerPayment(formData: FormData): Promise<ActionResult> {
+export async function registerPayment(formData: FormData): Promise<ActionResult<{ message: string }>> {
   const ctx = await superAdmin();
   if (!ctx) return fail(NO_AUTORIZADO);
   const parsed = paymentSchema.safeParse({
@@ -198,10 +204,31 @@ export async function registerPayment(formData: FormData): Promise<ActionResult>
   if (!parsed.success) return zodFail(parsed.error);
   const { tenantId, amount, periodStart, periodEnd } = parsed.data;
 
-  const { data: tenant } = await ctx.supabase.from("tenants").select("plan_id").eq("id", tenantId).single();
+  const { data: tenant, error: tenantErr } = await ctx.supabase
+    .from("tenants")
+    .select("plan_id, status")
+    .eq("id", tenantId)
+    .maybeSingle();
+  if (tenantErr) return dbFail("registerPayment.tenant", tenantErr, "No se pudo registrar el pago. Probá de nuevo.");
+  if (!tenant) return fail("Ese restaurante ya no existe. Recargá la página.");
+
+  // Un segundo clic (o un reintento después de un aviso) no registra el mismo pago dos veces:
+  // el mismo local con el mismo periodo ya pagado se rechaza.
+  const { data: dup, error: dupErr } = await ctx.supabase
+    .from("subscription_payments")
+    .select("id")
+    .eq("tenant_id", tenantId)
+    .eq("period_start", periodStart)
+    .eq("period_end", periodEnd)
+    .limit(1);
+  if (dupErr) return dbFail("registerPayment.dup", dupErr, "No se pudo registrar el pago. Probá de nuevo.");
+  if (dup?.length) {
+    return fail("Ese local ya tiene un pago registrado con el mismo periodo. No se registró otro: si es un pago distinto, revisá las fechas.");
+  }
+
   const { error } = await ctx.supabase.from("subscription_payments").insert({
     tenant_id: tenantId,
-    plan_id: tenant?.plan_id ?? null,
+    plan_id: tenant.plan_id ?? null,
     amount_usd: amount,
     period_start: periodStart,
     period_end: periodEnd,
@@ -209,14 +236,39 @@ export async function registerPayment(formData: FormData): Promise<ActionResult>
     status: "paid",
     approved_by: ctx.userId,
   });
+  // Dos clics a la vez: el índice único por local y periodo (schema.sql, 14a) frena el segundo.
+  if (error?.code === "23505") return fail("Ya hay un pago registrado para ese período en este local. No se registró otro.");
   if (error) return dbFail("registerPayment", error, "No se pudo registrar el pago. Probá de nuevo.");
 
-  // Un pago registrado deja activo al local.
-  await ctx.supabase.from("tenants").update({ status: "active" }).eq("id", tenantId);
   revalidatePath("/admin/payments");
-  revalidatePath("/admin/tenants");
   revalidatePath("/admin");
-  return ok();
+
+  // Un pago reactiva solo a un local suspendido o en prueba. Uno cancelado se reactiva a mano,
+  // desde Restaurantes: un pago atrasado no debe revivirlo sin que nadie lo decida.
+  if (tenant.status !== "suspended" && tenant.status !== "trial") {
+    return ok({
+      message:
+        tenant.status === "cancelled"
+          ? "Pago registrado. El local sigue cancelado: si corresponde, reactivalo desde Restaurantes."
+          : "Pago registrado.",
+    });
+  }
+  // La condición de estado va en el `update`: si alguien lo canceló mientras tanto, no se revive.
+  const { data: updated, error: statusErr } = await ctx.supabase
+    .from("tenants")
+    .update({ status: "active" })
+    .eq("id", tenantId)
+    .in("status", ["suspended", "trial"])
+    .select("id");
+  revalidatePath("/admin/tenants");
+  if (statusErr) {
+    console.error("[datafud] registerPayment.status:", statusErr.code ?? "-", statusErr.message ?? "");
+    return fail("El pago quedó registrado (no lo registrés de nuevo), pero no se pudo activar el local. Activalo desde Restaurantes.");
+  }
+  if (!updated?.length) {
+    return ok({ message: "Pago registrado. El estado del local cambió mientras tanto, así que no se tocó: revisalo en Restaurantes." });
+  }
+  return ok({ message: "Pago registrado. El local quedó activo y su carta vuelve a abrirse." });
 }
 
 // ---------- Cargos ----------
@@ -258,4 +310,11 @@ export async function registerCharge(formData: FormData): Promise<ActionResult> 
   revalidatePath("/admin/charges");
   revalidatePath("/admin");
   return ok();
+}
+
+// ---------- Cuenta del super admin ----------
+export async function changeAdminPassword(formData: FormData): Promise<PasswordResult> {
+  const ctx = await superAdmin();
+  if (!ctx) return fail(NO_AUTORIZADO);
+  return changeOwnPassword(formData);
 }

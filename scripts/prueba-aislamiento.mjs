@@ -17,15 +17,20 @@
 //   - S15: B crea en SU negocio filas que apuntan a filas de A (un platillo con la categoría de A,
 //     una orden con la mesa de A, líneas con la orden o el platillo de A, y cambiar la categoría
 //     de un platillo propio por la de A): debe fallar por la FK compuesta de la sección 13 de
-//     schema.sql (código 23503 con el nombre de esa FK). Si la base no tiene la sección 13, B lo
-//     logra y es FALLA. Lo que B cree en su negocio (incluido el control positivo) lo borra B.
+//     schema.sql (código 23503 con el nombre de esa FK). Desde 1.7.0 nadie con sesión inserta
+//     órdenes ni líneas (entran solo por place_order): en esas tres, el rechazo por permisos
+//     también cuenta como ok. Si B lo logra, es FALLA. Lo que B cree en su negocio lo borra B.
+//   - B tampoco puede insertar una orden en su propio negocio (control de 1.7.0).
 //   - B hace update y delete sobre filas de A por id: deben afectar cero filas (y A las ve intactas).
-//   - Si existe el bucket `media`: B sube a la carpeta <tenant_id de A>/: debe fallar.
+//   - Si existe el bucket `media`: B sube a la carpeta <tenant_id de A>/: debe fallar. A lista su
+//     propia carpeta y ve su archivo (control de la política de select de 1.7.0); B no lo ve.
 //     Si el bucket no existe, la comprobación se omite (no cuenta como FALLA).
 //   - Sin sesión (anon): leer cualquiera de esas tablas devuelve cero filas o error.
 //
 // Para tener filas de A con qué probar, A (sesión legítima) crea unas filas marcadas con
-// "zz-aislamiento" y el script las borra al final, también si algo falla. Lo que B logre crear
+// "zz-aislamiento" y el script las borra al final, también si algo falla. La orden de A se crea
+// como la crea un comensal, con place_order en la mesa de prueba: el local de A tiene que estar
+// activo y en un plan con pedidos desde la mesa (Estándar o Empresarial). Lo que B logre crear
 // por error se reporta como FALLA y se intenta borrar. Las pruebas de update sobre `tenants` y
 // `tenant_settings` reescriben el mismo valor que ya tenían, así que no cambian nada si pasaran.
 //
@@ -265,8 +270,9 @@ async function limpiar() {
     const { error } = await B.cliente.from(tabla).delete().eq("id", id);
     if (error) aviso(`No se pudo borrar ${tabla}/${id} con B: ${limpio(error)}. Borrarla a mano.`);
   }
-  // El bucket no tiene política de select (a propósito): remove() puede no borrar nada sin avisar.
-  // Se confirma por la URL pública y, si el archivo sigue, se avisa para borrarlo a mano.
+  // Desde 1.7.0 cada negocio ve su carpeta (media_tenant_select) y remove() borra lo suyo. Con un
+  // schema.sql anterior remove() no borra nada y no avisa: se confirma por la URL pública y, si el
+  // archivo sigue, se avisa para borrarlo a mano.
   const sobrantes = [];
   for (const { cliente, ruta } of archivosAborrar.splice(0).reverse()) {
     if (!ruta) continue;
@@ -299,21 +305,27 @@ try {
     price: 1,
   });
   const mesa = await crearComoA("tables", { tenant_id: A.tenantId, label: MARCA });
-  const orden = await crearComoA("orders", { tenant_id: A.tenantId, table_id: mesa?.id ?? null, customer_note: MARCA, status: "paid", subtotal: 1, total: 1 });
-  const linea = orden
-    ? await crearComoA("order_items", {
-        order_id: orden.id,
-        tenant_id: A.tenantId,
-        product_id: producto?.id ?? null,
-        product_name_snapshot: MARCA,
-        unit_price_snapshot: 1,
-        quantity: 1,
-        line_total: 1,
-      })
-    : null;
+  tenantA = (await A.cliente.from("tenants").select("id, name, slug").eq("id", A.tenantId).maybeSingle()).data;
+  // Desde 1.7.0 las órdenes entran solo por place_order: A hace un pedido en su mesa de prueba.
+  let orden = null;
+  let linea = null;
+  if (tenantA?.slug && mesa && producto) {
+    const pedido = await A.cliente.rpc("place_order", {
+      p_slug: tenantA.slug,
+      p_token: mesa.qr_token,
+      p_items: [{ product_id: producto.id, quantity: 1 }],
+      p_note: MARCA,
+    });
+    if (pedido.error || typeof pedido.data !== "string") {
+      aviso(`A no pudo hacer un pedido de prueba con place_order (${limpio(pedido.error)}); si dice que el local no recibe pedidos, pasalo a un plan con pedidos. Las pruebas de órdenes quedan inconclusas.`);
+    } else {
+      limpiezaA.push({ tabla: "orders", id: pedido.data }); // sus líneas se borran con la orden
+      orden = (await A.cliente.from("orders").select("*").eq("id", pedido.data).maybeSingle()).data;
+      linea = (await A.cliente.from("order_items").select("*").eq("order_id", pedido.data).limit(1).maybeSingle()).data;
+    }
+  }
   semillas = { categories: categoria, products: producto, tables: mesa, orders: orden, order_items: linea };
 
-  tenantA = (await A.cliente.from("tenants").select("id, name").eq("id", A.tenantId).maybeSingle()).data;
   settingsA = (await A.cliente.from("tenant_settings").select("tenant_id, restaurant_name").eq("tenant_id", A.tenantId).maybeSingle()).data;
 
   // -------------------------------------------------------------------
@@ -393,33 +405,40 @@ try {
   // -------------------------------------------------------------------
   console.log("\n2b) B crea en su negocio filas que apuntan a filas de A (deben fallar por la FK del mismo negocio)");
   // Una inserción o un update de B con una referencia a A: ok solo si lo rechaza la FK compuesta esperada.
-  const comprobarReferencia = (referencia, { data, error }, tabla, msg) => {
+  const comprobarReferencia = (referencia, { data, error }, tabla, msg, permisosValen = false) => {
     if (!error && (data ?? []).length > 0) {
       falla(`${msg}: lo logró (la referencia cruza de negocio; falta la sección 13 de schema.sql)`);
       if (tabla) for (const r of data) limpiezaB.push({ tabla, id: r.id });
     } else if (esFkMismoNegocio(error, referencia)) {
       ok(`${msg}: rechazado por ${FK_MISMO_NEGOCIO[referencia]}`);
+    } else if (permisosValen && esRls(error)) {
+      ok(`${msg}: rechazado (con sesión no se insertan órdenes ni líneas; ${limpio(error)})`);
     } else {
       inconcluso(`${msg}: falló por otra causa, no por la FK del mismo negocio (${error ? limpio(error) : "sin error y sin filas"})`);
     }
   };
 
-  // Control positivo: B crea una orden y un platillo en su propio negocio, sin referencias.
-  // Sirven de partida para la línea con el platillo de A y para el update de la categoría.
+  // 1.7.0: B no inserta órdenes ni en su propio negocio (entran solo por place_order).
   const ordenB = await B.cliente
     .from("orders")
     .insert({ tenant_id: B.tenantId, customer_note: `${MARCA}-B-propia`, status: "paid", subtotal: 1, total: 1 })
-    .select("id")
-    .single();
-  if (ordenB.data) limpiezaB.push({ tabla: "orders", id: ordenB.data.id });
+    .select("id");
+  if (!ordenB.error && (ordenB.data ?? []).length) {
+    for (const r of ordenB.data) limpiezaB.push({ tabla: "orders", id: r.id });
+    falla("B inserta una orden directo en su propio negocio: lo logró (falta la sección 6 de schema.sql 1.7.0)");
+  } else if (esRls(ordenB.error)) ok("B no puede insertar una orden directo, ni en su negocio: solo por place_order");
+  else inconcluso(`B inserta una orden directo en su negocio: falló por otra causa (${limpio(ordenB.error)})`);
+
+  // Control positivo: B crea un platillo en su propio negocio, sin referencias. Sirve de partida
+  // para el update de la categoría.
   const productoB = await B.cliente
     .from("products")
     .insert({ tenant_id: B.tenantId, category_id: null, name_i18n: { es: `${MARCA}-B-propio` }, price: 1 })
     .select("id")
     .single();
   if (productoB.data) limpiezaB.push({ tabla: "products", id: productoB.data.id });
-  if (ordenB.data && productoB.data) ok("B crea una orden y un platillo en su propio negocio (control positivo)");
-  else aviso(`B no pudo crear filas en su propio negocio (${limpio(ordenB.error ?? productoB.error)}); las pruebas que las usan quedan inconclusas.`);
+  if (productoB.data) ok("B crea un platillo en su propio negocio (control positivo)");
+  else aviso(`B no pudo crear un platillo en su propio negocio (${limpio(productoB.error)}); la prueba que lo usa queda inconclusa.`);
 
   const lineaB = (extra) => ({
     tenant_id: B.tenantId,
@@ -446,6 +465,7 @@ try {
       semilla: "tables",
       msg: "B inserta en su negocio una orden con la mesa de A",
       tabla: "orders",
+      permisosValen: true,
       intento: () =>
         B.cliente.from("orders").insert({ tenant_id: B.tenantId, table_id: semillas.tables.id, customer_note: `${MARCA}-B` }).select("id"),
     },
@@ -454,18 +474,21 @@ try {
       semilla: "orders",
       msg: "B inserta en su negocio una línea colgada de una orden de A",
       tabla: "order_items",
+      permisosValen: true,
       intento: () => B.cliente.from("order_items").insert(lineaB({ order_id: semillas.orders.id })).select("id"),
     },
     {
       referencia: "order_items.product_id",
       semilla: "products",
-      partida: ordenB.data,
-      msg: "B inserta en una orden suya una línea con el platillo de A",
+      msg: "B inserta en su negocio una línea con el platillo de A",
       tabla: "order_items",
+      permisosValen: true,
+      // B ya no tiene órdenes propias que no sean de place_order: el id de orden no existe, y
+      // el rechazo llega antes (permisos) o por la FK del platillo.
       intento: () =>
         B.cliente
           .from("order_items")
-          .insert(lineaB({ order_id: ordenB.data.id, product_id: semillas.products.id }))
+          .insert(lineaB({ order_id: crypto.randomUUID(), product_id: semillas.products.id }))
           .select("id"),
     },
     {
@@ -488,7 +511,7 @@ try {
       inconcluso(`${r.msg}: B no pudo crear su propia fila de partida, no se probó`);
       continue;
     }
-    comprobarReferencia(r.referencia, await r.intento(), r.tabla, r.msg);
+    comprobarReferencia(r.referencia, await r.intento(), r.tabla, r.msg, Boolean(r.permisosValen));
   }
 
   // -------------------------------------------------------------------
@@ -596,6 +619,12 @@ try {
           "B intenta borrar un archivo de A en media: el archivo desapareció",
         );
       }
+      // Control positivo de la política de select (1.7.0): A ve su archivo al listar su carpeta.
+      const nombreA = rutaA.slice(A.tenantId.length + 1);
+      const listadoA = await A.cliente.storage.from("media").list(A.tenantId, { search: nombreA });
+      if (listadoA.error) inconcluso(`A lista su propia carpeta de media: error (${limpio(listadoA.error)})`);
+      else if ((listadoA.data ?? []).some((f) => f.name === nombreA)) ok("A lista su propia carpeta de media y ve su archivo");
+      else aviso("A no ve su propio archivo al listar su carpeta de media: falta la política media_tenant_select (schema.sql 1.7.0, sección 12).");
       const listadoB = await B.cliente.storage.from("media").list(A.tenantId);
       comprobarCero(
         listadoB.error,
@@ -645,7 +674,7 @@ try {
   // Los catálogos globales no son datos de un negocio, pero anon tampoco debería tocarlos como tablas.
   for (const tabla of ["plans", "currencies"]) {
     const { data, error } = await anon.from(tabla).select("*").limit(1);
-    if (!error && (data ?? []).length) aviso(`anon lee el catálogo ${tabla} (no es de un negocio; schema.sql le deja la política plans_read en true, pero sin permiso de tabla no debería llegar).`);
+    if (!error && (data ?? []).length) aviso(`anon lee el catálogo ${tabla} (no es de un negocio, pero desde 1.7.0 sus políticas son solo para authenticated y anon no tiene permiso de tabla: no debería llegar).`);
   }
 } catch (e) {
   console.error(`\nLa prueba se interrumpió: ${limpio(e)}`);

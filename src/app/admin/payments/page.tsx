@@ -1,30 +1,50 @@
 import { createClient } from "@/lib/supabase/server";
+import { requireRole } from "@/lib/auth/session";
+import { must } from "@/app/dashboard/_lib/queries";
 import { PageHeader } from "@/components/shell/page-header";
 import { EmptyState } from "@/components/shell/empty-state";
 import { Card, CardBody, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { PAYMENT_STATUS_COLOR, PAYMENT_STATUS_LABEL } from "@/lib/constants";
 import { formatUsdAmount } from "@/lib/currency/format";
-import { formatDate } from "@/lib/dates";
-import { PaymentForm } from "./payment-form";
+import { formatDate, localDayKey } from "@/lib/dates";
+import { PaymentForm, type TenantOption } from "./payment-form";
 import type { SubscriptionPayment, Tenant } from "@/lib/supabase/types";
 
 export const dynamic = "force-dynamic";
 
-export default async function PaymentsPage() {
-  const supabase = await createClient();
-  const { data: tenants } = await supabase
-    .from("tenants")
-    .select("id, name")
-    .order("name");
-  const { data: payments } = await supabase
-    .from("subscription_payments")
-    .select("*")
-    .order("created_at", { ascending: false });
+/** "2026-01-31" + 1 mes = "2026-02-28": el mismo día del mes siguiente, con tope al último día. */
+function addOneMonth(key: string): string {
+  const [y, m, d] = key.split("-").map(Number);
+  const ny = m === 12 ? y + 1 : y;
+  const nm = m === 12 ? 1 : m + 1;
+  const last = new Date(Date.UTC(ny, nm, 0)).getUTCDate();
+  return `${ny}-${String(nm).padStart(2, "0")}-${String(Math.min(d, last)).padStart(2, "0")}`;
+}
 
-  const tenantList = (tenants as Pick<Tenant, "id" | "name">[]) ?? [];
+type TenantRow = Pick<Tenant, "id" | "name" | "status"> & {
+  plan: { price_usd: number } | { price_usd: number }[] | null;
+};
+
+export default async function PaymentsPage() {
+  await requireRole("super_admin");
+  const supabase = await createClient();
+  const [tenantsRes, paymentsRes] = await Promise.all([
+    supabase.from("tenants").select("id, name, status, plan:plans(price_usd)").order("name"),
+    supabase.from("subscription_payments").select("*").order("created_at", { ascending: false }),
+  ]);
+  const tenantRows = must<TenantRow>(tenantsRes, "admin.payments.tenants");
+  const list = must<SubscriptionPayment>(paymentsRes, "admin.payments");
+
+  // El monto propuesto es la mensualidad del plan de cada local (no un número escrito a mano).
+  const tenantList: TenantOption[] = tenantRows.map((t) => {
+    const plan = Array.isArray(t.plan) ? t.plan[0] : t.plan;
+    return { id: t.id, name: t.name, status: t.status, priceUsd: plan ? Number(plan.price_usd) : null };
+  });
   const nameById = new Map(tenantList.map((t) => [t.id, t.name]));
-  const list = (payments as SubscriptionPayment[]) ?? [];
+  // Fechas propuestas en el día de Costa Rica (en UTC, después de las 6 p. m. ya era «mañana»).
+  const today = localDayKey();
+  const nextMonth = addOneMonth(today);
 
   return (
     <div>
@@ -40,7 +60,7 @@ export default async function PaymentsPage() {
         </CardHeader>
         <CardBody>
           {tenantList.length > 0 ? (
-            <PaymentForm tenants={tenantList} />
+            <PaymentForm tenants={tenantList} today={today} nextMonth={nextMonth} />
           ) : (
             <p className="text-sm text-stone-600">
               Para registrar un pago primero tiene que haber un restaurante dado de alta.

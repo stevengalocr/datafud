@@ -9,8 +9,10 @@ import type {
   Product,
   SubscriptionPayment,
   Tenant,
+  TenantCharge,
   TenantSettings,
 } from "@/lib/supabase/types";
+import { PRICING } from "@/lib/constants";
 import type { MenuPayload } from "@/app/m/[tenant]/[table]/menu-client";
 
 const now = new Date();
@@ -27,7 +29,7 @@ export const RESTAURANT = {
   tagline: "Soda tica · cocina fresca de barrio",
   slug: "verde-limon",
   address: "Barrio Escalante, San José, Costa Rica",
-  phone: "+506 2253 7788",
+  phone: "+506 0000 0000",
   cover: "/demo/portada.webp",
 };
 
@@ -39,7 +41,7 @@ export const mockPlans: Plan[] = [
     price_usd: 29,
     is_active: true,
     sort_order: 1,
-    features: { max_languages: 2, max_products: 60, max_categories: 5, max_tables: 8, advanced_reports: false, full_branding: false },
+    features: { max_languages: 2, max_products: 60, max_categories: 5, max_tables: 8, advanced_reports: false, full_branding: false, table_ordering: false },
   },
   {
     id: "plan-estandar",
@@ -48,7 +50,7 @@ export const mockPlans: Plan[] = [
     price_usd: 49,
     is_active: true,
     sort_order: 2,
-    features: { max_languages: 2, max_products: 150, max_categories: 20, max_tables: 30, advanced_reports: true, full_branding: true },
+    features: { max_languages: 2, max_products: 150, max_categories: 20, max_tables: 30, advanced_reports: true, full_branding: true, table_ordering: true },
   },
   {
     id: "plan-empresarial",
@@ -57,10 +59,14 @@ export const mockPlans: Plan[] = [
     price_usd: 99,
     is_active: true,
     sort_order: 3,
-    features: { max_languages: 3, max_products: null, max_categories: null, max_tables: null, advanced_reports: true, full_branding: true },
+    features: { max_languages: 3, max_products: null, max_categories: null, max_tables: null, advanced_reports: true, full_branding: true, table_ordering: true },
   },
 ];
 
+// Locales y dueños con nombres que no pueden ser de nadie («de prueba») (AA-21): la demo del super
+// admin los muestra suspendidos o con pagos vencidos. Correos en el dominio reservado `.test`
+// (/preview/admin no los muestra) y teléfonos 0000, que no existen en Costa Rica. Verde Limón es
+// el restaurante ficticio de la demo (D-042) y sale activo.
 export const mockTenants: Tenant[] = [
   {
     id: "t-demo",
@@ -69,63 +75,76 @@ export const mockTenants: Tenant[] = [
     status: "active",
     plan_id: "plan-estandar",
     trial_ends_at: null,
-    owner_email: "hola@verdelimon.cr",
-    owner_name: "Daniela Castro",
-    phone: "+506 2253 7788",
+    owner_email: "verde-limon@ejemplo.test",
+    owner_name: "Dueña de ejemplo",
+    phone: "+506 0000 0000",
     created_at: iso(120),
     updated_at: iso(0),
   },
   {
     id: "t-2",
-    name: "Restaurante La Cosecha",
-    slug: "la-cosecha",
+    name: "Local de prueba Norte",
+    slug: "prueba-norte",
     status: "active",
     plan_id: "plan-empresarial",
     trial_ends_at: null,
-    owner_email: "info@lacosecha.cr",
-    owner_name: "María Jiménez",
-    phone: "+506 2222 1111",
+    owner_email: "prueba-norte@ejemplo.test",
+    owner_name: "Dueña de prueba A",
+    phone: "+506 0000 0001",
     created_at: iso(95),
     updated_at: iso(2),
   },
   {
     id: "t-3",
-    name: "Café del Parque",
-    slug: "cafe-parque",
+    name: "Café de prueba Centro",
+    slug: "prueba-centro",
     status: "trial",
     plan_id: "plan-basico",
     trial_ends_at: iso(-18),
-    owner_email: "hola@cafeparque.com",
-    owner_name: "Luis Mora",
+    owner_email: "prueba-centro@ejemplo.test",
+    owner_name: "Dueño de prueba B",
     phone: null,
     created_at: iso(12),
     updated_at: iso(1),
   },
   {
     id: "t-4",
-    name: "Pizzería Napoli",
-    slug: "napoli",
+    name: "Local de prueba Sur",
+    slug: "prueba-sur",
     status: "suspended",
     plan_id: "plan-estandar",
     trial_ends_at: null,
-    owner_email: "napoli@gmail.com",
-    owner_name: "Marco Rossi",
+    owner_email: "prueba-sur@ejemplo.test",
+    owner_name: "Dueño de prueba C",
     phone: null,
     created_at: iso(80),
     updated_at: iso(6),
   },
   {
     id: "t-5",
-    name: "Marisquería El Puerto",
-    slug: "el-puerto",
+    name: "Local de prueba Oeste",
+    slug: "prueba-oeste",
     status: "active",
     plan_id: "plan-estandar",
     trial_ends_at: null,
-    owner_email: "ventas@elpuerto.cr",
-    owner_name: "Sofía Vargas",
-    phone: "+506 2630 4040",
+    owner_email: "prueba-oeste@ejemplo.test",
+    owner_name: "Dueña de prueba D",
+    phone: "+506 0000 0002",
     created_at: iso(45),
     updated_at: iso(3),
+  },
+  {
+    id: "t-6",
+    name: "Local de prueba Este",
+    slug: "prueba-este",
+    status: "cancelled",
+    plan_id: "plan-basico",
+    trial_ends_at: null,
+    owner_email: "prueba-este@ejemplo.test",
+    owner_name: "Dueño de prueba E",
+    phone: null,
+    created_at: iso(150),
+    updated_at: iso(20),
   },
 ];
 
@@ -135,6 +154,13 @@ export const mockPayments: SubscriptionPayment[] = [
   { id: "pay-2", tenant_id: "t-2", plan_id: "plan-empresarial", amount_usd: 99, period_start: iso(25).slice(0, 10), period_end: iso(-5).slice(0, 10), paid_at: iso(25), status: "paid", approved_by: null, notes: null, created_at: iso(25) },
   { id: "pay-5", tenant_id: "t-5", plan_id: "plan-estandar", amount_usd: 49, period_start: iso(20).slice(0, 10), period_end: iso(10).slice(0, 10), paid_at: iso(20), status: "paid", approved_by: null, notes: null, created_at: iso(20) },
   { id: "pay-3", tenant_id: "t-4", plan_id: "plan-estandar", amount_usd: 49, period_start: iso(40).slice(0, 10), period_end: iso(10).slice(0, 10), paid_at: null, status: "overdue", approved_by: null, notes: "Pago vencido", created_at: iso(40) },
+];
+
+// Cargos únicos (implementación y tarjetas NFC) para /preview/admin. Los montos salen de PRICING.
+export const mockCharges: TenantCharge[] = [
+  { id: "ch-1", tenant_id: "t-demo", kind: "implementation", description: "Implementación del sistema completo", quantity: 1, unit_amount_usd: PRICING.setupFee.sistema.usd, amount_usd: PRICING.setupFee.sistema.usd, status: "paid", paid_at: iso(118), approved_by: null, notes: null, created_at: iso(118) },
+  { id: "ch-2", tenant_id: "t-demo", kind: "nfc_cards", description: "Tarjetas NFC para las mesas", quantity: 6, unit_amount_usd: PRICING.nfcUnitUsd, amount_usd: 6 * PRICING.nfcUnitUsd, status: "paid", paid_at: iso(100), approved_by: null, notes: null, created_at: iso(100) },
+  { id: "ch-3", tenant_id: "t-2", kind: "implementation", description: null, quantity: 1, unit_amount_usd: PRICING.setupFee.sistema.usd, amount_usd: PRICING.setupFee.sistema.usd, status: "pending", paid_at: null, approved_by: null, notes: null, created_at: iso(4) },
 ];
 
 export const mockSettings: TenantSettings = {
@@ -210,7 +236,17 @@ export const mockProducts: Product[] = [
   P("p-queque", "c-postres", "Queque de frutos rojos", "Berry cake", "Bizcocho suave con crema y frutos rojos frescos.", "Soft sponge cake with cream and fresh red berries.", 2600, "p-queque", 2),
 ];
 
-// Comandas en vivo — variedad de estados para el tablero de cocina.
+// Nombre de cada mesa, como lo guarda el panel real (`tables.label`).
+export const mockTableLabels: Record<string, string> = {
+  "tab-1": "Mesa 1",
+  "tab-2": "Mesa 2",
+  "tab-3": "Mesa 3",
+  "tab-4": "Mesa 4",
+  "tab-5": "Terraza 1",
+  "tab-6": "Barra",
+};
+
+// Órdenes de ejemplo con variedad de estados para el tablero (la última es de ayer).
 export const mockOrders: Order[] = [
   { id: "o-1", tenant_id: "t-demo", table_id: "tab-3", status: "pending", currency_code: "CRC", subtotal: 8400, total: 8400, customer_note: "Sin cebolla en el casado, por favor", created_at: minsAgo(3), updated_at: minsAgo(3) },
   { id: "o-2", tenant_id: "t-demo", table_id: "tab-1", status: "pending", currency_code: "CRC", subtotal: 4500, total: 4500, customer_note: null, created_at: minsAgo(7), updated_at: minsAgo(7) },
@@ -219,6 +255,7 @@ export const mockOrders: Order[] = [
   { id: "o-5", tenant_id: "t-demo", table_id: "tab-4", status: "ready", currency_code: "CRC", subtotal: 6500, total: 6500, customer_note: null, created_at: minsAgo(26), updated_at: minsAgo(4) },
   { id: "o-6", tenant_id: "t-demo", table_id: "tab-6", status: "delivered", currency_code: "CRC", subtotal: 5200, total: 5200, customer_note: null, created_at: minsAgo(48), updated_at: minsAgo(30) },
   { id: "o-7", tenant_id: "t-demo", table_id: "tab-1", status: "paid", currency_code: "CRC", subtotal: 9100, total: 9100, customer_note: null, created_at: minsAgo(75), updated_at: minsAgo(60) },
+  { id: "o-9", tenant_id: "t-demo", table_id: "tab-4", status: "cancelled", currency_code: "CRC", subtotal: 2800, total: 2800, customer_note: null, created_at: minsAgo(40), updated_at: minsAgo(35) },
   { id: "o-8", tenant_id: "t-demo", table_id: "tab-2", status: "paid", currency_code: "CRC", subtotal: 7000, total: 7000, customer_note: null, created_at: iso(1), updated_at: iso(1) },
 ];
 
@@ -234,10 +271,18 @@ export const mockOrderItems: Record<string, OrderItem[]> = {
   "o-5": [oi("oi-8", "o-5", "p-lomito", "Lomito en salsa", 6500, 1)],
   "o-6": [oi("oi-9", "o-6", "p-pizza", "Pizza Artesanal", 5200, 1)],
   "o-7": [oi("oi-10", "o-7", "p-casado", "Casado con carne mechada", 4200, 2), oi("oi-11", "o-7", "p-fresco", "Fresco Natural de Naranja", 1400, 1)],
+  "o-9": [oi("oi-14", "o-9", "p-gallo", "Gallo Pinto con maduro", 2800, 1)],
   "o-8": [oi("oi-12", "o-8", "p-casado", "Casado con carne mechada", 4200, 1), oi("oi-13", "o-8", "p-brownie", "Brownie con helado", 2900, 1)],
 };
 
 export const mockDailySales = [
+  { day: iso(13).slice(0, 10), orders_count: 31, revenue: 158700, currency_code: "CRC" },
+  { day: iso(12).slice(0, 10), orders_count: 36, revenue: 187300, currency_code: "CRC" },
+  { day: iso(11).slice(0, 10), orders_count: 40, revenue: 209600, currency_code: "CRC" },
+  { day: iso(10).slice(0, 10), orders_count: 29, revenue: 149800, currency_code: "CRC" },
+  { day: iso(9).slice(0, 10), orders_count: 44, revenue: 231400, currency_code: "CRC" },
+  { day: iso(8).slice(0, 10), orders_count: 52, revenue: 274100, currency_code: "CRC" },
+  { day: iso(7).slice(0, 10), orders_count: 46, revenue: 240500, currency_code: "CRC" },
   { day: iso(6).slice(0, 10), orders_count: 38, revenue: 196500, currency_code: "CRC" },
   { day: iso(5).slice(0, 10), orders_count: 42, revenue: 221800, currency_code: "CRC" },
   { day: iso(4).slice(0, 10), orders_count: 35, revenue: 178400, currency_code: "CRC" },

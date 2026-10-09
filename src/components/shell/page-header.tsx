@@ -5,11 +5,14 @@ export function PageHeader({
   description,
   eyebrow,
   action,
+  as: Heading = "h1",
 }: {
   title: string;
   description?: string;
   eyebrow?: string;
   action?: React.ReactNode;
+  /** Nivel del título; la demo (varias secciones en una página) usa h2. */
+  as?: "h1" | "h2";
 }) {
   return (
     <header className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
@@ -19,9 +22,9 @@ export function PageHeader({
             {eyebrow}
           </p>
         )}
-        <h1 className="break-words font-display text-[1.75rem] leading-tight text-brand-900 sm:text-[2rem]">
+        <Heading className="break-words font-display text-[1.75rem] leading-tight text-brand-900 sm:text-[2rem]">
           {title}
-        </h1>
+        </Heading>
         {description && (
           <p className="mt-2 max-w-[60ch] text-sm leading-relaxed text-stone-600">{description}</p>
         )}

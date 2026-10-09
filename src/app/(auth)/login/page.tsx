@@ -4,6 +4,7 @@ import { Icon } from "@/components/ui/icon";
 import { AuthFrame } from "@/components/shell/auth-frame";
 import { hasSupabaseEnv } from "@/lib/env";
 import { waProps } from "@/lib/site";
+import { safeRedirect } from "@/lib/auth/redirect";
 import { LoginForm } from "./login-form";
 
 export const metadata: Metadata = {
@@ -11,13 +12,31 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
 };
 
+// Por qué se volvió al login (`?motivo=`): el panel manda acá a un usuario sin local.
+// Map y no objeto: un `?motivo=` cualquiera nunca toca las propiedades heredadas.
+const NOTICES = new Map<string, string>([
+  ["sin-local", "Tu usuario no tiene un local asignado. Escribinos por WhatsApp y lo revisamos."],
+]);
+
 // Server Component: decide en el servidor si existe backend. Sin variables de Supabase
 // (etapa "landing primero") no hay formulario: aviso de marca + WhatsApp + vuelta a la landing.
-export default function LoginPage() {
+export default async function LoginPage({
+  searchParams,
+}: {
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
+}) {
   if (hasSupabaseEnv()) {
+    const params = await searchParams;
+    const one = (v: string | string[] | undefined) => (Array.isArray(v) ? v[0] : v);
+    // Solo rutas internas de los paneles; la acción la vuelve a validar según el rol.
+    const raw = one(params.redirect);
+    const redirectTo = safeRedirect(raw, "/dashboard") ?? safeRedirect(raw, "/admin") ?? undefined;
+    const motivo = one(params.motivo);
     return (
       <LoginForm
         wa={waProps("contacto", "Hola, necesito ayuda para entrar al panel de DataFud de mi local.")}
+        redirectTo={redirectTo}
+        notice={motivo ? NOTICES.get(motivo) : undefined}
       />
     );
   }

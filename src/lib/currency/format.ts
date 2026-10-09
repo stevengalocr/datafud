@@ -22,7 +22,21 @@ const SYMBOLS: Record<string, string> = {
   CUP: "$",
 };
 
-const ZERO_DECIMAL = new Set(["CLP", "PYG"]);
+// Monedas que se cobran sin decimales. Son las que `schema.sql` siembra con `decimal_digits = 0`
+// (CLP, PYG) más los colones: la BD dice 2, pero DataFud los muestra y los guarda sin céntimos
+// (regla 6 de CLAUDE.md, AA-29). Es la única lista: la usan el formato, el panel y las acciones.
+const ZERO_DECIMAL = new Set(["CRC", "CLP", "PYG"]);
+
+/** Decimales con los que se escribe y se guarda un monto en esa moneda (0 o 2). */
+export function currencyDecimals(currencyCode: string | null | undefined): number {
+  return currencyCode && ZERO_DECIMAL.has(currencyCode) ? 0 : 2;
+}
+
+/** Redondea un monto a los decimales de su moneda: 3500.5 en CRC da 3501; 8.505 en USD, 8.51. */
+export function roundToCurrency(amount: number, currencyCode: string | null | undefined): number {
+  const f = 10 ** currencyDecimals(currencyCode);
+  return Math.round(amount * f) / f;
+}
 
 /** Separador de miles de Costa Rica: espacio que no se corta al final de línea. */
 const CR_GROUP = " ";

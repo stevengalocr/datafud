@@ -1,5 +1,6 @@
 import { createServerClient, type CookieOptions } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
+import { loginReturnPath } from "@/lib/auth/redirect";
 
 type CookieToSet = { name: string; value: string; options?: CookieOptions };
 
@@ -38,7 +39,10 @@ export async function updateSession(request: NextRequest) {
   if (isPrivate && !user) {
     const url = request.nextUrl.clone();
     url.pathname = "/login";
-    url.searchParams.set("redirect", path);
+    // Vuelve a la misma página (con sus filtros) después de entrar; el login la valida. La descarga
+    // de un QR vuelve a Mesas y QR, no al archivo.
+    url.search = "";
+    url.searchParams.set("redirect", loginReturnPath(path, request.nextUrl.search));
     return NextResponse.redirect(url);
   }
 

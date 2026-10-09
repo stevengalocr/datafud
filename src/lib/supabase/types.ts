@@ -23,6 +23,8 @@ export interface PlanFeatures {
   max_tables: number | null;
   advanced_reports: boolean;
   full_branding: boolean;
+  /** Pedidos desde la mesa (PRICING.plans.*.tableOrdering); place_order los rechaza sin esto. */
+  table_ordering: boolean;
 }
 
 export interface Plan {
@@ -132,6 +134,13 @@ export interface Order {
   subtotal: number;
   total: number;
   customer_note: string | null;
+  // Las tres columnas de 1.7.0 son opcionales: la demo no las trae.
+  /** Estado antes del último cambio (lo escribe el trigger trg_order_status); «Deshacer» vuelve a él. */
+  previous_status?: OrderStatus | null;
+  /** Cuándo fue el último cambio de estado. */
+  status_changed_at?: string | null;
+  /** Referencia del envío de la carta (place_order): un reintento no duplica la orden. */
+  client_ref?: string | null;
   created_at: string;
   updated_at: string;
 }

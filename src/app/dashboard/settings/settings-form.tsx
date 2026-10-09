@@ -15,9 +15,15 @@ const LANGS: Lang[] = ["es", "en", "pt"];
 export function SettingsForm({
   settings,
   currencies,
+  maxLanguages,
+  readOnly,
 }: {
   settings: TenantSettings | null;
   currencies: Currency[];
+  /** Idiomas que incluye el plan del local (el servidor lo vuelve a revisar al guardar). */
+  maxLanguages: number;
+  /** Local suspendido o cancelado: el servidor rechaza el guardado; el botón ya lo dice. */
+  readOnly: boolean;
 }) {
   const [status, setStatus] = useState<"idle" | "saved" | "error">("idle");
   const [errorText, setErrorText] = useState<string | null>(null);
@@ -45,7 +51,14 @@ export function SettingsForm({
     return () => clearTimeout(id);
   }, [status]);
   const theme = settings?.theme ?? {};
-  const enabled = settings?.enabled_languages ?? ["es"];
+  const initialCurrency = settings?.currency_code ?? "USD";
+  const [currency, setCurrency] = useState(initialCurrency);
+  const [enabled, setEnabled] = useState<Lang[]>(() =>
+    (settings?.enabled_languages ?? ["es"]).filter((l): l is Lang => LANGS.includes(l as Lang))
+  );
+  const atLimit = enabled.length >= maxLanguages;
+  const toggleLang = (l: Lang, on: boolean) =>
+    setEnabled((prev) => (on ? [...prev.filter((x) => x !== l), l] : prev.filter((x) => x !== l)));
 
   return (
     <form
@@ -53,6 +66,8 @@ export function SettingsForm({
       className="space-y-6"
       aria-busy={saving}
     >
+      {/* Solo lectura: el fieldset deshabilita todos los campos y botones, también el de subir logo. */}
+      <fieldset disabled={readOnly} className="m-0 min-w-0 space-y-6 border-0 p-0">
       <Card>
         <CardHeader>
           <CardTitle>Datos del negocio</CardTitle>
@@ -92,7 +107,9 @@ export function SettingsForm({
             <Select
               id="currency_code"
               name="currency_code"
-              defaultValue={settings?.currency_code ?? "USD"}
+              value={currency}
+              onChange={(e) => setCurrency(e.target.value)}
+              aria-describedby={currency !== initialCurrency ? "currency-hint" : undefined}
             >
               {currencies.map((c) => (
                 <option key={c.code} value={c.code}>
@@ -100,6 +117,11 @@ export function SettingsForm({
                 </option>
               ))}
             </Select>
+            {currency !== initialCurrency && (
+              <FieldHint id="currency-hint" className="mt-1.5">
+                Cambiar la moneda no convierte los precios: después de guardar, revisalos en Menú.
+              </FieldHint>
+            )}
           </div>
           <div>
             <Label htmlFor="default_language">Idioma por defecto</Label>
@@ -118,19 +140,36 @@ export function SettingsForm({
           <fieldset className="sm:col-span-2">
             <legend className="mb-1.5 block text-sm font-medium text-stone-800">Idiomas de la carta</legend>
             <div className="flex flex-wrap gap-x-6 gap-y-1">
-              {LANGS.map((l) => (
-                <label key={l} className="flex min-h-11 cursor-pointer items-center gap-2.5 text-sm text-stone-800">
-                  <input
-                    type="checkbox"
-                    name="enabled_languages"
-                    value={l}
-                    defaultChecked={enabled.includes(l)}
-                    className="h-5 w-5 cursor-pointer rounded border-stone-300 accent-brand-600"
-                  />
-                  {LANG_LABEL[l]}
-                </label>
-              ))}
+              {LANGS.map((l) => {
+                const checked = enabled.includes(l);
+                const blocked = !checked && atLimit;
+                return (
+                  <label
+                    key={l}
+                    className={`flex min-h-11 items-center gap-2.5 text-sm ${blocked ? "cursor-not-allowed text-stone-500" : "cursor-pointer text-stone-800"}`}
+                  >
+                    <input
+                      type="checkbox"
+                      name="enabled_languages"
+                      value={l}
+                      checked={checked}
+                      disabled={blocked}
+                      onChange={(e) => toggleLang(l, e.target.checked)}
+                      aria-describedby="langs-hint"
+                      className="h-5 w-5 cursor-pointer rounded border-stone-300 accent-brand-600 disabled:cursor-not-allowed"
+                    />
+                    {LANG_LABEL[l]}
+                  </label>
+                );
+              })}
             </div>
+            <FieldHint id="langs-hint" className="mt-1">
+              {maxLanguages >= LANGS.length
+                ? "Tu plan incluye los tres idiomas."
+                : enabled.length > maxLanguages
+                  ? `Tu plan incluye ${maxLanguages} ${maxLanguages === 1 ? "idioma" : "idiomas"} y tenés ${enabled.length} activos: desactivá ${enabled.length - maxLanguages === 1 ? "uno" : "los que sobran"} para poder guardar.`
+                  : `Tu plan incluye ${maxLanguages} ${maxLanguages === 1 ? "idioma" : "idiomas"}${atLimit ? ": para activar otro, desactivá uno." : "."}`}
+            </FieldHint>
           </fieldset>
         </CardBody>
       </Card>
@@ -164,9 +203,12 @@ export function SettingsForm({
       </Card>
 
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
-        <Button type="submit" pending={saving} pendingText="Guardando…" className="w-full sm:w-auto">
+        <Button type="submit" pending={saving} pendingText="Guardando…" disabled={readOnly} className="w-full sm:w-auto">
           Guardar configuración
         </Button>
+        {readOnly && (
+          <FieldHint className="font-medium">Tu panel está en solo lectura: los cambios no se pueden guardar.</FieldHint>
+        )}
         <div aria-live="polite" className="min-h-5">
           {status === "saved" && (
             <FieldHint tone="success" className="font-medium">Cambios guardados.</FieldHint>
@@ -178,6 +220,7 @@ export function SettingsForm({
           )}
         </div>
       </div>
+      </fieldset>
     </form>
   );
 }

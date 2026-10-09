@@ -13,9 +13,13 @@ export const BUSINESS_TYPES = [
   "Otro",
 ] as const;
 
-/** Trampa de tiempo: un humano tarda más de 3 s y menos de 2 h en llenar el formulario. */
+/**
+ * Trampa de tiempo: un humano tarda más de 3 s en llenar el formulario. El sello vale 45 min desde
+ * el primer toque (si vence, el servidor manda otro y lo escrito se conserva). Se mide con el reloj
+ * del servidor (sello firmado de src/lib/contact-guard.ts).
+ */
 export const MIN_FILL_MS = 3_000;
-export const MAX_FILL_MS = 2 * 60 * 60 * 1000;
+export const MAX_FILL_MS = 45 * 60 * 1000;
 /** Más de 2 enlaces en el mensaje es spam en la práctica. */
 export const MAX_URLS_IN_MESSAGE = 2;
 
@@ -23,12 +27,6 @@ const URL_PATTERN = /(https?:\/\/|www\.)/gi;
 
 export function countUrls(text: string): number {
   return (text.match(URL_PATTERN) ?? []).length;
-}
-
-/** true si el tiempo de llenado es de bot: falta, es negativo, muy corto o absurdamente largo. */
-export function looksAutomated(elapsedMs: number | null): boolean {
-  if (elapsedMs === null || !Number.isFinite(elapsedMs)) return true;
-  return elapsedMs < MIN_FILL_MS || elapsedMs > MAX_FILL_MS;
 }
 
 export const contactSchema = z.object({
@@ -62,7 +60,18 @@ export type ContactInput = z.infer<typeof contactSchema>;
 export type ContactState =
   | { status: "idle" }
   | { status: "ok" }
-  | { status: "error"; message: string };
+  // `stamp`: sello nuevo para reenviar (el formulario lo reemplaza). `values`: lo que la persona
+  // escribió, para que React no lo borre al reiniciar el formulario después del error.
+  | { status: "error"; message: string; stamp?: string; values?: ContactValues };
+
+/** Lo escrito en el formulario, devuelto tal cual (recortado) cuando hay error. */
+export type ContactValues = {
+  name: string;
+  business: string;
+  phone: string;
+  businessType: string;
+  message: string;
+};
 
 /** El formulario existe solo si el servidor tiene la clave de Resend. */
 export function isContactFormEnabled(): boolean {

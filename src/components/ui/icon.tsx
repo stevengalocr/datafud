@@ -112,6 +112,7 @@ const paths: Record<string, React.ReactNode> = {
     </>
   ),
   plus: <path d="M12 5v14M5 12h14" />,
+  minus: <path d="M5 12h14" />,
   trash: (
     <>
       <path d="M4 7h16" />

@@ -1,3 +1,4 @@
+import "server-only";
 import { createServerClient, type CookieOptions } from "@supabase/ssr";
 import { createClient as createSupabaseClient } from "@supabase/supabase-js";
 import { cookies } from "next/headers";
@@ -31,8 +32,8 @@ export async function createClient() {
   );
 }
 
-// Cliente con service role para operaciones administrativas server-side
-// (registrar tenants, etc.). NUNCA exponer al cliente.
+// Cliente con service role, solo servidor (`server-only` arriba rompe el build si un componente
+// cliente importa este módulo). Hoy lo usa solo `createTenant` (regla 5). NUNCA exponer al cliente.
 export function createAdminClient() {
   return createSupabaseClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,

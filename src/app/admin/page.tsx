@@ -1,5 +1,7 @@
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
+import { requireRole } from "@/lib/auth/session";
+import { must } from "@/app/dashboard/_lib/queries";
 import { PageHeader } from "@/components/shell/page-header";
 import { StatCard } from "@/components/shell/stat-card";
 import { EmptyState } from "@/components/shell/empty-state";
@@ -14,25 +16,20 @@ import type { Tenant } from "@/lib/supabase/types";
 export const dynamic = "force-dynamic";
 
 export default async function AdminHome() {
+  await requireRole("super_admin");
   const supabase = await createClient();
-  const { data: tenants } = await supabase
-    .from("tenants")
-    .select("*")
-    .order("created_at", { ascending: false });
-
-  const list = (tenants as Tenant[]) ?? [];
+  const [tenantsRes, paymentsRes] = await Promise.all([
+    supabase.from("tenants").select("*").order("created_at", { ascending: false }),
+    supabase.from("subscription_payments").select("amount_usd, paid_at"),
+  ]);
+  const list = must<Tenant>(tenantsRes, "admin.tenants");
+  const payments = must<{ amount_usd: number; paid_at: string | null }>(paymentsRes, "admin.payments");
   const total = list.length;
   const active = list.filter((t) => t.status === "active").length;
   const trial = list.filter((t) => t.status === "trial").length;
   const suspended = list.filter((t) => t.status === "suspended").length;
 
-  const { data: payments } = await supabase
-    .from("subscription_payments")
-    .select("amount_usd, paid_at");
-  const mrr =
-    (payments ?? [])
-      .filter((p: { paid_at: string | null }) => p.paid_at)
-      .reduce((s: number, p: { amount_usd: number }) => s + Number(p.amount_usd), 0) || 0;
+  const mrr = payments.filter((p) => p.paid_at).reduce((s, p) => s + Number(p.amount_usd), 0) || 0;
 
   const stats: { label: string; value: number; icon: IconName; accent: "brand" | "accent" | "slate" }[] = [
     { label: "Restaurantes", value: total, icon: "store", accent: "brand" },

@@ -1,4 +1,6 @@
 import { createClient } from "@/lib/supabase/server";
+import { requireRole } from "@/lib/auth/session";
+import { must } from "@/app/dashboard/_lib/queries";
 import { PageHeader } from "@/components/shell/page-header";
 import { EmptyState } from "@/components/shell/empty-state";
 import { Card } from "@/components/ui/card";
@@ -14,12 +16,12 @@ function limit(v: number | null | undefined) {
 }
 
 export default async function PlansPage() {
+  await requireRole("super_admin");
   const supabase = await createClient();
-  const { data } = await supabase
-    .from("plans")
-    .select("*")
-    .order("sort_order", { ascending: true });
-  const plans = (data as Plan[]) ?? [];
+  const plans = must<Plan>(
+    await supabase.from("plans").select("*").order("sort_order", { ascending: true }),
+    "admin.plans"
+  );
 
   return (
     <div>

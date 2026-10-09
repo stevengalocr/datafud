@@ -14,7 +14,17 @@ type WaLinkProps = {
 // `wa` llega armado desde el servidor (page.tsx): el único canal de ayuda es WhatsApp (D-039).
 // Los campos, el envío y los errores viven en `../access-form.tsx` (compartido con la entrada
 // privada).
-export function LoginForm({ wa }: { wa: WaLinkProps }) {
+export function LoginForm({
+  wa,
+  redirectTo,
+  notice,
+}: {
+  wa: WaLinkProps;
+  /** Ruta interna del panel a la que volver después de entrar (ya validada en el servidor). */
+  redirectTo?: string;
+  /** Aviso de por qué se volvió al login (por ejemplo, un usuario sin local). */
+  notice?: string;
+}) {
   return (
     <AuthFrame
       eyebrow="Panel de tu local"
@@ -32,7 +42,12 @@ export function LoginForm({ wa }: { wa: WaLinkProps }) {
         </>
       }
     >
-      <AccessForm submitLabel="Ingresar" pendingLabel="Ingresando…" autoComplete />
+      {notice && (
+        <p role="status" className="mb-4 rounded-lg border border-accent-200 bg-accent-50 px-3 py-2.5 text-sm font-medium text-brand-900">
+          {notice}
+        </p>
+      )}
+      <AccessForm submitLabel="Ingresar" pendingLabel="Ingresando…" autoComplete redirectTo={redirectTo} />
     </AuthFrame>
   );
 }

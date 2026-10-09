@@ -4,7 +4,7 @@ import { useActionState, useEffect, useId, useRef } from "react";
 import { cn } from "@/lib/utils/cn";
 import { Icon } from "@/components/ui/icon";
 import { trackEvent } from "@/components/marketing/v2/tracking";
-import { sendContactAction } from "@/app/actions";
+import { sendContactAction, startContactAction } from "@/app/actions";
 import { BUSINESS_TYPES, type ContactState } from "@/lib/contact";
 import { TurnstileWidget } from "@/components/marketing/v2/turnstile-widget";
 
@@ -18,16 +18,25 @@ const initial: ContactState = { status: "idle" };
 export function ContactForm({ whatsappHref, turnstileSiteKey }: { whatsappHref: string; turnstileSiteKey?: string | null }) {
   const [state, formAction, pending] = useActionState<ContactState, FormData>(sendContactAction, initial);
   const formRef = useRef<HTMLFormElement>(null);
-  // Trampa de tiempo: se mide en el cliente (sin depender del reloj del servidor ni del build).
-  const mountedAt = useRef<number>(Date.now());
-  const elapsedRef = useRef<HTMLInputElement>(null);
+  // Trampa de tiempo: al primer toque del formulario el servidor emite un sello firmado y, al
+  // enviar, mide el tiempo con su propio reloj. La landing es estática: el sello no puede venir
+  // en el HTML. Se pide al interactuar (no al cargar) para no llamar al servidor en cada visita.
+  const stampRef = useRef<HTMLInputElement>(null);
+  const stampRequested = useRef(false);
   const statusRef = useRef<HTMLParagraphElement>(null);
   const id = useId();
 
   useEffect(() => {
     if (state.status === "ok") {
       formRef.current?.reset();
-      mountedAt.current = Date.now();
+      // Otro mensaje necesita su propio sello.
+      if (stampRef.current) stampRef.current.value = "";
+      stampRequested.current = false;
+    }
+    if (state.status === "error") {
+      if (state.stamp && stampRef.current) stampRef.current.value = state.stamp;
+      // El token de Turnstile sirve una vez: después de un error se pide otro.
+      (window as { turnstile?: { reset: () => void } }).turnstile?.reset();
     }
     if (state.status !== "idle") {
       statusRef.current?.focus();
@@ -35,14 +44,34 @@ export function ContactForm({ whatsappHref, turnstileSiteKey }: { whatsappHref: 
     }
   }, [state]);
 
+  function requestStamp() {
+    if (stampRequested.current) return;
+    stampRequested.current = true;
+    startContactAction()
+      .then((res) => {
+        if (res.ok && res.data && stampRef.current) stampRef.current.value = res.data.stamp;
+        else stampRequested.current = false;
+      })
+      .catch(() => {
+        // Sin red: se reintenta en el próximo toque; si nunca llega, el servidor lo explica al enviar.
+        stampRequested.current = false;
+      });
+  }
+
   const isExternal = whatsappHref.startsWith("http");
+  // React 19 reinicia el formulario al terminar la acción: con error, el servidor devuelve lo
+  // escrito y se usa como valor inicial, así no se pierde nada.
+  const v = state.status === "error" ? state.values : undefined;
 
   return (
     <form
       ref={formRef}
       action={formAction}
+      onFocusCapture={requestStamp}
+      onPointerDownCapture={requestStamp}
       onSubmit={() => {
-        if (elapsedRef.current) elapsedRef.current.value = String(Date.now() - mountedAt.current);
+        // Sin sello todavía (red lenta o caída): se pide para el próximo envío.
+        if (!stampRef.current?.value) requestStamp();
       }}
       noValidate={false}
       className="rounded-2xl border border-stone-200/80 bg-white p-6 shadow-[0_24px_60px_-28px_rgba(34,80,58,0.28)] sm:p-8"
@@ -51,20 +80,20 @@ export function ContactForm({ whatsappHref, turnstileSiteKey }: { whatsappHref: 
       <div className="grid gap-5 sm:grid-cols-2">
         <div>
           <label htmlFor={`${id}-name`} className={label}>Tu nombre</label>
-          <input id={`${id}-name`} name="name" autoComplete="name" required minLength={2} maxLength={80} placeholder="Ana Rodríguez" className={field} />
+          <input id={`${id}-name`} name="name" defaultValue={v?.name} autoComplete="name" required minLength={2} maxLength={80} placeholder="Ana Rodríguez" className={field} />
         </div>
         <div>
           <label htmlFor={`${id}-business`} className={label}>Nombre del local</label>
-          <input id={`${id}-business`} name="business" autoComplete="organization" required minLength={2} maxLength={120} placeholder="Soda La Esquina" className={field} />
+          <input id={`${id}-business`} name="business" defaultValue={v?.business} autoComplete="organization" required minLength={2} maxLength={120} placeholder="Soda La Esquina" className={field} />
         </div>
         <div>
           <label htmlFor={`${id}-phone`} className={label}>WhatsApp o teléfono</label>
-          <input id={`${id}-phone`} name="phone" type="tel" autoComplete="tel" inputMode="tel" required minLength={8} maxLength={25} placeholder="+506 8888 8888" className={field} />
+          <input id={`${id}-phone`} name="phone" defaultValue={v?.phone} type="tel" autoComplete="tel" inputMode="tel" required minLength={8} maxLength={25} placeholder="+506 8888 8888" className={field} />
         </div>
         <div>
           <label htmlFor={`${id}-type`} className={label}>Tipo de negocio</label>
           <div className="relative">
-            <select id={`${id}-type`} name="businessType" required defaultValue="" className={cn(field, "appearance-none pr-11")}>
+            <select id={`${id}-type`} name="businessType" required defaultValue={v?.businessType ?? ""} className={cn(field, "appearance-none pr-11")}>
               <option value="" disabled>Elegí una opción</option>
               {BUSINESS_TYPES.map((t) => (
                 <option key={t} value={t}>{t}</option>
@@ -77,12 +106,12 @@ export function ContactForm({ whatsappHref, turnstileSiteKey }: { whatsappHref: 
           <label htmlFor={`${id}-message`} className={label}>
             Mensaje <span className="font-semibold normal-case tracking-normal text-brand-700/75">(opcional)</span>
           </label>
-          <textarea id={`${id}-message`} name="message" rows={4} maxLength={1500} placeholder="Contanos cuántas mesas tenés, si ya usás carta digital o qué te gustaría resolver." className={cn(field, "h-auto py-3 leading-relaxed")} />
+          <textarea id={`${id}-message`} name="message" defaultValue={v?.message} rows={4} maxLength={1500} placeholder="Contanos cuántas mesas tenés, si ya usás carta digital o qué te gustaría resolver." className={cn(field, "h-auto py-3 leading-relaxed")} />
         </div>
       </div>
 
-      {/* Tiempo de llenado en ms; lo escribe onSubmit. Sin JS queda vacío y el servidor lo descarta. */}
-      <input ref={elapsedRef} type="hidden" name="elapsedMs" defaultValue="" />
+      {/* Sello firmado por el servidor. Sin JS queda vacío y el servidor pide recargar o WhatsApp. */}
+      <input ref={stampRef} type="hidden" name="stamp" defaultValue="" />
 
       {turnstileSiteKey && (
         <div className="mt-6">

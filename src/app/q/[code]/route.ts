@@ -8,6 +8,6 @@ export async function GET(
   { params }: { params: Promise<{ code: string }> }
 ) {
   const { code } = await params;
-  const destination = qrDestination(code) ?? "/?qr=desconocido";
+  const destination = qrDestination(code) ?? "/q/no-disponible";
   return NextResponse.redirect(new URL(destination, request.url), 307);
 }

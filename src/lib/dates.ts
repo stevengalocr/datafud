@@ -42,3 +42,25 @@ export function formatDate(value: string | Date): string {
 export function localDayKey(value: string | Date = new Date()): string {
   return new Date(value).toLocaleDateString("en-CA", { timeZone: TZ });
 }
+
+/**
+ * Costa Rica está en UTC−6 todo el año (sin horario de verano desde 1992). Con eso, el inicio de
+ * un día local se puede pasar a UTC sin depender del ICU del entorno.
+ */
+const CR_OFFSET = "-06:00";
+
+/** Clave del día local de hace `daysAgo` días ("2026-09-24" si hoy es 2026-10-07 y `daysAgo` = 13). */
+export function localDayKeyDaysAgo(daysAgo: number, from: Date = new Date()): string {
+  const [y, m, d] = localDayKey(from).split("-").map(Number);
+  // Aritmética de calendario en UTC (mediodía para no cruzar de día): la clave ya es la local.
+  const date = new Date(Date.UTC(y, m - 1, d, 12) - daysAgo * 86_400_000);
+  return date.toISOString().slice(0, 10);
+}
+
+/**
+ * Inicio del día de Costa Rica, en ISO UTC, para filtrar marcas de tiempo por rango:
+ * `startOfLocalDayIso()` a las 7 p. m. del 7 de octubre en San José da "2026-10-07T06:00:00.000Z".
+ */
+export function startOfLocalDayIso(daysAgo = 0, from: Date = new Date()): string {
+  return new Date(`${localDayKeyDaysAgo(daysAgo, from)}T00:00:00${CR_OFFSET}`).toISOString();
+}

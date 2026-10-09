@@ -1,4 +1,6 @@
 import { createClient } from "@/lib/supabase/server";
+import { requireRole } from "@/lib/auth/session";
+import { must } from "@/app/dashboard/_lib/queries";
 import { PageHeader } from "@/components/shell/page-header";
 import { EmptyState } from "@/components/shell/empty-state";
 import { Card, CardBody, CardHeader, CardTitle } from "@/components/ui/card";
@@ -17,19 +19,15 @@ import type { TenantCharge, Tenant } from "@/lib/supabase/types";
 export const dynamic = "force-dynamic";
 
 export default async function ChargesPage() {
+  await requireRole("super_admin");
   const supabase = await createClient();
-  const { data: tenants } = await supabase
-    .from("tenants")
-    .select("id, name")
-    .order("name");
-  const { data: charges } = await supabase
-    .from("tenant_charges")
-    .select("*")
-    .order("created_at", { ascending: false });
-
-  const tenantList = (tenants as Pick<Tenant, "id" | "name">[]) ?? [];
+  const [tenantsRes, chargesRes] = await Promise.all([
+    supabase.from("tenants").select("id, name").order("name"),
+    supabase.from("tenant_charges").select("*").order("created_at", { ascending: false }),
+  ]);
+  const tenantList = must<Pick<Tenant, "id" | "name">>(tenantsRes, "admin.charges.tenants");
   const nameById = new Map(tenantList.map((t) => [t.id, t.name]));
-  const list = (charges as TenantCharge[]) ?? [];
+  const list = must<TenantCharge>(chargesRes, "admin.charges");
 
   // Las cifras salen de PRICING (regla 6): antes estaban escritas a mano en el texto.
   const description = `Cobros únicos de cada local: implementación (${formatUsd(

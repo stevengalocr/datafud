@@ -1,5 +1,6 @@
 import { getTenantContext } from "@/lib/auth/tenant-context";
 import { AppShell, type NavItem } from "@/components/shell/sidebar";
+import { ReadOnlyBanner } from "@/components/shell/read-only-banner";
 
 export const dynamic = "force-dynamic";
 
@@ -17,10 +18,11 @@ export default async function DashboardLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const { tenant } = await getTenantContext();
+  const { tenant, readOnly } = await getTenantContext();
 
   return (
     <AppShell brand={tenant.name} subtitle="Panel del restaurante" items={nav}>
+      {readOnly && <ReadOnlyBanner status={tenant.status} name={tenant.name} />}
       {children}
     </AppShell>
   );

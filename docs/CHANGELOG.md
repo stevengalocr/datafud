@@ -7,6 +7,171 @@ Todas las versiones notables del proyecto. Formato basado en
 
 ## [Unreleased]
 
+## [1.7.0] — 2026-10-08 · Base sólida: lo que encontraron las auditorías de la app y de seguridad
+
+### Panel del restaurante
+- **Órdenes:** cada tarjeta dice de qué mesa viene, bien grande arriba del total (o «Mesa
+  eliminada» si se borró la mesa). El Resumen también la muestra en las órdenes recientes.
+- **Órdenes:** el tablero se divide en «Por atender» (todas las activas, la más vieja primero) y
+  «Cerradas hoy». Una orden lista de la mañana ya no desaparece porque entraron muchas después.
+- **Órdenes:** después de cambiar el estado de una orden aparece «Deshacer» durante un minuto, para
+  corregir un toque de más (también al cancelar).
+- **Órdenes:** solo se aceptan los pasos del servicio (de pendiente a pagada, cancelar una activa o
+  deshacer el último cambio). Si otra persona ya movió la orden, el tablero lo avisa en vez de pisarla.
+- **Órdenes:** el texto al cancelar dice lo que pasa de verdad («Pasa a Cerradas hoy… avisale al
+  cliente»).
+- **Resumen:** «Órdenes hoy» y «Vendido hoy» cuentan todas las órdenes del día de Costa Rica, no solo
+  las últimas 50.
+- **Resumen:** la tarjeta «Por atender» cuenta lo mismo que el bloque «Por atender» del tablero
+  (antes «Órdenes activas» dejaba fuera las entregadas sin pagar).
+- **Órdenes:** si un refresco automático del tablero falla, se queda a la vista lo último que cargó,
+  con un aviso, y se vuelve a intentar solo; antes el tablero se cambiaba por la página de error.
+- **Menú:** los platillos se ven agrupados por categoría, en el orden de la carta, con un buscador
+  por nombre. Los que quedaron sin categoría (porque se borró la suya) salen al final en
+  «Sin categoría», con un aviso arriba y un selector para asignarles una sin abrir el formulario.
+- **Menú:** al borrar una categoría, la confirmación dice qué pasa con sus platillos en la carta.
+- **Menú:** en colones (y en las demás monedas sin decimales, como el peso chileno y el guaraní) el
+  precio se pide y se guarda sin céntimos, para que lo mostrado y el total cuadren.
+- **Menú:** eliminar, agotar o volver a ofrecer un platillo (o borrar una categoría) que ya no existe
+  avisa «Recargá la página» en vez de decir que salió bien.
+- **Menú:** los nombres largos o sin espacios ya no desbordan la lista en pantallas chicas.
+- **Panel del restaurante:** si la base no responde al cargar una página (Resumen, Órdenes, Menú o
+  Reportes), el panel muestra «Esta página no cargó» con reintento, en vez de un vacío falso como
+  «Todavía no hay órdenes».
+- **Reportes:** «Últimos 14 días» son los 14 días de calendario (hoy incluido), no los últimos 14 con
+  ventas; «Platillos más vendidos» cuenta solo ese período y suma todas las ventas, sin cortarse con
+  muchos platillos.
+- Un error inesperado fuera de las páginas muestra una pantalla propia de DataFud, en español, con
+  reintento y código, en lugar de la página genérica en inglés. Usa las fuentes de la marca.
+
+### Carta del comensal
+- **Enviar la orden ya no se cuelga:** si la red falla o la carta quedó abierta desde antes de una
+  actualización, el botón vuelve a estar disponible, el carrito se conserva (también al recargar la
+  página) y se puede reintentar sin duplicar el pedido (ver «Base de datos»).
+- **Errores dentro de la hoja del pedido y en el idioma elegido** (español, inglés o portugués), sin
+  ventanas del navegador. La nota para la cocina avisa del tope de 300 caracteres.
+- **Platillos agotados:** si algo se agotó mientras se armaba el pedido, no entra a medias: se quita
+  del pedido y se le avisa al comensal. La confirmación muestra lo que se envió, con cantidades y total.
+- **Platillos sin categoría** (la categoría se borró en el panel) se ven al final, en «Otros».
+- **La mesa ya no sale duplicada** («Mesa Mesa 3»): se muestra la etiqueta tal como la escribió el
+  local; solo a un número se le antepone «Mesa».
+- **Accesibilidad:** botones de cantidad de 44 px que dicen qué platillo suman o quitan, nota con
+  etiqueta, botón de cerrar traducido, hoja del pedido como diálogo (se cierra con Escape), la
+  página cambia de idioma junto con la carta y los textos tenues pasan a un gris legible.
+- **Carta vacía** dice «Esta carta todavía no tiene platillos.» y los textos del carrito van en voseo.
+- **Nombres largos** se cortan dentro de la tarjeta en vez de desbordarla.
+- Sin desenfoque de fondo en la carta (regla de marca), más liviana al hacer scroll en teléfonos.
+- **La carta de cada mesa tiene el nombre del local como título y no se indexa en buscadores.**
+  Al compartir el enlace, la vista previa muestra el nombre del local con una imagen neutra de la
+  marca, sin la oferta ni precios de DataFud.
+- **Página 404 propia**, con la marca, en español y en inglés. La carta de una mesa que ya no está
+  activa lo dice y pide la carta al personal; si la carta no carga, ofrece reintentar sin mostrar
+  detalles técnicos.
+- **Código QR o NFC dado de baja o inexistente:** abre un aviso de «Este código ya no está activo o
+  no existe» en vez de la página de venta.
+- La hoja del pedido mantiene el foco adentro mientras está abierta y lo devuelve al cerrarla; la
+  confirmación se anuncia al aparecer. Si el envío falla, el aviso también sugiere recargar la página.
+
+### Cuenta y super admin
+- **Cambiar la contraseña desde el panel:** Configuración tiene la tarjeta «Cambiar contraseña», que
+  pide la actual y la nueva dos veces (mínimo 10 caracteres). La contraseña inicial que se manda por
+  WhatsApp ya no queda para siempre; el mensaje del alta le dice al dueño dónde cambiarla. Al
+  cambiarla se cierran las otras sesiones abiertas con ese usuario. El panel interno tiene la misma
+  opción en «Tu cuenta».
+- **Local suspendido o cancelado:** el panel muestra un aviso arriba («Tu local está suspendido…»)
+  con el enlace a WhatsApp y queda en solo lectura: se ven los datos, pero ningún cambio se guarda, y
+  los botones de Menú, Órdenes, Mesas y Configuración aparecen deshabilitados.
+  La confirmación de suspender o cancelar en el panel interno dice exactamente eso.
+- **Configuración muestra el plan del local:** cuántos idiomas incluye y si recibe pedidos desde la
+  mesa (el plan Carta no: el panel lo dice ahí, en Órdenes y en Mesas y QR). Las casillas de idioma no dejan activar más de los que
+  incluye el plan, y al guardar se vuelve a revisar.
+- **Configuración:** al cambiar la moneda avisa que los precios no se convierten. Si el local no
+  tiene su fila de configuración, dice que no se guardó en vez de «Cambios guardados».
+- **Login:** después de entrar vuelve a la página del panel que se había pedido. Un usuario sin local
+  asignado ve «Tu usuario no tiene un local asignado. Escribinos por WhatsApp» en vez de volver al
+  login sin explicación, una y otra vez. Si la base no responde al entrar, pide probar de nuevo.
+- **Panel interno:** cada página verifica el rol por su cuenta, y si la base no responde muestra
+  «Esta página no cargó» con reintento en vez de listas vacías. Configuración del restaurante, igual.
+- **Pagos:** «Desde» y «Hasta» se proponen en el día de Costa Rica (antes, después de las 6 p. m.
+  salía mañana) y el mes siguiente no se pasa de mes (31 de enero → 28 de febrero). El monto
+  propuesto es la mensualidad del plan del local elegido.
+- **Pagos:** registrar un pago reactiva solo a un local suspendido o en prueba, y el resultado dice
+  si el local quedó activo; uno cancelado se reactiva a mano. Si la reactivación falla, lo avisa.
+  El mismo pago (mismo local y mismo periodo) no se registra dos veces.
+- **Mesas y QR:** si la base no responde, muestra «Esta página no cargó» en vez de «Todavía no hay mesas».
+- **Restaurantes:** cambiar el estado de un local que ya no existe avisa «Recargá la página».
+- **Mesas y QR:** si la sesión venció al descargar un QR, después de ingresar se vuelve a Mesas y QR
+  en vez de quedarse en la pantalla de ingreso.
+
+
+### Web y seguridad
+- **Encabezados de seguridad en todo el sitio:** ninguna página se puede mostrar dentro de otro
+  sitio, el navegador no adivina tipos de archivo, se manda menos información de origen al salir y
+  se apagan cámara, micrófono y ubicación. La política de contenido completa va primero en modo de
+  observación (avisa en la consola sin bloquear) para revisarla en producción.
+- **Cartas de mesa y códigos dados de baja fuera de los buscadores:** `/m/…` y `/q/no-disponible`
+  piden no indexarse.
+- **Formulario de contacto endurecido:** el tiempo de llenado lo mide el servidor con un sello
+  firmado, hay un tope de envíos seguidos por conexión y, con Turnstile activo, la verificación
+  exige que se haya resuelto en datafud.com. Cada envío usa su propio sello. Si algo falla, el
+  formulario dice qué hacer (esperar, reenviar, recargar o escribir por WhatsApp) y conserva lo que
+  se escribió; antes React lo borraba y algunos casos daban un éxito falso.
+- **Higiene:** el cliente de Supabase del servidor no se puede importar desde el navegador (el build
+  falla si pasa) y `.env.example` queda sin valores de ejemplo para las claves, con las variables de
+  los scripts locales documentadas.
+- **Demo del panel** (`/preview/dashboard`): muestra las mismas seis secciones del panel real
+  (Resumen, Menú, Órdenes, Mesas y QR, Reportes y Configuración) con sus cabeceras y textos: la
+  mesa de cada orden, «Por atender» (la más vieja primero), «Cerradas hoy», «Deshacer», los
+  platillos agrupados por categoría con buscador, los QR de las mesas, los reportes de 14 días, el
+  plan y el cambio de contraseña. Al final enseña los avisos del panel: plan Carta sin pedidos y
+  local suspendido o cancelado en solo lectura. Ya no dice «Comandas en vivo» ni tiene el punto que
+  parpadea.
+- **Demo del super admin** (`/preview/admin`): muestra las seis secciones del panel interno
+  (Resumen, Restaurantes, Pagos, Cargos, Planes y Tu cuenta) con sus textos, estados en español y
+  el aviso de reactivación al registrar un pago. No muestra correos, y los locales y dueños de
+  ejemplo tienen nombres «de prueba» que no pueden ser de un negocio real (algunos salen
+  suspendidos, cancelados o con pagos vencidos). Los teléfonos de ejemplo son números que no existen.
+
+### Base de datos
+Requiere aplicar `supabase/schema.sql` en producción (y después `supabase/verify.sql`, 51 filas en
+true), mejor antes de desplegar esta versión de la app y en un horario sin pedidos. Si la app sale
+primero, pedidos y «Deshacer» siguen funcionando como en 1.6 hasta que se aplique.
+- **Pedidos sin duplicar:** cada envío de la carta lleva una referencia; si la red falla después de
+  guardar, el reintento devuelve la misma orden, también si se recarga la página (la nota para la
+  cocina se guarda junto al carrito). Si el envío no responde en 20 segundos, el botón se libera
+  para reintentar.
+- **Las órdenes entran solo desde la carta:** nadie con sesión puede crear órdenes a mano por la
+  Data API.
+- **Platillos agotados al enviar:** la orden entera se rechaza con un aviso claro, en vez de entrar
+  sin el platillo.
+- **Plan Carta sin pedidos desde la mesa:** la carta de un local en ese plan se muestra sin carrito y
+  la base rechaza los pedidos con «Este local no recibe pedidos por la carta».
+- **Topes de pedidos más firmes:** los límites por mesa y por local valen también cuando llegan
+  varios pedidos a la vez.
+- **Estados de las órdenes en la base:** solo los pasos del servicio, y «Deshacer» revierte solo el
+  último cambio, una vez y dentro de su tiempo.
+- **Mensajes claros** cuando la base rechaza un dato viejo que ya no cumple las reglas, cuando un
+  pago de ese período ya estaba registrado y cuando el local llegó al tope de fotos.
+- **Local suspendido o cancelado en solo lectura también en la base:** menú, mesas, configuración,
+  estados de órdenes y fotos.
+- **Reportes por día de Costa Rica:** lo vendido después de las 6 p. m. cuenta para ese día, igual
+  que en el Resumen.
+- **Mesas y QR:** «Cambiar QR» genera un código nuevo para una mesa, con una confirmación que avisa
+  que el QR impreso y la tarjeta NFC dejan de servir. La descarga es para imprimir: PNG de 1024 px y
+  SVG, con el margen que piden los lectores, generados al descargarlos (la página carga más liviana). La lista de mesas avisa si no cargó y «Eliminar» dice si la mesa ya no
+  existía.
+- **Fotos:** al reemplazar la foto de un platillo o el logo, o al borrar un platillo, la foto vieja se
+  quita del almacenamiento. Cada local tiene un tope de fotos guardadas según su plan.
+- **Pagos:** un solo pago por local y periodo, también con dos clics a la vez.
+- **Reglas de datos en la base** con los mismos límites que los formularios (nombres, precios,
+  colores, direcciones de fotos, idiomas, cantidades). Si hay filas viejas que no cumplen, no se
+  tocan: `schema.sql` avisa cuáles y `verify.sql` lo marca.
+- **Permisos y comprobaciones más estrictos:** políticas solo para usuarios con sesión, sin permisos
+  de más para los roles de la API, funciones con ruta de búsqueda fija, y `verify.sql` compara la
+  lista exacta de políticas y de funciones que puede ejecutar cada rol. Índices nuevos para el
+  tablero y los reportes.
+- `seed.dev.sql` termina con código de error si falta la contraseña o algo falla.
+
 ---
 
 ## [1.6.1] — 2026-10-07 · Pulido del panel de menú, la subida de fotos y la prueba de aislamiento

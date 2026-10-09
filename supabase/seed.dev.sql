@@ -22,11 +22,15 @@
 -- schema.sql: está en el historial público del repositorio.
 -- =====================================================================
 
--- Sin contraseña no seguimos (psql ≥ 10).
+-- Cualquier error corta el script con código de salida distinto de 0 (psql devuelve 3), para que
+-- un script o una terminal no lo den por bueno.
+\set ON_ERROR_STOP on
+
+-- Sin contraseña no seguimos (psql ≥ 10). El error de abajo termina psql con código 3.
 \if :{?seed_password}
 \else
   \echo 'ERROR seed.dev.sql: definí la contraseña con  -v seed_password=''<tu-contraseña>''  (mínimo 12 caracteres).'
-  \quit
+  do $$ begin raise exception 'seed.dev.sql: falta la variable seed_password'; end $$;
 \endif
 
 -- Correos con valor por defecto si no se pasan.

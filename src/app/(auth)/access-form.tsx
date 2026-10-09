@@ -25,11 +25,14 @@ export function AccessForm({
   submitLabel,
   pendingLabel,
   autoComplete,
+  redirectTo,
 }: {
   submitLabel: string;
   pendingLabel: string;
   /** `false` en la entrada privada: que el navegador no ofrezca ni guarde la cuenta. */
   autoComplete: boolean;
+  /** Ruta del panel a la que volver después de entrar; la acción la valida otra vez. */
+  redirectTo?: string;
 }) {
   const [state, formAction, pending] = useActionState<ActionState, FormData>(
     loginAction,
@@ -67,6 +70,7 @@ export function AccessForm({
       className="space-y-4"
       aria-busy={pending}
     >
+      {redirectTo && <input type="hidden" name="redirect" value={redirectTo} />}
       <div>
         <Label htmlFor="email">Correo</Label>
         <Input

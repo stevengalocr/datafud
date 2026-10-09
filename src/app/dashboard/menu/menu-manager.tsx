@@ -1,7 +1,8 @@
 "use client";
 
-import { useEffect, useRef, useState, useTransition } from "react";
+import { useEffect, useMemo, useRef, useState, useTransition } from "react";
 import {
+  assignProductCategory,
   createCategory,
   createProduct,
   deleteCategory,
@@ -19,7 +20,7 @@ import { Icon } from "@/components/ui/icon";
 import { useConfirm } from "@/components/ui/confirm-dialog";
 import { useFormSubmit } from "@/components/ui/use-form-submit";
 import { EmptyState } from "@/components/shell/empty-state";
-import { formatMoney } from "@/lib/currency/format";
+import { currencyDecimals, formatMoney, roundToCurrency } from "@/lib/currency/format";
 import { t } from "@/lib/i18n/dictionaries";
 import type { Category, Product } from "@/lib/supabase/types";
 
@@ -28,14 +29,20 @@ const FAIL = "No se pudo guardar. Revisá tu conexión y probá de nuevo.";
 type Res = { ok: boolean; error?: string } | undefined | void;
 type SetError = (e: string | null) => void;
 
+/** Texto sin tildes ni mayúsculas, para que «pina» encuentre «Piña colada». */
+const fold = (v: string) => v.normalize("NFD").replace(/\p{Diacritic}/gu, "").toLowerCase();
+
 export function MenuManager({
   categories,
   products,
   currency,
+  readOnly = false,
 }: {
   categories: Category[];
   products: Product[];
   currency: string;
+  /** Local suspendido o cancelado: se ve todo, pero ningún botón cambia nada (el servidor también lo rechaza). */
+  readOnly?: boolean;
 }) {
   const [pending, start] = useTransition();
   const [showCat, setShowCat] = useState(false);
@@ -52,8 +59,32 @@ export function MenuManager({
   const { confirm, dialog } = useConfirm();
   const editProdRef = useRef<HTMLFormElement>(null);
 
+  const [query, setQuery] = useState("");
   const catName = (c: Category) => t(c.name_i18n, "es");
   const productsIn = (id: string) => products.filter((p) => p.category_id === id).length;
+
+  // Monedas sin decimales (colones incluidos): el campo pide enteros y el servidor redondea igual.
+  const whole = currencyDecimals(currency) === 0;
+  const priceStep = whole ? "1" : "0.01";
+  const priceMode = whole ? "numeric" : "decimal";
+
+  // La lista va agrupada por categoría, en el orden de la carta, y los platillos sin categoría
+  // (la suya se borró) al final, con aviso y para asignarles una.
+  const known = useMemo(() => new Set(categories.map((c) => c.id)), [categories]);
+  const uncategorized = products.filter((p) => !p.category_id || !known.has(p.category_id));
+  const q = fold(query.trim());
+  const matches = (p: Product) =>
+    !q || Object.values(p.name_i18n ?? {}).some((n) => typeof n === "string" && fold(n).includes(q));
+  const groups = [
+    ...categories.map((c) => ({
+      id: c.id,
+      title: catName(c),
+      items: products.filter((p) => p.category_id === c.id && matches(p)),
+      orphan: false,
+    })),
+    { id: "sin-categoria", title: "Sin categoría", items: uncategorized.filter(matches), orphan: true },
+  ].filter((g) => g.items.length > 0 || (!q && !g.orphan));
+  const shown = groups.reduce((n, g) => n + g.items.length, 0);
 
   // Corre una acción y muestra su error, si lo hay. Devuelve si salió bien.
   const exec = async (fn: () => Promise<Res>, setErr: SetError = setError) => {
@@ -111,7 +142,7 @@ export function MenuManager({
       title: `¿Eliminar la categoría «${catName(c)}»?`,
       description:
         n > 0
-          ? `Deja de aparecer en la carta. ${n === 1 ? "Su platillo queda" : `Sus ${n} platillos quedan`} sin categoría.`
+          ? `Deja de aparecer en la carta. ${n === 1 ? "Su platillo queda" : `Sus ${n} platillos quedan`} sin categoría: en la carta pasan al final, en «Otros», hasta que les asignés otra.`
           : "Deja de aparecer en la carta. No tiene platillos.",
       confirmLabel: "Eliminar categoría",
     });
@@ -148,6 +179,7 @@ export function MenuManager({
               setShowCat((v) => !v);
               setCatError(null);
             }}
+            disabled={readOnly}
             aria-expanded={showCat}
             aria-controls="form-categoria"
           >
@@ -195,7 +227,7 @@ export function MenuManager({
               {categories.map((c) => (
                 <li
                   key={c.id}
-                  className="flex items-center gap-1 rounded-full border border-stone-200 bg-white py-1 pl-3.5 pr-1 text-sm text-brand-950"
+                  className="flex min-w-0 max-w-full items-center gap-1 rounded-full border border-stone-200 bg-white py-1 pl-3.5 pr-1 text-sm text-brand-950"
                 >
                   <button
                     type="button"
@@ -203,7 +235,8 @@ export function MenuManager({
                       setEditing(editing === c.id ? null : c.id);
                       setEditError(null);
                     }}
-                    className="cursor-pointer rounded-full py-1 underline-offset-4 hover:underline"
+                    disabled={readOnly}
+                    className="min-w-0 cursor-pointer rounded-full py-1 text-left underline-offset-4 [overflow-wrap:anywhere] hover:underline disabled:cursor-default disabled:no-underline"
                     aria-expanded={editing === c.id}
                     aria-label={`Editar la categoría ${catName(c)}`}
                   >
@@ -212,10 +245,10 @@ export function MenuManager({
                   <button
                     type="button"
                     onClick={() => askDeleteCategory(c)}
-                    disabled={pending}
+                    disabled={pending || readOnly}
                     // 36 px visibles en el teléfono (la píldora no crece) y 44 px de área táctil con
                     // el `::before`, que sobresale 4 px por lado. Con mouse, 32 px sin extensión.
-                    className="relative flex h-9 w-9 cursor-pointer items-center justify-center rounded-full text-stone-500 [-webkit-tap-highlight-color:transparent] transition-[transform,background-color,color] duration-[160ms] ease-out-expo before:absolute before:-inset-1 before:rounded-full active:scale-[0.94] disabled:opacity-60 sm:h-8 sm:w-8 sm:before:inset-0 hov:bg-rose-50 hov:text-rose-700"
+                    className="relative flex h-9 w-9 shrink-0 cursor-pointer items-center justify-center rounded-full text-stone-500 [-webkit-tap-highlight-color:transparent] transition-[transform,background-color,color] duration-[160ms] ease-out-expo before:absolute before:-inset-1 before:rounded-full active:scale-[0.94] disabled:opacity-60 sm:h-8 sm:w-8 sm:before:inset-0 hov:bg-rose-50 hov:text-rose-700"
                     aria-label={`Eliminar la categoría ${catName(c)}`}
                   >
                     <Icon name="x" size={14} />
@@ -285,7 +318,7 @@ export function MenuManager({
               setShowProd((v) => !v);
               setProdError(null);
             }}
-            disabled={categories.length === 0}
+            disabled={categories.length === 0 || readOnly}
             aria-expanded={showProd}
             aria-controls="form-platillo"
           >
@@ -325,7 +358,7 @@ export function MenuManager({
               </div>
               <div>
                 <Label htmlFor="p_price">Precio ({currency})</Label>
-                <Input id="p_price" name="price" type="number" inputMode="decimal" min="0" step="0.01" placeholder="3500" required />
+                <Input id="p_price" name="price" type="number" inputMode={priceMode} min="0" step={priceStep} placeholder={whole ? "3500" : "8.50"} required />
               </div>
               <div>
                 <Label htmlFor="p_image">Foto (enlace, opcional)</Label>
@@ -345,70 +378,138 @@ export function MenuManager({
             </form>
           )}
 
-          {categories.length === 0 ? (
-            <FieldHint>Creá al menos una categoría antes de agregar platillos.</FieldHint>
-          ) : products.length === 0 ? (
+          {categories.length === 0 && (
+            <FieldHint>
+              {products.length === 0
+                ? "Creá al menos una categoría antes de agregar platillos."
+                : "Creá al menos una categoría para volver a ordenar tus platillos en la carta."}
+            </FieldHint>
+          )}
+          {products.length === 0 ? (
+            categories.length > 0 &&
             !showProd && (
               <EmptyState icon="utensils" title="Todavía no hay platillos">
                 Agregá el primero con «Nuevo platillo». Lo que marqués como agotado deja de ofrecerse en la carta.
               </EmptyState>
             )
           ) : (
-            <ul className="divide-y divide-stone-100 rounded-lg border border-stone-200">
-              {products.map((p) => (
-                <li
-                  key={p.id}
-                  className="flex flex-col gap-3 px-4 py-3 sm:flex-row sm:items-center sm:justify-between"
-                >
-                  <div className="min-w-0">
-                    <p className="font-medium text-brand-950">{t(p.name_i18n, "es")}</p>
-                    <p className="mt-0.5 flex flex-wrap items-center gap-2 text-sm text-stone-700">
-                      <span className="tabular-nums">{formatMoney(Number(p.price), currency)}</span>
-                      <Badge
-                        className={
-                          p.is_available ? "bg-brand-100 text-brand-800" : "bg-stone-200 text-stone-800"
-                        }
-                      >
-                        {p.is_available ? "Disponible" : "Agotado"}
-                      </Badge>
+            <div className="space-y-5">
+              {uncategorized.length > 0 && (
+                <p className="flex items-start gap-3 rounded-lg border border-accent-200 bg-accent-50 px-4 py-3 text-sm text-accent-900">
+                  <Icon name="utensils" size={18} className="mt-0.5 shrink-0 text-accent-700" />
+                  <span>
+                    {uncategorized.length === 1
+                      ? "Un platillo no tiene categoría"
+                      : `${uncategorized.length} platillos no tienen categoría`}{" "}
+                    (se borró la suya). En la carta salen al final, en «Otros». Asignales una abajo,
+                    en «Sin categoría».
+                  </span>
+                </p>
+              )}
+
+              <div className="max-w-sm">
+                <Label htmlFor="buscar-platillo">Buscar platillo</Label>
+                <Input
+                  id="buscar-platillo"
+                  type="search"
+                  value={query}
+                  onChange={(e) => setQuery(e.target.value)}
+                  placeholder="Nombre del platillo"
+                  autoComplete="off"
+                />
+              </div>
+
+              {q && shown === 0 && (
+                <p className="text-sm text-stone-600" role="status">
+                  Ningún platillo coincide con «{query.trim()}».
+                </p>
+              )}
+
+              {groups.map((g) => (
+                <section key={g.id} aria-labelledby={`grupo-${g.id}`}>
+                  <h3
+                    id={`grupo-${g.id}`}
+                    className="mb-2 flex flex-wrap items-center gap-2 text-sm font-semibold text-brand-900 [overflow-wrap:anywhere]"
+                  >
+                    <span className="min-w-0">{g.title}</span>
+                    <span className="font-normal text-stone-600 tabular-nums">({g.items.length})</span>
+                    {g.orphan && (
+                      <Badge className="bg-accent-100 text-accent-900">En la carta: «Otros»</Badge>
+                    )}
+                  </h3>
+                  {g.items.length === 0 ? (
+                    <p className="rounded-lg border border-dashed border-stone-300 px-4 py-3 text-sm text-stone-600">
+                      Sin platillos todavía.
                     </p>
-                  </div>
-                  <div className="flex shrink-0 gap-2">
-                    <Button
-                      size="sm"
-                      variant="soft"
-                      onClick={() => run(() => toggleProductAvailability(p.id, !p.is_available))}
-                      disabled={pending}
-                    >
-                      {p.is_available ? "Marcar agotado" : "Volver a ofrecer"}
-                    </Button>
-                    <Button
-                      size="sm"
-                      variant="soft"
-                      onClick={() => {
-                        setEditingProd(editingProd === p.id ? null : p.id);
-                        setEditProdError(null);
-                      }}
-                      disabled={pending || editProdForm.pending}
-                      aria-expanded={editingProd === p.id}
-                      aria-label={`Editar ${t(p.name_i18n, "es")}`}
-                    >
-                      Editar
-                    </Button>
-                    <Button
-                      size="sm"
-                      variant="danger-soft"
-                      onClick={() => askDeleteProduct(p)}
-                      disabled={pending || editProdForm.pending}
-                      aria-label={`Eliminar ${t(p.name_i18n, "es")}`}
-                    >
-                      <Icon name="trash" size={16} />
-                      <span className="hidden sm:inline">Eliminar</span>
-                    </Button>
-                  </div>
-                </li>
+                  ) : (
+                    <ul className="divide-y divide-stone-100 rounded-lg border border-stone-200">
+                      {g.items.map((p) => (
+                        <li
+                          key={p.id}
+                          className="flex flex-col gap-3 px-4 py-3 sm:flex-row sm:items-center sm:justify-between"
+                        >
+                          <div className="min-w-0">
+                            <p className="font-medium text-brand-950 [overflow-wrap:anywhere]">{t(p.name_i18n, "es")}</p>
+                            <p className="mt-0.5 flex flex-wrap items-center gap-2 text-sm text-stone-700">
+                              <span className="tabular-nums">{formatMoney(Number(p.price), currency)}</span>
+                              <Badge
+                                className={
+                                  p.is_available ? "bg-brand-100 text-brand-800" : "bg-stone-200 text-stone-800"
+                                }
+                              >
+                                {p.is_available ? "Disponible" : "Agotado"}
+                              </Badge>
+                            </p>
+                            {g.orphan && categories.length > 0 && (
+                              <AssignCategory
+                                product={p}
+                                categories={categories}
+                                catName={catName}
+                                disabled={pending || readOnly}
+                                onAssign={(categoryId) => run(() => assignProductCategory(p.id, categoryId))}
+                              />
+                            )}
+                          </div>
+                          <div className="flex shrink-0 flex-wrap gap-2">
+                            <Button
+                              size="sm"
+                              variant="soft"
+                              onClick={() => run(() => toggleProductAvailability(p.id, !p.is_available))}
+                              disabled={pending || readOnly}
+                            >
+                              {p.is_available ? "Marcar agotado" : "Volver a ofrecer"}
+                            </Button>
+                            <Button
+                              size="sm"
+                              variant="soft"
+                              onClick={() => {
+                                setEditingProd(editingProd === p.id ? null : p.id);
+                                setEditProdError(null);
+                              }}
+                              disabled={pending || editProdForm.pending || readOnly}
+                              aria-expanded={editingProd === p.id}
+                              aria-label={`Editar ${t(p.name_i18n, "es")}`}
+                            >
+                              Editar
+                            </Button>
+                            <Button
+                              size="sm"
+                              variant="danger-soft"
+                              onClick={() => askDeleteProduct(p)}
+                              disabled={pending || editProdForm.pending || readOnly}
+                              aria-label={`Eliminar ${t(p.name_i18n, "es")}`}
+                            >
+                              <Icon name="trash" size={16} />
+                              <span className="hidden sm:inline">Eliminar</span>
+                            </Button>
+                          </div>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </section>
               ))}
-            </ul>
+            </div>
           )}
 
           {editingProduct && (
@@ -446,7 +547,7 @@ export function MenuManager({
               </div>
               <div>
                 <Label htmlFor="ep_price">Precio ({currency})</Label>
-                <Input id="ep_price" name="price" type="number" inputMode="decimal" min="0" step="0.01" defaultValue={Number(editingProduct.price)} required />
+                <Input id="ep_price" name="price" type="number" inputMode={priceMode} min="0" step={priceStep} defaultValue={roundToCurrency(Number(editingProduct.price), currency)} required />
               </div>
               <div>
                 <Label htmlFor="ep_image">Foto (enlace, opcional)</Label>
@@ -491,6 +592,42 @@ export function MenuManager({
         </CardBody>
       </Card>
       {dialog}
+    </div>
+  );
+}
+
+/** Elegir la categoría de un platillo que quedó sin ella, sin abrir el formulario completo. */
+function AssignCategory({
+  product,
+  categories,
+  catName,
+  disabled,
+  onAssign,
+}: {
+  product: Product;
+  categories: Category[];
+  catName: (c: Category) => string;
+  disabled: boolean;
+  onAssign: (categoryId: string) => void;
+}) {
+  const [value, setValue] = useState("");
+  const id = `asignar-${product.id}`;
+  return (
+    <div className="mt-2 flex flex-wrap items-center gap-2">
+      <label htmlFor={id} className="sr-only">
+        Categoría para {t(product.name_i18n, "es")}
+      </label>
+      <Select id={id} value={value} onChange={(e) => setValue(e.target.value)} className="w-auto max-w-full">
+        <option value="">Elegí una categoría</option>
+        {categories.map((c) => (
+          <option key={c.id} value={c.id}>
+            {catName(c)}
+          </option>
+        ))}
+      </Select>
+      <Button size="sm" variant="secondary" onClick={() => onAssign(value)} disabled={disabled || !value}>
+        Asignar
+      </Button>
     </div>
   );
 }

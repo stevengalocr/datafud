@@ -4,25 +4,22 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { createClient } from "@/lib/supabase/server";
 import { type ActionResult, dbFail, fail, ok, zodFail } from "@/lib/action-result";
-import type { Lang } from "@/lib/supabase/types";
+import { writableTenant } from "@/lib/auth/tenant-access";
+import { planLimits } from "@/lib/auth/plan";
+import type { Lang, OrderStatus } from "@/lib/supabase/types";
+import { ORDER_STATUS_LABEL } from "@/lib/constants";
+import { roundToCurrency } from "@/lib/currency/format";
+import { isForward, isUndo, UNDO_SERVER_MS } from "./_lib/order-status";
 
 // Resuelve el negocio del usuario con sesión (server-side, con RLS activa). El tenant_id nunca
-// viene del navegador (regla 4): se lee del perfil. Toda acción devuelve un ActionResult (S10).
+// viene del navegador (regla 4): se lee del perfil. Un local suspendido o cancelado no escribe
+// (`writableTenant`). Toda acción devuelve un ActionResult (S10).
 async function ctx() {
   const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  if (!user) return null;
-  const { data: profile } = await supabase
-    .from("profiles")
-    .select("tenant_id, role")
-    .eq("id", user.id)
-    .single();
-  if (!profile?.tenant_id) return null;
-  return { supabase, tenantId: profile.tenant_id as string };
+  const access = await writableTenant(supabase);
+  if (!access.ok) return access;
+  return { ok: true as const, supabase, tenantId: access.tenantId };
 }
-const SIN_SESION = "Tu sesión venció. Volvé a entrar.";
 
 const uuid = z.string().uuid("Elemento inválido.");
 const texto = (max: number) => z.string().trim().max(max, `Máximo ${max} caracteres.`);
@@ -46,7 +43,7 @@ const categorySchema = z.object({
 
 export async function createCategory(formData: FormData): Promise<ActionResult> {
   const c = await ctx();
-  if (!c) return fail(SIN_SESION);
+  if (!c.ok) return fail(c.error);
   const parsed = categorySchema.safeParse({ nameEs: formData.get("name_es"), sortOrder: formData.get("sort_order") ?? 0 });
   if (!parsed.success) return zodFail(parsed.error);
   const { error } = await c.supabase.from("categories").insert({
@@ -61,7 +58,7 @@ export async function createCategory(formData: FormData): Promise<ActionResult> 
 
 export async function updateCategory(formData: FormData): Promise<ActionResult> {
   const c = await ctx();
-  if (!c) return fail(SIN_SESION);
+  if (!c.ok) return fail(c.error);
   const id = uuid.safeParse(formData.get("id"));
   const parsed = categorySchema.safeParse({ nameEs: formData.get("name_es"), sortOrder: formData.get("sort_order") ?? 0 });
   if (!id.success) return zodFail(id.error);
@@ -79,11 +76,12 @@ export async function updateCategory(formData: FormData): Promise<ActionResult> 
 
 export async function deleteCategory(id: string): Promise<ActionResult> {
   const c = await ctx();
-  if (!c) return fail(SIN_SESION);
+  if (!c.ok) return fail(c.error);
   const parsed = uuid.safeParse(id);
   if (!parsed.success) return zodFail(parsed.error);
-  const { error } = await c.supabase.from("categories").delete().eq("id", parsed.data);
+  const { data, error } = await c.supabase.from("categories").delete().eq("id", parsed.data).select("id");
   if (error) return dbFail("deleteCategory", error, "No se pudo eliminar la categoría. Probá de nuevo.");
+  if (!data?.length) return fail("Esa categoría ya no existe. Recargá la página.");
   revalidatePath("/dashboard/menu");
   return ok();
 }
@@ -97,6 +95,7 @@ const productSchema = z.object({
     .string()
     .trim()
     .url("La URL de la foto no es válida.")
+    .max(2048, "La dirección de la foto es muy larga.")
     .refine((u) => u.startsWith("https://"), "La foto tiene que estar en una dirección https.")
     .nullable(),
   sortOrder: orden,
@@ -113,18 +112,77 @@ function parseProductForm(formData: FormData) {
   });
 }
 
+// El precio se guarda con los decimales de la moneda del local (los colones, sin céntimos: la
+// carta muestra "₡3 501" y el total no cuadraría con lo mostrado). La moneda sale de la
+// configuración del local, no del formulario.
+async function priceFor(c: Ctx, price: number) {
+  const { data, error } = await c.supabase
+    .from("tenant_settings")
+    .select("currency_code")
+    .eq("tenant_id", c.tenantId)
+    .maybeSingle();
+  if (error) return { error, price: 0 };
+  return { error: null, price: roundToCurrency(price, data?.currency_code) };
+}
+
+type Ctx = Extract<Awaited<ReturnType<typeof ctx>>, { ok: true }>;
+
+// Fotos reemplazadas o de platillos borrados: se quitan del bucket para no llenar el tope de
+// archivos del local (schema.sql, sección 12). Solo si la URL es de la carpeta del propio local en
+// `media` y nada más del local la usa. Es limpieza: si falla, se registra y la acción sigue.
+const MEDIA_PREFIX = "/storage/v1/object/public/media/";
+
+function ownMediaPath(url: string | null | undefined, tenantId: string): string | null {
+  const base = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  if (!url || !base) return null;
+  try {
+    const u = new URL(url);
+    if (u.origin !== new URL(base).origin || !u.pathname.startsWith(MEDIA_PREFIX)) return null;
+    const path = decodeURIComponent(u.pathname.slice(MEDIA_PREFIX.length));
+    if (!path.startsWith(`${tenantId}/`) || path.split("/").some((part) => part === ".." || part === "")) return null;
+    return path;
+  } catch {
+    return null;
+  }
+}
+
+async function removeUnusedMedia(c: Ctx, url: string | null | undefined): Promise<void> {
+  const path = ownMediaPath(url, c.tenantId);
+  if (!path || !url) return;
+  try {
+    const head = { count: "exact" as const, head: true };
+    const [products, categories, settings] = await Promise.all([
+      c.supabase.from("products").select("id", head).eq("tenant_id", c.tenantId).eq("image_url", url),
+      c.supabase.from("categories").select("id", head).eq("tenant_id", c.tenantId).eq("image_url", url),
+      c.supabase.from("tenant_settings").select("tenant_id", head).eq("tenant_id", c.tenantId).eq("logo_url", url),
+    ]);
+    const error = products.error ?? categories.error ?? settings.error;
+    if (error) {
+      console.error("[datafud] removeUnusedMedia:", error.code ?? "-", error.message ?? "");
+      return;
+    }
+    if ((products.count ?? 0) + (categories.count ?? 0) + (settings.count ?? 0) > 0) return;
+    const { error: rmErr } = await c.supabase.storage.from("media").remove([path]);
+    if (rmErr) console.error("[datafud] removeUnusedMedia:", rmErr.message ?? "-");
+  } catch (e) {
+    console.error("[datafud] removeUnusedMedia:", e instanceof Error ? e.message : "-");
+  }
+}
+
 export async function createProduct(formData: FormData): Promise<ActionResult> {
   const c = await ctx();
-  if (!c) return fail(SIN_SESION);
+  if (!c.ok) return fail(c.error);
   const parsed = parseProductForm(formData);
   if (!parsed.success) return zodFail(parsed.error);
   const p = parsed.data;
+  const pr = await priceFor(c, p.price);
+  if (pr.error) return dbFail("createProduct", pr.error, "No se pudo guardar el platillo. Probá de nuevo.");
   const { error } = await c.supabase.from("products").insert({
     tenant_id: c.tenantId,
     category_id: p.categoryId,
     name_i18n: i18nFrom(formData, "name", 80),
     description_i18n: i18nFrom(formData, "description", 300),
-    price: p.price,
+    price: pr.price,
     image_url: p.imageUrl,
     sort_order: p.sortOrder,
   });
@@ -135,19 +193,29 @@ export async function createProduct(formData: FormData): Promise<ActionResult> {
 
 export async function updateProduct(formData: FormData): Promise<ActionResult> {
   const c = await ctx();
-  if (!c) return fail(SIN_SESION);
+  if (!c.ok) return fail(c.error);
   const id = uuid.safeParse(formData.get("id"));
   const parsed = parseProductForm(formData);
   if (!id.success) return zodFail(id.error);
   if (!parsed.success) return zodFail(parsed.error);
   const p = parsed.data;
+  const pr = await priceFor(c, p.price);
+  if (pr.error) return dbFail("updateProduct", pr.error, "No se pudo guardar el platillo. Probá de nuevo.");
+  // La foto que tenía, para quitarla del bucket si se reemplazó.
+  const { data: before, error: beforeErr } = await c.supabase
+    .from("products")
+    .select("image_url")
+    .eq("id", id.data)
+    .eq("tenant_id", c.tenantId)
+    .maybeSingle();
+  if (beforeErr) return dbFail("updateProduct", beforeErr, "No se pudo guardar el platillo. Probá de nuevo.");
   const { data, error } = await c.supabase
     .from("products")
     .update({
       category_id: p.categoryId,
       name_i18n: i18nFrom(formData, "name", 80),
       description_i18n: i18nFrom(formData, "description", 300),
-      price: p.price,
+      price: pr.price,
       image_url: p.imageUrl,
       sort_order: p.sortOrder,
     })
@@ -155,28 +223,57 @@ export async function updateProduct(formData: FormData): Promise<ActionResult> {
     .select("id");
   if (error) return dbFail("updateProduct", error, "No se pudo guardar el platillo. Probá de nuevo.");
   if (!data?.length) return fail("Ese platillo ya no existe. Recargá la página.");
+  if (before?.image_url && before.image_url !== p.imageUrl) await removeUnusedMedia(c, before.image_url);
   revalidatePath("/dashboard/menu");
   return ok();
 }
 
 export async function toggleProductAvailability(id: string, available: boolean): Promise<ActionResult> {
   const c = await ctx();
-  if (!c) return fail(SIN_SESION);
+  if (!c.ok) return fail(c.error);
   const parsed = uuid.safeParse(id);
   if (!parsed.success || typeof available !== "boolean") return fail("Platillo inválido.");
-  const { error } = await c.supabase.from("products").update({ is_available: available }).eq("id", parsed.data);
+  const { data, error } = await c.supabase
+    .from("products")
+    .update({ is_available: available })
+    .eq("id", parsed.data)
+    .select("id");
   if (error) return dbFail("toggleProductAvailability", error, "No se pudo cambiar la disponibilidad. Probá de nuevo.");
+  if (!data?.length) return fail("Ese platillo ya no existe. Recargá la página.");
   revalidatePath("/dashboard/menu");
   return ok();
 }
 
 export async function deleteProduct(id: string): Promise<ActionResult> {
   const c = await ctx();
-  if (!c) return fail(SIN_SESION);
+  if (!c.ok) return fail(c.error);
   const parsed = uuid.safeParse(id);
   if (!parsed.success) return zodFail(parsed.error);
-  const { error } = await c.supabase.from("products").delete().eq("id", parsed.data);
+  const { data, error } = await c.supabase.from("products").delete().eq("id", parsed.data).select("id, image_url");
   if (error) return dbFail("deleteProduct", error, "No se pudo eliminar el platillo. Probá de nuevo.");
+  if (!data?.length) return fail("Ese platillo ya no existe. Recargá la página.");
+  await removeUnusedMedia(c, data[0]?.image_url);
+  revalidatePath("/dashboard/menu");
+  return ok();
+}
+
+/** Asigna una categoría a un platillo que quedó sin ella (se borró la suya). */
+export async function assignProductCategory(productId: string, categoryId: string): Promise<ActionResult> {
+  const c = await ctx();
+  if (!c.ok) return fail(c.error);
+  const pid = uuid.safeParse(productId);
+  const cid = uuid.safeParse(categoryId);
+  if (!pid.success) return zodFail(pid.error);
+  if (!cid.success) return fail("Elegí una categoría.");
+  // RLS limita el platillo al negocio propio y la FK compuesta (S15), la categoría.
+  const { data, error } = await c.supabase
+    .from("products")
+    .update({ category_id: cid.data })
+    .eq("id", pid.data)
+    .eq("tenant_id", c.tenantId)
+    .select("id");
+  if (error) return dbFail("assignProductCategory", error, "No se pudo asignar la categoría. Recargá la página y probá de nuevo.");
+  if (!data?.length) return fail("Ese platillo ya no existe. Recargá la página.");
   revalidatePath("/dashboard/menu");
   return ok();
 }
@@ -207,7 +304,7 @@ function matchesMagic(type: keyof typeof IMAGE_TYPES, b: Uint8Array) {
 export async function uploadImage(formData: FormData): Promise<ActionResult<{ url: string }>> {
   try {
     const c = await ctx();
-    if (!c) return fail(SIN_SESION);
+    if (!c.ok) return fail(c.error);
     const parsed = uploadSchema.safeParse({ kind: formData.get("kind"), file: formData.get("file") });
     if (!parsed.success) return zodFail(parsed.error);
     const { kind, file } = parsed.data;
@@ -224,7 +321,18 @@ export async function uploadImage(formData: FormData): Promise<ActionResult<{ ur
       const msg = error.message ?? "";
       const code = String((error as { statusCode?: string | number }).statusCode ?? "");
       const apagado = /bucket not found/i.test(msg) || (code === "404" && /bucket/i.test(msg));
-      return dbFail("uploadImage", { message: error.message }, apagado ? STORAGE_APAGADO : "No se pudo subir la imagen. Probá de nuevo o pegá la dirección de la foto.");
+      // La carpeta sale de la sesión, así que un rechazo de la política es el tope de archivos del
+      // local (schema.sql, media_quota_ok); un local en solo lectura ya lo frena ctx().
+      const rechazo = /row-level security/i.test(msg) || code === "403";
+      return dbFail(
+        "uploadImage",
+        { message: error.message },
+        apagado
+          ? STORAGE_APAGADO
+          : rechazo
+            ? "No se pudo subir la foto. Lo más probable es que tu local haya llegado al tope de fotos guardadas de su plan: quitá fotos de platillos que ya no usés (al cambiar o borrar una, la vieja se libera) o escribinos por WhatsApp."
+            : "No se pudo subir la imagen. Probá de nuevo o pegá la dirección de la foto."
+      );
     }
     const { data } = c.supabase.storage.from("media").getPublicUrl(path);
     return ok({ url: data.publicUrl });
@@ -238,7 +346,7 @@ const tableSchema = z.object({ label: z.string().trim().min(1, "Escribí el nomb
 
 export async function createTable(formData: FormData): Promise<ActionResult> {
   const c = await ctx();
-  if (!c) return fail(SIN_SESION);
+  if (!c.ok) return fail(c.error);
   const parsed = tableSchema.safeParse({ label: formData.get("label") });
   if (!parsed.success) return zodFail(parsed.error);
   const { error } = await c.supabase.from("tables").insert({ tenant_id: c.tenantId, label: parsed.data.label });
@@ -249,11 +357,38 @@ export async function createTable(formData: FormData): Promise<ActionResult> {
 
 export async function deleteTable(id: string): Promise<ActionResult> {
   const c = await ctx();
-  if (!c) return fail(SIN_SESION);
+  if (!c.ok) return fail(c.error);
   const parsed = uuid.safeParse(id);
   if (!parsed.success) return zodFail(parsed.error);
-  const { error } = await c.supabase.from("tables").delete().eq("id", parsed.data);
+  const { data, error } = await c.supabase
+    .from("tables")
+    .delete()
+    .eq("id", parsed.data)
+    .eq("tenant_id", c.tenantId)
+    .select("id");
   if (error) return dbFail("deleteTable", error, "No se pudo eliminar la mesa. Probá de nuevo.");
+  if (!data?.length) return fail("Esa mesa ya no existe. Recargá la página.");
+  revalidatePath("/dashboard/tables");
+  return ok();
+}
+
+/**
+ * Cambia el código de la mesa (S13): el QR impreso deja de abrir la carta y hay que imprimir el
+ * nuevo. Sirve si un QR se copió o salió del local. El código nuevo sale del servidor.
+ */
+export async function rotateTableToken(id: string): Promise<ActionResult> {
+  const c = await ctx();
+  if (!c.ok) return fail(c.error);
+  const parsed = uuid.safeParse(id);
+  if (!parsed.success) return zodFail(parsed.error);
+  const { data, error } = await c.supabase
+    .from("tables")
+    .update({ qr_token: crypto.randomUUID() })
+    .eq("id", parsed.data)
+    .eq("tenant_id", c.tenantId)
+    .select("id");
+  if (error) return dbFail("rotateTableToken", error, "No se pudo cambiar el QR de la mesa. Probá de nuevo.");
+  if (!data?.length) return fail("Esa mesa ya no existe. Recargá la página.");
   revalidatePath("/dashboard/tables");
   return ok();
 }
@@ -261,15 +396,74 @@ export async function deleteTable(id: string): Promise<ActionResult> {
 // ---------- Órdenes ----------
 const statusSchema = z.enum(["pending", "preparing", "ready", "delivered", "paid", "cancelled"]);
 
-export async function updateOrderStatus(id: string, status: string): Promise<ActionResult> {
+/**
+ * Cambia el estado de una orden de `from` a `to` (S11). Solo acepta el paso siguiente, cancelar
+ * una orden activa o deshacer el último cambio (un paso atrás, o reabrir una cancelada) dentro de
+ * `UNDO_SERVER_MS`. El `update` exige que la orden siga en `from`: si alguien la movió mientras
+ * tanto, no se pisa y se avisa. La base hace cumplir lo mismo (trigger trg_order_status de
+ * schema.sql): deshacer solo vuelve a `previous_status`, y una sola vez, así que solo se revierte
+ * el último cambio.
+ */
+export async function updateOrderStatus(id: string, from: string, to: string): Promise<ActionResult> {
   const c = await ctx();
-  if (!c) return fail(SIN_SESION);
+  if (!c.ok) return fail(c.error);
   const pid = uuid.safeParse(id);
-  const st = statusSchema.safeParse(status);
-  if (!pid.success || !st.success) return fail("Estado de la orden inválido.");
-  const { data, error } = await c.supabase.from("orders").update({ status: st.data }).eq("id", pid.data).select("id");
+  const f = statusSchema.safeParse(from);
+  const t = statusSchema.safeParse(to);
+  if (!pid.success || !f.success || !t.success) return fail("Estado de la orden inválido.");
+  const forward = isForward(f.data, t.data);
+  if (!forward && !isUndo(f.data, t.data)) return fail("Ese cambio de estado no se puede hacer desde el tablero.");
+
+  // tenant_id: defensa en profundidad; la garantía es RLS.
+  const cutoff = new Date(Date.now() - UNDO_SERVER_MS).toISOString();
+  const run = (legacy: boolean) => {
+    let q = c.supabase
+      .from("orders")
+      .update({ status: t.data })
+      .eq("id", pid.data)
+      .eq("tenant_id", c.tenantId)
+      .eq("status", f.data);
+    if (!forward) {
+      // 1.7.0: deshacer vuelve solo a previous_status. Con una base anterior (sin la columna) se
+      // usa la regla de 1.6.x: un paso atrás si la orden cambió hace poco.
+      q = legacy
+        ? q.gte("updated_at", cutoff)
+        : q.eq("previous_status", t.data).gte("status_changed_at", cutoff);
+    }
+    return q.select("id");
+  };
+  let legacy = false;
+  let { data, error } = await run(false);
+  if (error?.code === "42703" && !forward) {
+    console.error("[datafud] updateOrderStatus: base sin previous_status, se usa la regla anterior");
+    legacy = true;
+    ({ data, error } = await run(true));
+  }
+  // El trigger rechazó el cambio (por ejemplo, el reloj de la base ya cerró la ventana de deshacer).
+  if (error?.hint === "datafud:order_transition") {
+    revalidatePath("/dashboard/orders");
+    return fail(forward ? "Ese cambio de estado no se puede hacer desde el tablero." : "Ya pasó el tiempo para deshacer ese cambio.");
+  }
   if (error) return dbFail("updateOrderStatus", error, "No se pudo actualizar la orden. Probá de nuevo.");
-  if (!data?.length) return fail("Esa orden ya no existe. El tablero se actualiza solo.");
+
+  if (!data?.length) {
+    // No cambió nada: se averigua por qué, para decirlo bien.
+    const { data: now, error: e2 } = await c.supabase
+      .from("orders")
+      .select(legacy ? "status" : "status, previous_status")
+      .eq("id", pid.data)
+      .eq("tenant_id", c.tenantId)
+      .maybeSingle<{ status: OrderStatus; previous_status?: OrderStatus | null }>();
+    if (e2) return dbFail("updateOrderStatus", e2, "No se pudo actualizar la orden. Probá de nuevo.");
+    revalidatePath("/dashboard/orders");
+    if (!now) return fail("Esa orden ya no existe. El tablero se actualiza solo.");
+    const actual = now.status;
+    if (actual !== f.data) {
+      return fail(`Esa orden ya estaba «${ORDER_STATUS_LABEL[actual]}»: alguien la cambió antes. El tablero ya se actualizó.`);
+    }
+    if (!legacy && now.previous_status !== t.data) return fail("Solo se puede deshacer el último cambio de una orden, una vez.");
+    return fail("Ya pasó el tiempo para deshacer ese cambio.");
+  }
   revalidatePath("/dashboard/orders");
   revalidatePath("/dashboard");
   return ok();
@@ -288,6 +482,7 @@ const settingsSchema = z.object({
     .string()
     .trim()
     .url("La URL del logo no es válida.")
+    .max(2048, "La dirección del logo es muy larga.")
     .refine((u) => u.startsWith("https://"), "El logo tiene que estar en una dirección https.")
     .optional(),
   primary: hex,
@@ -296,7 +491,7 @@ const settingsSchema = z.object({
 
 export async function updateSettings(formData: FormData): Promise<ActionResult> {
   const c = await ctx();
-  if (!c) return fail(SIN_SESION);
+  if (!c.ok) return fail(c.error);
   const opt = (k: string) => ((formData.get(k) as string) || "").trim() || undefined;
   const parsed = settingsSchema.safeParse({
     currency: formData.get("currency_code") ?? "USD",
@@ -314,7 +509,28 @@ export async function updateSettings(formData: FormData): Promise<ActionResult> 
   const enabled = s.enabled.length ? s.enabled : ["es"];
   if (!enabled.includes(s.defaultLanguage)) return fail("El idioma principal tiene que estar entre los idiomas activos.");
 
-  const { error } = await c.supabase
+  // Idiomas: los que incluye el plan del local (la fila de `plans`, con PRICING de respaldo).
+  const { data: tenant, error: planErr } = await c.supabase
+    .from("tenants")
+    .select("plan:plans(code, features)")
+    .eq("id", c.tenantId)
+    .maybeSingle();
+  if (planErr) return dbFail("updateSettings.plan", planErr, "No se pudo guardar la configuración. Probá de nuevo.");
+  const planRel = tenant?.plan as Parameters<typeof planLimits>[0] | Parameters<typeof planLimits>[0][];
+  const { maxLanguages } = planLimits(Array.isArray(planRel) ? planRel[0] : planRel);
+  if (enabled.length > maxLanguages) {
+    return fail(`Tu plan incluye ${maxLanguages} ${maxLanguages === 1 ? "idioma" : "idiomas"}. Desactivá ${enabled.length - maxLanguages === 1 ? "uno" : "los que sobran"} o escribinos para cambiar de plan.`);
+  }
+
+  // El logo que tenía, para quitarlo del bucket si se reemplazó.
+  const { data: before, error: beforeErr } = await c.supabase
+    .from("tenant_settings")
+    .select("logo_url")
+    .eq("tenant_id", c.tenantId)
+    .maybeSingle();
+  if (beforeErr) return dbFail("updateSettings.logo", beforeErr, "No se pudo guardar la configuración. Probá de nuevo.");
+
+  const { data: saved, error } = await c.supabase
     .from("tenant_settings")
     .update({
       currency_code: s.currency,
@@ -326,8 +542,12 @@ export async function updateSettings(formData: FormData): Promise<ActionResult> 
       logo_url: s.logoUrl ?? null,
       theme: { primary: s.primary, accent: s.accent },
     })
-    .eq("tenant_id", c.tenantId);
+    .eq("tenant_id", c.tenantId)
+    .select("tenant_id");
   if (error) return dbFail("updateSettings", error, "No se pudo guardar la configuración. Probá de nuevo.");
+  // Sin fila en `tenant_settings` (un local creado a mano) no se guardó nada: no se dice «listo».
+  if (!saved?.length) return fail("No encontramos la configuración de tu local, así que no se guardó. Escribinos por WhatsApp.");
+  if (before?.logo_url && before.logo_url !== (s.logoUrl ?? null)) await removeUnusedMedia(c, before.logo_url);
   revalidatePath("/dashboard/settings");
   return ok();
 }

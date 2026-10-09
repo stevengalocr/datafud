@@ -9,6 +9,7 @@ const nav: NavItem[] = [
   { href: "/admin/payments", label: "Pagos", icon: "card" },
   { href: "/admin/charges", label: "Cargos", icon: "receipt" },
   { href: "/admin/plans", label: "Planes", icon: "sparkles" },
+  { href: "/admin/cuenta", label: "Tu cuenta", icon: "shield" },
 ];
 
 export default async function AdminLayout({

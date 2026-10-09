@@ -3,26 +3,82 @@
 import { Resend } from "resend";
 import { SITE } from "@/lib/site";
 import { headers } from "next/headers";
-import { contactSchema, looksAutomated, type ContactState } from "@/lib/contact";
-import { isTurnstileEnabled, verifyTurnstileToken } from "@/lib/turnstile";
+import { contactSchema, type ContactState, type ContactValues } from "@/lib/contact";
+import { isTurnstileEnabled } from "@/lib/turnstile";
+import {
+  allowContactAttempt,
+  checkFormStamp,
+  clientIp,
+  consumeFormStamp,
+  issueFormStamp,
+  verifyTurnstileToken,
+} from "@/lib/contact-guard";
+import { fail, ok, type ActionResult } from "@/lib/action-result";
 
 const FALLBACK_ERROR = "No pudimos enviar tu mensaje. Probá de nuevo o escribinos por WhatsApp.";
+
+/**
+ * Sello firmado del formulario de contacto: el cliente lo pide al empezar a llenarlo y lo manda
+ * con el envío. Sin RESEND_API_KEY devuelve un error amable (el formulario tampoco se muestra).
+ */
+export async function startContactAction(): Promise<ActionResult<{ stamp: string }>> {
+  const stamp = issueFormStamp();
+  return stamp ? ok({ stamp }) : fail("El formulario no está disponible en este momento.");
+}
+
+const field = (formData: FormData, key: string, max: number) => {
+  const v = formData.get(key);
+  return typeof v === "string" ? v.slice(0, max) : "";
+};
+
+/** Lo escrito, para devolverlo con el error: React 19 reinicia el formulario después de la acción. */
+function typedValues(formData: FormData): ContactValues {
+  return {
+    name: field(formData, "name", 80),
+    business: field(formData, "business", 120),
+    phone: field(formData, "phone", 25),
+    businessType: field(formData, "businessType", 40),
+    message: field(formData, "message", 1500),
+  };
+}
+
+const RELOAD = "No pudimos validar el formulario. Recargá la página y volvé a enviar el mensaje.";
 
 // Formulario de contacto de la landing. Sin RESEND_API_KEY el formulario no se renderiza
 // (lo decide el servidor en contact-section.tsx); esta acción además responde con un
 // error amable si llegara a llamarse sin la clave.
-// Anti-abuso sin infraestructura: honeypot, trampa de tiempo (elapsedMs medido en el
-// cliente), tope de enlaces en el mensaje y, si está configurado, Cloudflare Turnstile.
-// Los envíos automatizados reciben un éxito silencioso: nada llega a Resend.
+// Anti-abuso sin infraestructura: honeypot, sello de tiempo firmado por el servidor (el tiempo
+// de llenado se mide con el reloj del servidor, y cada sello sirve para un envío), tope de enlaces
+// en el mensaje, tope de envíos por IP y, si está configurado, Cloudflare Turnstile atado a
+// nuestro dominio. Solo el honeypot recibe un éxito silencioso; todo lo demás le dice a la persona
+// qué hacer y conserva lo que escribió.
 export async function sendContactAction(
   _prev: ContactState,
   formData: FormData
 ): Promise<ContactState> {
-  const elapsedRaw = formData.get("elapsedMs");
-  const elapsedMs = typeof elapsedRaw === "string" && elapsedRaw !== "" ? Number(elapsedRaw) : null;
-  if (looksAutomated(elapsedMs)) {
-    console.info(`[contacto] descartado por trampa de tiempo (elapsedMs=${elapsedRaw ?? "vacío"})`);
-    return { status: "ok" };
+  const values = typedValues(formData);
+  const failWith = (message: string, freshStamp = false): ContactState => ({
+    status: "error",
+    message,
+    values,
+    stamp: freshStamp ? (issueFormStamp() ?? undefined) : undefined,
+  });
+
+  const raw = formData.get("stamp");
+  const stamp = typeof raw === "string" ? raw : "";
+  const stampCheck = stamp ? checkFormStamp(stamp) : "missing";
+  if (stampCheck === "missing") {
+    return failWith(
+      "No pudimos preparar el formulario. Esperá unos segundos y volvé a enviar; si sigue, recargá la página o escribinos por WhatsApp."
+    );
+  }
+  if (stampCheck === "invalid" || stampCheck === "used") {
+    console.info(`[contacto] sello ${stampCheck === "used" ? "repetido" : "inválido"}`);
+    return failWith(RELOAD, true);
+  }
+  if (stampCheck === "too-fast") return failWith("Esperá unos segundos y volvé a enviar.");
+  if (stampCheck === "expired") {
+    return failWith("La página llevaba mucho rato abierta. Volvé a enviar el mensaje.", true);
   }
 
   const parsed = contactSchema.safeParse({
@@ -40,30 +96,32 @@ export async function sendContactAction(
       console.info("[contacto] descartado por honeypot");
       return { status: "ok" };
     }
-    return {
-      status: "error",
-      message: parsed.error.issues[0]?.message ?? "Revisá los datos del formulario.",
-    };
+    // El sello no se gastó: sigue sirviendo para corregir y reenviar.
+    return failWith(parsed.error.issues[0]?.message ?? "Revisá los datos del formulario.");
+  }
+
+  // De acá en adelante el sello ya se usó: cada error manda uno nuevo para poder reenviar.
+  consumeFormStamp(stamp);
+
+  const ip = clientIp(await headers());
+  if (!allowContactAttempt(ip)) {
+    return failWith(
+      "Recibimos varios mensajes seguidos desde tu conexión. Esperá unos minutos o escribinos por WhatsApp.",
+      true
+    );
   }
 
   if (isTurnstileEnabled()) {
     const token = formData.get("cf-turnstile-response");
-    const ip = (await headers()).get("x-forwarded-for")?.split(",")[0]?.trim() ?? null;
-    const ok = await verifyTurnstileToken(typeof token === "string" ? token : null, ip);
-    if (!ok) {
-      return {
-        status: "error",
-        message: "No pudimos confirmar que sos una persona. Probá de nuevo o escribinos por WhatsApp.",
-      };
+    const valid = await verifyTurnstileToken(typeof token === "string" ? token : null, ip);
+    if (!valid) {
+      return failWith("No pudimos confirmar que sos una persona. Probá de nuevo o escribinos por WhatsApp.", true);
     }
   }
 
   const apiKey = process.env.RESEND_API_KEY;
   if (!apiKey) {
-    return {
-      status: "error",
-      message: "El formulario no está disponible en este momento. Escribinos por WhatsApp y te respondemos.",
-    };
+    return failWith("El formulario no está disponible en este momento. Escribinos por WhatsApp y te respondemos.");
   }
 
   const { name, business, phone, businessType, message } = parsed.data;
@@ -89,11 +147,11 @@ export async function sendContactAction(
     });
     if (error) {
       console.error("[contacto] Resend devolvió error:", error.message);
-      return { status: "error", message: FALLBACK_ERROR };
+      return failWith(FALLBACK_ERROR, true);
     }
     return { status: "ok" };
   } catch (err) {
     console.error("[contacto] Falló el envío:", err);
-    return { status: "error", message: FALLBACK_ERROR };
+    return failWith(FALLBACK_ERROR, true);
   }
 }
