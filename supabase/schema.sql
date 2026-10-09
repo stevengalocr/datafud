@@ -1016,13 +1016,10 @@ commit;
 
 -- ---------------------------------------------------------------------
 -- 13) Referencias dentro del mismo negocio (S15)
--- RLS solo mira el tenant_id de la fila y las FK no pasan por RLS: con FK de una sola columna,
--- el negocio B podía crear en su negocio un platillo con la categoría de A, o una orden con la
--- mesa de A (get_menu entrega esos id a quien tenga el QR), y así llenar el tope de pedidos de
--- esa mesa o quedar colgado de los borrados de A. Desde aquí cada referencia entre tablas de
--- negocio es una FK compuesta (tenant_id, <columna>) -> padre (tenant_id, id): la fila referida
--- tiene que ser del mismo negocio, lo valida Postgres al insertar y al modificar, en los dos
--- lados. Al borrar el padre, "set null (<columna>)" vacía solo la referencia (no el tenant_id;
+-- Cada referencia entre tablas de negocio es una FK compuesta (tenant_id, <columna>) -> padre
+-- (tenant_id, id): la fila referida tiene que ser del mismo negocio. Postgres lo valida al
+-- insertar y al modificar, en los dos lados.
+-- Al borrar el padre, "set null (<columna>)" vacía solo la referencia (no el tenant_id;
 -- necesita Postgres 15 o más) y order_items se sigue borrando con su orden.
 --   products.category_id   -> categories   on delete set null (category_id)
 --   orders.table_id        -> tables       on delete set null (table_id)
