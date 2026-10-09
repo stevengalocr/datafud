@@ -44,11 +44,13 @@ menú y sus pedidos desde un panel, y el dueño del servicio administra a todos 
 - Entra a **`/login`** con el correo y contraseña de tu negocio. Te lleva a tu panel.
 
 ### Resumen
-Al entrar ves el **resumen del día**: órdenes de hoy, vendido hoy y órdenes activas.
+Al entrar ves el **resumen del día**: órdenes de hoy, vendido hoy y las órdenes **por atender**.
 
 ### Comandas en vivo (Órdenes)
 - Cada pedido aparece con su mesa, platillos, nota y **estado**.
-- Avanza el estado conforme cocinas: **Pendiente → En preparación → Lista → Entregada → Pagada**.
+- Avanza el estado conforme cocinas: **Pendiente → En preparación → Lista → Entregada → Pagada**. Solo se aceptan los pasos del servicio, en ese orden.
+- Si te equivocás de paso, **Deshacer** te devuelve al estado anterior durante un minuto.
+- Un restaurante suspendido o cancelado ve su panel en solo lectura.
 - Las notas del comensal se resaltan para no pasarlas por alto.
 
 ### Menú (categorías y platillos)
@@ -66,7 +68,8 @@ Al entrar ves el **resumen del día**: órdenes de hoy, vendido hoy y órdenes a
 
 ### Configuración
 - **Moneda** (todas las de Latam + USD), **idiomas** activos, **nombre, dirección y branding**
-  (colores y logo de tu marca, según tu plan).
+  (colores y logo de tu marca, según tu plan) y el **cambio de tu contraseña**.
+- El plan **Carta** no recibe pedidos desde la mesa: el comensal ve la carta, sin carrito.
 
 ---
 
@@ -85,7 +88,7 @@ Al entrar ves el **resumen del día**: órdenes de hoy, vendido hoy y órdenes a
 ### Cargos (`/admin/charges`)
 - Registra los **cargos puntuales** que no son mensualidad:
   - **Implementación única** (US$249 el sistema completo; US$49 la Carta).
-  - **Tarjetas NFC** ($15 por unidad).
+  - **Tarjetas NFC** (₡7 500 por unidad).
   - Otros cargos.
 - El total se calcula solo (precio × cantidad) y puedes marcarlo Pagado o Pendiente.
 
@@ -108,8 +111,8 @@ Al entrar ves el **resumen del día**: órdenes de hoy, vendido hoy y órdenes a
 - Precios vigentes y oferta completa: `docs/MARKETING.md` §6 (fuente: `PRICING`).
 - En la etapa "landing primero" no hay registro de autoservicio: `/register` redirige a `/#contacto`.
 
-**Para registrar tu restaurante:** entra a `/register`, elige tu plan, completa los datos del
-negocio y crea tu cuenta. Entras directo a tu panel con un periodo de prueba activo.
+**Para tener tu restaurante en DataFud:** escribinos por WhatsApp o con el formulario de la
+landing. Nosotros creamos tu cuenta y te entregamos el acceso a tu panel.
 
 ---
 

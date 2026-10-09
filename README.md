@@ -17,7 +17,7 @@ tenants, planes y pagos.
 
 ## Documentación
 
-Centro de documentación en [`docs/`](docs/README.md). **Versión actual: v1.0.1** (ver [CHANGELOG](docs/CHANGELOG.md)).
+Centro de documentación en [`docs/`](docs/README.md). **Versión:** ver `package.json` y el [CHANGELOG](docs/CHANGELOG.md).
 
 - [`docs/PRODUCT.md`](docs/PRODUCT.md) — contexto completo: qué es, para qué, para quién y cómo está construido.
 - [`docs/USER_MANUAL.md`](docs/USER_MANUAL.md) — cómo se usa, paso a paso, por rol (comensal, restaurante, super admin).

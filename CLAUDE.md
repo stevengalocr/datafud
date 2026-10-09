@@ -5,9 +5,9 @@ Next.js 15 (App Router) + React 19 + TypeScript + Supabase (Postgres, Auth, RLS)
 Producción en Vercel (`datafud.com`, proyecto `datafud`). Versión en `package.json`.
 
 **Etapa actual: backend encendido como base, sin clientes (D-063, 2026-10-03; antes "landing
-primero", D-010).** Producción tiene Supabase (`us-east-1`) con `schema.sql` aplicado y tres
-variables en Vercel, solo en Production: `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`
-y `NEXT_PUBLIC_SITE_URL`. La `service_role` no se carga hasta que algo la use. `/login` y la ruta
+primero", D-010).** Producción tiene Supabase (`us-east-1`) con `schema.sql` (1.7.0) aplicado y cuatro
+variables en Vercel, solo en Production: `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`,
+`NEXT_PUBLIC_SITE_URL` y `SUPABASE_SERVICE_ROLE_KEY` (Sensitive; solo la usa `createTenant`). `/login` y la ruta
 privada muestran el formulario; `/admin` y `/dashboard` piden sesión. El P0 de los paneles
 en Vercel («Esta página no cargó») quedó resuelto el 2026-10-03 (`6382835`): no era Supabase sino
 la imagen OG (ver Trampas y `docs/plans/2026-10-04-paneles-en-vercel.md`). El registro público de Auth
@@ -83,7 +83,8 @@ etiqueta "Render ilustrativo" y todo QR dibujado decodifica a `https://datafud.c
 7. `schema.sql` sigue idempotente y **sin usuarios, correos ni contraseñas**. Las semillas de personas
    solo en `seed.dev.sql`, con contraseña por variable. La contraseña que hubo en el historial está
    quemada: no se reutiliza. Nunca reescribir el historial de git.
-8. Toda Server Action valida con Zod y devuelve un estado que la UI muestra: `ActionResult` de
+8. Los límites de Zod son los mismos que los CHECK de la sección 14b de `schema.sql`: se cambian
+   juntos. Toda Server Action valida con Zod y devuelve un estado que la UI muestra: `ActionResult` de
    `src/lib/action-result.ts` (`ok` / `fail` / `zodFail` / `dbFail`). Nunca lanza hacia la interfaz
    ni devuelve el mensaje crudo de la base (S10, cerrado el 2026-10-03).
 9. Marca: `docs/BRAND.md` y `.impeccable.md`. Iconos solo SVG (`src/components/ui/icon.tsx`). Sin
@@ -141,6 +142,17 @@ etiqueta "Render ilustrativo" y todo QR dibujado decodifica a `https://datafud.c
 - "₡" sale de `public/fonts/datafud-colon-*.woff2` (D-052), primera en los stacks de Tailwind.
   No redeclarar `--font-sans` ni `--font-display` en `globals.css`: pisa a `next/font`.
 - Los triggers de límite de plan lanzan excepción: la UI tiene que mostrarla.
+- **El esquema va antes que la app, en cada release.** `main` despliega solo en Vercel: se aplica
+  `supabase/schema.sql` en producción y `supabase/verify.sql` tiene que dar 51 de 51 en `true`
+  antes del squash-merge a `main`. Un release es un squash-merge a `main`; las ramas de trabajo
+  no se empujan.
+- Los mensajes y las pistas (`hint`) de `place_order` están atados a `CODIGOS` y
+  `MENSAJES_CONOCIDOS` en `src/app/m/[tenant]/[table]/actions.ts`. Un `raise` nuevo o cambiado en la
+  función obliga a tocar esos dos y su texto para el comensal.
+- El plan `basico` (Carta) no tiene pedidos desde la mesa: `place_order` los rechaza en la base,
+  no solo la interfaz.
+- Un negocio suspendido o cancelado queda de solo lectura en la base (RLS), no solo en la UI.
+- Los `/preview/*` son estáticos y no tocan la base: un cambio en el panel real no se ve ahí.
 
 ## Vault de Obsidian (memoria del proyecto) — protocolo de alineación
 

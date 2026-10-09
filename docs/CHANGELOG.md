@@ -7,6 +7,8 @@ Todas las versiones notables del proyecto. Formato basado en
 
 ## [Unreleased]
 
+---
+
 ## [1.7.0] — 2026-10-08 · Base sólida: lo que encontraron las auditorías de la app y de seguridad
 
 ### Panel del restaurante
@@ -422,8 +424,7 @@ Informe: `docs/plans/pulido-loop-report.md`.
   desayuno tico (`public/demo/portada.webp`). Créditos en `docs/marca/creditos-demo.md`. Donde la
   foto no calzaba con la descripción, se ajustó la descripción: el casado queda "con carne
   mechada". `/c/ejemplo` hace 0 requests a otros hosts (antes 13 a `images.unsplash.com`).
-- **`/_next/image` solo acepta imágenes de Supabase Storage (D-054).** Con `hostname: "**"`
-  cualquiera podía usar el optimizador del sitio como proxy. Ahora
+- **`/_next/image` solo acepta imágenes de Supabase Storage (D-054).**
   `/_next/image?url=https://example.com/x.jpg` responde 400.
 - **`qa:landing` falla si una página pide una imagen a otro host** (antes era un aviso).
 
