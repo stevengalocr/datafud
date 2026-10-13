@@ -9,9 +9,13 @@ import { TENANT_STATUS_COLOR, TENANT_STATUS_LABEL } from "@/lib/constants";
 import { formatDate } from "@/lib/dates";
 import { TenantStatusActions } from "./tenant-actions";
 import { CreateTenantForm } from "./create-tenant-form";
+import { ImportCartaForm } from "./import-carta-form";
+import { CARTAS } from "@/content/cartas";
 import type { Plan, Tenant } from "@/lib/supabase/types";
 
 export const dynamic = "force-dynamic";
+// Pasar una Carta copia sus fotos a Storage: le da más tiempo que el de una acción común.
+export const maxDuration = 60;
 
 export default async function TenantsPage() {
   await requireRole("super_admin");
@@ -33,12 +37,18 @@ export default async function TenantsPage() {
         description="Creá un local y aprobá, suspendé o cancelá su acceso."
       />
 
-      <div className="mb-6">
+      <div className="mb-6 flex flex-col items-start gap-3">
         <CreateTenantForm
           plans={plans
             .slice()
             .sort((a, b) => a.sort_order - b.sort_order)
             .map((p) => ({ code: p.code, name: p.name }))}
+        />
+        <ImportCartaForm
+          tenants={list
+            .filter((t) => t.status === "active" || t.status === "trial")
+            .map((t) => ({ value: t.id, label: `${t.name} · /${t.slug} · ${planName(t)}` }))}
+          cartas={CARTAS.map((c) => ({ value: c.slug, label: `/c/${c.slug} · ${c.menu.settings.restaurant_name}` }))}
         />
       </div>
 

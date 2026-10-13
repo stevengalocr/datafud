@@ -23,7 +23,7 @@ export function AuthFrame({
   logoHref?: string | null;
 }) {
   const logo = (
-    <Image src="/logo-main.png" alt="DataFud" width={170} height={70} priority className="h-11 w-auto" />
+    <Image src="/logo-main-transparente.png" alt="DataFud" width={170} height={70} priority className="h-11 w-auto" />
   );
 
   return (

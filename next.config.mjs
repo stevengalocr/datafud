@@ -12,8 +12,10 @@ const isDev = process.env.NODE_ENV !== "production";
 // - Supabase para datos y archivos; las fotos de los platillos pueden venir de cualquier https
 //   (el local pega la dirección) y la vista previa de una subida usa data: y blob:;
 // - next/font sirve las fuentes desde el mismo dominio.
-// Va como Report-Only: el navegador avisa en la consola lo que bloquearía, sin bloquear nada,
-// hasta revisarla en producción. Lo que sí se aplica ya va en `enforcedCsp` y X-Frame-Options.
+// Se aplica en las rutas públicas desde 1.8.0 (D-068): revisada en producción el 2026-10-13, las
+// 17 rutas públicas en escritorio y teléfono dieron cero avisos. Los paneles, el acceso y la
+// carta de cada mesa la siguen teniendo en Report-Only (el navegador avisa sin bloquear) hasta
+// la oleada de pruebas con sesión y un pedido real (`panelCsp`, abajo).
 const cspDirectives = {
   "default-src": ["'self'"],
   "script-src": [
@@ -45,16 +47,25 @@ const cspDirectives = {
   // frame-ancestors no vale en Report-Only: se aplica en `enforcedCsp`.
 };
 const toCsp = (d) => Object.entries(d).map(([k, v]) => `${k} ${v.join(" ")}`).join("; ");
-// Lo que se aplica desde ya: nadie mete el sitio en un iframe, sin plugins y sin <base> ajeno.
+// Lo que se aplica en todo el sitio: nadie lo mete en un iframe, sin plugins y sin <base> ajeno.
 const enforcedCsp = toCsp({
   "frame-ancestors": ["'none'"],
   "object-src": ["'none'"],
   "base-uri": ["'self'"],
 });
-
-const securityHeaders = [
+// Rutas públicas: la política completa, aplicada, más frame-ancestors.
+const publicCsp = toCsp({ ...cspDirectives, "frame-ancestors": ["'none'"] });
+// Paneles, acceso y carta de mesa: lo aplicado de siempre y la completa en observación (D-067).
+const panelCsp = [
   { key: "Content-Security-Policy", value: enforcedCsp },
   { key: "Content-Security-Policy-Report-Only", value: toCsp(cspDirectives) },
+];
+// Next aplica todas las entradas que coinciden y, con la misma clave, gana la última: estas van
+// después de la global y le quitan la política completa a sus rutas.
+const PANEL_PATHS = ["/dashboard/:path*", "/admin/:path*", "/login", "/register", "/acceso-galodev-9f3a", "/m/:path*"];
+
+const securityHeaders = [
+  { key: "Content-Security-Policy", value: publicCsp },
   { key: "X-Frame-Options", value: "DENY" },
   { key: "X-Content-Type-Options", value: "nosniff" },
   { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
@@ -83,6 +94,7 @@ const nextConfig = {
     const noindex = [{ key: "X-Robots-Tag", value: "noindex, nofollow" }];
     return [
       { source: "/:path*", headers: securityHeaders },
+      ...PANEL_PATHS.map((source) => ({ source, headers: panelCsp })),
       { source: "/login", headers: noindex },
       { source: "/register", headers: noindex },
       { source: "/acceso-galodev-9f3a", headers: noindex },

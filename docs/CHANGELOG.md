@@ -9,6 +9,38 @@ Todas las versiones notables del proyecto. Formato basado en
 
 ---
 
+## [1.8.0] — 2026-10-13 · Panel listo: la Carta pasa al sistema, el logo sin placa y la política aplicada
+
+### Super admin
+- **Pasar una Carta al sistema** (en Restaurantes): elige una Carta publicada en `/c/<slug>` y un
+  local activo o en prueba con el menú vacío, y copia su menú (categorías, platillos y precios en
+  sus idiomas), sus fotos y su logo a Storage, sus colores, moneda e idiomas (sin pasar los del
+  plan), y crea la mesa del stand. Corre con la sesión del super admin, sin la llave de servicio. Si
+  algo falla, deshace todo y el local queda como estaba. Al terminar muestra la carta nueva de la
+  mesa y el comando para mover el código impreso. Es el día 11 de la puesta en marcha
+  (`docs/ventas/OFERTA.md` §4).
+- `scripts/qr-mover.mjs <código> </m/<local>/<token>>` mueve un código impreso a su destino nuevo
+  y deja comentado a dónde apuntaba. No reactiva códigos reservados (D-014).
+
+### Marca
+- El logo de las pantallas de acceso, de la carta no disponible y de la barra de la landing ya no
+  se ve sobre una placa blanca: `public/logo-main-transparente.png` es el mismo logo sin el fondo,
+  del mismo tamaño.
+
+### Seguridad
+- La política de contenido completa se **aplica** en las rutas públicas (landing, guías, legales,
+  `/preview`, `/c` y `/q`). Antes, en producción, se revisaron las 17 rutas en escritorio y
+  teléfono: cero avisos. Los paneles, el acceso y la carta de cada mesa la siguen teniendo en
+  observación hasta la oleada con sesión y un pedido real (D-068).
+
+### Calidad
+- CI en GitHub Actions: typecheck, lint, `npm run test:carta` y build en cada push y pull request,
+  sin secretos y sin desplegar nada.
+- `npm run test:carta`: prueba de la parte pura del paso de una Carta (filas, topes de la base,
+  fotos que se pueden copiar).
+
+---
+
 ## [1.7.0] — 2026-10-08 · Base sólida: lo que encontraron las auditorías de la app y de seguridad
 
 ### Panel del restaurante

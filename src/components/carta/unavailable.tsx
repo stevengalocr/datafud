@@ -41,7 +41,7 @@ export function CartaNotice({
       <div className="relative w-full max-w-md">
         <div className="mb-8 flex justify-center">
           <Link href="/" aria-label="DataFud" className="rounded-md">
-            <Image src="/logo-main.png" alt="DataFud" width={170} height={70} priority className="h-11 w-auto" />
+            <Image src="/logo-main-transparente.png" alt="DataFud" width={170} height={70} priority className="h-11 w-auto" />
           </Link>
         </div>
         <div className="rounded-2xl border border-stone-200/80 bg-white p-6 shadow-panel-lg sm:p-8">

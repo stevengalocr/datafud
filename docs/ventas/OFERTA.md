@@ -191,7 +191,7 @@ desde que se cobra:
 | 8 | Cargar el menú real y probar editarlo: cambiarle el precio a un platillo y verlo en la carta. |
 | 9 | Storage de Supabase para las fotos de los platillos y el logo. |
 | 10 | Tablero de comandas que se refresca cada 15–20 segundos. |
-| 11 | Migrar la carta de `/c/<slug>` a `/m/<tenant>/<mesa>` y apuntar el `/q/<código>` al destino nuevo. El stand impreso no se toca. |
+| 11 | Pasar la carta de `/c/<slug>` a `/m/<tenant>/<mesa>`: en `/admin/tenants`, «Pasar una Carta al sistema» (menú, fotos, logo, colores y la mesa del stand, desde 1.8.0); después `node scripts/qr-mover.mjs <código> /m/<local>/<token>`, build, commit y publicar. El stand impreso no se toca. |
 | 12 | QR por mesa desde el panel, con `NEXT_PUBLIC_SITE_URL=https://datafud.com`. |
 | 13 | Pruebas de punta a punta: pedido real desde un teléfono, aislamiento entre negocios, límites de plan. |
 | 14 | Capacitación del local: una sesión con quien va a usar el panel, más el manual. |

@@ -1,0 +1,31 @@
+# CI mínima (P2 de Pendientes): typecheck, lint, la prueba de la carta y el build en cada push
+# y pull request. No usa secretos: sin variables de Supabase la app degrada sin romper (regla 11)
+# y el build no toca la base. Vercel sigue desplegando solo `main`; esto no despliega nada.
+name: CI
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verificar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npm run lint
+      - run: npm run test:carta
+      - run: npm run build

@@ -1,6 +1,6 @@
 {
   "name": "datafud",
-  "version": "1.7.0",
+  "version": "1.8.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -9,7 +9,8 @@
     "start": "next start",
     "lint": "next lint",
     "typecheck": "tsc --noEmit",
-    "qa:landing": "node scripts/qa-landing.mjs"
+    "qa:landing": "node scripts/qa-landing.mjs",
+    "test:carta": "node --experimental-strip-types --no-warnings scripts/prueba-carta-a-sistema.mts"
   },
   "dependencies": {
     "@supabase/ssr": "^0.12.7",

@@ -28,6 +28,8 @@ etiqueta "Render ilustrativo" y todo QR dibujado decodifica a `https://datafud.c
 - `npm run dev` — local en :3000 (sin `.env.local` cargan `/`, `/preview`, `/login` con aviso, legal).
 - `npm run typecheck` · `npm run lint` · `npm run build` — los tres en verde antes de cada commit.
 - `npm run qa:landing` — QA de la landing en navegador real (Playwright); ver `scripts/qa-landing.mjs`.
+- `npm run test:carta` — prueba de la parte pura de «Pasar una Carta al sistema» (sin red ni base). La CI
+  (`.github/workflows/ci.yml`) corre typecheck, lint, esta prueba y el build en cada push.
 - BD: `supabase/schema.sql` (idempotente, sin usuarios) → `supabase/verify.sql` (SQL Editor o psql). Solo en desarrollo:
   `psql "$DBURL" -v seed_password='<tu-contraseña>' -f supabase/seed.dev.sql`.
 
@@ -49,6 +51,9 @@ etiqueta "Render ilustrativo" y todo QR dibujado decodifica a `https://datafud.c
   (`CARTAS`, `cartaBySlug`, los 4 pasos de alta en `index.ts`); usa `MenuClient` con
   `ordering={false}`. `src/app/q/[code]/` **redirección de los QR y NFC impresos** (D-014), con los
   destinos en `src/content/qr.ts`: el código impreso es permanente y nunca se reutiliza.
+  Cuando el local pasa a un plan con pedidos, «Pasar una Carta al sistema» (`/admin/tenants`,
+  `importCarta` y `src/lib/carta-a-sistema.ts`) copia la carta a su local y `scripts/qr-mover.mjs`
+  mueve el código impreso a `/m/<local>/<token>` (1.8.0).
 - `src/lib/site.ts` contacto, `waProps`, redes, `leadsEmail` (destino interno del formulario, que
   nunca se renderiza) y `metaPixelId()` · `constants.ts` `PRICING`
   (CRC y USD, implementación por tipo, fundadores, textos de garantía) y `TESTIMONIALS` ·
@@ -153,6 +158,12 @@ etiqueta "Render ilustrativo" y todo QR dibujado decodifica a `https://datafud.c
   no solo la interfaz.
 - Un negocio suspendido o cancelado queda de solo lectura en la base (RLS), no solo en la UI.
 - Los `/preview/*` son estáticos y no tocan la base: un cambio en el panel real no se ve ahí.
+- La política de contenido completa se **aplica** en las rutas públicas y va en **Report-Only** en
+  `PANEL_PATHS` (`next.config.mjs`: paneles, acceso y `/m`), D-068. Una ruta pública nueva que cargue
+  algo de otro origen tiene que sumarlo a `cspDirectives` o el navegador lo bloquea. Next aplica
+  todas las entradas de `headers()` que coinciden y, con la misma clave, gana la última.
+- `scripts/qr-mover.mjs` desde Git Bash: MSYS convierte `/m/...` en una ruta de Windows y el script
+  la rechaza. Correrlo desde PowerShell o con `MSYS_NO_PATHCONV=1`.
 
 ## Vault de Obsidian (memoria del proyecto) — protocolo de alineación
 

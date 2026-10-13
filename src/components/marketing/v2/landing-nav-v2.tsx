@@ -35,7 +35,7 @@ export function LandingNavV2() {
           className="group flex min-h-11 items-center transition-transform duration-200 active:scale-[0.98]"
         >
           <Image
-            src="/logo-main.png"
+            src="/logo-main-transparente.png"
             alt="DataFud"
             width={150}
             height={62}
