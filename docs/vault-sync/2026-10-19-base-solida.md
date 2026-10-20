@@ -52,6 +52,6 @@ Aplicado en vault: sí
 **Pendientes.md** — los cierres de B1 a B4 y las tareas de Steven ordenadas por impacto, con su línea en la cola de GaloDeVibes (sección Datafud).
 **Decisiones.md** — ninguna.
 **Seguridad.md** — ver B1 y B5.
-**Otras páginas** — `Equipo/CEO.md` y `01-GaloDev/Mesa/CEO-Datafud.md` con la foto del día; `Equipo/Sistemas-Seguridad.md`, `Sistemas-Datos.md` y `Sistemas-Frontend.md` con lo resuelto marcado; ESTADO `2026-10-13-Datafud-Panel-Listo` con la casilla nueva del push.
+**Otras páginas** — `Equipo/CEO.md` y `01-GaloDev/Mesa/CEO-Datafud.md` con la foto del día; `Equipo/Sistemas-Seguridad.md`, `Sistemas-Datos.md` y `Sistemas-Frontend.md` con lo resuelto marcado; ESTADO `2026-10-13-Datafud-Panel-Listo` con la casilla nueva del push; `Datafud.md` (dónde está el proyecto) y `Ficha-Tecnica.md` (CI con las tres pruebas y la trampa de la marca `must_change_password`); `Arquitectura-Y-Base-De-Datos.md` (versiones y pruebas). Lint del vault: OK · 289 páginas · 0 problemas.
 **log.md** — `## [2026-10-19] ingest | Base sólida`: contraseña temporal obligada, prueba del SQL en la CI, acciones por hash, sitemap con fechas reales, plan del doble factor; typecheck, lint, las tres pruebas y build en verde; 1.9.0 en `main` local sin empujar.
 Aplicado en vault: sí
