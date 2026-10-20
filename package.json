@@ -1,6 +1,6 @@
 {
   "name": "datafud",
-  "version": "1.8.0",
+  "version": "1.9.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -10,7 +10,9 @@
     "lint": "next lint",
     "typecheck": "tsc --noEmit",
     "qa:landing": "node scripts/qa-landing.mjs",
-    "test:carta": "node --experimental-strip-types --no-warnings scripts/prueba-carta-a-sistema.mts"
+    "test:carta": "node --experimental-strip-types --no-warnings scripts/prueba-carta-a-sistema.mts",
+    "test:auth": "node --experimental-strip-types --no-warnings scripts/prueba-contrasena-temporal.mts",
+    "test:esquema": "node scripts/prueba-esquema.mjs"
   },
   "dependencies": {
     "@supabase/ssr": "^0.12.7",
@@ -25,6 +27,7 @@
     "zod": "^3.23.8"
   },
   "devDependencies": {
+    "@electric-sql/pglite": "^0.5.10",
     "@playwright/test": "^1.63.0",
     "@types/node": "^20.14.0",
     "@types/qrcode": "^1.5.5",

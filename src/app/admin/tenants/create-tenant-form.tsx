@@ -132,7 +132,7 @@ function CreatedPanel({ created, onClose }: { created: CreatedTenant; onClose: (
     `Correo: ${created.email}\n` +
     `Contraseña temporal: ${created.password}
 ` +
-    `Al entrar, cámbienla en Configuración > Cambiar contraseña.`;
+    `Al entrar por primera vez, el panel les pide cambiarla por una propia.`;
 
   const copy = async () => {
     try {
@@ -152,7 +152,7 @@ function CreatedPanel({ created, onClose }: { created: CreatedTenant; onClose: (
         <div className="min-w-0 flex-1">
           <h2 className="font-display text-xl text-brand-900">{created.name} ya está creado</h2>
           <p className="mt-1 text-sm text-stone-600">
-            Esta contraseña temporal se muestra <strong className="font-semibold text-brand-900">solo esta vez</strong>. Copiala y mandásela al dueño: la cambia él mismo en Configuración.
+            Esta contraseña temporal se muestra <strong className="font-semibold text-brand-900">solo esta vez</strong>. Copiala y mandásela al dueño: en su primer ingreso, el panel le pide cambiarla por una suya.
           </p>
           <dl className="mt-4 grid gap-3 rounded-lg bg-cream-100 p-4 text-sm sm:grid-cols-3">
             <div className="min-w-0">

@@ -28,8 +28,11 @@ etiqueta "Render ilustrativo" y todo QR dibujado decodifica a `https://datafud.c
 - `npm run dev` — local en :3000 (sin `.env.local` cargan `/`, `/preview`, `/login` con aviso, legal).
 - `npm run typecheck` · `npm run lint` · `npm run build` — los tres en verde antes de cada commit.
 - `npm run qa:landing` — QA de la landing en navegador real (Playwright); ver `scripts/qa-landing.mjs`.
-- `npm run test:carta` — prueba de la parte pura de «Pasar una Carta al sistema» (sin red ni base). La CI
-  (`.github/workflows/ci.yml`) corre typecheck, lint, esta prueba y el build en cada push.
+- `npm run test:carta` — prueba de la parte pura de «Pasar una Carta al sistema» (sin red ni base).
+  `npm run test:auth` — la contraseña temporal del dueño. `npm run test:esquema` — `schema.sql` dos
+  veces, `verify.sql` 51/51 y el aislamiento por RLS sobre una Postgres en memoria (PGlite, con una
+  réplica mínima de lo que trae Supabase). Un cambio en `schema.sql` o `verify.sql` la tiene que dejar
+  en verde. La CI (`.github/workflows/ci.yml`) corre typecheck, lint, las tres pruebas y el build en cada push.
 - BD: `supabase/schema.sql` (idempotente, sin usuarios) → `supabase/verify.sql` (SQL Editor o psql). Solo en desarrollo:
   `psql "$DBURL" -v seed_password='<tu-contraseña>' -f supabase/seed.dev.sql`.
 

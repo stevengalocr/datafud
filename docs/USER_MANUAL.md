@@ -42,6 +42,8 @@ menú y sus pedidos desde un panel, y el dueño del servicio administra a todos 
 
 ### Ingresar
 - Entra a **`/login`** con el correo y contraseña de tu negocio. Te lleva a tu panel.
+- La primera vez entrás con la **contraseña temporal** que te mandamos por WhatsApp: el panel te
+  lleva a Configuración y te pide cambiarla por una tuya antes de usar lo demás.
 
 ### Resumen
 Al entrar ves el **resumen del día**: órdenes de hoy, vendido hoy y las órdenes **por atender**.

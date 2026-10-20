@@ -105,3 +105,20 @@ export function faqJsonLd() {
     })),
   };
 }
+
+/**
+ * Última vez que cambió el contenido visible de cada página pública del sitemap (de `git log`,
+ * contando los componentes que comparte). Se actualiza a mano al cambiar una de esas páginas: el
+ * sitemap no pone la fecha del build, que le diría a Google que todo cambió en cada despliegue.
+ */
+export const PAGE_UPDATED_ISO = {
+  "/": "2026-10-13",
+  "/preview": "2026-09-24",
+  "/preview/carta": "2026-10-08",
+  "/preview/cliente": "2026-10-08",
+  "/menu-digital-costa-rica": "2026-09-25",
+  "/menu-digital-para-sodas": "2026-09-25",
+  "/menu-qr-restaurantes-turisticos": "2026-09-25",
+  /** Cartas publicadas en /c/<slug> (src/content/cartas). */
+  cartas: "2026-10-08",
+} as const;

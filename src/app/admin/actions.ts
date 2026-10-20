@@ -6,6 +6,7 @@ import { z } from "zod";
 import { createAdminClient, createClient } from "@/lib/supabase/server";
 import { type ActionResult, dbFail, fail, ok, zodFail } from "@/lib/action-result";
 import { changeOwnPassword, type PasswordResult } from "@/lib/auth/change-password";
+import { TEMP_PASSWORD_FLAG } from "@/lib/auth/temporary-password";
 import { CARTAS, cartaBySlug } from "@/content/cartas";
 import { QR_CODES } from "@/content/qr";
 import { destinoMesa, planDeCarta } from "@/lib/carta-a-sistema";
@@ -124,7 +125,8 @@ export async function createTenant(
     email: ownerEmail,
     password,
     email_confirm: true,
-    user_metadata: { full_name: ownerName },
+    // La contraseña viaja por WhatsApp: el panel le pide al dueño cambiarla en su primer ingreso.
+    user_metadata: { full_name: ownerName, [TEMP_PASSWORD_FLAG]: true },
   });
   if (userErr || !created?.user) {
     console.error("[datafud] createTenant.user:", userErr?.status ?? "-", userErr?.message ?? "");

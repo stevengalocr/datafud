@@ -9,6 +9,29 @@ Todas las versiones notables del proyecto. Formato basado en
 
 ---
 
+## [1.9.0] — 2026-10-19 · Base sólida: contraseña temporal obligada y el SQL probado en la CI
+
+### Seguridad
+- **La contraseña temporal del dueño se cambia en el primer ingreso.** El local que crea el super
+  admin queda con su usuario marcado (`must_change_password` en `user_metadata`); mientras la
+  marca esté, todo `/dashboard` lleva a Configuración, que pide cambiarla primero. Al cambiarla, la
+  marca se quita en la misma llamada y se cierran las otras sesiones. Los locales creados antes no
+  quedan marcados. Prueba nueva: `npm run test:auth` (también en la CI).
+
+### Calidad
+- **El SQL tiene prueba automática.** `npm run test:esquema` corre `schema.sql` dos veces (la segunda
+  sobre datos), exige las 51 filas de `verify.sql` en true y prueba el aislamiento entre dos locales
+  por RLS (lectura, cambios, altas y traspasos a otro local), el acceso del comensal solo por
+  `get_menu` y `place_order`, el precio tomado de la base y el solo lectura de un local suspendido.
+  Corre en una Postgres en memoria (PGlite), sin red; también en la CI. No reemplaza la prueba con
+  dos locales reales en producción (`scripts/prueba-aislamiento.mjs`).
+
+### SEO
+- El sitemap pone la fecha real en que cambió cada página (`PAGE_UPDATED_ISO` en `src/lib/seo.ts`)
+  en vez de la del build, que le decía a Google que todo cambiaba en cada despliegue.
+
+---
+
 ## [1.8.0] — 2026-10-13 · Panel listo: la Carta pasa al sistema, el logo sin placa y la política aplicada
 
 ### Super admin

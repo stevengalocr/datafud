@@ -10,6 +10,7 @@ import { must } from "../_lib/queries";
 import { SettingsForm } from "./settings-form";
 import { PasswordForm } from "@/components/shell/password-form";
 import { changePassword } from "./actions";
+import { mustChangePassword } from "@/lib/auth/temporary-password";
 import type { Currency, Lang } from "@/lib/supabase/types";
 
 export const dynamic = "force-dynamic";
@@ -21,6 +22,21 @@ export default async function SettingsPage() {
     await supabase.from("currencies").select("*").order("code"),
     "settings.currencies"
   );
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  // Con la contraseña temporal, el middleware trae al dueño acá y el resto del panel espera.
+  const temporal = mustChangePassword(user);
+  const passwordForm = (
+    <PasswordForm
+      action={changePassword}
+      intro={
+        temporal
+          ? "Escribí la contraseña temporal que te mandamos por WhatsApp y elegí una tuya, de al menos 10 caracteres. Después de cambiarla, el panel queda libre."
+          : undefined
+      }
+    />
+  );
 
   return (
     <div>
@@ -29,6 +45,19 @@ export default async function SettingsPage() {
         description="Los datos de tu local, la moneda, los idiomas, los colores de tu carta y tu contraseña."
       />
       <div className="space-y-6">
+        {temporal && (
+          <p
+            role="status"
+            className="flex items-start gap-2 rounded-lg border border-accent-200 bg-accent-50 px-4 py-3 text-sm text-brand-900"
+          >
+            <Icon name="shield" size={18} className="mt-0.5 shrink-0 text-accent-800" />
+            <span>
+              Estás entrando con la contraseña temporal. Antes de usar el resto del panel, cambiala
+              por una tuya: así la que viajó por el chat deja de servir.
+            </span>
+          </p>
+        )}
+        {temporal && passwordForm}
         <PlanCard plan={plan} />
         <SettingsForm
           settings={settings}
@@ -36,7 +65,7 @@ export default async function SettingsPage() {
           maxLanguages={plan.maxLanguages}
           readOnly={readOnly}
         />
-        <PasswordForm action={changePassword} />
+        {!temporal && passwordForm}
       </div>
     </div>
   );

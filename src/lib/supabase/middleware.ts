@@ -1,6 +1,7 @@
 import { createServerClient, type CookieOptions } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 import { loginReturnPath } from "@/lib/auth/redirect";
+import { passwordGateRedirect } from "@/lib/auth/temporary-password";
 
 type CookieToSet = { name: string; value: string; options?: CookieOptions };
 
@@ -44,6 +45,15 @@ export async function updateSession(request: NextRequest) {
     url.search = "";
     url.searchParams.set("redirect", loginReturnPath(path, request.nextUrl.search));
     return NextResponse.redirect(url);
+  }
+
+  // Un dueño que todavía entra con la contraseña temporal (la que viajó por WhatsApp) va primero a
+  // cambiarla. La redirección lleva las cookies que `getUser` haya refrescado.
+  const gate = user ? passwordGateRedirect(path, user) : null;
+  if (gate) {
+    const redirect = NextResponse.redirect(new URL(gate, request.url));
+    supabaseResponse.cookies.getAll().forEach((cookie) => redirect.cookies.set(cookie));
+    return redirect;
   }
 
   return supabaseResponse;

@@ -2,6 +2,7 @@ import { z } from "zod";
 import { createClient } from "@/lib/supabase/server";
 import { type ActionResult, fail, ok, zodFail } from "@/lib/action-result";
 import { SIN_SESION } from "./tenant-access";
+import { mustChangePassword, TEMP_PASSWORD_FLAG } from "./temporary-password";
 
 // Cambio de contraseña con la actual, compartido por el panel del restaurante y el del super
 // admin (cada uno lo llama desde su Server Action, después de verificar el rol). Las
@@ -51,7 +52,13 @@ export async function changeOwnPassword(formData: FormData): Promise<PasswordRes
     return fail("No pudimos verificar tu contraseña actual. Probá de nuevo en un momento.");
   }
 
-  const { error } = await supabase.auth.updateUser({ password: parsed.data.next });
+  // Si entraba con la contraseña temporal, la marca se quita en la misma llamada: o cambian las
+  // dos cosas o ninguna.
+  const { error } = await supabase.auth.updateUser(
+    mustChangePassword(user)
+      ? { password: parsed.data.next, data: { [TEMP_PASSWORD_FLAG]: false } }
+      : { password: parsed.data.next }
+  );
   if (error) {
     console.error("[datafud] changePassword.update:", error.status ?? "-", error.code ?? "-");
     if (error.code === "weak_password") return fail("Esa contraseña es muy fácil de adivinar. Probá con una más larga o con más variedad.");
