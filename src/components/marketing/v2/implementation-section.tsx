@@ -1,5 +1,6 @@
 import { Icon, type IconName } from "@/components/ui/icon";
 import { RevealOnView } from "@/components/marketing/v2/reveal";
+import { LineaViva } from "@/components/marketing/v2/linea-viva";
 import { PRICING } from "@/lib/constants";
 
 // Sección #como-funciona: una sola línea de tiempo (de la llamada al sistema completo) y las dos
@@ -72,10 +73,13 @@ export function ImplementationSection() {
 
         {/* Línea de tiempo */}
         <RevealOnView className="relative mt-12 sm:mt-14">
+          <LineaViva>
           <div className="pointer-events-none absolute left-[19px] top-2 h-[calc(100%-1rem)] w-px bg-stone-250 lg:left-0 lg:top-[19px] lg:h-px lg:w-full" aria-hidden="true" />
+          {/* El relleno dorado avanza con el scroll (--fill de LineaViva). */}
+          <div className="linea-relleno pointer-events-none absolute left-[19px] top-2 h-[calc(100%-1rem)] w-px bg-accent-500 lg:left-0 lg:top-[19px] lg:h-px lg:w-full" aria-hidden="true" />
           <ol className="relative grid gap-6 lg:grid-cols-4 lg:gap-6">
             {milestones.map((m) => (
-              <li key={m.when} className="reveal-up relative flex gap-5 lg:flex-col lg:gap-0">
+              <li key={m.when} className="paso-vivo reveal-up relative flex gap-5 lg:flex-col lg:gap-0" data-activo="">
                 <span
                   className={
                     m.accent
@@ -93,6 +97,7 @@ export function ImplementationSection() {
               </li>
             ))}
           </ol>
+          </LineaViva>
         </RevealOnView>
 
         {/* Dos columnas */}

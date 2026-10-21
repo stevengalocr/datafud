@@ -9,6 +9,46 @@ Todas las versiones notables del proyecto. Formato basado en
 
 ---
 
+## [1.10.0] — 2026-10-21 · Landing de impacto: la página que escanea
+
+Pedido de Steven: «el diseño actual me gusta, nada más que es muy plano». Imagen nueva, con
+movimiento y profundidad, sin tocar el core: colores, tipografía, textos de venta, precios,
+condiciones y funciones quedan igual (D-069). Plan: `docs/plans/2026-10-21-landing-impacto.md`.
+
+### Diseño
+- **Portada que escanea.** Al bajar, la tarjeta crece a toda la pantalla, la cámara se acerca al
+  stand de la mesa (video que sigue al scroll), un visor dorado encuadra el QR y sube el teléfono
+  con la carta de la demo. El video se pide con la primera interacción (1,7 MB en escritorio,
+  0,7 MB vertical en teléfono); su primer cuadro es el render de siempre, con su etiqueta.
+- **Visor de escaneo.** Cuatro esquinas que siguen al mouse y enmarcan botones y enlaces. Solo
+  con mouse; el cursor del sistema sigue visible.
+- **Cómo funciona** con una línea dorada que se llena con el scroll; **demo** con el teléfono que
+  gira en 3D; **planes** y **hardware** con inclinación 3D y una luz que sigue al mouse.
+- **Nueva sección «El sistema completo, en acción» (`#sistema`).** Vitrina del panel con los
+  componentes reales (tarjetas de orden, estados, acciones y cifras) y los datos de la soda de
+  ejemplo: la orden sale de la mesa, entra en «Por atender», avanza hasta pagada y la semana se
+  dibuja en los reportes. En escritorio la cuenta el scroll; en teléfono se reproduce sola.
+  Rotulada «Panel de demostración · datos de ejemplo».
+- **Stand en 3D** hecho con CSS, con el QR real de la demo: gira con el scroll y se arrastra
+  (también con las flechas del teclado).
+- **Corte de escena nocturno** entre Hardware y Por qué DataFud, con parallax y una fila de
+  píxeles que se ensambla.
+- **Imágenes nuevas** (D-049 a D-051): foto de familia del hardware, la soda de noche y fotos de
+  producto sobre travertino para los cuatro productos. Todas rotuladas y con QR que decodifica a
+  `/q/demo26`.
+- **Guías de SEO** con el render de la portada inclinable y el visor; sus textos no cambian.
+- Sin JavaScript o con movimiento reducido, todo queda quieto y completo (la portada vuelve a la
+  tarjeta con el render y la vitrina muestra su estado final).
+
+### Calidad
+- Áreas táctiles de 44 px en el menú, el pie y los enlaces «Ver hardware de mesa» y «Ver los
+  planes completos».
+- `qa:landing` ignora el aviso de consola del script de Vercel Analytics que `next start` no sirve
+  (igual que ya ignoraba el pedido) y busca «MESA MESA» dentro de una línea: «Agregar mesa»
+  seguido de la tarjeta «Mesa 1» no es una repetición.
+
+---
+
 ## [1.9.0] — 2026-10-19 · Base sólida: contraseña temporal obligada y el SQL probado en la CI
 
 ### Seguridad

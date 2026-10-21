@@ -5,6 +5,10 @@ import { cn } from "@/lib/utils/cn";
 import { Icon } from "@/components/ui/icon";
 import { RevealOnView } from "@/components/marketing/v2/reveal";
 import { HardwareArt } from "@/components/marketing/v2/hardware-art";
+import { Stand3D } from "@/components/marketing/v2/stand-3d";
+import { Tilt } from "@/components/marketing/v2/tilt";
+import { Parallax } from "@/components/marketing/v2/parallax";
+import QRCode from "qrcode";
 import { PRICING, formatPublishedPrice, type HardwareItem } from "@/lib/constants";
 import { formatCrc } from "@/lib/currency/format";
 import { hasWhatsApp, waProps } from "@/lib/site";
@@ -84,7 +88,9 @@ function Visual({
   );
 }
 
-export function HardwareSection() {
+export async function HardwareSection() {
+  // QR real del stand 3D: decodifica a la dirección de demostración, como todo QR dibujado (D-051).
+  const qrSvg = await QRCode.toString("https://datafud.com/q/demo26", { type: "svg", margin: 0, errorCorrectionLevel: "M", color: { dark: "#112a20", light: "#fbfaf6" } });
   const wa = hasWhatsApp();
   const byCode = Object.fromEntries(PRICING.hardware.map((h) => [h.code, h])) as Record<HardwareItem["code"], HardwareItem>;
   const standQr = byCode["stand-qr-3d"];
@@ -96,24 +102,52 @@ export function HardwareSection() {
   return (
     <section id="hardware" className="scroll-mt-24 border-b border-stone-200/60 bg-cream-50">
       <div className="mx-auto max-w-6xl px-5 py-16 sm:px-6 sm:py-28">
-        <RevealOnView className="grid gap-8 lg:grid-cols-[1.1fr_0.9fr] lg:items-end">
+        <RevealOnView className="grid items-center gap-8 lg:grid-cols-[1fr_1fr] lg:gap-12">
           <div className="reveal-up max-w-2xl">
             <p className="text-xs font-bold uppercase tracking-[0.2em] text-accent-700">Hardware de mesa</p>
             <h2 className="mt-3 font-display text-[clamp(2rem,5vw,3.5rem)] leading-[1.05] tracking-tight text-brand-900">
               Lo que va en la mesa también lleva tu marca
             </h2>
+            <p className="mt-5 max-w-md text-base font-medium leading-relaxed text-brand-800/80">
+              Nada de QR pegados con cinta. Stands impresos en 3D y tarjetas NFC hechos para
+              tu local: firmes, limpios y con tu logo. {PRICING.hardwareDelivery.minimum} Listos{" "}
+              {PRICING.hardwareDelivery.leadTime} desde que aprobás el diseño.
+            </p>
           </div>
-          <p className="reveal-up max-w-md text-base font-medium leading-relaxed text-brand-800/80 lg:justify-self-end">
-            Nada de QR pegados con cinta. Stands impresos en 3D y tarjetas NFC hechos para
-            tu local: firmes, limpios y con tu logo. {PRICING.hardwareDelivery.minimum} Listos{" "}
-            {PRICING.hardwareDelivery.leadTime} desde que aprobás el diseño.
-          </p>
+          {/* Stand en 3D: gira con el scroll y se arrastra (stand-3d.tsx). */}
+          <div className="reveal-up relative">
+            <div className="pointer-events-none absolute inset-6 -z-10 rounded-full bg-brand-100/60 blur-3xl" />
+            <Stand3D qrSvg={qrSvg} />
+            <div className="mt-1 flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-xs font-semibold text-brand-700/75">
+              <span className="rounded-full bg-white/90 px-2.5 py-1 text-brand-800 shadow-sm">Modelo ilustrativo</span>
+              <span className="st-pista">Arrastralo (o usá las flechas) para verlo por todos lados</span>
+            </div>
+          </div>
+        </RevealOnView>
+
+        {/* La familia completa, en estudio (render nuevo, 2026-10-21). */}
+        <RevealOnView className="mt-12 sm:mt-16">
+          <div className="reveal-up relative overflow-hidden rounded-3xl border border-stone-200/70 bg-brand-950">
+            <Parallax strength={34} className="relative aspect-[4/3] sm:aspect-[21/9]">
+              <Image
+                src="/renders/familia-stands.webp"
+                alt="Render ilustrativo de los tres stands de mesa DataFud (QR, QR con NFC y reseñas) y una tarjeta NFC sobre una base de piedra verde, con luz dorada"
+                fill
+                sizes="(min-width: 1152px) 1104px, 100vw"
+                className="scale-[1.22] object-cover object-[50%_55%]"
+              />
+            </Parallax>
+            <span className="absolute bottom-4 left-4 z-10 rounded-full bg-white/90 px-2.5 py-1 text-xs font-semibold text-brand-800 shadow-sm">
+              Render ilustrativo
+            </span>
+          </div>
         </RevealOnView>
 
         {/* Composición asimétrica */}
         <RevealOnView className="mt-10 grid gap-5 sm:mt-16 lg:grid-cols-12 lg:grid-rows-[auto_auto]">
           {/* Pieza grande: stand QR 3D */}
-          <article className="reveal-up group flex flex-col overflow-hidden rounded-3xl border border-stone-200/80 bg-white transition-all duration-300 ease-out-expo hover:-translate-y-1 hover:border-accent-300/60 hover:shadow-[0_24px_60px_-24px_rgba(34,80,58,0.3)] lg:col-span-7 lg:row-span-2">
+          <div className="reveal-up lg:col-span-7 lg:row-span-2">
+          <Tilt as="article" max={4} className="group flex flex-col overflow-hidden rounded-3xl border border-stone-200/80 bg-white hover:border-accent-300/60 hover:shadow-[0_24px_60px_-24px_rgba(34,80,58,0.3)] h-full">
             <Visual item={standQr} className="aspect-[5/2] rounded-b-none border-0 border-b sm:aspect-[16/10] lg:aspect-auto lg:min-h-[320px] lg:flex-1" sizes="(min-width: 1024px) 58vw, 100vw" />
             <div className="flex flex-col p-6 sm:p-9">
               <span className="text-xs font-bold uppercase tracking-[0.18em] text-accent-700">El básico de cada mesa</span>
@@ -124,10 +158,12 @@ export function HardwareSection() {
                 <span className="text-xs font-semibold text-brand-700/75">Un color + base, con tu logo</span>
               </div>
             </div>
-          </article>
+          </Tilt>
+          </div>
 
           {/* Apiladas: tarjeta NFC y stand + NFC */}
-          <article className="reveal-up group grid gap-0 overflow-hidden rounded-3xl border border-stone-200/80 bg-white transition-all duration-300 ease-out-expo hover:-translate-y-1 hover:border-accent-300/60 hover:shadow-[0_24px_60px_-24px_rgba(34,80,58,0.3)] sm:grid-cols-[0.9fr_1.1fr] lg:col-span-5 lg:grid-cols-1">
+          <div className="reveal-up lg:col-span-5">
+          <Tilt as="article" max={4} className="group grid gap-0 overflow-hidden rounded-3xl border border-stone-200/80 bg-white hover:border-accent-300/60 hover:shadow-[0_24px_60px_-24px_rgba(34,80,58,0.3)] sm:grid-cols-[0.9fr_1.1fr] lg:grid-cols-1 h-full">
             <Visual item={nfc} position="object-[50%_25%]" chip="right-3 top-3" className="aspect-[5/2] rounded-none border-0 sm:aspect-auto sm:min-h-[180px] lg:aspect-[16/9]" sizes="(min-width: 1024px) 40vw, 100vw" />
             <div className="flex flex-col p-6 sm:p-7">
               <h3 className="font-display text-2xl text-brand-900">{nfc.name}</h3>
@@ -136,9 +172,11 @@ export function HardwareSection() {
                 <PriceTag item={nfc} wa={wa} />
               </div>
             </div>
-          </article>
+          </Tilt>
+          </div>
 
-          <article className="reveal-up group grid overflow-hidden rounded-3xl border border-stone-200/80 bg-white transition-all duration-300 ease-out-expo hover:-translate-y-1 hover:border-accent-300/60 hover:shadow-[0_24px_60px_-24px_rgba(34,80,58,0.3)] sm:grid-cols-[1.1fr_0.9fr] lg:col-span-5 lg:grid-cols-[1fr_0.9fr]">
+          <div className="reveal-up lg:col-span-5">
+          <Tilt as="article" max={4} className="group grid overflow-hidden rounded-3xl border border-stone-200/80 bg-white hover:border-accent-300/60 hover:shadow-[0_24px_60px_-24px_rgba(34,80,58,0.3)] sm:grid-cols-[1.1fr_0.9fr] lg:grid-cols-[1fr_0.9fr] h-full">
             <div className="order-2 flex flex-col p-6 sm:order-1 sm:p-7">
               <h3 className="font-display text-2xl text-brand-900">{standNfc.name}</h3>
               <p className="mt-2 text-sm font-medium leading-relaxed text-brand-700/80">{standNfc.benefit}</p>
@@ -147,10 +185,12 @@ export function HardwareSection() {
               </div>
             </div>
             <Visual item={standNfc} className="order-1 aspect-[5/2] rounded-none border-0 sm:order-2 sm:aspect-auto sm:min-h-[180px]" sizes="(min-width: 1024px) 20vw, 100vw" />
-          </article>
+          </Tilt>
+          </div>
 
           {/* Ancha: stand de reseñas */}
-          <article className="reveal-up group grid overflow-hidden rounded-3xl border border-stone-200/80 bg-white transition-all duration-300 ease-out-expo hover:-translate-y-1 hover:border-accent-300/60 hover:shadow-[0_24px_60px_-24px_rgba(34,80,58,0.3)] lg:col-span-7 lg:grid-cols-[0.8fr_1.2fr]">
+          <div className="reveal-up lg:col-span-7">
+          <Tilt as="article" max={4} className="group grid overflow-hidden rounded-3xl border border-stone-200/80 bg-white hover:border-accent-300/60 hover:shadow-[0_24px_60px_-24px_rgba(34,80,58,0.3)] lg:grid-cols-[0.8fr_1.2fr] h-full">
             <Visual item={reviews} className="aspect-[5/2] rounded-none border-0 lg:aspect-auto lg:min-h-[220px]" sizes="(min-width: 1024px) 25vw, 100vw" />
             <div className="flex flex-col p-6 sm:p-8">
               <span className="text-xs font-bold uppercase tracking-[0.18em] text-accent-700">Para pedir reseñas</span>
@@ -160,7 +200,8 @@ export function HardwareSection() {
                 <PriceTag item={reviews} wa={wa} />
               </div>
             </div>
-          </article>
+          </Tilt>
+          </div>
 
           {/* Bloque destacado: 100 % personalizable */}
           <aside className="reveal-up relative isolate overflow-hidden rounded-3xl bg-brand-950 p-7 text-cream-100 sm:p-9 lg:col-span-5">

@@ -1,11 +1,10 @@
 import Link from "next/link";
-import Image from "next/image";
 import { Icon } from "@/components/ui/icon";
-import { dict } from "@/lib/i18n/dictionaries";
 import { RevealOnView } from "@/components/marketing/v2/reveal";
+import { TelefonoCarta } from "@/components/marketing/v2/telefono-carta";
+import { Giro3D } from "@/components/marketing/v2/giro-3d";
 import QRCode from "qrcode";
-import { RESTAURANT, mockProducts, mockCategories } from "@/lib/demo/mock";
-import { formatCrc } from "@/lib/currency/format";
+import { RESTAURANT } from "@/lib/demo/mock";
 import { SITE } from "@/lib/site";
 
 // Sección #demo: teaser de la demo "Verde Limón" (restaurante ficticio) dentro de un marco
@@ -15,7 +14,6 @@ import { SITE } from "@/lib/site";
 // Lo que se enseña primero es el plan Carta: sin carrito, sin barra de orden y sin mesa. Los
 // pedidos desde la mesa son de Estándar y Empresarial y tienen su propio botón, aparte.
 
-const SAMPLE_IDS = ["p-casado", "p-gallo", "p-limonada"] as const;
 
 // URL que codifica el QR de escritorio: la demo del plan Carta, en producción.
 export const DEMO_QR_URL = `${SITE.url}/preview/carta`;
@@ -34,8 +32,6 @@ export async function DemoSection() {
     errorCorrectionLevel: "M",
     color: { dark: "#112a20", light: "#ffffff" },
   });
-  const products = SAMPLE_IDS.map((id) => mockProducts.find((p) => p.id === id)).filter((p): p is NonNullable<typeof p> => Boolean(p));
-  const categories = mockCategories.slice(0, 4);
 
   return (
     <section id="demo" className="scroll-mt-24 border-b border-stone-200/60 bg-white">
@@ -45,59 +41,7 @@ export async function DemoSection() {
           <RevealOnView className="relative order-2 hidden min-w-0 justify-center sm:flex lg:order-1 lg:justify-start">
             <div className="reveal-up relative">
               <div className="pointer-events-none absolute -inset-10 -z-10 rounded-full bg-brand-100/50 blur-3xl" />
-              <div aria-hidden="true" className="relative w-[280px] rounded-[2.6rem] border-[10px] border-brand-950 bg-brand-950 shadow-[0_40px_80px_-30px_rgba(10,26,19,0.5)] sm:w-[300px]">
-                <div className="absolute left-1/2 top-0 z-20 h-6 w-28 -translate-x-1/2 rounded-b-2xl bg-brand-950" aria-hidden="true" />
-                <div className="relative aspect-[9/19] overflow-hidden rounded-[2rem] bg-cream-50">
-                  {/* Cabecera con cover */}
-                  <div className="relative h-36">
-                    <Image src={RESTAURANT.cover} alt="" fill sizes="300px" className="object-cover" />
-                    <div className="absolute inset-0 bg-gradient-to-t from-brand-950/85 via-brand-950/30 to-transparent" />
-                    <div className="absolute inset-x-4 bottom-3 text-cream-50">
-                      <p className="font-display text-xl leading-tight">{RESTAURANT.name}</p>
-                      {/* El mismo subtítulo que muestra /c/ejemplo (la carta que abre el QR). */}
-                      <p className="text-[11px] font-medium text-cream-100/85">{dict.es.cartaTagline}</p>
-                    </div>
-                  </div>
-                  {/* Chips de categorías */}
-                  <div className="flex gap-2 overflow-hidden px-4 py-3">
-                    {categories.map((c, i) => (
-                      <span
-                        key={c.id}
-                        className={
-                          i === 1
-                            ? "whitespace-nowrap rounded-full bg-brand-600 px-3 py-1 text-[10px] font-bold text-white"
-                            : "whitespace-nowrap rounded-full border border-stone-250 bg-white px-3 py-1 text-[10px] font-semibold text-brand-800"
-                        }
-                      >
-                        {c.name_i18n.es}
-                      </span>
-                    ))}
-                  </div>
-                  {/* Platillos */}
-                  <ul className="space-y-2.5 px-4">
-                    {products.map((p, i) => (
-                      <li key={p.id} className="flex gap-3 rounded-xl border border-stone-200/80 bg-white p-2">
-                        <div className="relative h-16 w-16 flex-shrink-0 overflow-hidden rounded-lg bg-cream-100">
-                          {p.image_url && <Image src={p.image_url} alt="" fill sizes="64px" className="object-cover" />}
-                        </div>
-                        <div className="flex min-w-0 flex-1 flex-col justify-between py-0.5">
-                          <div>
-                            <p className="truncate text-[12px] font-bold leading-tight text-brand-900">{p.name_i18n.es}</p>
-                            <p className="mt-0.5 line-clamp-2 text-[10px] leading-snug text-brand-700/70">{p.description_i18n?.es}</p>
-                          </div>
-                          <div className="flex items-center justify-between">
-                            <span className="text-[12px] font-bold text-brand-900">{formatCrc(p.price)}</span>
-                          </div>
-                        </div>
-                      </li>
-                    ))}
-                  </ul>
-                  {/* Pie de la carta: en el plan Carta no hay barra de orden. */}
-                  <div className="absolute inset-x-4 bottom-4 flex items-center justify-center rounded-xl bg-brand-950 px-4 py-3 text-cream-50 shadow-lg">
-                    <span className="text-[11px] font-bold uppercase tracking-[0.14em]">Carta digital · ES · EN</span>
-                  </div>
-                </div>
-              </div>
+              <Giro3D><TelefonoCarta /></Giro3D>
               {/* Chips flotantes */}
               <div aria-hidden="true" className="absolute -right-4 top-24 hidden items-center gap-2 rounded-xl border border-stone-200/80 bg-white px-3 py-2 shadow-lg sm:flex">
                 <Icon name="globe" size={14} className="text-accent-700" />

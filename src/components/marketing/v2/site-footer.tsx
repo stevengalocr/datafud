@@ -85,7 +85,7 @@ export function SiteFooter() {
                 <h3 className="text-xs font-bold uppercase tracking-[0.18em] text-accent-300/80">Explorar</h3>
                 <nav aria-label="Explorar" className="mt-4 grid grid-cols-2 gap-x-4 md:flex md:flex-col md:items-start text-xs font-bold uppercase tracking-[0.16em] text-cream-100/75">
                   {explore.map((l) => (
-                    <a key={l.href} href={l.href} className="inline-flex min-h-11 items-center transition-colors duration-200 hover:text-white">
+                    <a key={l.href} href={l.href} className="inline-flex min-h-11 min-w-11 items-center transition-colors duration-200 hover:text-white">
                       {l.label}
                     </a>
                   ))}

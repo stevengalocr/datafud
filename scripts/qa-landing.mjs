@@ -121,6 +121,9 @@ try {
       page.on("console", (m) => {
         if (m.type() !== "error") return;
         if (/Failed to load resource/.test(m.text())) return; // los recursos se evalúan por request abajo
+        // `next start` no sirve el script de Vercel Analytics: el navegador rechaza la página 404
+        // que llega en su lugar. Es del entorno local, igual que el request que ya se ignora.
+        if (IGNORED_URL.test(m.text())) return;
         consoleErrors.push(m.text());
       });
       page.on("pageerror", (e) => consoleErrors.push("pageerror: " + e.message));
@@ -184,7 +187,8 @@ try {
           imgsNoAlt: [...document.querySelectorAll("img")].filter((i) => !i.hasAttribute("alt")).length,
           todo: /\bTODO\b|\bPENDIENTE\b/.test(document.body.innerText),
           crcDecimals: (document.body.innerText.match(/₡[\d\s\u00a0\u202f.]*\d,\d{2}(?!\d)/g) || []).slice(0, 3),
-          mesaMesa: /mesa\s+mesa/i.test(document.body.innerText),
+          // En la misma línea: «Agregar mesa» seguido de la tarjeta «Mesa 1» no es una repetición.
+          mesaMesa: /mesa[ \t\u00a0]+mesa/i.test(document.body.innerText),
           revisar: /\[REVISAR|Borrador/.test(document.body.innerText),
           emptyHrefs: [...document.querySelectorAll("a")].filter((a) => !a.getAttribute("href") || a.getAttribute("href") === "#" || a.getAttribute("href").startsWith("/register")).length,
           small,

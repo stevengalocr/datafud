@@ -1,7 +1,10 @@
 import Link from "next/link";
+import Image from "next/image";
+import { Tilt } from "@/components/marketing/v2/tilt";
 import { LandingNavV2 } from "@/components/marketing/v2/landing-nav-v2";
 import { SiteFooter } from "@/components/marketing/v2/site-footer";
 import { WhatsAppFloat } from "@/components/marketing/v2/whatsapp-float";
+import { CursorVisor } from "@/components/marketing/v2/cursor-visor";
 import { AnalyticsEvents } from "@/components/marketing/v2/analytics-events";
 import { MetaPixel } from "@/components/marketing/v2/meta-pixel";
 import { MagneticCta } from "@/components/marketing/v2/magnetic-cta";
@@ -68,7 +71,8 @@ export function GuidePage({
       <main id="contenido" tabIndex={-1} className="outline-none">
         <header data-wa-float-despues className="relative overflow-hidden border-b border-stone-200/60">
           <div className="qr-grid pointer-events-none absolute inset-0 opacity-60" />
-          <div className="relative mx-auto max-w-3xl px-5 py-14 sm:px-6 sm:py-20">
+          <div className="relative mx-auto grid max-w-6xl items-center gap-10 px-5 py-14 sm:px-6 sm:py-20 lg:grid-cols-[1.15fr_0.85fr] lg:gap-14">
+            <div className="max-w-3xl">
             <nav aria-label="Ruta" className="text-sm font-semibold text-brand-700/85">
               <Link href="/" className="inline-flex min-h-11 min-w-11 items-center underline decoration-accent-400 underline-offset-4 hover:text-brand-900">
                 Inicio
@@ -94,6 +98,22 @@ export function GuidePage({
                 Ver la carta demo
               </Link>
             </div>
+            </div>
+            {/* El mismo render de la portada, con inclinación 3D (solo escritorio). */}
+            <Tilt max={5} className="hidden overflow-hidden rounded-3xl border border-stone-200/80 bg-white p-2 shadow-[0_28px_60px_-20px_rgba(34,80,58,0.28)] lg:block">
+              <div className="relative aspect-[3/2] overflow-hidden rounded-2xl">
+                <Image
+                  src="/portada/escaneo-inicio.webp"
+                  alt="Render ilustrativo de un stand de mesa DataFud con código QR y una tarjeta NFC sobre una mesa de un café"
+                  fill
+                  sizes="(min-width: 1152px) 420px, 36vw"
+                  className="object-cover"
+                />
+                <span className="absolute bottom-3 left-3 z-10 rounded-full bg-white/90 px-2.5 py-1 text-xs font-semibold text-brand-800 shadow-sm">
+                  Render ilustrativo
+                </span>
+              </div>
+            </Tilt>
           </div>
         </header>
 
@@ -167,6 +187,7 @@ export function GuidePage({
 
       <SiteFooter />
       <WhatsAppFloat />
+      <CursorVisor />
       <AnalyticsEvents />
       <MetaPixel />
     </div>
@@ -212,7 +233,7 @@ function PriceSummary() {
       <p className="mt-4 text-sm font-medium leading-relaxed text-brand-700/85">
         Stand QR 3D desde {formatCrc(hardwareBy("stand-qr-3d").priceCrc)} y tarjeta NFC a {formatCrc(hardwareBy("tarjeta-nfc").priceCrc)} por
         unidad. {PRICING.terms.permanence}{" "}
-        <Link href="/#planes" className="font-semibold text-brand-800 underline decoration-accent-400 underline-offset-4 hover:text-brand-900">
+        <Link href="/#planes" className="inline-flex min-h-11 items-center font-semibold text-brand-800 underline decoration-accent-400 underline-offset-4 hover:text-brand-900">
           Ver los planes completos
         </Link>
         .

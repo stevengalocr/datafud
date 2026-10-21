@@ -79,7 +79,7 @@ Se evitan deliberadamente las fuentes "de defecto" (Inter, Playfair, Fraunces, e
 - **Propósito sobre decoración.** Una carga bien orquestada > micro-animaciones dispersas.
 - **Easing:** `cubic-bezier(0.23, 1, 0.32, 1)` (out-expo). Sin bounce/elastic.
 - **Solo `transform`/`opacity`** (60fps). Nunca animar layout (width/height/margin).
-- **Firmas:** reveal escalonado en carga, scroll-spy + secciones pinneadas, parallax sutil, count-up, marquee de monedas, motivo QR que se ensambla, CTA magnético.
+- **Firmas:** reveal escalonado en carga, scroll-spy + secciones pinneadas, parallax sutil, count-up, marquee de monedas, motivo QR que se ensambla, CTA magnético. Desde 1.10.0 (D-069): la portada que escanea (video que sigue al scroll + visor dorado sobre el QR), el visor de escaneo que sigue al mouse, la inclinación 3D con luz, el stand en CSS 3D y la vitrina del panel por pasos.
 - **Accesibilidad:** todo se neutraliza con `prefers-reduced-motion: reduce`.
 
 ---

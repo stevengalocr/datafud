@@ -1,6 +1,7 @@
 import { cn } from "@/lib/utils/cn";
 import { Icon, type IconName } from "@/components/ui/icon";
 import { RevealOnView } from "@/components/marketing/v2/reveal";
+import { Tilt } from "@/components/marketing/v2/tilt";
 import { PRICING, firstPaymentFor, founderOfferActive, founderSpotsLabel, hardwareBy, limitsLabel, setupFeeFor, type PlanCode } from "@/lib/constants";
 import { formatCrc, formatUsd } from "@/lib/currency/format";
 import { waProps } from "@/lib/site";
@@ -97,10 +98,12 @@ export function PricingV2() {
           const setup = setupFeeFor(card.code);
           const first = firstPaymentFor(card.code);
           return (
-            <div
-              key={card.code}
+            <div key={card.code} className="reveal-up flex">
+            {/* Inclinación 3D con luz (tilt.tsx): reemplaza el levantar al pasar el mouse. */}
+            <Tilt
+              max={4}
               className={cn(
-                "reveal-up relative flex flex-col rounded-2xl border bg-white p-6 transition-all duration-300 ease-out-expo hover:-translate-y-1.5 hover:shadow-[0_16px_48px_rgba(34,80,58,0.08)] sm:p-8",
+                "flex w-full flex-col rounded-2xl border bg-white p-6 transition-shadow duration-300 ease-out-expo hover:shadow-[0_24px_56px_-18px_rgba(34,80,58,0.22)] sm:p-8",
                 card.highlight ? "border-accent-400 bg-cream-50/20 ring-1 ring-accent-450/40" : "border-stone-200/80"
               )}
             >
@@ -176,6 +179,7 @@ export function PricingV2() {
                 <Icon name="whatsapp" size={16} />
                 Quiero {plan.marketingName}
               </a>
+            </Tilt>
             </div>
           );
         })}
@@ -199,7 +203,7 @@ export function PricingV2() {
       </RevealOnView>
       <p className="mt-4 text-sm font-medium leading-relaxed text-brand-700/85">
         Los stands QR y las tarjetas NFC se cobran aparte y por adelantado, desde {formatCrc(hardwareBy("stand-qr-3d").priceCrc)} por unidad.{" "}
-        <a href="#hardware" className="font-semibold text-brand-800 underline decoration-accent-400 underline-offset-4 hover:text-brand-900">Ver hardware de mesa</a>
+        <a href="#hardware" className="inline-flex min-h-11 items-center font-semibold text-brand-800 underline decoration-accent-400 underline-offset-4 hover:text-brand-900">Ver hardware de mesa</a>
       </p>
 
     </section>

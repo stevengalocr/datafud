@@ -144,7 +144,8 @@ por resultados.
   los renders con la etiqueta visible **"Render ilustrativo"**.
 - **Imágenes de la web (D-049 a D-051):** ninguna muestra texto, precios, monedas, marcas
   inventadas, personas ni comida generada. Todo render de IA lleva la etiqueta "Render
-  ilustrativo" (también el del hero, `public/renders/ambiente-mesa.webp`) y todo QR dibujado en
+  ilustrativo" (también la portada: el video `public/portada/escaneo*.mp4` y su primer cuadro, hechos
+  desde `public/renders/ambiente-mesa.webp`, D-069) y todo QR dibujado en
   una imagen decodifica a `https://datafud.com/q/demo26`: un QR inventado por la IA se reemplaza o
   no se publica. Los renders viven en `public/renders/`, nunca en `public/hardware/`.
 - **Redes:** `SITE.social` (instagram, facebook, tiktok) vacías; el footer muestra solo las que tengan

@@ -190,7 +190,7 @@ export const PRICING = {
       priceUsd: 12,
       priceCrc: 6000,
       unit: "unidad",
-      photo: "/stand-qr-3d.webp",
+      photo: "/renders/stand-qr-travertino.webp",
       photoIsRender: true,
     },
     {
@@ -201,7 +201,7 @@ export const PRICING = {
       priceUsd: 15,
       priceCrc: 7500,
       unit: "unidad",
-      photo: "/renders/tarjeta-nfc.webp",
+      photo: "/renders/tarjeta-nfc-travertino.webp",
       photoIsRender: true,
     },
     {
@@ -212,7 +212,7 @@ export const PRICING = {
       priceUsd: 20,
       priceCrc: 10000,
       unit: "unidad",
-      photo: "/stand-qr-3d-nfc.webp",
+      photo: "/renders/stand-qr-nfc-travertino.webp",
       photoIsRender: true,
     },
     {
@@ -223,7 +223,7 @@ export const PRICING = {
       priceUsd: 20,
       priceCrc: 10000,
       unit: "unidad",
-      photo: "/stand-resenas.webp",
+      photo: "/renders/stand-resenas-travertino.webp",
       photoIsRender: true,
     },
   ] satisfies readonly HardwareItem[],

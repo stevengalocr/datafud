@@ -49,7 +49,7 @@ export function LandingNavV2() {
             <a
               key={l.href}
               href={l.href}
-              className="link-underline inline-flex min-h-11 items-center transition-colors duration-300 ease-out-expo hover:text-brand-900"
+              className="link-underline inline-flex min-h-11 min-w-11 items-center justify-center transition-colors duration-300 ease-out-expo hover:text-brand-900"
             >
               {l.label}
             </a>
