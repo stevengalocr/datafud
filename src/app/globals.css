@@ -608,7 +608,8 @@ body {
     z-index: 4;
     left: 0;
     right: 0;
-    bottom: 4svh;
+    /* Sobre la etiqueta «Render ilustrativo» (abajo a la izquierda), no encima de ella. */
+    bottom: calc(4svh + 2.25rem);
     width: fit-content;
     margin-inline: auto;
     transform: translate3d(0, 115%, 0);

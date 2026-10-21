@@ -9,6 +9,13 @@ Todas las versiones notables del proyecto. Formato basado en
 
 ---
 
+## [1.10.1] — 2026-10-21 · Pie del teléfono de la portada
+
+- En teléfono, el pie «Así se abre tu carta · Soda ficticia · datos de ejemplo» quedaba debajo de
+  la etiqueta «Render ilustrativo»; ahora sube por encima de ella. Revisado en producción.
+
+---
+
 ## [1.10.0] — 2026-10-21 · Landing de impacto: la página que escanea
 
 Pedido de Steven: «el diseño actual me gusta, nada más que es muy plano». Imagen nueva, con
