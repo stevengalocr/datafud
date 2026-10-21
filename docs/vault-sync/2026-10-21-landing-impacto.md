@@ -10,3 +10,11 @@
 - `Imagenes-Y-Renders.md`: imágenes nuevas — `portada/escaneo.mp4`, `escaneo-movil.mp4` y sus pósters; `renders/familia-stands.webp`, `noche-soda.webp`, `stand-qr-travertino.webp`, `stand-qr-nfc-travertino.webp`, `stand-resenas-travertino.webp`, `tarjeta-nfc-travertino.webp` (las cuatro últimas reemplazan a las del hardware en `PRICING`). Todas rotuladas «Render ilustrativo» y con QR que decodifica a `/q/demo26`.
 **log.md** — `## [2026-10-21] ingest | 1.10.0 · Landing de impacto` + viñetas.
 Aplicado en vault: sí
+
+### L-02 · Pie del teléfono de la portada · commit e8ead7d · despliegue producción (Vercel)
+**Pendientes.md** — ninguno.
+**Decisiones.md** — ninguna.
+**Seguridad.md** — sin cambios.
+**Otras páginas** — `Datafud.md` (hub): producción en 1.10.1.
+**log.md** — una viñeta en la entrada de 1.10.0: 1.10.1 sube el pie del teléfono sobre la etiqueta en teléfono.
+Aplicado en vault: sí
