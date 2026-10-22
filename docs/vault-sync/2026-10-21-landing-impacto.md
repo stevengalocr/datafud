@@ -43,10 +43,10 @@ Aplicado en vault: sí
 **log.md** — `## [2026-10-21] ingest | 1.13.0 · Precios iguales para todos` + viñetas.
 Aplicado en vault: sí
 
-### L-06 · Portada a pantalla completa y fondos con vida · commit d9fe908 · despliegue pendiente (main local, espera el visto bueno de Steven)
+### L-06 · Portada a pantalla completa y fondos con vida · commit d9fe908 · despliegue producción (Vercel)
 **Pendientes.md** — ninguno nuevo ni cerrado.
 **Decisiones.md** — ninguna nueva (amplía D-069: en escritorio la portada también es inmersiva, en 100 vh desde el primer cuadro y sin tarjeta; el menú va transparente sobre ella).
 **Seguridad.md** — sin cambios.
-**Otras páginas** — `Datafud.md` (hub): 1.14.0 en `main` local, pendiente del push.
+**Otras páginas** — `Datafud.md` (hub): producción en 1.14.0.
 **log.md** — `## [2026-10-22] ingest | 1.14.0 · Portada a pantalla completa y fondos con vida` + viñetas.
 Aplicado en vault: sí
