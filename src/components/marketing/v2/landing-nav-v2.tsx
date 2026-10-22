@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { ScrollProgress } from "@/components/marketing/v2/scroll-progress";
+import { NavSobreHero } from "@/components/marketing/v2/nav-sobre-hero";
 import { MobileMenu } from "@/components/marketing/v2/mobile-menu";
 import { Icon } from "@/components/ui/icon";
 import { waProps } from "@/lib/site";
@@ -27,7 +28,7 @@ export function LandingNavV2() {
     >
       Saltar al contenido
     </a>
-    <header className="sticky top-0 z-40 border-b border-stone-200/40 bg-cream-50/95">
+    <header data-nav className="nav-landing sticky top-0 z-40 border-b border-stone-200/40 bg-cream-50/95">
       <div className="relative mx-auto flex h-[68px] max-w-6xl items-center justify-between px-5 sm:px-6">
         <Link
           href="/"
@@ -69,6 +70,7 @@ export function LandingNavV2() {
         </div>
       </div>
       <ScrollProgress />
+      <NavSobreHero />
     </header>
     </>
   );

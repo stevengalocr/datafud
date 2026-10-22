@@ -7,8 +7,8 @@ import { useScrollProgress } from "@/components/marketing/v2/use-scroll-progress
 // bajar, la cámara se acerca (video que sigue al scroll), el visor sigue al QR cuadro por cuadro y
 // al final sube el teléfono con la carta de la demo: el recorrido del comensal en una escena.
 //
-//  - Escritorio (≥ 1024 px): texto a la izquierda y la escena como tarjeta a la derecha, que
-//    crece hasta llenar la pantalla.
+//  - Escritorio (≥ 1024 px): la escena llena la pantalla desde el primer cuadro (100 vh, sin
+//    marco) y el texto va a la izquierda, claro sobre un velo verde oscuro que se va con él.
 //  - Teléfono y tableta vertical: la escena llena la pantalla desde el inicio, con el stand
 //    arriba y el texto abajo sobre un degradado; la cámara se desliza para tener el QR centrado.
 //
@@ -119,19 +119,12 @@ export function HeroEscaneo({ children, telefono }: { children: React.ReactNode;
 
     let s = 1;
     if (ancho) {
-      // Tarjeta que crece hasta llenar la escena. Arranca en el espacio libre a la derecha del
-      // texto (sin taparlo nunca), hasta 24 px del borde de la ventana.
-      const g = suave(tramo(p, 0.07, 0.36));
-      const col = texto.current?.firstElementChild as HTMLElement | null;
-      const finTexto = col ? col.offsetLeft + col.offsetWidth : W * 0.46;
-      const izq = finTexto + Math.max(32, W * 0.03);
-      const der = W - Math.max(24, W * 0.02);
-      const s0 = clamp((der - izq) / W, 0.3, 0.56);
-      const cx0 = izq + (s0 * W) / 2;
-      s = s0 + (1 - s0) * g;
-      const dx = (cx0 - W / 2) * (1 - g);
-      m.style.transform = `translate3d(${dx.toFixed(1)}px, ${(3 * (1 - g)).toFixed(3)}vh, 0) scale(${s.toFixed(4)})`;
-      m.style.borderRadius = `${((34 * (1 - g)) / s).toFixed(1)}px`;
+      // Pantalla completa desde el primer cuadro, sin marco: la escena llena la ventana y el
+      // acercamiento lo hace la cámara del video. El velo de la izquierda (detrás del texto) se va
+      // con el texto.
+      m.style.transform = "none";
+      m.style.borderRadius = "0px";
+      if (degradado.current) degradado.current.style.opacity = (1 - suave(tramo(p, 0.02, 0.2))).toFixed(3);
     } else {
       // Pantalla completa: la cámara se desliza para tener el QR centrado. Al inicio la escena va
       // corrida hacia arriba (el stand en el tercio de arriba; abajo, el texto sobre verde oscuro)

@@ -556,7 +556,8 @@ body {
 
 /* La escena viva también pide altura: en un teléfono acostado (menos de 520 px) queda la portada quieta. */
 @media (scripting: enabled) and (prefers-reduced-motion: no-preference) and (min-height: 520px) {
-  .he { display: block; padding-inline: 0; }
+  /* La portada arranca en el borde de arriba de la ventana, debajo del menú transparente. */
+  .he { display: block; padding-inline: 0; margin-top: -68px; border-bottom: 0; }
   .he-pista { height: 185svh; }
   .he-escena {
     position: sticky;
@@ -575,25 +576,41 @@ body {
     will-change: transform;
   }
   .he-video { display: block; opacity: 0; transition: opacity 0.5s var(--ease-out); }
-  /* Escala inversa a la de la escena inicial (1,12 en teléfono y 0,5 en escritorio), antes del JS.
-     En teléfono va arriba a la derecha, lejos del texto. */
-  .he-etiqueta { transform-origin: 0 100%; transform: scale(2); }
-  @media (max-width: 1023px) {
-    .he-etiqueta { display: none; }
-    .he-etiqueta-fija {
-      display: block;
-      position: absolute;
-      z-index: 3;
-      top: calc(68px + 0.75rem);
-      left: 0.75rem;
-      border-radius: 9999px;
-      background: rgba(255, 255, 255, 0.9);
-      padding: 0.25rem 0.625rem;
-      font-size: 0.75rem;
-      font-weight: 600;
-      color: #163528;
-    }
+  /* La etiqueta «Render ilustrativo» va fija en la esquina de la pantalla, no en la escena que se
+     mueve: debajo del menú, a la izquierda en teléfono y a la derecha en escritorio. */
+  .he-etiqueta { display: none; }
+  .he-etiqueta-fija {
+    display: block;
+    position: absolute;
+    z-index: 3;
+    top: calc(68px + 0.75rem);
+    left: 0.75rem;
+    border-radius: 9999px;
+    background: rgba(255, 255, 255, 0.9);
+    padding: 0.25rem 0.625rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #163528;
   }
+  /* Sombra fija arriba de la escena: el menú transparente se lee sobre cualquier cuadro. */
+  .he-escena::before {
+    content: "";
+    position: absolute;
+    inset: 0 0 auto 0;
+    height: 168px;
+    z-index: 3;
+    pointer-events: none;
+    background: linear-gradient(180deg, rgba(10, 26, 19, 0.62), rgba(10, 26, 19, 0));
+  }
+  /* El texto de la portada, claro sobre la escena en todos los tamaños; el botón principal en dorado. */
+  .he-col h1 { color: #fbfaf6; text-shadow: 0 1px 24px rgba(10, 26, 19, 0.45); }
+  .he-col h1 span { color: #e9d091; }
+  .he-col p { color: rgba(251, 250, 246, 0.86); }
+  .he-col .reveal > span:first-child { background: rgba(10, 26, 19, 0.45); border-color: rgba(220, 182, 90, 0.5); color: #e9d091; }
+  .he-col a[data-wa-origin="hero"] { background: #b8923f; border-color: #dcb65a; color: #0a1a13; }
+  .he-col a[data-wa-origin="hero"]:hover { background: #dcb65a; }
+  .he-col a[data-demo-open] { background: rgba(251, 250, 246, 0.08); border-color: rgba(251, 250, 246, 0.4); color: #fbfaf6; }
+  .he-col a[data-demo-open]:hover { background: rgba(251, 250, 246, 0.16); border-color: rgba(251, 250, 246, 0.6); }
   .he-video[data-listo] { opacity: 1; }
   .he-velo { display: block; position: absolute; inset: 0; z-index: 2; background: #0a1a13; opacity: 0; }
   .he-visor {
@@ -667,14 +684,9 @@ body {
       pointer-events: none;
       background: linear-gradient(180deg, rgba(10, 26, 19, 0) 28%, rgba(10, 26, 19, 0.7) 50%, rgba(10, 26, 19, 0.93) 72%, #0a1a13 100%);
     }
-    .he-col h1 { margin-top: 0.875rem; color: #fbfaf6; text-shadow: 0 1px 24px rgba(10, 26, 19, 0.45); }
-    .he-col h1 span { color: #e9d091; }
-    .he-col p { color: rgba(251, 250, 246, 0.86); }
+    .he-col h1 { margin-top: 0.875rem; }
     .he-col .reveal > p:first-of-type { margin-top: 0.75rem; font-size: 0.9375rem; line-height: 1.55; }
-    .he-col .reveal > span:first-child { background: rgba(10, 26, 19, 0.45); border-color: rgba(220, 182, 90, 0.5); color: #e9d091; }
     .he-col .reveal > div { margin-top: 1.25rem; }
-    .he-col a[data-wa-origin="hero"] { background: #b8923f; border-color: #dcb65a; color: #0a1a13; }
-    .he-col a[data-demo-open] { background: rgba(251, 250, 246, 0.08); border-color: rgba(251, 250, 246, 0.4); color: #fbfaf6; }
     .he-col a[href="#planes"] { background: rgba(10, 26, 19, 0.45); border-color: rgba(220, 182, 90, 0.5); color: #f4e8c8; }
     .he-col a[href="#planes"] span { color: #e9d091; }
   }
@@ -734,9 +746,20 @@ body {
       margin-left: max(1.5rem, calc((100vw - 72rem) / 2 + 1.5rem));
       padding: 0;
     }
-    .he-media {
-      transform: translate3d(23vw, 3vh, 0) scale(0.5);
-      border-radius: 68px;
+    /* Pantalla completa desde el primer cuadro: sin marco ni esquinas. */
+    .he-media { transform: none; border-radius: 0; }
+    .he-escena { background: #0a1a13; }
+    .he-etiqueta-fija { left: auto; right: 1rem; }
+    /* Velo verde oscuro a la izquierda, detrás del texto; se va con él (hero-escaneo.tsx). */
+    .he-degradado {
+      display: block;
+      position: absolute;
+      inset: 0;
+      z-index: 2;
+      pointer-events: none;
+      background:
+        linear-gradient(90deg, rgba(10, 26, 19, 0.9) 0%, rgba(10, 26, 19, 0.72) 30%, rgba(10, 26, 19, 0.28) 52%, rgba(10, 26, 19, 0) 68%),
+        linear-gradient(0deg, rgba(10, 26, 19, 0.55) 0%, rgba(10, 26, 19, 0) 30%);
     }
     .he-telefono { left: auto; right: max(2rem, calc((100vw - 72rem) / 2 + 3rem)); margin: 0; bottom: 3vh; }
     .he-telefono > div:first-child { transform: scale(0.9); }
@@ -753,7 +776,7 @@ body {
       font-weight: 700;
       letter-spacing: 0.18em;
       text-transform: uppercase;
-      color: #163528;
+      color: rgba(251, 250, 246, 0.82);
     }
     .he-indicio i {
       display: block;
@@ -765,6 +788,19 @@ body {
     }
   }
 }
+/* Menú de la landing transparente sobre la portada a pantalla completa (nav-sobre-hero.tsx marca
+   `data-solido` cuando la portada termina de pasar). Solo donde la portada es la escena viva. */
+.nav-landing { transition: background-color 0.3s var(--ease-out), border-color 0.3s var(--ease-out); }
+.nav-landing img { transition: filter 0.3s var(--ease-out); }
+@media (scripting: enabled) and (prefers-reduced-motion: no-preference) and (min-height: 520px) {
+  body:has(.he) .nav-landing:not([data-solido]) { background-color: transparent; border-color: transparent; }
+  body:has(.he) .nav-landing:not([data-solido]) > div > a:first-child img { filter: brightness(0) invert(1); }
+  body:has(.he) .nav-landing:not([data-solido]) nav[aria-label="Secciones"]:not(.flex-col) { color: rgba(251, 250, 246, 0.84); }
+  body:has(.he) .nav-landing:not([data-solido]) nav[aria-label="Secciones"]:not(.flex-col) a:hover { color: #fbfaf6; }
+  body:has(.he) .nav-landing:not([data-solido]) .lg\:hidden > button { background: rgba(10, 26, 19, 0.35); border-color: rgba(251, 250, 246, 0.35); color: #fbfaf6; }
+  body:has(.he) .nav-landing:not([data-solido]) .scroll-progress { opacity: 0; }
+}
+
 @keyframes visor-late {
   0%, 100% { transform: scale(1); }
   50% { transform: scale(1.07); }
@@ -1000,6 +1036,94 @@ body {
   .paso-vivo > span:first-child { transform: none !important; }
   .st-pista { display: none; }
   .stand3d { cursor: default; }
+}
+
+/* ── Fondo con vida (secciones claras de la landing, 2026-10-22) ──────────────────────────
+   Pedido de Steven: «el fondo no tan plano, que todo tenga impacto». Cada sección clara lleva
+   luces de la marca (verde y dorado) y la trama de módulos de QR, que se desvanece hacia un
+   borde; las que dicen `data-fondo="qr"` suman una marca de agua grande de un QR. Las luces se
+   desplazan un poco con el scroll (solo `transform`, donde el navegador tiene
+   `animation-timeline`; si no, quedan quietas). Todo es decorativo y va detrás del contenido. */
+.fondo-vivo { position: relative; isolation: isolate; overflow: clip; }
+.fondo-vivo::before,
+.fondo-vivo::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  pointer-events: none;
+}
+.fondo-vivo::before {
+  inset: -14% -4%;
+  background:
+    radial-gradient(44rem 32rem at 6% 14%, rgba(46, 111, 78, 0.26), transparent 70%),
+    radial-gradient(40rem 30rem at 96% 86%, rgba(220, 182, 90, 0.32), transparent 70%),
+    radial-gradient(28rem 20rem at 72% 6%, rgba(184, 146, 63, 0.14), transparent 70%);
+}
+.fondo-vivo[data-fondo="b"]::before,
+.fondo-vivo[data-fondo="qr"]::before {
+  background:
+    radial-gradient(44rem 32rem at 94% 12%, rgba(46, 111, 78, 0.25), transparent 70%),
+    radial-gradient(40rem 30rem at 4% 90%, rgba(220, 182, 90, 0.32), transparent 70%),
+    radial-gradient(26rem 20rem at 30% 4%, rgba(184, 146, 63, 0.13), transparent 70%);
+}
+.fondo-vivo::after {
+  inset: 0;
+  background-image:
+    linear-gradient(to right, rgba(34, 80, 58, 0.1) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(34, 80, 58, 0.1) 1px, transparent 1px);
+  background-size: 28px 28px;
+  -webkit-mask-image: radial-gradient(ellipse 62% 70% at 88% 18%, #000 0%, transparent 72%);
+  mask-image: radial-gradient(ellipse 62% 70% at 88% 18%, #000 0%, transparent 72%);
+}
+.fondo-vivo[data-fondo="b"]::after {
+  -webkit-mask-image: radial-gradient(ellipse 62% 70% at 10% 82%, #000 0%, transparent 72%);
+  mask-image: radial-gradient(ellipse 62% 70% at 10% 82%, #000 0%, transparent 72%);
+}
+.fondo-vivo[data-fondo="qr"]::after {
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 25 25' shape-rendering='crispEdges'%3E%3Cpath fill='%2322503a' fill-rule='evenodd' d='M0 0h7v7H0zM1 1v5h5V1zM2 2h3v3H2zM18 0h7v7h-7zM19 1v5h5V1zM20 2h3v3h-3zM0 18h7v7H0zM1 19v5h5v-5zM2 20h3v3H2zM9 0h1v1H9zM11 1h2v1h-2zM9 3h1v2H9zM12 4h1v1h-1zM14 2h1v1h-1zM10 6h2v1h-2zM15 5h1v2h-1zM0 9h1v1H0zM2 10h2v1H2zM5 9h1v2H5zM1 12h1v1H1zM3 13h2v1H3zM6 14h1v1H6zM9 9h3v1H9zM13 9h1v2h-1zM10 11h1v2h-1zM15 10h2v1h-2zM12 13h2v1h-2zM16 12h1v3h-1zM9 15h2v1H9zM18 9h1v1h-1zM20 10h2v1h-2zM23 9h1v2h-1zM19 12h1v1h-1zM21 13h3v1h-3zM18 15h1v1h-1zM9 18h1v2H9zM11 19h2v1h-2zM14 18h1v1h-1zM10 22h3v1h-3zM14 21h1v2h-1zM9 24h1v1H9zM18 18h3v1h-3zM22 18h1v1h-1zM19 20h1v2h-1zM21 21h2v1h-2zM24 20h1v1h-1zM18 23h2v1h-2zM22 23h1v2h-1z'/%3E%3C/svg%3E"),
+    linear-gradient(to right, rgba(34, 80, 58, 0.07) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(34, 80, 58, 0.07) 1px, transparent 1px);
+  background-repeat: no-repeat, repeat, repeat;
+  background-size: min(46vw, 520px) auto, 28px 28px, 28px 28px;
+  background-position: right -4% top 8%, 0 0, 0 0;
+  -webkit-mask-image: radial-gradient(ellipse 70% 80% at 92% 22%, rgba(0, 0, 0, 0.42) 0%, transparent 74%);
+  mask-image: radial-gradient(ellipse 70% 80% at 92% 22%, rgba(0, 0, 0, 0.42) 0%, transparent 74%);
+}
+/* La misma marca de agua abajo a la izquierda, para las secciones con el contenido a la derecha. */
+.fondo-vivo[data-fondo="qr-izq"]::before {
+  background:
+    radial-gradient(44rem 32rem at 94% 12%, rgba(46, 111, 78, 0.25), transparent 70%),
+    radial-gradient(40rem 30rem at 4% 90%, rgba(220, 182, 90, 0.32), transparent 70%);
+}
+.fondo-vivo[data-fondo="qr-izq"]::after {
+  background-image:
+    url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E"),
+    linear-gradient(to right, rgba(34, 80, 58, 0.07) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(34, 80, 58, 0.07) 1px, transparent 1px);
+  background-repeat: no-repeat, repeat, repeat;
+  background-size: min(34vw, 440px) auto, 28px 28px, 28px 28px;
+  background-position: left -3% bottom 6%, 0 0, 0 0;
+  -webkit-mask-image: radial-gradient(ellipse 60% 70% at 8% 86%, rgba(0, 0, 0, 0.42) 0%, transparent 74%);
+  mask-image: radial-gradient(ellipse 60% 70% at 8% 86%, rgba(0, 0, 0, 0.42) 0%, transparent 74%);
+}
+/* En teléfono y tableta el contenido ocupa todo el ancho: queda la trama, sin la marca de agua. */
+@media (max-width: 1023px) {
+  .fondo-vivo[data-fondo="qr"]::after,
+  .fondo-vivo[data-fondo="qr-izq"]::after { background-size: 0 0, 28px 28px, 28px 28px; }
+}
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .fondo-vivo::before {
+      animation: fondo-deriva linear both;
+      animation-timeline: view();
+      animation-range: cover;
+    }
+  }
+}
+@keyframes fondo-deriva {
+  from { transform: translate3d(0, -7%, 0) scale(1.02); }
+  to { transform: translate3d(0, 7%, 0) scale(1); }
 }
 
 /* Vitrina del sistema en teléfono y tableta: el título, después el panel y abajo los pasos

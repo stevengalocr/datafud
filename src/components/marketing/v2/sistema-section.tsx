@@ -48,7 +48,7 @@ const POR_ATENDER = mockOrders.filter((o) => isActive(o.status)).length;
 
 export function SistemaSection() {
   return (
-    <section id="sistema" className="scroll-mt-24 border-b border-stone-200/60 bg-cream-50">
+    <section id="sistema" data-fondo="qr" className="fondo-vivo scroll-mt-24 border-b border-stone-200/60 bg-cream-50">
       <PasosEscena pasos={4} className="sis-pista">
         <div className="sis-escena mx-auto grid max-w-6xl gap-10 px-5 py-16 sm:px-6 sm:py-24 lg:grid-cols-[0.82fr_1.18fr] lg:items-center lg:gap-14 lg:py-0">
           {/* Texto y pasos */}

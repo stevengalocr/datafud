@@ -30,7 +30,7 @@ export function FaqSection() {
   };
 
   return (
-    <section id="preguntas" className="scroll-mt-24 border-b border-stone-200/60 bg-cream-50">
+    <section id="preguntas" data-fondo="qr-izq" className="fondo-vivo scroll-mt-24 border-b border-stone-200/60 bg-cream-50">
       <div className="mx-auto max-w-6xl px-5 py-16 sm:px-6 sm:py-28">
         <div className="grid gap-8 lg:grid-cols-[0.8fr_1.2fr] lg:gap-20">
           <RevealOnView className="lg:sticky lg:top-28 lg:self-start">

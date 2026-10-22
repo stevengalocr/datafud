@@ -9,6 +9,30 @@ Todas las versiones notables del proyecto. Formato basado en
 
 ---
 
+## [1.14.0] — 2026-10-22 · Portada a pantalla completa y fondos con vida
+
+Pedido de Steven: sin imágenes cortadas ni ese marco raro; que la portada arranque de una vez en
+100 vh y que el fondo no sea tan plano al bajar.
+
+### Diseño
+- **Portada a pantalla completa desde el primer cuadro (escritorio).** Antes arrancaba como una
+  tarjeta encogida con esquinas redondeadas que crecía al bajar; ahora la escena llena la ventana
+  (100 vh, sin marco ni bordes crema) y el acercamiento lo hace la cámara del video. El texto va a
+  la izquierda, claro sobre un velo verde oscuro que se va con él; el botón principal pasa a
+  dorado, como en el teléfono. El visor sigue al QR igual que antes.
+- **Menú transparente sobre la portada** (`nav-sobre-hero.tsx`): logo y enlaces claros sobre una
+  sombra fija arriba de la escena; vuelve al fondo crema cuando la portada termina de pasar. Solo
+  en la landing y solo con la escena viva; las demás páginas no cambian.
+- «Render ilustrativo» queda fijo debajo del menú (a la derecha en escritorio, a la izquierda en
+  teléfono).
+- **Fondos con vida** (`.fondo-vivo` en `globals.css`): cada sección clara lleva luces de la marca
+  (verde y dorado) y la trama de módulos de QR que se desvanece hacia un borde; Sistema y
+  Preguntas suman una marca de agua grande de un QR en el espacio vacío (no en teléfono). Las
+  luces se desplazan un poco con el scroll (solo `transform`, con `animation-timeline`; sin
+  soporte o con movimiento reducido quedan quietas).
+
+---
+
 ## [1.13.0] — 2026-10-21 · Precios iguales para todos
 
 Pedido de Steven: quitar la oferta de fundadores. Los precios son los mismos para todos y la web

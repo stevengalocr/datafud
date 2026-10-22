@@ -56,7 +56,7 @@ const yours = [
 
 export function ImplementationSection() {
   return (
-    <section id="como-funciona" className="scroll-mt-24 border-b border-stone-200/60 bg-cream-50">
+    <section id="como-funciona" data-fondo="a" className="fondo-vivo scroll-mt-24 border-b border-stone-200/60 bg-cream-50">
       <div className="mx-auto max-w-6xl px-5 py-16 sm:px-6 sm:py-28">
         <RevealOnView className="max-w-2xl">
           <div className="reveal-up">

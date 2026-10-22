@@ -100,7 +100,7 @@ export async function HardwareSection() {
   const quote = waProps("hardware");
 
   return (
-    <section id="hardware" className="scroll-mt-24 border-b border-stone-200/60 bg-cream-50">
+    <section id="hardware" data-fondo="b" className="fondo-vivo scroll-mt-24 border-b border-stone-200/60 bg-cream-50">
       <div className="mx-auto max-w-6xl px-5 py-16 sm:px-6 sm:py-28">
         <RevealOnView className="grid items-center gap-8 lg:grid-cols-[1fr_1fr] lg:gap-12">
           <div className="reveal-up max-w-2xl">

@@ -34,7 +34,7 @@ export async function DemoSection() {
   });
 
   return (
-    <section id="demo" className="scroll-mt-24 border-b border-stone-200/60 bg-white">
+    <section id="demo" data-fondo="b" className="fondo-vivo scroll-mt-24 border-b border-stone-200/60 bg-white">
       <div className="mx-auto max-w-6xl px-5 py-16 sm:px-6 sm:py-28">
         <div className="grid items-center gap-14 lg:grid-cols-[1fr_0.9fr] lg:gap-20">
           {/* Marco de teléfono */}

@@ -97,7 +97,9 @@ export default function HomePage() {
       <SistemaSection />
 
       {/* ── Planes y precios ───────────────────────────────────── */}
-      <PricingV2 />
+      <div className="fondo-vivo" data-fondo="a">
+        <PricingV2 />
+      </div>
 
       {/* ── Hardware de mesa ───────────────────────────────────── */}
       <HardwareSection />
