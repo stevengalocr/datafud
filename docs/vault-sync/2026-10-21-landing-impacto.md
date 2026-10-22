@@ -50,3 +50,11 @@ Aplicado en vault: sí
 **Otras páginas** — `Datafud.md` (hub): producción en 1.14.0.
 **log.md** — `## [2026-10-22] ingest | 1.14.0 · Portada a pantalla completa y fondos con vida` + viñetas.
 Aplicado en vault: sí
+
+### L-07 · Sin costuras entre secciones · commit 21445e3 · despliegue producción (Vercel)
+**Pendientes.md** — ninguno nuevo ni cerrado.
+**Decisiones.md** — ninguna nueva (amplía D-069: secciones sin costuras, dos bandas y sombras de paso).
+**Seguridad.md** — sin cambios.
+**Otras páginas** — `Datafud.md` (hub): producción en 1.15.0; la landing queda cerrada y lo que sigue es contenido en redes.
+**log.md** — `## [2026-10-22] ingest | 1.15.0 · Sin costuras entre secciones` + viñetas.
+Aplicado en vault: sí
