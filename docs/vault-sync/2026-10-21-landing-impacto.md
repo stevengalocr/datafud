@@ -18,3 +18,11 @@ Aplicado en vault: sí
 **Otras páginas** — `Datafud.md` (hub): producción en 1.10.1.
 **log.md** — una viñeta en la entrada de 1.10.0: 1.10.1 sube el pie del teléfono sobre la etiqueta en teléfono.
 Aplicado en vault: sí
+
+### L-03 · La primera pantalla, en todos los tamaños · commit 301a2b2 · despliegue producción (Vercel)
+**Pendientes.md** — ninguno.
+**Decisiones.md** — ninguna nueva (amplía D-069: en teléfono y tableta vertical la portada es inmersiva).
+**Seguridad.md** — sin cambios.
+**Otras páginas** — `Datafud.md` (hub): producción en 1.11.0. `Imagenes-Y-Renders.md`: `portada/escaneo-vertical.mp4` (600×800, 0,76 MB) y `escaneo-inicio-vertical.webp` reemplazan a `escaneo-movil.mp4` y `escaneo-inicio-movil.webp`.
+**log.md** — `## [2026-10-21] ingest | 1.11.0 · La primera pantalla, en todos los tamaños` + viñetas.
+Aplicado en vault: sí
