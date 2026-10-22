@@ -1,4 +1,4 @@
-import { PLAN_CODES, PRICING, firstPaymentFor, firstYearMonthly, founderOfferActive, hardwareBy, setupFeeFor } from "@/lib/constants";
+import { PLAN_CODES, PRICING, firstPaymentFor, firstYearMonthly, hardwareBy, setupFeeFor } from "@/lib/constants";
 import { formatCrc } from "@/lib/currency/format";
 
 // Preguntas frecuentes de la landing. Un solo arreglo: lo usa el acordeón (#preguntas) y el
@@ -9,7 +9,7 @@ import { formatCrc } from "@/lib/currency/format";
 
 export type FaqItem = { id: string; q: string; a: string };
 
-const { plans, terms, founderOffer, delivery, hardwareDelivery } = PRICING;
+const { plans, terms, delivery, hardwareDelivery } = PRICING;
 
 const firstMonth = PLAN_CODES.map((code) => {
   const setup = setupFeeFor(code);
@@ -22,7 +22,7 @@ export const FAQ_ITEMS: FaqItem[] = [
   {
     id: "primer-mes",
     q: "¿Cuánto pago en total el primer mes?",
-    a: `${firstMonth} ${whenPaid} Después pagás solo la mensualidad.${founderOfferActive() ? ` Si entrás entre los primeros ${founderOffer.spots} locales, vale en cualquier plan: en la Carta la implementación no se cobra y en Estándar o Empresarial se descuentan ${formatCrc(PRICING.setupFee.carta.crc)} de la del sistema; en los dos casos te damos 1 stand QR 3D, a cambio de dejarnos mostrar tu local como caso (nombre, logo y capturas de tu carta). ${terms.founderConsent}` : ""}`,
+    a: `${firstMonth} ${whenPaid} Después pagás solo la mensualidad.`,
   },
   {
     id: "por-que-cuesta-mas",
@@ -82,12 +82,12 @@ export const FAQ_ITEMS: FaqItem[] = [
   {
     id: "empezar-con-carta",
     q: "¿Puedo empezar solo con la carta y sumar pedidos después?",
-    a: `Sí. Arrancás con la Carta y, cuando quieras recibir pedidos desde la mesa, pasás a Estándar o Empresarial: el cambio lleva la implementación del sistema completo (${formatCrc(PRICING.setupFee.sistema.crc)}) y desde ahí la mensualidad del plan nuevo. ${terms.upgradeCredit}${founderOfferActive() ? ` ${terms.upgradeCreditFounder}` : ""} Los stands y las tarjetas que ya tenés siguen funcionando.`,
+    a: `Sí. Arrancás con la Carta y, cuando quieras recibir pedidos desde la mesa, pasás a Estándar o Empresarial: el cambio lleva la implementación del sistema completo (${formatCrc(PRICING.setupFee.sistema.crc)}) y desde ahí la mensualidad del plan nuevo. ${terms.upgradeCredit} Los stands y las tarjetas que ya tenés siguen funcionando.`,
   },
   {
     id: "pago-hardware",
     q: "¿Cómo se paga el hardware?",
-    a: `${terms.hardwarePayment} Se hace a medida, así que hay costo de material antes de entregarlo.${founderOfferActive() ? ` La excepción es el stand incluido en la oferta de los primeros ${founderOffer.spots} locales, que no se cobra.` : ""}`,
+    a: `${terms.hardwarePayment} Se hace a medida, así que hay costo de material antes de entregarlo.`,
   },
   {
     id: "pedido-minimo",

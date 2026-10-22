@@ -71,7 +71,7 @@ servicio, datos del negocio, atención a clientes extranjeros.
 | **Hero** | Enganchar + CTA | "Tu carta digital con QR, *lista en 48 horas*" (el gancho se queda, D-061) · "Quiero mi carta" / "Ver la demo" · "Desde ₡14 900/mes · Garantía: carta en 48 horas hábiles" |
 | **Cómo funciona** (`#como-funciona`) | Educar con plazos | Línea de tiempo Día 0 → Plazo de la Carta → de 3 a 5 días hábiles (stands) → Día 15 + "Lo que hacemos nosotros" / "Lo que ponés vos" |
 | **Demo** (`#demo`) | Probar sin hablar con nadie | "Probalo vos mismo" · QR real desde tablet |
-| **Planes y precios** (`#planes`) | Convertir | CRC primero, implementación y primer pago por plan, garantía, fundadores |
+| **Planes y precios** (`#planes`) | Convertir | CRC primero, implementación y primer pago por plan, garantía |
 | **Hardware** (`#hardware`) | Vender lo que va en la mesa | Precios en colones, sin mínimo, entrega GAM/Correos |
 | **Por qué DataFud** (`#confianza`) | Confianza verificable | 4 puntos + tarjeta "Atención DataFud" con el WhatsApp |
 | **Preguntas** (`#preguntas`) | Resolver objeciones | 18 preguntas de Costa Rica (IVA, inicio de la mensualidad, "hábiles" y pago del hardware desde 1.4.0) |
@@ -105,9 +105,8 @@ visible de `/` (hero, planes y FAQ); la línea de tiempo no repite el plazo de l
 - **Todos los planes:** te la montamos nosotros; cambios de precios y platillos por WhatsApp
   incluidos; soporte por WhatsApp incluido mientras tengás el plan activo.
 - **Pago anual de la Carta:** ₡149 000/año (≈ US$290), 2 meses gratis, implementación incluida.
-- **Oferta de fundadores** (`founderOffer.enabled`), en cualquier plan (D-057): en la Carta,
-  implementación sin costo; en Estándar o Empresarial, ₡24 900 menos en la implementación del
-  sistema; en los dos casos 1 stand QR 3D, a cambio de dejarnos mostrar el local como caso.
+- **Sin oferta de fundadores (D-070, 2026-10-21):** precios iguales para todos; la web no dice si
+  hay muchos o pocos clientes, ni cupos, ni "primeros locales".
 - **Garantía de 48 h** (único uso permitido de la idea de garantía): "Si tu carta no está
   publicada en 48 horas hábiles desde que recibimos menú, fotos y logo, no pagás la implementación."
 - **Permanencia:** sin contrato; se cancela con aviso de 15 días por WhatsApp.

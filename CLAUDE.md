@@ -59,7 +59,7 @@ etiqueta "Render ilustrativo" y todo QR dibujado decodifica a `https://datafud.c
   mueve el código impreso a `/m/<local>/<token>` (1.8.0).
 - `src/lib/site.ts` contacto, `waProps`, redes, `leadsEmail` (destino interno del formulario, que
   nunca se renderiza) y `metaPixelId()` · `constants.ts` `PRICING`
-  (CRC y USD, implementación por tipo, fundadores, textos de garantía) y `TESTIMONIALS` ·
+  (CRC y USD, implementación por tipo, textos de garantía) y `TESTIMONIALS` ·
   `currency/format.ts` `formatCrc()` · `faq.ts` · `seo.ts` · `contact.ts` +
   `src/app/actions.ts` formulario · `turnstile.ts` · `env.ts` · `supabase/` clientes · `auth/` guardas.
 - `supabase/schema.sql` tablas, RLS, RPC, vistas, monedas y planes · `seed.dev.sql` semillas de desarrollo.
@@ -99,7 +99,8 @@ etiqueta "Render ilustrativo" y todo QR dibujado decodifica a `https://datafud.c
    emojis en UI, sin texto con degradado, sin `backdrop-blur`, voseo tico natural.
 10. Honestidad comercial: en la landing no van "tiempo real", "24/7", "exportación", "trial",
     "crea tu cuenta", promesas de resultado ("más ventas", "más estrellas", "llená tus mesas") ni
-    testimonios, logos o cifras inventados. **Canal único (D-039):** el único contacto público es
+    testimonios, logos o cifras inventados. **Precios iguales para todos (D-070):** sin oferta de
+    fundadores, cupos ni "primeros locales", y nada que diga si hay muchos o pocos clientes. **Canal único (D-039):** el único contacto público es
     WhatsApp; ningún correo se muestra en la web, en los legales ni en JSON-LD, y no se agregan
     enlaces `mailto:`. **Voz de empresa (D-041):** se habla como DataFud y en plural, sin "proyecto
     chico", sin firma personal y sin "un producto de GaloDev"; eso no autoriza a inventar sociedad,

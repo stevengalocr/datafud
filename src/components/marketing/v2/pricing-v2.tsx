@@ -2,7 +2,7 @@ import { cn } from "@/lib/utils/cn";
 import { Icon, type IconName } from "@/components/ui/icon";
 import { RevealOnView } from "@/components/marketing/v2/reveal";
 import { Tilt } from "@/components/marketing/v2/tilt";
-import { PRICING, firstPaymentFor, founderOfferActive, founderSpotsLabel, hardwareBy, limitsLabel, setupFeeFor, type PlanCode } from "@/lib/constants";
+import { PRICING, firstPaymentFor, hardwareBy, limitsLabel, setupFeeFor, type PlanCode } from "@/lib/constants";
 import { formatCrc, formatUsd } from "@/lib/currency/format";
 import { waProps } from "@/lib/site";
 
@@ -16,7 +16,7 @@ type PlanCard = {
   features: string[];
 };
 
-const { plans: P, terms, founderOffer, annualCarta } = PRICING;
+const { plans: P, terms, annualCarta } = PRICING;
 
 const plans: PlanCard[] = [
   {
@@ -68,29 +68,6 @@ export function PricingV2() {
           </p>
         </div>
       </RevealOnView>
-
-      {founderOfferActive() && (
-        <RevealOnView className="reveal-up mb-10 flex flex-col gap-4 rounded-2xl border border-accent-300/70 bg-accent-50 px-6 py-5 sm:flex-row sm:items-center sm:justify-between sm:px-8">
-          <div className="flex items-start gap-4">
-            <span className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl bg-brand-600 text-white">
-              <Icon name="star" size={18} />
-            </span>
-            <div>
-              <p className="text-xs font-bold uppercase tracking-[0.16em] text-accent-800">
-                Oferta de fundadores{founderSpotsLabel() && ` · ${founderSpotsLabel()}`}
-              </p>
-              <p className="mt-1 text-sm font-medium leading-relaxed text-brand-900 sm:text-[15px]">{founderOffer.text}</p>
-            </div>
-          </div>
-          <a
-            {...waProps("fundadores")}
-            className="inline-flex h-11 flex-shrink-0 items-center justify-center gap-2 whitespace-nowrap rounded-lg border border-stone-300 bg-white px-5 text-xs font-bold uppercase tracking-[0.14em] text-brand-800 transition-colors duration-300 ease-out-expo hover:border-stone-400 hover:bg-cream-50"
-          >
-            <Icon name="whatsapp" size={16} />
-            Pedir un cupo
-          </a>
-        </RevealOnView>
-      )}
 
       <RevealOnView className="grid gap-6 sm:gap-8 lg:grid-cols-3">
         {plans.map((card) => {

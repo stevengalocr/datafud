@@ -5,7 +5,7 @@ import { HeroEscaneo } from "@/components/marketing/v2/hero-escaneo";
 import { TelefonoCarta } from "@/components/marketing/v2/telefono-carta";
 import { MagneticCta } from "@/components/marketing/v2/magnetic-cta";
 import { Icon } from "@/components/ui/icon";
-import { PRICING, founderOfferActive, founderSpotsLabel } from "@/lib/constants";
+import { PRICING } from "@/lib/constants";
 import { ContactSection } from "@/components/marketing/v2/contact-section";
 import { HardwareSection } from "@/components/marketing/v2/hardware-section";
 import { ActoNoche } from "@/components/marketing/v2/acto-noche";
@@ -31,7 +31,6 @@ export const metadata: Metadata = {
   ...pageSocial("/", SITE_TITLE, SITE_DESCRIPTION),
 };
 
-const { founderOffer } = PRICING;
 
 export default function HomePage() {
   const jsonLd = [organizationJsonLd(), localBusinessJsonLd(), ...productsJsonLd(), faqJsonLd()];
@@ -85,17 +84,6 @@ export default function HomePage() {
         <p className="mt-4 text-sm font-semibold text-brand-800">
           Desde {formatCrc(PRICING.plans.basico.priceCrc)}/mes · Garantía: carta en {PRICING.delivery.menuHours} horas hábiles · Cambios por WhatsApp
         </p>
-        {founderOfferActive() && (
-          <a
-            href="#planes"
-            className="mt-3 inline-flex min-h-11 items-center gap-2 rounded-full border border-accent-300/70 bg-white/70 px-3.5 text-xs font-bold text-accent-800 transition-colors hover:border-accent-400 hover:bg-accent-50"
-          >
-            <Icon name="star" size={13} />
-            {founderOffer.short}
-            {founderSpotsLabel() && <span className="text-accent-700">· {founderSpotsLabel()}</span>}
-            <Icon name="arrow-right" size={13} />
-          </a>
-        )}
       </div>
       </HeroEscaneo>
 

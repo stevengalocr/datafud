@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { pageSocial } from "@/lib/seo";
 import { LegalPage, type LegalSection } from "@/components/marketing/v2/legal-page";
-import { PLAN_CODES, PRICING, founderOfferActive, setupFeeFor, tablesLabel } from "@/lib/constants";
+import { PLAN_CODES, PRICING, setupFeeFor, tablesLabel } from "@/lib/constants";
 import { formatCrc } from "@/lib/currency/format";
 import { SITE, tradeNameNotice, whatsappDisplay } from "@/lib/site";
 
@@ -15,7 +15,7 @@ export const metadata: Metadata = {
   ...pageSocial("/terminos", "Términos del servicio · DataFud", DESCRIPTION),
 };
 
-const { plans, terms, delivery, hardwareDelivery, founderOffer } = PRICING;
+const { plans, terms, delivery, hardwareDelivery } = PRICING;
 
 // 1.1 (2026-09-25): IVA incluido (D-047), plazos hábiles (D-048), inicio de la mensualidad (D-035),
 // pago del hardware (D-036), paso de la Carta al sistema (D-034), fundadores (D-037) y garantía
@@ -23,8 +23,9 @@ const { plans, terms, delivery, hardwareDelivery, founderOffer } = PRICING;
 // 1.2 (2026-09-25): fundadores en cualquier plan (D-057), detalle del descuento de Carta a sistema
 // (D-058), hardware pedido después (D-059), plazo desde material + pago (D-060) y a quién le pagás
 // (D-062).
-const TERMS_VERSION = "1.2";
-const TERMS_UPDATED = "25 de setiembre de 2026";
+// 1.3 (2026-10-21): se retira la oferta de fundadores (D-070); los precios son los mismos para todos.
+const TERMS_VERSION = "1.3";
+const TERMS_UPDATED = "21 de octubre de 2026";
 
 // Todo monto y plazo sale de PRICING: si cambia la oferta, estos términos cambian con ella.
 const planBullets = PLAN_CODES.map((code) => {
@@ -71,7 +72,7 @@ const sections: LegalSection[] = [
     title: "Pagos",
     paragraphs: [
       `Pagás por SINPE Móvil o transferencia bancaria. La implementación se paga al aprobar la propuesta. La mensualidad se paga por adelantado cada mes: ${terms.billingStart.charAt(0).toLowerCase()}${terms.billingStart.slice(1)} No hacemos cobros automáticos ni guardamos datos de tarjetas.`,
-      `${terms.hardwarePayment}${founderOfferActive() ? " La excepción es el stand incluido en la oferta de fundadores, que no se cobra." : ""}`,
+      terms.hardwarePayment,
       "Recibís un comprobante de cada pago.",
       "Si una mensualidad queda sin pagar, podemos pausar la carta hasta que se regularice, siempre avisándote antes por WhatsApp. Cuando se recibe el pago, la carta vuelve a estar disponible.",
     ],
@@ -79,20 +80,9 @@ const sections: LegalSection[] = [
   {
     title: "Pasar de la Carta a un plan con pedidos",
     paragraphs: [
-      `Podés empezar con la Carta y pasar a Estándar o Empresarial cuando quieras. El cambio lleva la implementación del sistema completo (${formatCrc(PRICING.setupFee.sistema.crc)}) y desde ahí la mensualidad del plan nuevo. ${terms.upgradeCredit} ${terms.upgradeCreditFounder}`,
+      `Podés empezar con la Carta y pasar a Estándar o Empresarial cuando quieras. El cambio lleva la implementación del sistema completo (${formatCrc(PRICING.setupFee.sistema.crc)}) y desde ahí la mensualidad del plan nuevo. ${terms.upgradeCredit}`,
     ],
   },
-  ...(founderOfferActive()
-    ? [
-        {
-          title: "Oferta de fundadores",
-          paragraphs: [
-            `Vale para los primeros ${founderOffer.spots} locales, en el plan que elijan. En la Carta, la implementación va sin costo; en Estándar o Empresarial, se descuentan ${formatCrc(PRICING.setupFee.carta.crc)} de la implementación del sistema. En los dos casos va 1 stand QR 3D incluido. A cambio, nos dejan mostrar su local como caso: su nombre, su logo y capturas de su carta.`,
-            terms.founderConsent,
-          ],
-        },
-      ]
-    : []),
   {
     title: "Cancelación, sin permanencia",
     paragraphs: [

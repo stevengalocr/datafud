@@ -63,7 +63,6 @@ export type WaOrigin =
   | "plan-basico"
   | "plan-estandar"
   | "plan-empresarial"
-  | "fundadores"
   | "guia-costa-rica"
   | "guia-sodas"
   | "guia-turisticos";
@@ -82,7 +81,6 @@ export const WA_MESSAGES: Record<WaOrigin, string> = {
   cierre: "Hola, quiero llevar la carta de mi local a DataFud. ¿Cómo empezamos?",
   footer: "Hola, vengo de datafud.com y quiero más información.",
   "plan-basico": "Hola, me interesa el plan Carta de DataFud para mi local.",
-  fundadores: "Hola, quiero uno de los cupos de fundadores de DataFud para mi local.",
   "plan-estandar": "Hola, me interesa el plan Estándar de DataFud para mi local.",
   "plan-empresarial": "Hola, me interesa el plan Empresarial de DataFud para mi local.",
   "guia-costa-rica": "Hola, leí la guía de menú digital en Costa Rica de datafud.com y quiero cotizar para mi local.",

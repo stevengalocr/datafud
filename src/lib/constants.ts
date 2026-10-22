@@ -125,23 +125,6 @@ export const PRICING = {
   } satisfies Record<PlanCode, Plan>,
   /** Pago anual de la Carta: 2 meses gratis y la implementación de la Carta incluida. */
   annualCarta: { usd: 290, crc: 149000 },
-  /**
-   * Oferta de fundadores (D-024). Steven la apaga con `enabled: false` al llenarse.
-   *
-   * `remaining` es cuántos cupos quedan y lo actualiza Steven con cada fundador que cierra.
-   * Con `null` la web no dice cuántos quedan, que es lo honesto mientras nadie lleve la cuenta:
-   * una escasez que no se puede comprobar es una cifra inventada. Con 0, la oferta se apaga
-   * sola aunque `enabled` siga en true.
-   */
-  founderOffer: {
-    enabled: true,
-    spots: 10,
-    remaining: null as number | null,
-    // D-057: vale para cualquier plan. En la Carta la implementación va sin costo; en Estándar o
-    // Empresarial se descuenta el valor de la implementación de la Carta de la del sistema.
-    text: `Primeros 10 locales, en cualquier plan: en la Carta, la implementación sin costo; en Estándar o Empresarial, ${CARTA_SETUP_CRC} menos en la implementación del sistema. En los dos casos, 1 stand QR 3D incluido, a cambio de dejarnos mostrar tu local como caso (nombre, logo y capturas de tu carta).`,
-    short: `Primeros 10 locales, en cualquier plan: ${CARTA_SETUP_CRC} menos en la implementación y 1 stand QR 3D`,
-  },
   /** Textos de la oferta que se repiten en planes, FAQ y legales (D-025). */
   terms: {
     // D-060: el plazo corre desde que están el material y el pago de la implementación.
@@ -174,11 +157,6 @@ export const PRICING = {
     upgradeCreditMonths: UPGRADE_CREDIT_MONTHS,
     // D-058: se descuenta lo que se pagó; los meses cuentan desde la publicación de la carta.
     upgradeCredit: `Si pasás a Estándar o Empresarial dentro de los ${UPGRADE_CREDIT_MONTHS} meses desde que tu carta quedó publicada, te descontamos de la implementación del sistema lo que pagaste por la de la Carta: ${CARTA_SETUP_CRC}, también si pagaste el año (es el valor de la implementación incluida).`,
-    /** D-058: el fundador no pagó implementación, así que no hay descuento. */
-    upgradeCreditFounder: "Si entraste como fundador, la implementación de la Carta no se cobró, así que no hay descuento: ya recibiste el beneficio de fundador.",
-    /** D-037: condiciones de la oferta de fundadores. */
-    founderConsent:
-      "Nos das el permiso por WhatsApp para mostrar el nombre, el logo y capturas de la carta de tu local. Podés retirarlo cuando quieras y el beneficio no se te quita.",
   },
   /** Hardware de mesa (decisión D-013). CRC primero desde 2026-09-22 (D-023); USD de referencia. */
   hardware: [
@@ -288,21 +266,6 @@ export function setupFeeFor(code: PlanCode): Money {
 }
 
 /** Primer pago de un plan: implementación + primer mes (para que no haya sorpresas). */
-/**
- * ¿Se muestra la oferta de fundadores? Con `remaining` en 0 se apaga sola: si no quedan cupos,
- * seguir anunciándolos es prometer algo que ya no existe.
- */
-export function founderOfferActive(): boolean {
-  const o = PRICING.founderOffer;
-  return o.enabled && o.remaining !== 0;
-}
-
-/** "Quedan 4 de 10" cuando alguien lleva la cuenta; cadena vacía cuando no. */
-export function founderSpotsLabel(): string {
-  const o = PRICING.founderOffer;
-  return o.remaining === null ? "" : `Quedan ${o.remaining} de ${o.spots}`;
-}
-
 export function firstPaymentFor(code: PlanCode): Money {
   const setup = setupFeeFor(code);
   const plan = PRICING.plans[code];

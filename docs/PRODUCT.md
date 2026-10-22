@@ -124,21 +124,17 @@ Colones primero (lo que ve el cliente tico); USD es la moneda interna y de la BD
 | Soporte | WhatsApp, mientras el plan esté activo | igual | igual |
 
 - **Pago anual de la Carta:** ₡149 000/año (≈ US$290): 2 meses gratis e implementación de la Carta incluida.
-- **Oferta de fundadores** (`PRICING.founderOffer`, activa): primeros 10 locales, en cualquier plan
-  (D-057): en la Carta, implementación sin costo; en Estándar o Empresarial, ₡24 900 menos en la
-  implementación del sistema; en los dos casos 1 stand QR 3D incluido, a cambio de mostrar el local
-  como caso.
+- **Sin oferta de fundadores (D-070, 2026-10-21):** los precios son los mismos para todos los
+  locales y la web no habla de cuántos clientes hay.
 - **Garantía de 48 h:** si la carta no está publicada en 48 horas hábiles desde que recibimos menú,
   fotos y logo, no se paga la implementación. Solo la Carta tiene garantía de plazo (D-038).
 - **Condiciones comerciales (2026-09-25, términos 1.1):** precios finales en colones, IVA incluido
   (D-047); "hábiles" = lunes a viernes sin feriados, desde que llega todo el material (D-048); la
   mensualidad arranca el día que la carta queda publicada (D-035); el hardware se paga por
-  adelantado con la implementación o, si se pide después, al aprobar el diseño, salvo el stand de
-  fundadores (D-036, D-059); al pasar de la Carta a un plan con pedidos dentro de los 6 meses desde
+  adelantado con la implementación o, si se pide después, al aprobar el diseño (D-036, D-059); al pasar de la Carta a un plan con pedidos dentro de los 6 meses desde
   la publicación se descuenta lo que se pagó por la implementación de la Carta: ₡24 900 con pago
-  mensual o anual, nada si entró como fundador (D-034, D-058); los plazos corren desde que están el
-  material y el pago de la implementación (D-060);
-  el permiso de fundadores se da por WhatsApp y se puede retirar sin perder el beneficio (D-037).
+  mensual o anual (D-034, D-058); los plazos corren desde que están el
+  material y el pago de la implementación (D-060).
 - **Peso de la carta (D-043):** la carta pesa menos de 2 MB al abrirla.
 - **Cambios de precios y platillos por WhatsApp** incluidos en todos los planes. **Sin permanencia**:
   se cancela con 15 días de aviso.

@@ -9,6 +9,24 @@ Todas las versiones notables del proyecto. Formato basado en
 
 ---
 
+## [1.13.0] — 2026-10-21 · Precios iguales para todos
+
+Pedido de Steven: quitar la oferta de fundadores. Los precios son los mismos para todos y la web
+no habla de cuántos clientes hay (D-070).
+
+### Oferta
+- Fuera la oferta de fundadores: la pastilla bajo los botones de la portada, la tarjeta de
+  «Planes y tarifas», las tres menciones del FAQ y el mensaje de WhatsApp «fundadores».
+  `PRICING.founderOffer`, `founderOfferActive()` y `founderSpotsLabel()` se eliminan del código.
+- **Términos 1.3:** sin la sección «Oferta de fundadores» ni la excepción del stand incluido; el
+  hardware se paga siempre por adelantado y el descuento de Carta a sistema es igual para todos.
+- Documentos de venta al día: `PRODUCT.md`, `MARKETING.md`, `ventas/OFERTA.md`,
+  `KIT-PROSPECCION.md` (mensaje del día 7) y `CONTENIDO-30-DIAS.md` (c12 pasa a la garantía de 48
+  horas hábiles). Regla nueva en `CLAUDE.md` (regla 10): sin fundadores, cupos ni «primeros
+  locales», y nada que diga si hay muchos o pocos clientes.
+
+---
+
 ## [1.12.0] — 2026-10-21 · Alta calidad y última revisión
 
 Pedido de Steven: imágenes de alta calidad sin pixelado, nada de scroll innecesario y responsive

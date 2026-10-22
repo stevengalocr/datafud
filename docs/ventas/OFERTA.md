@@ -88,22 +88,18 @@ cotiza aparte.
 dirección, o pasa de la Carta al sistema con pedidos, se cambia una línea y el stand impreso
 sigue sirviendo. Un código no se reutiliza nunca para otro local.
 
-### Cupos de fundadores
+### Sin oferta de fundadores (D-070)
 
-Mientras la oferta esté activa (`PRICING.founderOffer.enabled`): a los **primeros 10 locales, en
-el plan que elijan** (D-057). En la Carta, la implementación sin costo; en Estándar o Empresarial,
-**₡24 900 menos** en la implementación del sistema. En los dos casos, **1 stand QR 3D incluido**, a
-cambio de dejarnos mostrar el local como caso. El local da ese permiso por WhatsApp (nombre, logo y capturas de su carta) y
-puede retirarlo cuando quiera sin perder el beneficio (D-037). Cuando se llenen, se apaga en el
-código y desaparece de la web. La web no dice cuántos cupos quedan (`remaining: null`) hasta que
-cierre el primero.
+Desde el 2026-10-21 no hay oferta de fundadores: los precios son los mismos para todos los locales.
+No se ofrecen cupos ni beneficios por ser de los primeros, y ni la web ni la venta hablan de cuántos
+clientes hay.
 
 ### Pagos y permanencia
 
 **Precios finales en colones, IVA incluido** (D-047). SINPE Móvil o transferencia. La
 implementación se paga al aprobar la propuesta; **la mensualidad arranca el día que la carta queda
 publicada** (D-035). El hardware se paga completo por adelantado: con la implementación o, si se
-pide después, al aprobar el diseño; salvo el stand de fundadores (D-036, D-059). Los plazos corren
+pide después, al aprobar el diseño (D-036, D-059). Los plazos corren
 desde que están el material y el pago de la implementación, lo que llegue último (D-060). **Sin contrato de
 permanencia:** se cancela con 15 días de aviso por WhatsApp y el servicio sigue hasta el final del
 período ya pagado. Con menos de 15 días de aviso se cobra un período más y el servicio sigue
@@ -231,9 +227,9 @@ hábiles, léase D-047/D-048.
   no el día que se aprueba la propuesta ni el día que se paga la implementación. Va en la línea
   bajo los planes, en el FAQ y en los términos.
 - **D-036 · Hardware.** Se paga completo por adelantado, junto con la implementación, porque hay
-  costo de material antes de entregar. Excepción: el stand incluido en la oferta de fundadores.
+  costo de material antes de entregar. (La excepción del stand de fundadores se retiró con D-070.)
   Va en el FAQ y en los términos.
-- **D-037 · Fundadores.** El local acepta por WhatsApp que DataFud muestre su nombre, su logo y
+- **D-037 · Fundadores (retirada el 2026-10-21, D-070).** El local acepta por WhatsApp que DataFud muestre su nombre, su logo y
   capturas de su carta. Puede retirar ese permiso cuando quiera; el beneficio (implementación de la
   Carta sin costo + 1 stand) no se le quita. Va en los términos y acá. `founderOffer.remaining`
   se queda en `null`: "Quedan 10 de 10" le avisa al prospecto que nadie compró todavía; Steven lo
@@ -248,7 +244,7 @@ hábiles, léase D-047/D-048.
 
 **Cerradas después, el mismo 2026-09-25 (loop "ajustes", términos 1.2):**
 
-- **D-057 · Fundadores en cualquier plan.** En la Carta, implementación sin costo y 1 stand QR 3D;
+- **D-057 · Fundadores en cualquier plan (retirada el 2026-10-21, D-070).** En la Carta, implementación sin costo y 1 stand QR 3D;
   en Estándar o Empresarial, ₡24 900 menos en la implementación del sistema y 1 stand QR 3D. Va en
   la pastilla del hero, la tarjeta de fundadores, el FAQ y los términos.
 - **D-058 · Detalle de D-034.** Se descuenta lo que el local **pagó** por la implementación de la
@@ -283,4 +279,3 @@ hábiles, léase D-047/D-048.
 | 48 horas hábiles · 15 días hábiles | `PRICING.delivery.menuHours` / `.fullSystemDays` (D-048) |
 | 3 a 5 días hábiles (hardware) | `PRICING.hardwareDelivery.leadTime` |
 | 15 días de aviso · 10 días de reembolso · 3 meses de garantía | `PRICING.terms.noticeDays` / `.refundDays` / `.hardwareWarrantyMonths` |
-| 10 cupos de fundadores | `PRICING.founderOffer.spots` |

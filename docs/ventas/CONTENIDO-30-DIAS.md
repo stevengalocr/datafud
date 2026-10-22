@@ -21,7 +21,7 @@
 | c09 | 3 | Reel 25 s | Demostración | "Subió el precio del casado. ¿Y ahora?" |
 | c10 | 4 | Carrusel 5 | Antes/después | "Pizarra de soda → carta con fotos" |
 | c11 | 4 | Reel 30 s | Detrás del stand | "Quién está detrás de DataFud" |
-| c12 | 4 | Publicación fija | Oferta | "Cupos de fundadores" |
+| c12 | 4 | Publicación fija | Oferta | "Tu carta en 48 horas hábiles, o no pagás la implementación" |
 
 ---
 
@@ -87,10 +87,10 @@
 - **Copy:** DataFud es una empresa costarricense: nosotros te montamos la carta y te atiende una persona de nuestro equipo, no un bot.
 - **CTA:** "Escribinos por WhatsApp" → `https://datafud.com/?utm_source=instagram&utm_medium=social&utm_campaign=c11#contacto`
 
-### c12 · Publicación fija · "Cupos de fundadores"
-- **Imagen:** stand QR 3D sobre una mesa con el texto "Primeros 10 locales".
-- **Copy:** Primeros 10 locales, en cualquier plan: en la Carta, implementación sin costo; en Estándar o Empresarial, ₡24 900 menos en la implementación. En los dos casos, 1 stand QR 3D incluido, a cambio de dejarnos mostrar tu local como caso. Publicar solo mientras `founderOffer.enabled` esté activo; al llenarse, se archiva.
-- **CTA:** "Pedí un cupo" → `https://datafud.com/?utm_source=instagram&utm_medium=social&utm_campaign=c12#planes`
+### c12 · Publicación fija · "Tu carta en 48 horas hábiles, o no pagás la implementación"
+- **Imagen:** stand QR 3D sobre una mesa (render rotulado «Render ilustrativo»), sin texto en la imagen.
+- **Copy:** Te montamos la carta con tu marca, en español e inglés. Si no está publicada en 48 horas hábiles desde que tenemos el menú, las fotos, el logo y el pago de la implementación, no pagás la implementación. Precios finales en colones, IVA incluido.
+- **CTA:** "Mirá los planes" → `https://datafud.com/?utm_source=instagram&utm_medium=social&utm_campaign=c12#planes`
 
 ---
 
@@ -101,4 +101,4 @@
 | ₡14 900/mes · ₡24 900 · ₡39 800 · ₡149 000/año | c02 | `PRICING.plans.basico.priceCrc`, `setupFee.carta.crc`, `firstPaymentFor("basico")`, `annualCarta.crc` |
 | ₡6 000 · ₡7 500 · ₡10 000 | c03, c06, c07 | `PRICING.hardware[*].priceCrc` |
 | 48 horas | c10 | `PRICING.delivery.menuHours`, `terms.guarantee48h` |
-| Fundadores (10 locales) | c12 | `PRICING.founderOffer` |
+| Garantía de 48 horas hábiles | c12 | `PRICING.terms.guarantee48h` |
