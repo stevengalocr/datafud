@@ -9,6 +9,38 @@ Todas las versiones notables del proyecto. Formato basado en
 
 ---
 
+## [1.12.0] — 2026-10-21 · Alta calidad y última revisión
+
+Pedido de Steven: imágenes de alta calidad sin pixelado, nada de scroll innecesario y responsive
+perfecto. Medido en 375×667, 390×844, 430×932, 844×390 (teléfono acostado), 768×1024, 1024×768,
+1180×820, 1366×650, 1440×900 y 1920×1080, con la densidad de pantalla real de cada equipo.
+
+### Imágenes
+- **Portada en 4K.** El video del escaneo se volvió a generar en 4K (master 3524×2352): escritorio
+  usa `portada/escaneo-4k.mp4` (2560×1708, 3,0 MB) y teléfono y tableta vertical
+  `portada/escaneo-vertical-hd.mp4` (1080×1440, 1,3 MB). Los pósters vienen en dos tamaños por
+  formato (`escaneo-inicio-1920/2560.webp`, `escaneo-inicio-vertical-1080/1620.webp`) y el navegador
+  elige según la pantalla. El visor sigue al QR con las cajas medidas en los 21 cuadros del video
+  nuevo; los 21 decodifican a `/q/demo26`. El video se sigue pidiendo con la primera interacción.
+- **Fotos de producto en 4K.** Las seis fotos (`familia-stands`, `noche-soda` y los cuatro renders
+  sobre travertino) se rehicieron a 5456×3072 con la misma composición y se exportan a 3200 o
+  2560 px. Todos los QR siguen decodificando a `/q/demo26` (los tres de la foto de familia, por
+  recortes).
+- **Tamaños que pide cada imagen (`sizes`) corregidos a lo que se ve de verdad:** el recorte de
+  `object-cover`, el zoom de la foto de familia y las tarjetas altas del hardware pedían hasta 8
+  veces menos píxeles de los que se pintaban. Ahora ninguna foto de producto se estira en ninguno
+  de los diez tamaños (queda solo el fondo decorativo del pie, bajo una capa oscura del 80-90 %).
+
+### Diseño
+- **Menos scroll:** la portada pasa de 215 a 185 svh en teléfono y de 270 a 230 vh en escritorio, y
+  la vitrina del sistema de 330 a 270 vh.
+- **Teléfono acostado y pantallas de menos de 520 px de alto:** portada quieta y completa en lugar
+  de la escena con scroll, que no cabía.
+- La etiqueta «Render ilustrativo» de la portada pasa a la izquierda en teléfono: tapaba la
+  esquina del visor.
+
+---
+
 ## [1.11.0] — 2026-10-21 · La primera pantalla, en todos los tamaños
 
 Pedido de Steven: «los primeros 100 vh son los más importantes»; en teléfono la portada no estaba

@@ -16,20 +16,20 @@ import { useScrollProgress } from "@/components/marketing/v2/use-scroll-progress
 // es decorativo. Sin JS, sin `scripting` o con movimiento reducido: la portada quieta de siempre
 // (globals.css, .he-*). El video se pide con la primera interacción.
 
-// Caja del QR (x0, y0, x1, y1, en fracciones del cuadro original de 1764×1176) en 21 cuadros del
-// video, leída con un lector de QR: el código decodifica a /q/demo26 en todos (D-051).
+// Caja del QR (x0, y0, x1, y1, en fracciones del cuadro original de 3524×2352, el video en 4K) en
+// 21 cuadros, leída con un lector de QR: el código decodifica a /q/demo26 en todos (D-051).
 const CAJAS: [number, number, number, number, number][] = [
-  [0, 0.5757, 0.4023, 0.6885, 0.5621], [0.25, 0.5738, 0.4022, 0.6877, 0.562], [0.5, 0.5711, 0.4009, 0.6861, 0.5629],
-  [0.75, 0.5669, 0.4013, 0.6841, 0.5661], [1, 0.5614, 0.4008, 0.6808, 0.5684], [1.25, 0.5539, 0.398, 0.6767, 0.5706],
-  [1.5, 0.5454, 0.3968, 0.6726, 0.5751], [1.75, 0.5354, 0.3956, 0.667, 0.5812], [2, 0.5243, 0.3934, 0.6612, 0.5858],
-  [2.25, 0.5132, 0.3899, 0.6557, 0.5896], [2.5, 0.5017, 0.3874, 0.6505, 0.5944], [2.75, 0.4907, 0.3845, 0.6442, 0.5993],
-  [3, 0.4789, 0.3823, 0.6379, 0.6049], [3.25, 0.465, 0.3782, 0.6316, 0.6087], [3.5, 0.4536, 0.3761, 0.6282, 0.6154],
-  [3.75, 0.4428, 0.373, 0.62, 0.6194], [4, 0.4327, 0.3703, 0.6158, 0.6217], [4.25, 0.4253, 0.367, 0.6114, 0.6228],
-  [4.5, 0.4236, 0.3677, 0.6124, 0.6247], [4.75, 0.4232, 0.3669, 0.6113, 0.6245], [4.99, 0.4232, 0.3673, 0.6128, 0.6249],
+  [0, 0.5751, 0.4018, 0.6875, 0.5613], [0.25, 0.5732, 0.401, 0.6865, 0.5613], [0.5, 0.5713, 0.4007, 0.6861, 0.5633],
+  [0.75, 0.5673, 0.3994, 0.6843, 0.5654], [1, 0.5611, 0.3975, 0.6812, 0.5671], [1.25, 0.5546, 0.3941, 0.6781, 0.5684],
+  [1.5, 0.55, 0.3918, 0.6766, 0.5709], [1.75, 0.5417, 0.3893, 0.6724, 0.5738], [2, 0.534, 0.3863, 0.6692, 0.5763],
+  [2.25, 0.5272, 0.3827, 0.665, 0.5783], [2.5, 0.5188, 0.3794, 0.6618, 0.5815], [2.75, 0.5103, 0.3765, 0.6573, 0.5839],
+  [3, 0.5041, 0.3741, 0.6556, 0.5878], [3.25, 0.4934, 0.3693, 0.6498, 0.5885], [3.5, 0.4852, 0.366, 0.6461, 0.5911],
+  [3.75, 0.478, 0.3631, 0.6417, 0.5941], [4, 0.4708, 0.3603, 0.6396, 0.5966], [4.25, 0.4659, 0.358, 0.637, 0.5988],
+  [4.5, 0.4607, 0.3549, 0.6335, 0.5999], [4.75, 0.4539, 0.353, 0.6317, 0.6006], [4.99, 0.4544, 0.3525, 0.6322, 0.6018],
 ];
-// La versión vertical es un recorte de 882 px de ancho desde x = 529 (600×800).
-const VERTICAL = { x: 529 / 1764, w: 882 / 1764, aspecto: 600 / 800 };
-const ASPECTO_ESCRITORIO = 1.5;
+// La versión vertical es un recorte de 1764 px de ancho desde x = 1057 (exportado a 1080×1440).
+const VERTICAL = { x: 1057 / 3524, w: 1764 / 3524, aspecto: 1080 / 1440 };
+const ASPECTO_ESCRITORIO = 3524 / 2352;
 
 const clamp = (v: number, a = 0, b = 1) => Math.min(b, Math.max(a, v));
 const tramo = (p: number, a: number, b: number) => clamp((p - a) / (b - a));
@@ -46,7 +46,7 @@ function cajaEn(t: number) {
 
 // La escena larga existe solo si el navegador la arma (globals.css usa la misma consulta); en un
 // navegador sin `scripting` la portada queda quieta y este componente no toca nada.
-const ESCENA_VIVA = "(scripting: enabled) and (prefers-reduced-motion: no-preference)";
+const ESCENA_VIVA = "(scripting: enabled) and (prefers-reduced-motion: no-preference) and (min-height: 520px)";
 const viva = () => typeof window !== "undefined" && window.matchMedia(ESCENA_VIVA).matches;
 const esAncho = () => window.matchMedia("(min-width: 1024px)").matches;
 
@@ -190,7 +190,7 @@ export function HeroEscaneo({ children, telefono }: { children: React.ReactNode;
       quitar();
       const vertical = !esAncho();
       variante.current = vertical ? "vertical" : "escritorio";
-      v.src = vertical ? "/portada/escaneo-vertical.mp4" : "/portada/escaneo.mp4";
+      v.src = vertical ? "/portada/escaneo-vertical-hd.mp4" : "/portada/escaneo-4k.mp4";
       v.load();
       v.addEventListener(
         "loadeddata",
@@ -264,13 +264,20 @@ export function HeroEscaneo({ children, telefono }: { children: React.ReactNode;
         <div className="he-escena">
           <div ref={media} className="he-media">
             {/* Primer cuadro del video = el render de la mesa (D-050), etiquetado. */}
+            {/* Pósters en dos tamaños por forma: cada pantalla baja la nitidez que necesita. */}
             <picture>
-              <source media="(max-width: 1023px)" srcSet="/portada/escaneo-inicio-vertical.webp" />
+              <source
+                media="(max-width: 1023px)"
+                srcSet="/portada/escaneo-inicio-vertical-1080.webp 1080w, /portada/escaneo-inicio-vertical-1620.webp 1620w"
+                sizes="112vw"
+              />
               <img
-                src="/portada/escaneo-inicio.webp"
+                src="/portada/escaneo-inicio-2560.webp"
+                srcSet="/portada/escaneo-inicio-1920.webp 1920w, /portada/escaneo-inicio-2560.webp 2560w"
+                sizes="100vw"
                 alt="Render ilustrativo de un stand de mesa DataFud con código QR y una tarjeta NFC sobre una mesa de un café"
-                width={1440}
-                height={960}
+                width={2560}
+                height={1440}
                 fetchPriority="high"
                 decoding="async"
                 ref={poster}

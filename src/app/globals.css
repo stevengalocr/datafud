@@ -554,9 +554,10 @@ body {
   .he-media { inset: 0; }
 }
 
-@media (scripting: enabled) and (prefers-reduced-motion: no-preference) {
+/* La escena viva también pide altura: en un teléfono acostado (menos de 520 px) queda la portada quieta. */
+@media (scripting: enabled) and (prefers-reduced-motion: no-preference) and (min-height: 520px) {
   .he { display: block; padding-inline: 0; }
-  .he-pista { height: 215svh; }
+  .he-pista { height: 185svh; }
   .he-escena {
     position: sticky;
     top: 0;
@@ -584,7 +585,7 @@ body {
       position: absolute;
       z-index: 3;
       top: calc(68px + 0.75rem);
-      right: 0.75rem;
+      left: 0.75rem;
       border-radius: 9999px;
       background: rgba(255, 255, 255, 0.9);
       padding: 0.25rem 0.625rem;
@@ -718,7 +719,7 @@ body {
   .he-pie span:last-child { font-size: 0.6875rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: #dcb65a; }
 
   @media (min-width: 1024px) {
-    .he-pista { height: 270vh; }
+    .he-pista { height: 230vh; }
     .he-texto {
       position: absolute;
       inset: 0 0 auto 0;
@@ -838,7 +839,7 @@ body {
   .pasos-escena .sis-paso[data-activo] .sis-paso-icono { background: #22503a; color: #fff; border-color: #22503a; }
 
   @media (min-width: 1024px) {
-    .sis-pista { height: 330vh; }
+    .sis-pista { height: 270vh; }
     /* Fija debajo del menú (68 px), para que el título nunca quede tapado. */
     .sis-escena { position: sticky; top: 68px; min-height: calc(100vh - 68px); }
   }

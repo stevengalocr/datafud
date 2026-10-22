@@ -103,7 +103,7 @@ export function GuidePage({
             <Tilt max={5} className="hidden overflow-hidden rounded-3xl border border-stone-200/80 bg-white p-2 shadow-[0_28px_60px_-20px_rgba(34,80,58,0.28)] lg:block">
               <div className="relative aspect-[3/2] overflow-hidden rounded-2xl">
                 <Image
-                  src="/portada/escaneo-inicio.webp"
+                  src="/portada/escaneo-inicio-2560.webp"
                   alt="Render ilustrativo de un stand de mesa DataFud con código QR y una tarjeta NFC sobre una mesa de un café"
                   fill
                   sizes="(min-width: 1152px) 420px, 36vw"

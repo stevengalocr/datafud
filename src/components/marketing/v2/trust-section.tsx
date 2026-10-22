@@ -66,7 +66,7 @@ export function TrustSection() {
             {/* Atención: quién responde del otro lado, como empresa. */}
             <div className="reveal-up mt-9 flex items-center gap-4 rounded-2xl border border-stone-200/80 bg-cream-50/70 p-5">
               <span className="flex h-16 w-16 flex-shrink-0 items-center justify-center rounded-2xl border border-stone-200/80 bg-white p-2">
-                <Image src="/icono-main.png" alt="" aria-hidden="true" width={48} height={48} className="h-full w-full object-contain" />
+                <Image src="/icono-main.png" alt="" aria-hidden="true" width={48} height={48} sizes="64px" className="h-full w-full object-contain" />
               </span>
               <div className="min-w-0">
                 <p className="font-display text-xl leading-tight text-brand-900">Atención DataFud</p>

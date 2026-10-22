@@ -125,7 +125,8 @@ export async function HardwareSection() {
           </div>
         </RevealOnView>
 
-        {/* La familia completa, en estudio (render nuevo, 2026-10-21). */}
+        {/* La familia completa, en estudio (render 4K, 2026-10-21). Los sizes salen de medir: el
+            recorte (cover) y scale-[1.22] piden unas 1,8 veces el ancho de la ventana en teléfono. */}
         <RevealOnView className="mt-12 sm:mt-16">
           <div className="reveal-up relative overflow-hidden rounded-3xl border border-stone-200/70 bg-brand-950">
             <Parallax strength={34} className="relative aspect-[4/3] sm:aspect-[21/9]">
@@ -133,7 +134,7 @@ export async function HardwareSection() {
                 src="/renders/familia-stands.webp"
                 alt="Render ilustrativo de los tres stands de mesa DataFud (QR, QR con NFC y reseñas) y una tarjeta NFC sobre una base de piedra verde, con luz dorada"
                 fill
-                sizes="(min-width: 1152px) 1104px, 100vw"
+                sizes="(min-width: 1152px) 1650px, (min-width: 640px) 142vw, 180vw"
                 className="scale-[1.22] object-cover object-[50%_55%]"
               />
             </Parallax>
@@ -148,7 +149,7 @@ export async function HardwareSection() {
           {/* Pieza grande: stand QR 3D */}
           <div className="reveal-up lg:col-span-7 lg:row-span-2">
           <Tilt as="article" max={4} className="group flex flex-col overflow-hidden rounded-3xl border border-stone-200/80 bg-white hover:border-accent-300/60 hover:shadow-[0_24px_60px_-24px_rgba(34,80,58,0.3)] h-full">
-            <Visual item={standQr} className="aspect-[5/2] rounded-b-none border-0 border-b sm:aspect-[16/10] lg:aspect-auto lg:min-h-[320px] lg:flex-1" sizes="(min-width: 1024px) 58vw, 100vw" />
+            <Visual item={standQr} className="aspect-[5/2] rounded-b-none border-0 border-b sm:aspect-[16/10] lg:aspect-auto lg:min-h-[320px] lg:flex-1" sizes="(min-width: 1024px) 960px, 100vw" />
             <div className="flex flex-col p-6 sm:p-9">
               <span className="text-xs font-bold uppercase tracking-[0.18em] text-accent-700">El básico de cada mesa</span>
               <h3 className="mt-2 font-display text-2xl text-brand-900 sm:text-3xl">{standQr.name}</h3>
@@ -184,14 +185,14 @@ export async function HardwareSection() {
                 <PriceTag item={standNfc} wa={wa} />
               </div>
             </div>
-            <Visual item={standNfc} className="order-1 aspect-[5/2] rounded-none border-0 sm:order-2 sm:aspect-auto sm:min-h-[180px]" sizes="(min-width: 1024px) 20vw, 100vw" />
+            <Visual item={standNfc} className="order-1 aspect-[5/2] rounded-none border-0 sm:order-2 sm:aspect-auto sm:min-h-[180px]" sizes="(min-width: 1024px) 600px, 100vw" />
           </Tilt>
           </div>
 
           {/* Ancha: stand de reseñas */}
           <div className="reveal-up lg:col-span-7">
           <Tilt as="article" max={4} className="group grid overflow-hidden rounded-3xl border border-stone-200/80 bg-white hover:border-accent-300/60 hover:shadow-[0_24px_60px_-24px_rgba(34,80,58,0.3)] lg:grid-cols-[0.8fr_1.2fr] h-full">
-            <Visual item={reviews} className="aspect-[5/2] rounded-none border-0 lg:aspect-auto lg:min-h-[220px]" sizes="(min-width: 1024px) 25vw, 100vw" />
+            <Visual item={reviews} className="aspect-[5/2] rounded-none border-0 lg:aspect-auto lg:min-h-[220px]" sizes="(min-width: 1024px) 1040px, 100vw" />
             <div className="flex flex-col p-6 sm:p-8">
               <span className="text-xs font-bold uppercase tracking-[0.18em] text-accent-700">Para pedir reseñas</span>
               <h3 className="mt-2 font-display text-2xl text-brand-900">{reviews.name}</h3>

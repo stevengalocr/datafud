@@ -17,7 +17,7 @@ export function ActoNoche() {
           src="/renders/noche-soda.webp"
           alt="Render ilustrativo de una soda costarricense de noche, con luces cálidas y un stand de mesa DataFud sobre una mesa de madera"
           fill
-          sizes="100vw"
+          sizes="(min-width: 1024px) 140vw, (min-width: 640px) 215vw, 360vw"
           className="object-cover object-[35%_60%]"
         />
       </Parallax>
