@@ -26,3 +26,11 @@ Aplicado en vault: sí
 **Otras páginas** — `Datafud.md` (hub): producción en 1.11.0. `Imagenes-Y-Renders.md`: `portada/escaneo-vertical.mp4` (600×800, 0,76 MB) y `escaneo-inicio-vertical.webp` reemplazan a `escaneo-movil.mp4` y `escaneo-inicio-movil.webp`.
 **log.md** — `## [2026-10-21] ingest | 1.11.0 · La primera pantalla, en todos los tamaños` + viñetas.
 Aplicado en vault: sí
+
+### L-04 · Alta calidad y última revisión · commit bb3b537 · despliegue producción (Vercel)
+**Pendientes.md** — ninguno nuevo ni cerrado.
+**Decisiones.md** — ninguna nueva (amplía D-069: portada y fotos de producto en 4K; por debajo de 520 px de alto la portada queda quieta).
+**Seguridad.md** — sin cambios.
+**Otras páginas** — `Datafud.md` (hub): producción en 1.12.0. `Imagenes-Y-Renders.md`: `portada/escaneo-4k.mp4`, `escaneo-vertical-hd.mp4` y los cuatro pósters por tamaño reemplazan a `escaneo.mp4`, `escaneo-vertical.mp4`, `escaneo-inicio.webp` y `escaneo-inicio-vertical.webp`; las seis fotos de producto pasan a versión 4K con QR verificados.
+**log.md** — `## [2026-10-21] ingest | 1.12.0 · Alta calidad y última revisión` + viñetas.
+Aplicado en vault: sí
