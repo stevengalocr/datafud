@@ -9,6 +9,32 @@ Todas las versiones notables del proyecto. Formato basado en
 
 ---
 
+## [1.11.0] — 2026-10-21 · La primera pantalla, en todos los tamaños
+
+Pedido de Steven: «los primeros 100 vh son los más importantes»; en teléfono la portada no estaba
+optimizada (texto arriba y apenas un borde de la imagen abajo). Medido en 375, 390, 430, 768,
+1024, 1180, 1440 y 1920 px antes y después.
+
+### Diseño
+- **Teléfono y tableta vertical: portada inmersiva.** La escena llena la pantalla desde el primer
+  cuadro, con el stand en el tercio de arriba y el texto abajo, claro sobre un degradado del verde
+  más oscuro; el botón principal pasa a dorado. Al bajar, el texto se va enseguida (no se cruza con
+  la imagen), el degradado se aclara y empieza el escaneo. La cámara se desliza para tener siempre
+  el QR centrado.
+- **El visor late sobre el QR desde que abre la página** y lo sigue cuadro por cuadro mientras la
+  cámara se acerca (la caja del QR medida con un lector en 21 cuadros del video); al escanear se
+  aclara y sube el teléfono con la carta.
+- **Escritorio:** la tarjeta arranca en el espacio libre a la derecha del texto (nunca lo tapa,
+  también en 1024 y 1920 px) y el visor conserva su grosor aunque la tarjeta esté chica.
+- **Teléfonos bajos (≤ 760 px de alto, como el iPhone SE):** los botones suben justo debajo del
+  título para quedar en la primera pantalla; la bajada y el precio siguen debajo.
+- **Vitrina del sistema en teléfono y tableta:** el título, después el panel y abajo los pasos
+  compactos (solo el activo muestra su texto).
+- Video vertical nuevo, más ancho (600×800, 0,76 MB), para que el stand quepa entero en todos los
+  cuadros: `portada/escaneo-vertical.mp4` y su póster reemplazan a los de 1.10.
+
+---
+
 ## [1.10.1] — 2026-10-21 · Pie del teléfono de la portada
 
 - En teléfono, el pie «Así se abre tu carta · Soda ficticia · datos de ejemplo» quedaba debajo de
