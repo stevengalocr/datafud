@@ -23,7 +23,7 @@ export function ContactSection() {
   ];
 
   return (
-    <section id="contacto" data-fondo="b" className="fondo-vivo relative scroll-mt-24 border-t border-stone-200/60 bg-cream-100/60">
+    <section id="contacto" data-fondo="b" className="fondo-vivo relative scroll-mt-24">
       <div className="qr-grid pointer-events-none absolute inset-0 opacity-40" />
       <div className="relative mx-auto max-w-6xl px-5 py-16 sm:px-6 sm:py-28">
         <div className="grid gap-8 lg:grid-cols-[0.9fr_1.1fr] lg:gap-16">

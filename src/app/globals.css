@@ -1122,8 +1122,82 @@ body {
   }
 }
 @keyframes fondo-deriva {
-  from { transform: translate3d(0, -7%, 0) scale(1.02); }
-  to { transform: translate3d(0, 7%, 0) scale(1); }
+  from { transform: translate3d(0, -4%, 0); }
+  to { transform: translate3d(0, 4%, 0); }
+}
+
+/* Sin costuras entre secciones (2026-10-22, segunda pasada). Pedido de Steven: «cambia de un
+   color a otro y se ve la línea». Todas las secciones claras van sobre el mismo crema de la página,
+   sin bordes, y sus luces y su trama se desvanecen arriba y abajo: el borde de cada sección queda
+   del mismo color que el de la siguiente. Las luces se corren hacia el centro para no perderse en
+   el desvanecido. */
+.fondo-vivo::before {
+  -webkit-mask-image: linear-gradient(180deg, transparent 15%, #000 34%, #000 66%, transparent 85%);
+  mask-image: linear-gradient(180deg, transparent 15%, #000 34%, #000 66%, transparent 85%);
+  background:
+    radial-gradient(44rem 32rem at 6% 40%, rgba(46, 111, 78, 0.26), transparent 70%),
+    radial-gradient(40rem 30rem at 96% 60%, rgba(220, 182, 90, 0.32), transparent 70%),
+    radial-gradient(28rem 20rem at 72% 30%, rgba(184, 146, 63, 0.14), transparent 70%);
+}
+.fondo-vivo[data-fondo="b"]::before,
+.fondo-vivo[data-fondo="qr"]::before,
+.fondo-vivo[data-fondo="qr-izq"]::before {
+  background:
+    radial-gradient(44rem 32rem at 94% 40%, rgba(46, 111, 78, 0.25), transparent 70%),
+    radial-gradient(40rem 30rem at 4% 60%, rgba(220, 182, 90, 0.32), transparent 70%),
+    radial-gradient(26rem 20rem at 30% 30%, rgba(184, 146, 63, 0.13), transparent 70%);
+}
+.fondo-vivo::after {
+  -webkit-mask-image: radial-gradient(ellipse 62% 70% at 88% 18%, #000 0%, transparent 72%), linear-gradient(180deg, transparent 0%, #000 18%, #000 82%, transparent 100%);
+  mask-image: radial-gradient(ellipse 62% 70% at 88% 18%, #000 0%, transparent 72%), linear-gradient(180deg, transparent 0%, #000 18%, #000 82%, transparent 100%);
+  -webkit-mask-composite: source-in;
+  mask-composite: intersect;
+}
+.fondo-vivo[data-fondo="b"]::after {
+  -webkit-mask-image: radial-gradient(ellipse 62% 70% at 10% 82%, #000 0%, transparent 72%), linear-gradient(180deg, transparent 0%, #000 18%, #000 82%, transparent 100%);
+  mask-image: radial-gradient(ellipse 62% 70% at 10% 82%, #000 0%, transparent 72%), linear-gradient(180deg, transparent 0%, #000 18%, #000 82%, transparent 100%);
+}
+.fondo-vivo[data-fondo="qr"]::after {
+  -webkit-mask-image: radial-gradient(ellipse 70% 80% at 92% 22%, rgba(0, 0, 0, 0.42) 0%, transparent 74%), linear-gradient(180deg, transparent 0%, #000 18%, #000 82%, transparent 100%);
+  mask-image: radial-gradient(ellipse 70% 80% at 92% 22%, rgba(0, 0, 0, 0.42) 0%, transparent 74%), linear-gradient(180deg, transparent 0%, #000 18%, #000 82%, transparent 100%);
+}
+.fondo-vivo[data-fondo="qr-izq"]::after {
+  -webkit-mask-image: radial-gradient(ellipse 60% 70% at 8% 86%, rgba(0, 0, 0, 0.42) 0%, transparent 74%), linear-gradient(180deg, transparent 0%, #000 18%, #000 82%, transparent 100%);
+  mask-image: radial-gradient(ellipse 60% 70% at 8% 86%, rgba(0, 0, 0, 0.42) 0%, transparent 74%), linear-gradient(180deg, transparent 0%, #000 18%, #000 82%, transparent 100%);
+}
+
+/* Bandas (banda-valor.tsx y banda-cta.tsx): dos franjas oscuras que marcan un cambio a propósito.
+   La de valor corre en un carril y la de la llamada flota con sombra sobre el crema. */
+.banda-valor .marquee > span { display: inline-flex; align-items: center; gap: 1.5rem; padding-right: 1.5rem; }
+.banda-valor .modulo { width: 6px; height: 6px; background: #dcb65a; flex: none; }
+.banda-cta { box-shadow: 0 -30px 60px -40px rgba(10, 26, 19, 0.45), 0 30px 60px -40px rgba(10, 26, 19, 0.45); }
+
+/* Sombras de paso entre lo claro y lo oscuro: la soda de noche y el cierre se funden con el crema
+   en vez de cortarlo en seco. */
+.paso-claro-arriba::before,
+.paso-claro-abajo::after {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  height: clamp(72px, 12vh, 140px);
+  z-index: 0;
+  pointer-events: none;
+}
+.paso-claro-arriba::before { top: 0; background: linear-gradient(180deg, #fbfaf6 0%, rgba(251, 250, 246, 0.55) 35%, rgba(251, 250, 246, 0) 100%); }
+.paso-claro-abajo::after { bottom: 0; background: linear-gradient(0deg, #fbfaf6 0%, rgba(251, 250, 246, 0.55) 35%, rgba(251, 250, 246, 0) 100%); }
+
+/* El final de la portada se funde con la banda de valor (verde oscuro) en escritorio; en teléfono
+   la escena ya termina en ese verde. */
+@media (scripting: enabled) and (prefers-reduced-motion: no-preference) and (min-height: 520px) and (min-width: 1024px) {
+  .he-escena::after {
+    content: "";
+    position: absolute;
+    inset: auto 0 0 0;
+    height: 120px;
+    z-index: 2;
+    pointer-events: none;
+    background: linear-gradient(0deg, #0a1a13 0%, rgba(10, 26, 19, 0) 100%);
+  }
 }
 
 /* Vitrina del sistema en teléfono y tableta: el título, después el panel y abajo los pasos

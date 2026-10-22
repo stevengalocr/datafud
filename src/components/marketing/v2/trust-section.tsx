@@ -46,7 +46,7 @@ const promises = [
 export function TrustSection() {
   const wa = waProps("confianza");
   return (
-    <section id="confianza" data-fondo="a" className="fondo-vivo scroll-mt-24 border-y border-stone-200/60 bg-white">
+    <section id="confianza" data-fondo="a" className="fondo-vivo scroll-mt-24">
       <div className="mx-auto max-w-6xl px-5 py-16 sm:px-6 sm:py-28">
         <div className="grid gap-8 lg:grid-cols-[0.85fr_1.15fr] lg:gap-20">
           <RevealOnView className="lg:sticky lg:top-28 lg:self-start">

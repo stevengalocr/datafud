@@ -19,6 +19,8 @@ import { CursorVisor } from "@/components/marketing/v2/cursor-visor";
 import { AnalyticsEvents } from "@/components/marketing/v2/analytics-events";
 import { MetaPixel } from "@/components/marketing/v2/meta-pixel";
 import { SiteFooter } from "@/components/marketing/v2/site-footer";
+import { BandaValor } from "@/components/marketing/v2/banda-valor";
+import { BandaCta } from "@/components/marketing/v2/banda-cta";
 import { waProps } from "@/lib/site";
 import { formatCrc } from "@/lib/currency/format";
 import type { Metadata } from "next";
@@ -87,6 +89,9 @@ export default function HomePage() {
       </div>
       </HeroEscaneo>
 
+      {/* ── Banda de valor: recibe el final de la portada ───────── */}
+      <BandaValor />
+
       {/* ── Cómo funciona: una sola línea de tiempo con plazos ───── */}
       <ImplementationSection />
 
@@ -95,6 +100,9 @@ export default function HomePage() {
 
       {/* ── El sistema completo, en acción (vitrina del panel) ── */}
       <SistemaSection />
+
+      {/* ── Banda de llamada antes de los precios ──────────────── */}
+      <BandaCta />
 
       {/* ── Planes y precios ───────────────────────────────────── */}
       <div className="fondo-vivo" data-fondo="a">

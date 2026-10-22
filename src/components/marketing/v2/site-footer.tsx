@@ -24,7 +24,7 @@ const guides = [
 
 export function SiteFooter() {
   return (
-      <footer className="relative isolate overflow-hidden bg-brand-950 text-cream-100">
+      <footer className="paso-claro-arriba relative isolate overflow-hidden bg-brand-950 text-cream-100">
         {/* Render decorativo bajo una capa oscura del 80-90 %. Es un recorte de ambiente-piedra.webp
             sin el panel del stand (D-056): con el QR en el cuadro, alguien lo escaneaba desde la
             compu y terminaba en la demo en lugar de WhatsApp, la única llamada a la acción acá. */}

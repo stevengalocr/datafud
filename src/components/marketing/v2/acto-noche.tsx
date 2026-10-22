@@ -11,7 +11,7 @@ const PIXELES = Array.from({ length: 28 }, (_, i) => i);
 
 export function ActoNoche() {
   return (
-    <section aria-label="Stands 3D y NFC hechos acá" className="relative isolate overflow-hidden bg-brand-950 text-cream-50">
+    <section aria-label="Stands 3D y NFC hechos acá" className="paso-claro-abajo relative isolate overflow-hidden bg-brand-950 text-cream-50">
       <Parallax strength={60} className="absolute inset-x-0 -inset-y-16 -z-10">
         <Image
           src="/renders/noche-soda.webp"
@@ -30,7 +30,7 @@ export function ActoNoche() {
         ))}
       </RevealOnView>
 
-      <div className="mx-auto flex min-h-[78svh] max-w-6xl items-end px-5 pb-16 pt-32 sm:px-6 sm:pb-24 lg:min-h-[86vh] lg:items-center lg:pb-16">
+      <div className="relative z-[2] mx-auto flex min-h-[78svh] max-w-6xl items-end px-5 pb-16 pt-32 sm:px-6 sm:pb-24 lg:min-h-[86vh] lg:items-center lg:pb-16">
         <RevealOnView className="max-w-xl">
           {/* Sin texto de venta nuevo: la etiqueta y la frase son las de Hardware y Por qué DataFud. */}
           <p className="reveal-up text-xs font-bold uppercase tracking-[0.2em] text-accent-300">Hardware de mesa</p>
@@ -39,7 +39,7 @@ export function ActoNoche() {
           </p>
         </RevealOnView>
       </div>
-      <span className="absolute bottom-4 right-4 rounded-full bg-white/90 px-2.5 py-1 text-xs font-semibold text-brand-800 shadow-sm">
+      <span className="absolute bottom-4 right-4 z-[2] rounded-full bg-white/90 px-2.5 py-1 text-xs font-semibold text-brand-800 shadow-sm">
         Render ilustrativo
       </span>
     </section>

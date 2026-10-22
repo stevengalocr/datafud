@@ -59,6 +59,7 @@ export type WaOrigin =
   | "preguntas"
   | "contacto"
   | "cierre"
+  | "banda"
   | "footer"
   | "plan-basico"
   | "plan-estandar"
@@ -79,6 +80,7 @@ export const WA_MESSAGES: Record<WaOrigin, string> = {
   preguntas: "Hola, tengo una pregunta que no encontré en las preguntas frecuentes de datafud.com.",
   contacto: "Hola, quiero hablar con alguien de DataFud sobre mi local.",
   cierre: "Hola, quiero llevar la carta de mi local a DataFud. ¿Cómo empezamos?",
+  banda: "Hola, vi datafud.com y quiero mi carta digital con QR. ¿Cómo empezamos?",
   footer: "Hola, vengo de datafud.com y quiero más información.",
   "plan-basico": "Hola, me interesa el plan Carta de DataFud para mi local.",
   "plan-estandar": "Hola, me interesa el plan Estándar de DataFud para mi local.",

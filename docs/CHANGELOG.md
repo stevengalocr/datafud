@@ -9,6 +9,26 @@ Todas las versiones notables del proyecto. Formato basado en
 
 ---
 
+## [1.15.0] — 2026-10-22 · Sin costuras entre secciones
+
+Pedido de Steven: «cambia de un color a otro y se ve la línea»; una banda en algunos cambios y,
+en otros, sombras para que el paso no se note.
+
+### Diseño
+- **Sin costuras:** las secciones claras van todas sobre el mismo crema de la página, sin bordes,
+  y sus luces y su trama se desvanecen arriba y abajo. Medido en el teléfono: el salto de color en
+  cada borde entre secciones claras es 0.
+- **Banda de valor** (`banda-valor.tsx`) entre la portada y «Cómo funciona»: franja verde oscuro
+  con un carril de lo que ya promete la landing (plazo, idiomas, QR y NFC, sin app, cambios por
+  WhatsApp, stands en Costa Rica y el precio desde). En escritorio el final de la portada se funde
+  con ella.
+- **Banda de llamada** (`banda-cta.tsx`) entre «Sistema» y «Planes»: «Quiero mi carta» por
+  WhatsApp (origen nuevo `banda`) y «Ver la demo», con sombra hacia el crema.
+- **Sombras de paso:** la soda de noche se funde con el crema hacia «Por qué DataFud» y el cierre
+  oscuro entra desde el crema de «Contacto».
+
+---
+
 ## [1.14.0] — 2026-10-22 · Portada a pantalla completa y fondos con vida
 
 Pedido de Steven: sin imágenes cortadas ni ese marco raro; que la portada arranque de una vez en
