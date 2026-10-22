@@ -34,3 +34,11 @@ Aplicado en vault: sí
 **Otras páginas** — `Datafud.md` (hub): producción en 1.12.0. `Imagenes-Y-Renders.md`: `portada/escaneo-4k.mp4`, `escaneo-vertical-hd.mp4` y los cuatro pósters por tamaño reemplazan a `escaneo.mp4`, `escaneo-vertical.mp4`, `escaneo-inicio.webp` y `escaneo-inicio-vertical.webp`; las seis fotos de producto pasan a versión 4K con QR verificados.
 **log.md** — `## [2026-10-21] ingest | 1.12.0 · Alta calidad y última revisión` + viñetas.
 Aplicado en vault: sí
+
+### L-05 · Precios iguales para todos · commit f88e45e · despliegue producción (Vercel)
+**Pendientes.md** — cerrar: "`founderOffer.remaining = 9` cuando cierre el primer fundador". Cambiar "3 fundadores cerrados → … bajar `founderOffer.remaining`" por "Primeros clientes → permiso por escrito → primer testimonio real".
+**Decisiones.md** — D-070 · Sin oferta de fundadores: precios iguales para todos (retira D-037 y D-057 y la parte de fundadores de D-024).
+**Seguridad.md** — sin cambios.
+**Otras páginas** — `Datafud.md` (hub): producción en 1.13.0; la oferta ya no menciona fundadores.
+**log.md** — `## [2026-10-21] ingest | 1.13.0 · Precios iguales para todos` + viñetas.
+Aplicado en vault: sí
