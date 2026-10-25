@@ -44,11 +44,19 @@ function cajaEn(t: number) {
   return a.map((v, j) => v + (b[j] - v) * k) as [number, number, number, number];
 }
 
+// Los videos van codificados con todos los cuadros completos (sin cuadros intermedios ni B-frames):
+// cada búsqueda decodifica un solo cuadro. Con un cuadro completo cada 10, una búsqueda en el de
+// escritorio tardaba 28 ms de mediana en Chrome, más que un cuadro de pantalla (16,7 ms).
+const FPS = 24;
+
 // La escena larga existe solo si el navegador la arma (globals.css usa la misma consulta); en un
 // navegador sin `scripting` la portada queda quieta y este componente no toca nada.
 const ESCENA_VIVA = "(scripting: enabled) and (prefers-reduced-motion: no-preference) and (min-height: 520px)";
 const viva = () => typeof window !== "undefined" && window.matchMedia(ESCENA_VIVA).matches;
 const esAncho = () => window.matchMedia("(min-width: 1024px)").matches;
+
+// Medidas de la escena: se leen al montar y al cambiar el tamaño, nunca en cada cuadro de scroll.
+type Geo = { ancho: boolean; vertical: boolean; W: number; H: number; Wd: number; Hd: number; offX: number; offY: number };
 
 export function HeroEscaneo({ children, telefono }: { children: React.ReactNode; telefono: React.ReactNode }) {
   const pista = useRef<HTMLDivElement>(null);
@@ -67,12 +75,18 @@ export function HeroEscaneo({ children, telefono }: { children: React.ReactNode;
   // Qué versión del video se cargó: la escena se compone según esa, aunque después cambie el ancho.
   const variante = useRef<"vertical" | "escritorio" | null>(null);
   const correr = useRef<() => void>(() => {});
+  const geo = useRef<Geo | null>(null);
+  // Tiempo del cuadro que el video está mostrando (el visor y la cámara siguen a ese cuadro).
+  const cuadro = useRef(0);
 
-  // Compone la escena para el progreso actual y el cuadro que muestra el video.
-  const componer = () => {
+  // Lee las medidas y acomoda el video y el póster a su tamaño entero. Solo al montar, al cargar
+  // el video y al cambiar el tamaño de la ventana.
+  const medir = () => {
     const m = media.current;
-    if (!m || !viva()) return;
-    const p = progreso.current;
+    if (!m || !viva()) {
+      geo.current = null;
+      return;
+    }
     const ancho = esAncho();
     const vertical = variante.current ? variante.current === "vertical" : !ancho;
     const W = m.offsetWidth;
@@ -82,30 +96,10 @@ export function HeroEscaneo({ children, telefono }: { children: React.ReactNode;
     const Wd = Hd * a;
     const offX = (W - Wd) / 2;
     const offY = (H - Hd) / 2;
-    const v = video.current;
-    const t = v && v.readyState >= 2 ? v.currentTime : 0;
-    const [bx0, by0, bx1, by1] = cajaEn(t);
-    const fx = (x: number) => (vertical ? (x - VERTICAL.x) / VERTICAL.w : x);
-    const qx0 = offX + fx(bx0) * Wd;
-    const qx1 = offX + fx(bx1) * Wd;
-    const qy0 = offY + by0 * Hd;
-    const qy1 = offY + by1 * Hd;
-
-    // El visor, sobre el QR del cuadro que se ve.
-    const vz = visor.current;
-    if (vz) {
-      vz.style.left = `${qx0}px`;
-      vz.style.top = `${qy0}px`;
-      vz.style.width = `${qx1 - qx0}px`;
-      vz.style.height = `${qy1 - qy0}px`;
-      vz.style.setProperty("--alto-visor", `${qy1 - qy0}px`);
-      vz.style.opacity = (1 - tramo(p, 0.84, 0.92)).toFixed(3);
-      vz.classList.toggle("escaneado", p > 0.7);
-    }
-
+    geo.current = { ancho, vertical, W, H, Wd, Hd, offX, offY };
     // En pantalla completa el video y el póster miden su tamaño entero (la cámara se desliza sobre
-    // ellos y recorta la pantalla); en la tarjeta de escritorio, object-fit: cover dentro de ella.
-    for (const capa of [poster.current, v]) {
+    // ellos y recorta la pantalla); en escritorio, object-fit: cover dentro de la escena.
+    for (const capa of [poster.current, video.current]) {
       if (!capa) continue;
       if (ancho) {
         capa.style.left = capa.style.top = capa.style.width = capa.style.height = "";
@@ -115,6 +109,34 @@ export function HeroEscaneo({ children, telefono }: { children: React.ReactNode;
         capa.style.width = `${Wd}px`;
         capa.style.height = `${Hd}px`;
       }
+    }
+  };
+
+  // Compone la escena para el progreso actual y el cuadro que muestra el video. No lee medidas
+  // del documento: solo escribe estilos, así que nunca obliga al navegador a recalcular el layout.
+  const componer = () => {
+    const g0 = geo.current;
+    const m = media.current;
+    if (!m || !g0) return;
+    const p = progreso.current;
+    const { ancho, vertical, W, H, Wd, Hd, offX, offY } = g0;
+    const [bx0, by0, bx1, by1] = cajaEn(cuadro.current);
+    const fx = (x: number) => (vertical ? (x - VERTICAL.x) / VERTICAL.w : x);
+    const qx0 = offX + fx(bx0) * Wd;
+    const qx1 = offX + fx(bx1) * Wd;
+    const qy0 = offY + by0 * Hd;
+    const qy1 = offY + by1 * Hd;
+
+    // El visor, sobre el QR del cuadro que se ve. La posición va en `translate` (se compone en la
+    // GPU y convive con el latido, que anima `transform`); el tamaño, en width y height.
+    const vz = visor.current;
+    if (vz) {
+      vz.style.translate = `${qx0.toFixed(1)}px ${qy0.toFixed(1)}px`;
+      vz.style.width = `${(qx1 - qx0).toFixed(1)}px`;
+      vz.style.height = `${(qy1 - qy0).toFixed(1)}px`;
+      vz.style.setProperty("--alto-visor", `${(qy1 - qy0).toFixed(1)}px`);
+      vz.style.opacity = (1 - tramo(p, 0.84, 0.92)).toFixed(3);
+      vz.classList.toggle("escaneado", p > 0.7);
     }
 
     let s = 1;
@@ -169,68 +191,117 @@ export function HeroEscaneo({ children, telefono }: { children: React.ReactNode;
     if (indicio.current) indicio.current.style.opacity = (1 - tramo(p, 0.02, 0.1)).toFixed(3);
   };
 
-  // El video se pide con la primera interacción.
+  // El video se pide con la primera interacción o, si nadie toca nada, cuando la página ya cargó
+  // y el navegador está libre: así un scroll rápido apenas entrando no alcanza al video a medio bajar.
   useEffect(() => {
     if (!viva()) return;
     const v = video.current;
     if (!v) return;
     let cargado = false;
+    let espera = 0;
     const eventos = ["scroll", "pointermove", "touchstart", "keydown"] as const;
-    const quitar = () => eventos.forEach((e) => window.removeEventListener(e, cargar));
+    const quitar = () => {
+      eventos.forEach((e) => window.removeEventListener(e, cargar));
+      window.removeEventListener("load", alCargarPagina);
+      if (espera) clearTimeout(espera);
+    };
     function cargar() {
       if (cargado || !v) return;
       cargado = true;
       quitar();
       const vertical = !esAncho();
       variante.current = vertical ? "vertical" : "escritorio";
-      v.src = vertical ? "/portada/escaneo-vertical-hd.mp4" : "/portada/escaneo-4k.mp4";
+      // Escritorio: 1920 px salvo en pantallas de más de 2200 px reales, que piden el de 2560.
+      const fino = window.innerWidth * (window.devicePixelRatio || 1) > 2200;
+      v.src = vertical ? "/portada/escaneo-vertical-1080.mp4" : fino ? "/portada/escaneo-2560.mp4" : "/portada/escaneo-1920.mp4";
+      v.preload = "auto";
       v.load();
       v.addEventListener(
         "loadeddata",
         () => {
           v.setAttribute("data-listo", "");
+          medir();
           componer();
           correr.current();
         },
         { once: true },
       );
     }
+    function alCargarPagina() {
+      const ocioso = (window as Window & { requestIdleCallback?: (cb: () => void, o?: { timeout: number }) => number }).requestIdleCallback;
+      espera = window.setTimeout(() => (ocioso ? ocioso(cargar, { timeout: 2000 }) : cargar()), 1200);
+    }
     eventos.forEach((e) => window.addEventListener(e, cargar, { passive: true }));
+    if (document.readyState === "complete") alCargarPagina();
+    else window.addEventListener("load", alCargarPagina, { once: true });
     return quitar;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // El video sigue al scroll con inercia: currentTime se acerca al objetivo en cada cuadro y el
-  // ciclo se detiene al llegar (lo retoma el próximo scroll). No se toca mientras busca un cuadro.
+  // El video sigue al scroll con inercia: un tiempo continuo se acerca al objetivo en cada cuadro de
+  // pantalla y el video busca el cuadro del video más cercano a ese tiempo, solo si cambió y solo
+  // cuando terminó la búsqueda anterior. En saltos chicos (scroll lento) la inercia es la de
+  // siempre; en saltos grandes (scroll rápido) alcanza antes. El ciclo se detiene al llegar.
   useEffect(() => {
     if (!viva()) return;
     let raf = 0;
+    let t = 0;
+    let pedido = -1;
     const tick = () => {
       raf = 0;
       const v = video.current;
-      if (!v || v.readyState < 2 || !v.duration) return;
-      if (!v.seeking) {
-        const meta = objetivo.current * (v.duration - 0.05);
-        const delta = meta - v.currentTime;
-        if (Math.abs(delta) <= 0.012) return;
-        v.currentTime = v.currentTime + delta * 0.22;
+      if (!v || !v.duration) return;
+      // Mientras busca, el video puede bajar su readyState: el ciclo espera en vez de apagarse
+      // (antes se apagaba y el video quedaba en un cuadro viejo hasta el siguiente scroll).
+      if (v.readyState < 2) {
+        raf = requestAnimationFrame(tick);
+        return;
       }
-      raf = requestAnimationFrame(tick);
+      const fin = Math.floor((v.duration - 0.05) * FPS);
+      const meta = objetivo.current * fin;
+      const delta = meta - t;
+      const k = 0.22 + 0.33 * clamp((Math.abs(delta) - 6) / 24);
+      t = Math.abs(delta) < 0.05 ? meta : t + delta * k;
+      const n = Math.round(t);
+      if (!v.seeking && n !== pedido) {
+        pedido = n;
+        v.currentTime = (n + 0.5) / FPS;
+      }
+      if (t !== meta || n !== pedido || v.seeking) raf = requestAnimationFrame(tick);
     };
     correr.current = () => {
       if (!raf) raf = requestAnimationFrame(tick);
     };
     const v = video.current;
-    // Cuando el navegador muestra el cuadro pedido, la escena se acomoda a ese cuadro.
-    const alBuscar = () => componer();
-    v?.addEventListener("seeked", alBuscar);
-    componer();
-    window.addEventListener("resize", componer, { passive: true });
+    // La escena se acomoda al cuadro que el navegador presenta, en el mismo cuadro de pantalla.
+    // Sin requestVideoFrameCallback, al terminar cada búsqueda.
+    let rvfc = 0;
+    const conCuadro = typeof HTMLVideoElement !== "undefined" && "requestVideoFrameCallback" in HTMLVideoElement.prototype;
+    const alCuadro = (_: number, info: { mediaTime: number }) => {
+      cuadro.current = info.mediaTime;
+      componer();
+      rvfc = v!.requestVideoFrameCallback(alCuadro);
+    };
+    const alBuscar = () => {
+      cuadro.current = v!.currentTime;
+      componer();
+    };
+    if (v) {
+      if (conCuadro) rvfc = v.requestVideoFrameCallback(alCuadro);
+      else v.addEventListener("seeked", alBuscar);
+    }
+    const alRedimensionar = () => {
+      medir();
+      componer();
+    };
+    alRedimensionar();
+    window.addEventListener("resize", alRedimensionar, { passive: true });
     return () => {
       if (raf) cancelAnimationFrame(raf);
       correr.current = () => {};
+      if (v && conCuadro && rvfc) v.cancelVideoFrameCallback(rvfc);
       v?.removeEventListener("seeked", alBuscar);
-      window.removeEventListener("resize", componer);
+      window.removeEventListener("resize", alRedimensionar);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -238,7 +309,7 @@ export function HeroEscaneo({ children, telefono }: { children: React.ReactNode;
   useScrollProgress(
     pista,
     (p) => {
-      if (!viva()) return;
+      if (!geo.current) return;
       progreso.current = p;
       objetivo.current = suave(tramo(p, 0.04, 0.72));
       componer();

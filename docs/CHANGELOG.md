@@ -9,6 +9,29 @@ Todas las versiones notables del proyecto. Formato basado en
 
 ---
 
+## [1.15.1] — 2026-10-25 · Portada fluida con scroll rápido
+
+Pedido de Steven: «si hago el scroll muy rápido… se ve como con lag, como si estuviera pegado»; el
+diseño, los colores y la animación no cambian.
+
+### Rendimiento
+- **Video con todos los cuadros completos.** Los videos de la portada traían un cuadro completo
+  cada 10 y cuadros en desorden (B-frames): cada búsqueda decodificaba hasta 10. Ahora cada cuadro
+  es completo: una búsqueda en Chrome baja de 28 a 9,7 ms en escritorio y de 11 a 6 ms en teléfono
+  (el presupuesto de un cuadro de pantalla es 16,7 ms). Escritorio usa `portada/escaneo-1920.mp4`
+  (7,7 MB) y, en pantallas de más de 2200 px reales, `portada/escaneo-2560.mp4` (10,7 MB); teléfono
+  y tableta vertical, `portada/escaneo-vertical-1080.mp4` (5,2 MB). Misma imagen: PSNR de 38–40 dB
+  contra los anteriores.
+- **El video ya no se queda atrás.** Con scroll rápido el video va a la mitad de distancia del
+  scroll (18 cuadros contra 35) y llega a su lugar unos 0,2 s después de soltar; antes podía
+  quedarse en un cuadro viejo hasta el siguiente scroll (el ciclo se apagaba si el video bajaba su
+  `readyState` mientras buscaba). Con scroll lento, la inercia es la misma de siempre.
+- **El visor y la cámara siguen al cuadro que se ve** (`requestVideoFrameCallback`), y la escena
+  ya no lee medidas en cada cuadro de scroll: el visor se mueve con `translate` y las medidas se
+  toman solo al cambiar el tamaño de la ventana.
+- **El video se pide antes:** con la primera interacción o, si no hay ninguna, cuando la página ya
+  cargó y el navegador está libre, para que un scroll rápido apenas entrando no lo alcance a medio bajar.
+
 ## [1.15.0] — 2026-10-22 · Sin costuras entre secciones
 
 Pedido de Steven: «cambia de un color a otro y se ve la línea»; una banda en algunos cambios y,

@@ -616,6 +616,9 @@ body {
   .he-visor {
     display: block;
     position: absolute;
+    /* La posición la pone hero-escaneo.tsx en `translate`, que se compone sin recalcular el layout. */
+    left: 0;
+    top: 0;
     z-index: 3;
     transform-origin: 50% 50%;
     animation: visor-late 2.4s var(--ease-out) infinite;
