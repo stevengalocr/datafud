@@ -4,7 +4,7 @@ import { useEffect, useRef } from "react";
 import { useScrollProgress } from "@/components/marketing/v2/use-scroll-progress";
 
 // Portada que escanea. Desde el primer cuadro, un visor dorado late sobre el QR del stand; al
-// bajar, la cámara se acerca (los cuadros del video siguen al scroll), el visor sigue al QR cuadro por cuadro y
+// bajar, la cámara se acerca (video que sigue al scroll), el visor sigue al QR cuadro por cuadro y
 // al final sube el teléfono con la carta de la demo: el recorrido del comensal en una escena.
 //
 //  - Escritorio (≥ 1024 px): la escena llena la pantalla desde el primer cuadro (100 vh, sin
@@ -14,7 +14,7 @@ import { useScrollProgress } from "@/components/marketing/v2/use-scroll-progress
 //
 // El texto (h1, bajada, CTA) llega como children y viene visible en el HTML del servidor; lo demás
 // es decorativo. Sin JS, sin `scripting` o con movimiento reducido: la portada quieta de siempre
-// (globals.css, .he-*). Los cuadros se piden con la primera interacción.
+// (globals.css, .he-*). El video se pide con la primera interacción.
 
 // Caja del QR (x0, y0, x1, y1, en fracciones del cuadro original de 3524×2352, el video en 4K) en
 // 21 cuadros, leída con un lector de QR: el código decodifica a /q/demo26 en todos (D-051).
@@ -44,47 +44,9 @@ function cajaEn(t: number) {
   return a.map((v, j) => v + (b[j] - v) * k) as [number, number, number, number];
 }
 
-// La animación son los 121 cuadros del video (5 s a 24 cuadros por segundo) en WebP sueltos que se
-// pintan en un canvas: un cuadro ya decodificado se dibuja en menos de 1 ms, así que el cuadro que se
-// ve es siempre el que pide el scroll, en el mismo cuadro de pantalla, rápido o lento. Con un video,
-// cada búsqueda es asíncrona y no se puede pedir otra hasta que termina: con scroll rápido el
-// teléfono se quedaba atrás y saltaba (1.15.1 y antes).
-//
-// Decodificar un cuadro al pintarlo cuesta más que un cuadro de pantalla en un teléfono, y tenerlos
-// todos decodificados ocuparía cientos de MB. Por eso se guardan los 121 comprimidos y solo VENTANA
-// decodificados (ImageBitmap, fuera del hilo principal) alrededor del cuadro actual: ATRAS detrás y
-// el resto hacia donde va el scroll, salteados si va rápido para cubrir más recorrido; los demás se
-// liberan. Decodificar 12 cuadros en paralelo toma unos 30 ms, también en un teléfono lento.
-//
-// Para el scroll muy rápido, que pasa la ventana antes de que se decodifique, están además los 121
-// cuadros en una versión previa liviana (un tercio del ancho, 2–3 MB en total), que llega primero y
-// queda decodificada entera: siempre hay un cuadro en el lugar exacto y el nítido lo reemplaza apenas
-// llega, sin que el cuadro se quede atrás.
-const FPS = 24;
-const CUADROS = 121;
-const SECUENCIAS = {
-  vertical: { dir: "v", previa: "v-previa", w: 1080, h: 1440 },
-  escritorio: { dir: "d", previa: "d-previa", w: 1920, h: 1282 },
-} as const;
-const VENTANA = 28;
-const ATRAS = 5;
-const rutaCuadro = (dir: string, i: number) => `/portada/cuadros/${dir}/${String(i).padStart(3, "0")}.webp`;
-
-// Orden de carga: el primero y el último, después uno de cada 16, 8, 4, 2 y todos. Con scroll rápido
-// apenas entrando ya hay cuadros repartidos por todo el recorrido y se pinta el cargado más cercano.
-function ordenDeCarga() {
-  const orden = [0, CUADROS - 1];
-  const visto = new Set(orden);
-  for (const paso of [16, 8, 4, 2, 1]) {
-    for (let i = 0; i < CUADROS; i += paso) {
-      if (!visto.has(i)) {
-        visto.add(i);
-        orden.push(i);
-      }
-    }
-  }
-  return orden;
-}
+// Los videos van codificados con todos los cuadros completos (sin cuadros intermedios ni B-frames):
+// cada búsqueda decodifica un solo cuadro. Con un cuadro completo cada 10, una búsqueda en el de
+// escritorio tardaba 28 ms de mediana en Chrome, más que un cuadro de pantalla (16,7 ms).
 
 // La escena larga existe solo si el navegador la arma (globals.css usa la misma consulta); en un
 // navegador sin `scripting` la portada queda quieta y este componente no toca nada.
@@ -98,9 +60,10 @@ type Geo = { ancho: boolean; vertical: boolean; W: number; H: number; Wd: number
 export function HeroEscaneo({ children, telefono }: { children: React.ReactNode; telefono: React.ReactNode }) {
   const pista = useRef<HTMLDivElement>(null);
   const media = useRef<HTMLDivElement>(null);
-  const lienzo = useRef<HTMLCanvasElement>(null);
+  const video = useRef<HTMLVideoElement>(null);
   const visor = useRef<HTMLDivElement>(null);
   const velo = useRef<HTMLDivElement>(null);
+  const fundido = useRef<HTMLDivElement>(null);
   const degradado = useRef<HTMLDivElement>(null);
   const tel = useRef<HTMLDivElement>(null);
   const indicio = useRef<HTMLDivElement>(null);
@@ -109,26 +72,15 @@ export function HeroEscaneo({ children, telefono }: { children: React.ReactNode;
   const poster = useRef<HTMLImageElement>(null);
   const progreso = useRef(0);
   const objetivo = useRef(0);
-  // Qué secuencia se cargó: la escena se compone según esa, aunque después cambie el ancho.
+  // Qué versión del video se cargó: la escena se compone según esa, aunque después cambie el ancho.
   const variante = useRef<"vertical" | "escritorio" | null>(null);
+  const correr = useRef<() => void>(() => {});
   const geo = useRef<Geo | null>(null);
-  // Tiempo del cuadro que muestra el canvas (el visor y la cámara siguen a ese cuadro).
+  // Tiempo del cuadro que el video está mostrando (el visor y la cámara siguen a ese cuadro).
   const cuadro = useRef(0);
-  // Cuadros comprimidos ya descargados, los decodificados alrededor del actual y el que está pintado.
-  const blobs = useRef<(Blob | undefined)[]>([]);
-  const listos = useRef(new Map<number, ImageBitmap>());
-  const decodificando = useRef(new Set<number>());
-  const previas = useRef<(ImageBitmap | undefined)[]>([]);
-  // Cuadro nítido pintado (no se libera mientras se ve) y qué hay en el canvas (índice; negativo si es previa).
-  const pintado = useRef(-1);
-  const enLienzo = useRef(Number.NaN);
-  const sentido = useRef(1);
-  const ultimaMeta = useRef(0);
-  // Cuadros que avanza el scroll por cada pintada, suavizado: decide qué tan lejos se decodifica.
-  const velocidad = useRef(0);
 
-  // Lee las medidas y acomoda el canvas y el póster a su tamaño entero. Solo al montar, al cargar
-  // el primer cuadro y al cambiar el tamaño de la ventana.
+  // Lee las medidas y acomoda el video y el póster a su tamaño entero. Solo al montar, al cargar
+  // el video y al cambiar el tamaño de la ventana.
   const medir = () => {
     const m = media.current;
     if (!m || !viva()) {
@@ -145,9 +97,9 @@ export function HeroEscaneo({ children, telefono }: { children: React.ReactNode;
     const offX = (W - Wd) / 2;
     const offY = (H - Hd) / 2;
     geo.current = { ancho, vertical, W, H, Wd, Hd, offX, offY };
-    // En pantalla completa el canvas y el póster miden su tamaño entero (la cámara se desliza sobre
+    // En pantalla completa el video y el póster miden su tamaño entero (la cámara se desliza sobre
     // ellos y recorta la pantalla); en escritorio, object-fit: cover dentro de la escena.
-    for (const capa of [poster.current, lienzo.current]) {
+    for (const capa of [poster.current, video.current, fundido.current]) {
       if (!capa) continue;
       if (ancho) {
         capa.style.left = capa.style.top = capa.style.width = capa.style.height = "";
@@ -160,75 +112,7 @@ export function HeroEscaneo({ children, telefono }: { children: React.ReactNode;
     }
   };
 
-  // Pinta en el canvas el cuadro que pide el scroll: el nítido, si no su previa y, si tampoco llegó,
-  // el cargado más cercano.
-  // Sin inercia: el cuadro sigue al dedo tal cual, y la suavidad la da el scroll del sistema.
-  const pintar = () => {
-    const c = lienzo.current;
-    const lista = listos.current;
-    const meta = Math.round(objetivo.current * (CUADROS - 1));
-    if (meta !== ultimaMeta.current) sentido.current = meta > ultimaMeta.current ? 1 : -1;
-    velocidad.current = velocidad.current * 0.6 + Math.abs(meta - ultimaMeta.current) * 0.4;
-    ultimaMeta.current = meta;
-    decodificar();
-    const prev = previas.current;
-    if (!c) return;
-    let j = -1;
-    let bmp: ImageBitmap | undefined;
-    let fino = false;
-    for (let d = 0; d < CUADROS && !bmp; d++) {
-      for (const i of d ? [meta - d, meta + d] : [meta]) {
-        if (bmp || i < 0 || i >= CUADROS) continue;
-        if (lista.has(i)) [j, bmp, fino] = [i, lista.get(i), true];
-        else if (prev[i]) [j, bmp, fino] = [i, prev[i], false];
-      }
-    }
-    const clave = fino ? j : -1 - j;
-    if (!bmp || clave === enLienzo.current) return;
-    const ctx = c.getContext("2d", { alpha: false });
-    if (!ctx) return;
-    ctx.drawImage(bmp, 0, 0, c.width, c.height);
-    enLienzo.current = clave;
-    if (fino) pintado.current = j;
-    cuadro.current = j / FPS;
-  };
-
-  // Mantiene decodificados los cuadros de la ventana, primero los más cercanos al actual, y libera
-  // los que quedan fuera. Hasta 8 a la vez.
-  const decodificar = () => {
-    const meta = ultimaMeta.current;
-    const s = sentido.current;
-    const v = velocidad.current;
-    const paso = v > 6 ? 3 : v > 2.5 ? 2 : 1;
-    const quiero: number[] = [];
-    for (let i = meta; i >= 0 && i < CUADROS && quiero.length < VENTANA - ATRAS; i += s * paso) quiero.push(i);
-    for (let d = 1; d <= ATRAS; d++) if (meta - s * d >= 0 && meta - s * d < CUADROS) quiero.push(meta - s * d);
-    const dentro = new Set(quiero);
-    for (const [i, bmp] of listos.current) {
-      // Nunca se libera el que está pintado: es el que se ve mientras llegan los demás.
-      if (!dentro.has(i) && i !== pintado.current) {
-        bmp.close();
-        listos.current.delete(i);
-      }
-    }
-    for (const i of quiero) {
-      if (decodificando.current.size >= 8) break;
-      const b = blobs.current[i];
-      if (!b || listos.current.has(i) || decodificando.current.has(i)) continue;
-      decodificando.current.add(i);
-      createImageBitmap(b)
-        .then((bmp) => {
-          decodificando.current.delete(i);
-          if (!blobs.current.length) return bmp.close();
-          listos.current.set(i, bmp);
-          alLlegarRef.current();
-        })
-        .catch(() => decodificando.current.delete(i));
-    }
-  };
-  const alLlegarRef = useRef<() => void>(() => {});
-
-  // Compone la escena para el progreso actual y el cuadro que muestra el canvas. No lee medidas
+  // Compone la escena para el progreso actual y el cuadro que muestra el video. No lee medidas
   // del documento: solo escribe estilos, así que nunca obliga al navegador a recalcular el layout.
   const componer = () => {
     const g0 = geo.current;
@@ -307,17 +191,13 @@ export function HeroEscaneo({ children, telefono }: { children: React.ReactNode;
     if (indicio.current) indicio.current.style.opacity = (1 - tramo(p, 0.02, 0.1)).toFixed(3);
   };
 
-  // Los cuadros se piden con la primera interacción o, si nadie toca nada, cuando la página ya
-  // cargó y el navegador está libre. Ocho descargas a la vez; los nítidos se guardan comprimidos y la ventana
-  // de decodificados avanza con cada cuadro que llega y con cada pintada.
+  // El video se pide con la primera interacción o, si nadie toca nada, cuando la página ya cargó
+  // y el navegador está libre: así un scroll rápido apenas entrando no alcanza al video a medio bajar.
   useEffect(() => {
     if (!viva()) return;
-    const c = lienzo.current;
-    const decodificados = listos.current;
-    const previasLocal = previas.current;
-    if (!c) return;
+    const v = video.current;
+    if (!v) return;
     let cargado = false;
-    let vivo = true;
     let espera = 0;
     const eventos = ["scroll", "pointermove", "touchstart", "keydown"] as const;
     const quitar = () => {
@@ -325,58 +205,27 @@ export function HeroEscaneo({ children, telefono }: { children: React.ReactNode;
       window.removeEventListener("load", alCargarPagina);
       if (espera) clearTimeout(espera);
     };
-    // Cada cuadro decodificado: el primero muestra el canvas; los demás se pintan si están más cerca.
-    alLlegarRef.current = () => {
-      if (!vivo || !c) return;
-      pintar();
-      if (!Number.isNaN(enLienzo.current) && !c.hasAttribute("data-listo")) {
-        c.setAttribute("data-listo", "");
-        medir();
-      }
-      componer();
-    };
     function cargar() {
-      if (cargado || !c) return;
+      if (cargado || !v) return;
       cargado = true;
       quitar();
       const vertical = !esAncho();
       variante.current = vertical ? "vertical" : "escritorio";
-      const sec = SECUENCIAS[variante.current];
-      c.width = sec.w;
-      c.height = sec.h;
-      // Primero las previas (se decodifican y quedan), después los nítidos (quedan comprimidos).
-      const orden = ordenDeCarga();
-      const tareas = [...orden.map((i) => [i, true] as const), ...orden.map((i) => [i, false] as const)];
-      let k = 0;
-      const trabajador = async () => {
-        while (vivo && k < tareas.length) {
-          const [i, previa] = tareas[k++];
-          if (previa) {
-            try {
-              const r = await fetch(rutaCuadro(sec.previa, i));
-              if (!r.ok) continue;
-              const bmp = await createImageBitmap(await r.blob());
-              if (!vivo) return bmp.close();
-              previas.current[i] = bmp;
-              alLlegarRef.current();
-            } catch {
-              // Sin la previa queda el nítido más cercano.
-            }
-            continue;
-          }
-          try {
-            const r = await fetch(rutaCuadro(sec.dir, i));
-            if (!r.ok) continue;
-            const b = await r.blob();
-            if (!vivo) return;
-            blobs.current[i] = b;
-          } catch {
-            continue;
-          }
-          decodificar();
-        }
-      };
-      for (let n = 0; n < 8; n++) void trabajador();
+      // Escritorio: 1920 px salvo en pantallas de más de 2200 px reales, que piden el de 2560.
+      const fino = window.innerWidth * (window.devicePixelRatio || 1) > 2200;
+      v.src = vertical ? "/portada/escaneo-vertical-1080.mp4" : fino ? "/portada/escaneo-2560.mp4" : "/portada/escaneo-1920.mp4";
+      v.preload = "auto";
+      v.load();
+      v.addEventListener(
+        "loadeddata",
+        () => {
+          v.setAttribute("data-listo", "");
+          medir();
+          componer();
+          correr.current();
+        },
+        { once: true },
+      );
     }
     function alCargarPagina() {
       const ocioso = (window as Window & { requestIdleCallback?: (cb: () => void, o?: { timeout: number }) => number }).requestIdleCallback;
@@ -385,6 +234,57 @@ export function HeroEscaneo({ children, telefono }: { children: React.ReactNode;
     eventos.forEach((e) => window.addEventListener(e, cargar, { passive: true }));
     if (document.readyState === "complete") alCargarPagina();
     else window.addEventListener("load", alCargarPagina, { once: true });
+    return quitar;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // El video sigue al scroll con inercia: currentTime se acerca al objetivo en cada cuadro de
+  // pantalla, con un tiempo continuo (no salta de cuadro en cuadro), y el ciclo se detiene al llegar
+  // (lo retoma el próximo scroll). No se toca mientras busca. Es el movimiento de 1.15.0: 1.15.1 lo
+  // cambió por saltos a cuadros enteros y 1.15.2 por cuadros sueltos sin inercia, y en el teléfono
+  // los dos se veían a saltos.
+  useEffect(() => {
+    if (!viva()) return;
+    let raf = 0;
+    const tick = () => {
+      raf = 0;
+      const v = video.current;
+      if (!v || !v.duration) return;
+      // Mientras busca, el video puede bajar su readyState: el ciclo espera en vez de apagarse
+      // (si se apagaba, el video quedaba en un cuadro viejo hasta el siguiente scroll).
+      if (v.readyState < 2) {
+        raf = requestAnimationFrame(tick);
+        return;
+      }
+      if (!v.seeking) {
+        const meta = objetivo.current * (v.duration - 0.05);
+        const delta = meta - v.currentTime;
+        if (Math.abs(delta) <= 0.012) return;
+        v.currentTime = v.currentTime + delta * 0.22;
+      }
+      raf = requestAnimationFrame(tick);
+    };
+    correr.current = () => {
+      if (!raf) raf = requestAnimationFrame(tick);
+    };
+    const v = video.current;
+    // La escena se acomoda al cuadro que el navegador presenta, en el mismo cuadro de pantalla.
+    // Sin requestVideoFrameCallback, al terminar cada búsqueda.
+    let rvfc = 0;
+    const conCuadro = typeof HTMLVideoElement !== "undefined" && "requestVideoFrameCallback" in HTMLVideoElement.prototype;
+    const alCuadro = (_: number, info: { mediaTime: number }) => {
+      cuadro.current = info.mediaTime;
+      componer();
+      rvfc = v!.requestVideoFrameCallback(alCuadro);
+    };
+    const alBuscar = () => {
+      cuadro.current = v!.currentTime;
+      componer();
+    };
+    if (v) {
+      if (conCuadro) rvfc = v.requestVideoFrameCallback(alCuadro);
+      else v.addEventListener("seeked", alBuscar);
+    }
     const alRedimensionar = () => {
       medir();
       componer();
@@ -392,13 +292,10 @@ export function HeroEscaneo({ children, telefono }: { children: React.ReactNode;
     alRedimensionar();
     window.addEventListener("resize", alRedimensionar, { passive: true });
     return () => {
-      vivo = false;
-      quitar();
-      blobs.current = [];
-      for (const bmp of decodificados.values()) bmp.close();
-      decodificados.clear();
-      for (const bmp of previasLocal) bmp?.close();
-      previasLocal.length = 0;
+      if (raf) cancelAnimationFrame(raf);
+      correr.current = () => {};
+      if (v && conCuadro && rvfc) v.cancelVideoFrameCallback(rvfc);
+      v?.removeEventListener("seeked", alBuscar);
       window.removeEventListener("resize", alRedimensionar);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -410,8 +307,8 @@ export function HeroEscaneo({ children, telefono }: { children: React.ReactNode;
       if (!geo.current) return;
       progreso.current = p;
       objetivo.current = suave(tramo(p, 0.04, 0.72));
-      pintar();
       componer();
+      correr.current();
     },
     "fijo",
   );
@@ -425,7 +322,7 @@ export function HeroEscaneo({ children, telefono }: { children: React.ReactNode;
       <div ref={pista} className="he-pista relative">
         <div className="he-escena">
           <div ref={media} className="he-media">
-            {/* Primer cuadro de la secuencia = el render de la mesa (D-050), etiquetado. */}
+            {/* Primer cuadro del video = el render de la mesa (D-050), etiquetado. */}
             {/* Pósters en dos tamaños por forma: cada pantalla baja la nitidez que necesita. */}
             <picture>
               <source
@@ -446,7 +343,8 @@ export function HeroEscaneo({ children, telefono }: { children: React.ReactNode;
                 className="he-poster"
               />
             </picture>
-            <canvas ref={lienzo} className="he-lienzo" aria-hidden="true" />
+            <video ref={video} className="he-video" muted playsInline preload="none" aria-hidden="true" tabIndex={-1} />
+            <div ref={fundido} className="he-fundido" aria-hidden="true" />
             <div ref={velo} className="he-velo" aria-hidden="true" />
             <div ref={visor} className="he-visor" aria-hidden="true">
               <span /><span /><span /><span />

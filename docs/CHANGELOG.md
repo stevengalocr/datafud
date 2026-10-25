@@ -9,6 +9,27 @@ Todas las versiones notables del proyecto. Formato basado en
 
 ---
 
+## [1.15.3] — 2026-10-25 · La portada de antes, más pulida
+
+Pedido de Steven, probando 1.15.2 en su iPhone: «se ve todo cortado, todo disparejo», «se ve como
+con fotograma, los degradados se ven cortados»; antes de 1.15.1 «se veía muchísimo mejor, más
+fluido». Que se valide cuál fue la etapa buena y se perfeccione esa. El diseño no cambia.
+
+### Corregido
+- **Vuelve el movimiento de 1.15.0.** El video avanza con inercia sobre un tiempo continuo, así que
+  pasa de un cuadro a otro sin escalones. 1.15.1 lo había cambiado por saltos a cuadros enteros y
+  1.15.2 por cuadros sueltos en un canvas, sin inercia y con versiones livianas durante el scroll;
+  medido en Chrome no se atrasaban, pero en el teléfono se veían a saltos y más blandos. Se quitan
+  `portada/cuadros/` y vuelven los videos de 1.15.1, con cada cuadro completo (`escaneo-vertical-1080.mp4`
+  1080×1440 a 8 Mb/s; `escaneo-1920.mp4` y `escaneo-2560.mp4` en escritorio).
+- Se conserva de 1.15.1 lo que no cambia el movimiento: el video ya no se queda en un cuadro viejo si
+  baja su `readyState` mientras busca, la escena no lee medidas en cada cuadro de scroll y el video
+  se pide antes.
+- **La imagen ya no se corta en teléfono.** El borde de abajo se fundía con una máscara, y Safari
+  (y a veces Chrome) recorta mal una máscara sobre un elemento grande dentro de una capa que se
+  escala: la imagen se veía cortada a un costado y el degradado partido. Ahora es una capa con el
+  mismo degradado encima del video (`.he-fundido`). Comprobado en WebKit y Chrome a cuatro alturas.
+
 ## [1.15.2] — 2026-10-25 · Portada que sigue al dedo
 
 Pedido de Steven: en el teléfono la portada todavía se sentía «muy pegada», «como que se congelan

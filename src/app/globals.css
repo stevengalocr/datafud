@@ -512,7 +512,7 @@ body {
   transform-origin: 50% 50%;
 }
 .he-poster,
-.he-lienzo {
+.he-video {
   position: absolute;
   inset: 0;
   width: 100%;
@@ -521,7 +521,8 @@ body {
   max-width: none;
   object-fit: cover;
 }
-.he-lienzo,
+.he-video,
+.he-fundido,
 .he-velo,
 .he-degradado,
 .he-etiqueta-fija,
@@ -575,7 +576,7 @@ body {
     border-radius: 0;
     will-change: transform;
   }
-  .he-lienzo { display: block; opacity: 0; transition: opacity 0.5s var(--ease-out); }
+  .he-video { display: block; opacity: 0; transition: opacity 0.5s var(--ease-out); }
   /* La etiqueta «Render ilustrativo» va fija en la esquina de la pantalla, no en la escena que se
      mueve: debajo del menú, a la izquierda en teléfono y a la derecha en escritorio. */
   .he-etiqueta { display: none; }
@@ -611,7 +612,7 @@ body {
   .he-col a[data-wa-origin="hero"]:hover { background: #dcb65a; }
   .he-col a[data-demo-open] { background: rgba(251, 250, 246, 0.08); border-color: rgba(251, 250, 246, 0.4); color: #fbfaf6; }
   .he-col a[data-demo-open]:hover { background: rgba(251, 250, 246, 0.16); border-color: rgba(251, 250, 246, 0.6); }
-  .he-lienzo[data-listo] { opacity: 1; }
+  .he-video[data-listo] { opacity: 1; }
   .he-velo { display: block; position: absolute; inset: 0; z-index: 2; background: #0a1a13; opacity: 0; }
   .he-visor {
     display: block;
@@ -665,12 +666,16 @@ body {
     }
     .he-escena { background: #0a1a13; }
     .he-media { overflow: visible; }
-    /* El borde de abajo de la escena se funde con el verde oscuro mientras la escena viene subiendo
-       (en el canvas y el póster, que miden su tamaño entero; no en la capa, que es más angosta). */
-    .he-poster,
-    .he-lienzo {
-      -webkit-mask-image: linear-gradient(180deg, #000 88%, transparent 100%);
-      mask-image: linear-gradient(180deg, #000 88%, transparent 100%);
+    /* El borde de abajo del video se funde con el verde oscuro mientras la escena viene subiendo.
+       Es una capa encima del video y del póster, del mismo tamaño que ellos (hero-escaneo.tsx), y no
+       una máscara: Safari recorta mal una máscara sobre un elemento grande dentro de una capa que se
+       escala, y la imagen se veía cortada a un costado. */
+    .he-fundido {
+      display: block;
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background: linear-gradient(180deg, rgba(10, 26, 19, 0) 88%, #0a1a13 100%);
     }
     .he-col {
       pointer-events: auto;

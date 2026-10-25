@@ -1,6 +1,6 @@
 # Vault-sync · 2026-10-25 · Portada fluida con scroll rápido
 
-Aplicado en vault: sí
+Aplicado en vault: no
 
 ### F-01 · 1.15.1 · Portada fluida con scroll rápido · commit c8214e4 · despliegue Vercel (main)
 **Pendientes.md** — sin cambios (no había un pendiente abierto para esto).
@@ -23,3 +23,14 @@ Aplicado en vault: sí
 - Causa: un video solo acepta una búsqueda a la vez, así que con scroll rápido el cuadro quedaba atrás; además había inercia.
 - Ahora son cuadros sueltos pintados en un canvas en el mismo cuadro de pantalla que el scroll, sin inercia, con 28 decodificados alrededor del actual y una previa liviana para el scroll muy rápido.
 - Medido contra producción: cuadros de pantalla atrasados de 16/18, 44/55 y 114/181 a 0 en rápido, medio y lento; también 0 con el procesador 4× más lento. Capturas a cinco alturas: mismo diseño. `qa:landing` en verde.
+
+### F-03 · 1.15.3 · La portada de antes, más pulida · despliegue Vercel (main)
+**Pendientes.md** — sin cambios.
+**Decisiones.md** — ninguna.
+**Seguridad.md** — sin cambios.
+**Otras páginas** — `Datafud.md` (hub): producción en 1.15.3. `Imagenes-Y-Renders.md`: la fila de la portada vuelve a los videos de 1.15.1 (`escaneo-1920.mp4`, `escaneo-2560.mp4`, `escaneo-vertical-1080.mp4`, cada cuadro completo); se quitan los cuadros de 1.15.2.
+**log.md** — `## [2026-10-25] ingest | 1.15.3 · La portada de antes, más pulida`
+- Steven probó 1.15.2 en su iPhone: cortada, a saltos y más blanda; antes de 1.15.1 se veía mejor.
+- Vuelve el movimiento de 1.15.0 (inercia sobre un tiempo continuo) con los videos de 1.15.1 y sus arreglos que no cambian el movimiento; 1.15.2 queda revertida.
+- El corte de la imagen venía de la máscara del borde de abajo (Safari la recorta mal dentro de una capa que se escala); ahora es una capa con el mismo degradado.
+- Lección: el scroll de la portada se valida en WebKit (motor de Safari) y en el teléfono de Steven, no solo con métricas de Chrome.
