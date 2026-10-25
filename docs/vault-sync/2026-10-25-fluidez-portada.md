@@ -1,6 +1,6 @@
 # Vault-sync · 2026-10-25 · Portada fluida con scroll rápido
 
-Aplicado en vault: no
+Aplicado en vault: sí
 
 ### F-01 · 1.15.1 · Portada fluida con scroll rápido · commit c8214e4 · despliegue Vercel (main)
 **Pendientes.md** — sin cambios (no había un pendiente abierto para esto).
