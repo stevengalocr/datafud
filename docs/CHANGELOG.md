@@ -9,6 +9,30 @@ Todas las versiones notables del proyecto. Formato basado en
 
 ---
 
+## [1.15.2] — 2026-10-25 · Portada que sigue al dedo
+
+Pedido de Steven: en el teléfono la portada todavía se sentía «muy pegada», «como que se congelan
+los fotogramas»; quiere que «si baja rapidísimo, todo se haga rapidísimo, y si baja lento, vaya
+lentico». El diseño no cambia: mismos cuadros, misma cámara, mismo visor y mismo teléfono.
+
+### Rendimiento
+- **Cuadros sueltos en un canvas en lugar del video.** La causa era de fondo: un video solo acepta
+  una búsqueda a la vez y cada una es asíncrona, así que con scroll rápido el cuadro quedaba atrás y
+  saltaba; además la escena seguía al scroll con inercia. Ahora los 121 cuadros del video están en
+  WebP (`public/portada/cuadros/v/` 1080×1440, 7,5 MB; `cuadros/d/` 1920×1282, 12 MB) y se pintan
+  en el mismo cuadro de pantalla que el scroll, sin inercia: un cuadro decodificado se dibuja en
+  0,2 ms.
+- **Memoria acotada.** Los nítidos se guardan comprimidos y solo 28 quedan decodificados alrededor
+  del actual (más hacia donde va el scroll, salteados si va rápido), fuera del hilo principal.
+- **Scroll muy rápido sin saltos.** Una versión previa liviana de los 121 cuadros
+  (`cuadros/v-previa/` 2 MB, `cuadros/d-previa/` 2,9 MB) llega primero y queda decodificada: en un
+  movimiento muy rápido siempre hay un cuadro en el lugar exacto y el nítido lo reemplaza apenas llega.
+- Medido en Chrome con teléfono emulado, contra producción (1.15.1): cuadros de pantalla con el
+  cuadro atrasado, de 16 de 18 (rápido), 44 de 55 (medio) y 114 de 181 (lento) a **0 en los tres**;
+  atraso máximo de 29 cuadros a 1. Con el procesador 4 veces más lento, también 0. A velocidad normal,
+  60 cuadros por segundo parejos. Capturas a cinco alturas, en teléfono y escritorio: mismo diseño.
+- Se quitan `portada/escaneo-1920.mp4`, `escaneo-2560.mp4` y `escaneo-vertical-1080.mp4`.
+
 ## [1.15.1] — 2026-10-25 · Portada fluida con scroll rápido
 
 Pedido de Steven: «si hago el scroll muy rápido… se ve como con lag, como si estuviera pegado»; el

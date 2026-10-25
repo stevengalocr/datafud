@@ -512,7 +512,7 @@ body {
   transform-origin: 50% 50%;
 }
 .he-poster,
-.he-video {
+.he-lienzo {
   position: absolute;
   inset: 0;
   width: 100%;
@@ -521,7 +521,7 @@ body {
   max-width: none;
   object-fit: cover;
 }
-.he-video,
+.he-lienzo,
 .he-velo,
 .he-degradado,
 .he-etiqueta-fija,
@@ -575,7 +575,7 @@ body {
     border-radius: 0;
     will-change: transform;
   }
-  .he-video { display: block; opacity: 0; transition: opacity 0.5s var(--ease-out); }
+  .he-lienzo { display: block; opacity: 0; transition: opacity 0.5s var(--ease-out); }
   /* La etiqueta «Render ilustrativo» va fija en la esquina de la pantalla, no en la escena que se
      mueve: debajo del menú, a la izquierda en teléfono y a la derecha en escritorio. */
   .he-etiqueta { display: none; }
@@ -611,7 +611,7 @@ body {
   .he-col a[data-wa-origin="hero"]:hover { background: #dcb65a; }
   .he-col a[data-demo-open] { background: rgba(251, 250, 246, 0.08); border-color: rgba(251, 250, 246, 0.4); color: #fbfaf6; }
   .he-col a[data-demo-open]:hover { background: rgba(251, 250, 246, 0.16); border-color: rgba(251, 250, 246, 0.6); }
-  .he-video[data-listo] { opacity: 1; }
+  .he-lienzo[data-listo] { opacity: 1; }
   .he-velo { display: block; position: absolute; inset: 0; z-index: 2; background: #0a1a13; opacity: 0; }
   .he-visor {
     display: block;
@@ -665,10 +665,10 @@ body {
     }
     .he-escena { background: #0a1a13; }
     .he-media { overflow: visible; }
-    /* El borde de abajo del video se funde con el verde oscuro mientras la escena viene subiendo
-       (en el video y el póster, que miden su tamaño entero; no en la capa, que es más angosta). */
+    /* El borde de abajo de la escena se funde con el verde oscuro mientras la escena viene subiendo
+       (en el canvas y el póster, que miden su tamaño entero; no en la capa, que es más angosta). */
     .he-poster,
-    .he-video {
+    .he-lienzo {
       -webkit-mask-image: linear-gradient(180deg, #000 88%, transparent 100%);
       mask-image: linear-gradient(180deg, #000 88%, transparent 100%);
     }
